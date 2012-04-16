@@ -1,0 +1,11 @@
+.depend
+Makefile
+configure
+version.ml
+autom4te.cache/
+config.log
+config.status
+*.o
+*.cm*
+project.byte
+project.opt

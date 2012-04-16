@@ -55,37 +55,45 @@ let add_row headers row =
 (* Lie h et tous les headers.(i) entre eux *)
 let create_headers m h =
   let size = Array.length m in 
-  let headers = Array.init nc (fun _ -> one_node ()) in
+  let headers = Array.init size (fun _ -> one_node ()) in
   let rec link_rec n = 
     if n = size then (* en arrivant à la derniere case on arrete*)
       ()
-    else
-      add_right headers.(n - 1) headers(n); (* on lie le header a droite du precedent *)
-    link_rec (n + 1) (* suivant *)
+    else begin
+      add_right headers.(n - 1) headers.(n); (* on lie le header a droite du precedent *)
+      link_rec (n + 1) (* suivant *)
+    end
   in
     add_right h headers.(0); (* on lie le premier à droite de la tete *)
     link_rec 1; 
     headers (* on retourne le node array *)
 
 
+let iter_right f n = assert false (*TODO*)
+let iter_down f n = assert false (*TODO*)
+
 (* Cree une matrix doublement chainee a partir d'une matrix *)
 let create_linked_matrix m = 
   let h = one_node () in (* creation de la tete *)
   let headers = create_headers m h in (* on recupere les headers *)
-  let rec add_rows_rec i = (* On ajoute les lignes en partant de la derniere *)
-    if i = 0 then 
-      ()
-    else (
-      add_row headers m.(i); (* ajout sous les headers *)
-      add_rows_rec (i - 1) (* ligne suivante *)
-    )
-  in
-    add_rows_rec (Array.length m);
-    h (* retourne la tete *)
+  (* On ajoute les lignes en partant de la derniere *)
+  for i = Array.length m - 1 downto 0 do
+    add_row headers m.(i) (* ajout sous les headers *)
+  done;
+  h (* retourne la tete *)
 
 let find_solution m =
   let linked_matrix = create_linked_matrix m in
 
+  (* on imprime toutes les colonnes *)
+  let print_node _n = Format.printf "." in
+  let print_column n =
+    if n != linked_matrix then begin
+      iter_down print_node n;
+      Format.printf "@."
+    end
+  in
+  iter_right print_column linked_matrix;
 
     (* l'algo DLX commence ici *)
     assert false
