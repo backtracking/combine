@@ -9,3 +9,4 @@ config.status
 *.cm*
 project.byte
 project.opt
+.*.swp
