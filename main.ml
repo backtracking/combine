@@ -1,9 +1,8 @@
 
-let m = [| [|true; false; false; true; true |];
-           [|true; true; false; true; false |];
-           [|true; false; true; true; false |];
-           [|false; true; true; true; true |] |]
+let m = [| [|true; false|];
+           [|false; true|];
+           [|false; true|]|]
 
-let _ = Dlx.find_solution m
+let _ = Dlx.find_first_solution m
 
 

@@ -9,7 +9,8 @@ type node = {
     mutable name : string;
 }
 
-
+exception Solution of node array * int
+exception NotFound
 
 let one_node () =
 let rec h = { name = "head"; c = h; s = 0; up = h; 
@@ -91,7 +92,7 @@ let iter_right ?(self = true) f n =
 
 
 
- (* Applique la fonction f à tout les elements de la list sous n *)
+(* Applique la fonction f à tout les elements de la list sous n *)
 let iter_down ?(self = true) f n = 
     if self then f n;
     let rec rec_iter_down node = 
@@ -103,7 +104,7 @@ let iter_down ?(self = true) f n =
       rec_iter_down n.down
 
 
- (* Applique la fonction f à tout les elements de la list a gauche de n *)
+(* Applique la fonction f à tout les elements de la list a gauche de n *)
 let iter_left ?(self = true) f n = 
     if self then f n;
     let rec rec_iter_left node = 
@@ -116,7 +117,7 @@ let iter_left ?(self = true) f n =
 
 
 
- (* Applique la fonction f à tout les elements de la list au dessus de n *)
+(* Applique la fonction f à tout les elements de la list au dessus de n *)
 let iter_up ?(self = true) f n = 
     if self then f n;
     let rec rec_iter_up node = 
@@ -152,7 +153,7 @@ let cover column_header =
     n.c.s <- n.c.s - 1
   in 
   let cover_row n = (* retire la ligne *)
-    iter_right cover_node n
+    iter_right ~self:false cover_node n
   in 
     (* retire la colonne, head non compris *)
     iter_down ~self:false cover_row column_header 
@@ -160,35 +161,38 @@ let cover column_header =
 
 
 (* Découvre : rajoute une colonne et les lignes correspondant aux elts 
-de la colonne *)
+ de la colonne *)
 let uncover column_header =
   let uncover_node n = (* remet l'elt *)
     n.c.s <- n.c.s + 1;
     n.down.up <- n;
-    n.up.down <- n;
-    n.right.left <- n;
-    n.left.right <- n
+    n.up.down <- n
   in 
   let uncover_row n = (* remet la ligne *)
-    iter_left uncover_node n
+    iter_left ~self:false uncover_node n
   in 
-    iter_up ~self:false uncover_row column_header (* remet la colonne *)
+    iter_up ~self:false uncover_row column_header; (* remet la colonne *)
+    column_header.right.left <- column_header;
+    column_header.left.right <- column_header
 
 
 
-(* affiche la solution *)
-let print_solution s =
-  let print_node n =
-    Format.printf "%s@." n.c.name
+(* affiche la solution o *)
+let print_solution (o, k) =
+  for i = 0 to k - 1  do
+    Format.printf "%d@." o.(i).s
+  done
+
+(* retourne une solution sous forme de int list *)
+let solution_to_list (o, k) = 
+  let rec rec_stl l i = 
+    if i = k - 1 then l
+    else rec_stl (o.(i).s::l) (i + 1)
   in 
-  let print_row n =
-    iter_right print_node n;
-    Format.printf "@." 
-  in 
-    Array.iter print_row s
+    rec_stl [] 0
 
 
-(* Inutilise *)
+(* TODO : Inutilise - a ajouter *)
 (* Choisit la colonne min *)
 let choose_min h = 
   let rec rec_chose min node =
@@ -203,15 +207,15 @@ let choose_min h =
 
 
 (* recherche l'ensemble des solutions au probleme de recouvrement *)
-let rec search k h o = 
-  if h == h.right then print_solution o
+let rec search f k h o = 
+  if h == h.right then f (o, k)
   else 
     let column = h.right in
     let get_down r = 
       o.(k) <- r;
-      iter_right ~self:false cover column;
-      search (k + 1) column o;
-      iter_left uncover o.(k)
+      iter_right ~self:false (fun j -> cover j.c) r;
+      search f (k + 1) h o;
+      iter_left ~self:false (fun j -> uncover j.c) r
     in 
       cover column;
       iter_down ~self:false get_down column;
@@ -219,19 +223,38 @@ let rec search k h o =
 
 
 (* Initialise la matrice doublement chainee et affiche les solutions *)
-let find_solution m =
-  let linked_matrix = create m in
-  (* on imprime toutes les colonnes *)
-  let print_node node = Format.printf "%d " node.s in
-  let print_column n =
-    if n != linked_matrix then begin
-      iter_down print_node n;
-      Format.printf "@."
-    end
-  in
+let iter_solution f m =
+  let dlm = create m in
   let o = Array.init (Array.length m.(0)) (fun _ -> one_node ()) in
-    iter_right print_column linked_matrix;
-    search 0 linked_matrix o;
-    assert false
+    search f 0 dlm o
+
+
+
+
+(* Fonctions visibles *)
+
+
+
+
+(* retourne le nombre de solutions *)
+let get_solution_number m =
+  let r = ref 0 in
+    iter_solution (fun (_, _) -> r:= !r + 1) m
+
+(* Affiche toute les solutions *)
+let print_solutions m = 
+  iter_solution print_solution m
+
+(* affiche la premiere solution *)
+let find_first_solution m =
+  try 
+    iter_solution (fun (o, k) -> ignore(raise (Solution (o, k)))) m; 
+    raise NotFound
+  with 
+    | Solution (o, k) -> print_solution (o, k)
+    | NotFound -> Format.printf "No solutions.@."
+
+
+
 
 
