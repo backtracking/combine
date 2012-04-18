@@ -1,3 +1,5 @@
+(* Dlx Module *)
+
 type node = {
     mutable c : node;
     mutable s: int;
@@ -14,6 +16,11 @@ val print_solutions:
 val find_first_solution :
   bool array array -> unit
             
+val get_solution_number :
+  bool array array -> int
 
+val get_solution_array :
+  bool array array -> int list array
 
-
+val print_solution_array :
+  int list array -> unit

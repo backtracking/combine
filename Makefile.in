@@ -48,7 +48,7 @@ all: $(OCAMLBEST)
 # bytecode and native-code compilation
 ######################################
 
-CMO = dlx.cmo main.cmo
+CMO = tiling.cmo dlx.cmo main.cmo 
 CMX = $(CMO:.cmo=.cmx)
 
 GENERATED = version.ml
