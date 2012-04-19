@@ -211,8 +211,7 @@ let choose_min h =
     rec_chose h.right h.right.right 
 
 let count = ref 0
-
-let () = at_exit (fun () -> Format.printf "%d@." !count)
+let () = at_exit (fun () -> Format.printf "Dlx at_exit : %d@." !count)
 
 (* recherche l'ensemble des solutions au probleme de recouvrement *)
 let rec search f k h o = 
@@ -228,7 +227,7 @@ let rec search f k h o =
       cover column;
       iter_down ~self:false get_down column;
       uncover column;
-		 incr count
+      incr count
 
 
 (* Initialise la matrice doublement chainee et affiche les solutions *)        
