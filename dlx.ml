@@ -210,6 +210,9 @@ let choose_min h =
   in 
     rec_chose h.right h.right.right 
 
+let count = ref 0
+
+let () = at_exit (fun () -> Format.printf "%d@." !count)
 
 (* recherche l'ensemble des solutions au probleme de recouvrement *)
 let rec search f k h o = 
@@ -224,7 +227,8 @@ let rec search f k h o =
     in 
       cover column;
       iter_down ~self:false get_down column;
-      uncover column
+      uncover column;
+		 incr count
 
 
 (* Initialise la matrice doublement chainee et affiche les solutions *)        
@@ -252,7 +256,6 @@ let get_solution_array m =
     iter_solution (fun (o, k) -> s_array.(!i) <- solution_of_list (o, k);
                                  i := !i + 1) m;
     s_array
-
 
 let print_solution_array s_array = 
   Array.iteri (fun i s -> Format.printf "Solution %d :" i;

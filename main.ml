@@ -1,7 +1,7 @@
+let n = int_of_string Sys.argv.(1)
 
-let m = [| [|true; true|];
-           [|true; true|];
-           [|true; true|]|]
+
+let board = Array.create_matrix n n true
 
 let pieces = [
   [|[|true|]; [|true|]|];
@@ -9,10 +9,8 @@ let pieces = [
 ]
 
 let _ = 
-  if Tiling.existing_position m 2 1 then 
-    Format.printf "Ok@."
-  else 
-    Format.printf "Not ok@."
+let m = Tiling.matrix_of_game board pieces in 
+  Format.printf "%d@." (Dlx.get_solution_number m) 
 
 
 
