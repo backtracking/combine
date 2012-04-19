@@ -1,28 +1,17 @@
-let n = int_of_string Sys.argv.(1)
+let l = int_of_string Sys.argv.(1)
+let h = int_of_string Sys.argv.(2)
 
 
-let board = Array.create_matrix n n true
-
-
-let test_clockwise = 
-  [|
-    [|true; true|];
-    [|true; false|];
-    [|false; true|]
-   |]
+let board = Array.create_matrix l h true
 
 
 let pieces = [
-  [|[|true; true|]|]
+  [|[|true; true|];[|true; false|]|]
 ]
 
 let _ = 
-  Tiling.display_boolean_matrix test_clockwise;
-  Format.printf "----------------------@.";
-  Tiling.display_boolean_matrix 
-    (Tiling.quarter_turn_anticlockwise test_clockwise)
-(*  let m = Tiling.matrix_of_game board pieces in 
-    Format.printf "%d@." (Dlx.get_solution_number m) 
-    *)
+  Tiling.display_boolean_matrix board;
+  let m = Tiling.matrix_of_game board (Tiling.get_all_rotations pieces) in 
+    Format.printf "Dlx solutions : %d@." (Dlx.get_solution_number m) 
 
 
