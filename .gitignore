@@ -10,3 +10,4 @@ config.status
 project.byte
 project.opt
 .*.swp
+parser.ml

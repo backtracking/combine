@@ -1,6 +1,29 @@
 (* Tiling Module *)
 
 (* Misc *)
+(*
+type node = {
+  mutable c : node;
+  mutable s: int;
+  mutable up: node;
+  mutable down: node;
+  mutable left: node;
+  mutable right: node;
+  mutable name : string;
+}
+*)
+
+
+type piece = {
+  mutable matrix : bool array array;
+  mutable name : string;
+  mutable quantity : int;
+  mutable exact : bool; 
+}
+
+
+let create_piece ?(q = 0) ?(e = false) ?(n = "") m =
+  {matrix = m; name = n; quantity = q; exact = e}
 
 (* display a boolean matrix *)
 let display_boolean_matrix m = 
@@ -25,9 +48,10 @@ let existing_position board x y =
 (* return true if piece could be put at position x y*)
 let is_possible_position piece board x y =
   try
-    for i = 0 to Array.length piece - 1 do
-      for j = 0 to Array.length piece.(0) - 1 do
-        if piece.(i).(j) && not (existing_position board (x + i) (y + j))
+    for i = 0 to Array.length piece.matrix - 1 do
+      for j = 0 to Array.length piece.matrix.(0) - 1 do
+        if piece.matrix.(i).(j) 
+        && not (existing_position board (x + i) (y + j))
         then raise Exit
       done
     done;
@@ -41,12 +65,12 @@ let is_possible_position piece board x y =
 
 (* return true if a piece has a diagonal symmetry *)
 let has_diagonal_symmetry piece =
-  let h = Array.length piece.(0) in 
-  let l = Array.length piece in 
+  let h = Array.length piece.matrix.(0) in 
+  let l = Array.length piece.matrix in 
     try
-      for i = 0 to Array.length piece / 2 - 1 do
+      for i = 0 to Array.length piece.matrix / 2 - 1 do
         for j = 0 to h / 2 - 1 do
-          if piece.(i).(j) <> piece.(l - i).(h - j) 
+          if piece.matrix.(i).(j) <> piece.matrix.(l - i).(h - j) 
           then raise Exit
         done
       done;
@@ -56,11 +80,11 @@ let has_diagonal_symmetry piece =
 
 (* return true if a piece has an horizontal symmetry *)
 let has_horizontal_symmetry piece = 
-  let h = Array.length piece.(0) in 
+  let h = Array.length piece.matrix.(0) in 
     try
-      for i = 0 to Array.length piece / 2 - 1 do
+      for i = 0 to Array.length piece.matrix / 2 - 1 do
         for j = 0 to h / 2 - 1 do
-          if piece.(i).(j) <> piece.(i).(h - j) 
+          if piece.matrix.(i).(j) <> piece.matrix.(i).(h - j) 
           then raise Exit
         done
       done;
@@ -70,11 +94,11 @@ let has_horizontal_symmetry piece =
 
 (* return true if a piece has a vertical symmetry *)
 let has_vertical_symmetry piece = 
-  let l = Array.length piece in 
+  let l = Array.length piece.matrix in 
     try
       for i = 0 to l / 2 - 1 do
-        for j = 0 to Array.length piece.(0) / 2 - 1 do
-          if piece.(i).(j) <> piece.(i).(j) 
+        for j = 0 to Array.length piece.matrix.(0) / 2 - 1 do
+          if piece.matrix.(i).(j) <> piece.matrix.(i).(j) 
           then raise Exit
         done
       done;
@@ -128,10 +152,11 @@ let quarter_turn_anticlockwise m =
     including itself 
     *)
 (* TODO : Modify and add 180° and 90° rotations*)
+(*
 let get_rotations piece = 
   let rec rec_get i piece rotations = 
     if i <> 3 then
-      let rot_piece = quarter_turn_clockwise piece in 
+      let rot_piece = create_piece piece.matrix in 
         if List.mem rot_piece rotations then
           rec_get (i + 1) rot_piece rotations
         else 
@@ -139,6 +164,7 @@ let get_rotations piece =
     else rotations
   in 
     rec_get 0 piece [piece]
+    
 
 (* return a list of pieces containing rotations of all start pieces *)
 let get_all_rotations pieces = 
@@ -149,6 +175,8 @@ let get_all_rotations pieces =
   in 
     rec_add_rotations pieces []
 
+*)
+
 
 
 (* Placing piece on board *)
@@ -156,15 +184,30 @@ let get_all_rotations pieces =
 (* return an array of size n representing the way to put piece p at 
  position x y on the board of size l*n
  *)
-let one_line l n p x y = 
-  let line = Array.make n false in                                         		  
-    for i = 0 to Array.length p - 1 do  
-      for j = 0 to Array.length p.(0) - 1 do  
-        if p.(i).(j) then
+let one_line l n piece x y = 
+  let line = Array.make n false in
+    for i = 0 to Array.length piece.matrix - 1 do  
+      for j = 0 to Array.length piece.matrix.(0) - 1 do  
+        if piece.matrix.(i).(j) then
           line.((x + i) * l + y + j) <- true
       done 
     done;
     line 
+
+let comput_matrix_size board pieces =
+  let h = Array.length board in 
+  let l = Array.length board.(0) in 
+  let n = l * h  in
+    n + List.fold_left (
+      fun acc e ->
+        if e.quantity <> 0 then
+          acc + e.quantity
+        else 
+          acc
+    ) 0 pieces
+
+
+
 
 (* return a boolean matrix representing the set of way to put all pieces
  * on the board
@@ -172,15 +215,15 @@ let one_line l n p x y =
 let matrix_of_game board pieces =
   let h = Array.length board in 
   let l = Array.length board.(0) in 
-  let n = l * h  in
+  let n = comput_matrix_size board pieces in
   let lines = ref [] in 
-  let add_piece p = 
-    for i = 0 to Array.length board - 1 do
-      for j = 0 to Array.length board.(0) do
-        if is_possible_position p board i j then
-          lines := one_line l n p i j::!lines
+  let add_piece piece = 
+    for i = 0 to h - 1 do
+      for j = 0 to l - 1 do
+        if is_possible_position piece board i j then
+          lines := one_line l n piece i j::!lines
       done 
-    done 
+    done;
   in 
     List.iter add_piece pieces; 
     Array.of_list !lines

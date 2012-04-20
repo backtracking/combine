@@ -1,3 +1,7 @@
+(* Dlx Module *)
+
+(* DLM : doubly linked matrix *)
+
 
 type node = {
   mutable c : node;
@@ -16,7 +20,7 @@ let one_node () =
   let rec h = { name = "head"; c = h; s = 0; up = h; 
                 down = h; left = h; right = h } in h
 
-(* Ajoute n2 à droite de n1 dans la liste circulaire de n1 *)
+(* Adds n2 to the right of n1 in the DLM *)
 let add_right n1 n2 =
   let tmp = n1.right in
     n1.right <- n2;
@@ -25,7 +29,7 @@ let add_right n1 n2 =
     n2.right.left <- n2
 
 
-(* Ajoute n2 en dessous de n1 dans la liste circulaire de n1 *)
+(* Adds n2 under n1 in the DLM *)
 let add_below n1 n2 =
   let tmp = n1.down in 
     n1.down <- n2;
@@ -34,7 +38,7 @@ let add_below n1 n2 =
     n2.down.up <- n2
 
 
-(* Ajoute la ligne row apres les headers *)
+(* Adds row after the headers in the DLM *)
 let add_row headers row i =
   let rec addi_rec n previous = 
     if n = (Array.length row) then  begin
@@ -59,7 +63,7 @@ let add_row headers row i =
 
 
 
-(* Lie h et tous les headers.(i) entre eux *)
+(* Returns a DLM only with the headers *)
 let generate_headers m h =
   let size = Array.length m.(0) in 
   let headers = Array.init size (fun _ -> one_node ()) in
@@ -81,7 +85,7 @@ let generate_headers m h =
 
 
 
-(* Applique la fonction f à tout les elements de la list à droite de n*)
+(* Applies f to elements of the DLM, from left to right*)
 let iter_right ?(self = true) f n = 
   if self then f n;
     let rec rec_iter_right node = 
@@ -94,7 +98,7 @@ let iter_right ?(self = true) f n =
 
 
 
-(* Applique la fonction f à tout les elements de la list sous n *)
+(* Applies f to elements of the DLM, from up to down*)
 let iter_down ?(self = true) f n = 
   if self then f n;
     let rec rec_iter_down node = 
@@ -106,7 +110,7 @@ let iter_down ?(self = true) f n =
       rec_iter_down n.down
 
 
-(* Applique la fonction f à tout les elements de la list a gauche de n *)
+(* Applies f to elements of the DLM, from right to left *)
 let iter_left ?(self = true) f n = 
   if self then f n;
     let rec rec_iter_left node = 
@@ -119,7 +123,7 @@ let iter_left ?(self = true) f n =
 
 
 
-(* Applique la fonction f à tout les elements de la list au dessus de n *)
+(* Applies f to elements of the DLM, from down to up *)
 let iter_up ?(self = true) f n = 
   if self then f n;
     let rec rec_iter_up node = 
@@ -132,7 +136,7 @@ let iter_up ?(self = true) f n =
 
 
 
-(* Cree une matrix doublement chainee a partir d'une matrix *)
+(* Creates a DLM from a boolean matrix *)
 let create m = 
   let h = one_node () in (* creation de la tete *)
   let headers = generate_headers m h in (* on recupere les headers *)
@@ -144,8 +148,8 @@ let create m =
 
 
 
-   (* Recouvre : retire une colonne et les lignes correspondant aux 
-    elts de la colonne *)
+(* Removes the given column and all rows in column own list from 
+ the DLM*)
 let cover column_header = 
   column_header.right.left <- column_header.left;
   column_header.left.right <- column_header.right;
@@ -161,9 +165,8 @@ let cover column_header =
     iter_down ~self:false cover_row column_header 
 
 
-
-   (* Découvre : rajoute une colonne et les lignes correspondant aux elts 
-    de la colonne *)
+(* Un-removes the given column and all rows in column own list from 
+ the DLM*)
 let uncover column_header =
   let uncover_node n = (* remet l'elt *)
     n.c.s <- n.c.s + 1;
@@ -178,19 +181,19 @@ let uncover column_header =
     column_header.left.right <- column_header
 
 
-
-(* affiche la solution o *)
+(* Print the given solution *)
 let print_solution (o, k) =
   for i = 0 to k - 1  do
     Format.printf "%d@." o.(i).s
   done
 
+(* Print the given solution as an int list *)
 let print_list_solution l =
   List.iter (fun e -> Format.printf "%d " e) l; Format.printf "@."
 
 
-(* retourne une solution sous forme de int list *)
-let solution_of_list (o, k) = 
+(* Returns a solution as an int list *)
+let list_of_solution (o, k) = 
   let rec rec_stl l i = 
     if i = k then l
     else rec_stl (o.(i).s::l) (i + 1)
@@ -198,7 +201,7 @@ let solution_of_list (o, k) =
     rec_stl [] 0
 
 
-(* Choisit la colonne min *)
+(* Returns the min column *)
 let choose_min h = 
   let rec rec_chose min node =
     if node == h then min (* si on retombe sur la tete on arrete *)
@@ -213,7 +216,8 @@ let choose_min h =
 let count = ref 0
 let () = at_exit (fun () -> Format.printf "Dlx at_exit : %d@." !count)
 
-(* recherche l'ensemble des solutions au probleme de recouvrement *)
+(* Search the solution set of matrix covering problem and apply f on it 
+* *)
 let rec search f k h o = 
   if h == h.right then f (o, k)
   else 
@@ -229,8 +233,7 @@ let rec search f k h o =
       uncover column;
       incr count
 
-
-(* Initialise la matrice doublement chainee et affiche les solutions *)        
+(* Applies f to all solutions returned by search function from a boolean matrix*)
 let iter_solution f m =
   let dlm = create m in
   let o = Array.init (Array.length m.(0)) (fun _ -> one_node ()) in
@@ -238,34 +241,35 @@ let iter_solution f m =
 
 
 
-
-(* Fonctions visibles *)
-
+(* Visible functions *)
 
 (* retourne le nombre de solutions *)
-let get_solution_number m =
+let count_solutions m =
   let r = ref 0 in
     iter_solution (fun (_, _) -> r:= !r + 1) m;
     !r
 
+(* Return a solution (int list) array *)
 let get_solution_array m =
-  let n = get_solution_number m in
+  let n = count_solutions m in
   let s_array = Array.make n [] in 
   let i = ref 0 in 
-    iter_solution (fun (o, k) -> s_array.(!i) <- solution_of_list (o, k);
-                                 i := !i + 1) m;
+    iter_solution (
+      fun (o, k) -> s_array.(!i) <- list_of_solution (o, k); i := !i + 1
+    ) m;
     s_array
 
+(* Print all solutions from a solution array on stdout *)
 let print_solution_array s_array = 
   Array.iteri (fun i s -> Format.printf "Solution %d :" i;
                           print_list_solution s) s_array
 
-(* Affiche toutes les solutions *)
+(* Print all solution on stdout *)
 let print_solutions m = 
   iter_solution print_solution m
 
-(* Affiche la premiere solution *)
-let find_first_solution m =
+(* Print the first solution founded on stdout *)
+let print_first_solution m =
   try 
     iter_solution (fun (o, k) -> ignore(raise (Solution (o, k)))) m; 
     raise NotFound

@@ -48,10 +48,10 @@ all: $(OCAMLBEST)
 # bytecode and native-code compilation
 ######################################
 
-CMO = tiling.cmo dlx.cmo main.cmo 
+CMO = tiling.cmo dlx.cmo parser.cmo main.cmo 
 CMX = $(CMO:.cmo=.cmx)
 
-GENERATED = version.ml
+GENERATED = parser.ml version.ml
 
 byte: $(NAME).byte
 opt: $(NAME).opt

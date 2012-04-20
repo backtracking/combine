@@ -13,10 +13,10 @@ type node = {
 val print_solutions:
   bool array array -> unit
 
-val find_first_solution :
+val print_first_solution :
   bool array array -> unit
             
-val get_solution_number :
+val count_solutions :
   bool array array -> int
 
 val get_solution_array :
