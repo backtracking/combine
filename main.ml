@@ -1,17 +1,7 @@
-
-(*
-let l = int_of_string Sys.argv.(1)
-let h = int_of_string Sys.argv.(2)
-
-
-let board = Array.create_matrix l h true
-
-
-let _ = 
-  Tiling.display_boolean_matrix board
-*)
-
 open Format
+
+exception NoBoard
+
 
 let msg = "usage: project [options] file"
 let spec = [] 
@@ -24,23 +14,59 @@ let set_file f = match !file with
 
 let () = Arg.parse spec set_file msg
 
-let c = match !file with
-  | Some f -> open_in f
-  | None -> stdin
+let error_pieces_board () = 
+  eprintf "problem must have board and piece(s) @."; 
+  exit 1 
 
-let pl = Parser.read_channel c
+let problem =
+  let c = match !file with
+    | Some f -> open_in f
+    | None -> stdin
+  in
+  let p = 
+    try
+      Parser.read_problem c
+    with Invalid_argument msg ->
+      eprintf "invalid input file: %s@." msg;
+      exit 1
+  in
+  begin match !file with Some _ -> close_in c | None -> () end;
+  p
 
-let () = match !file with Some _ -> close_in c | None -> ()
+open Zdd
 
-let () = printf "%d pieces@." (List.length pl)
+let m = Tiling.emc problem
+let () = Tiling.display_boolean_matrix m
+let () = printf "%d x %d@." (Array.length m) (Array.length m.(0))
 
+let () = 
+  printf "ZDD : solutions : %d@." 
+    (Zdd.cardinal (Zdd.tiling m));
 (*
-let n = Array.length p
-let () =
-  if n = 0 then begin eprintf "problem height must be positive@."; exit 1 end
-let m = Array.length p.(0)
+  printf "ZDD : solutions : %d@." 
+    (Zdd.cardinal (Zdd.tiling (Tiling.emc problem)));
+  printf "DLX : solutions : %d@." 
+    (Dlx.count_solutions (Tiling.emc problem));
 
-let () = printf "problem has size %d x %d@." n m
+  let z = Zdd.column 0 [|[|true|];
+			 [|true|];
+			 [|false|];
+			 [|true|];
+			 [|false|];|] in
+  
+  let c = open_out "test.dot" in
+  let fmt = Format.formatter_of_out_channel c in
+  Zdd.print_to_dot fmt z;
+  close_out c;
+  ignore (Sys.command "dot -Tps test.dot | gv -")
 *)
+()
+
+  
+
+
+
+
+
 
 

@@ -41,14 +41,14 @@ OFLAGS = $(INCLUDES)
 # main target
 #############
 
-NAME = project
+NAME = reml
 
-all: $(OCAMLBEST)
+all: $(OCAMLBEST) test
 
 # bytecode and native-code compilation
 ######################################
 
-CMO = tiling.cmo dlx.cmo parser.cmo main.cmo 
+CMO = tiling.cmo dlx.cmo zdd.cmo parser.cmo  main.cmo 
 CMX = $(CMO:.cmo=.cmx)
 
 GENERATED = parser.ml version.ml
@@ -67,6 +67,15 @@ VERSION=0.1
 version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > version.ml
 	echo "let date = \""`date`"\"" >> version.ml
+
+# test
+######
+
+test: test.opt
+	./test.opt
+
+test.opt: tiling.cmx dlx.cmx zdd.cmx parser.cmx test.cmx
+	$(OCAMLOPT) -o $@ $^
 
 # installation
 ##############

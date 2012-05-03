@@ -7,7 +7,10 @@ config.log
 config.status
 *.o
 *.cm*
-project.byte
-project.opt
+reml.byte
+reml.opt
+test.opt
+test.dot
 .*.swp
 parser.ml
+*~

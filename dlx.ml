@@ -213,9 +213,6 @@ let choose_min h =
   in 
     rec_chose h.right h.right.right 
 
-let count = ref 0
-let () = at_exit (fun () -> Format.printf "Dlx at_exit : %d@." !count)
-
 (* Search the solution set of matrix covering problem and apply f on it 
 * *)
 let rec search f k h o = 
@@ -230,10 +227,10 @@ let rec search f k h o =
     in 
       cover column;
       iter_down ~self:false get_down column;
-      uncover column;
-      incr count
+      uncover column
 
-(* Applies f to all solutions returned by search function from a boolean matrix*)
+(* Applies f to all solutions returned by search 
+   function from a boolean matrix*)
 let iter_solution f m =
   let dlm = create m in
   let o = Array.init (Array.length m.(0)) (fun _ -> one_node ()) in

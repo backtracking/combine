@@ -1,29 +1,48 @@
 (* Tiling Module *)
 
 (* Misc *)
-(*
-type node = {
-  mutable c : node;
-  mutable s: int;
-  mutable up: node;
-  mutable down: node;
-  mutable left: node;
-  mutable right: node;
-  mutable name : string;
-}
-*)
 
+type iso = Id | Rot90h | Rot90a | Rot180 | VertRef | HorizRef |
+              Diag13Ref | Diag24Ref
+
+module Iso = 
+  Set.Make 
+    (struct
+       type t = iso
+       let compare iso1 iso2 = if iso1 = iso2 then 0 else 1
+     end)
 
 type piece = {
   mutable matrix : bool array array;
   mutable name : string;
   mutable quantity : int;
   mutable exact : bool; 
+  mutable isos_piece : Iso.t
+}
+
+type problem = {
+  mutable grid : bool array array;
+  mutable pname : string;
+  mutable pieces : piece list;
+  mutable isos_grid: Iso.t
+}
+
+let create_problem ?(n = "") g ps = {
+  grid = g; 
+  pname = n; 
+  pieces = ps;
+  isos_grid = Iso.empty
+}
+
+let create_piece ?(q = 0) ?(e = false) ?(n = "") m ={
+  matrix = m; 
+  name = n; 
+  quantity = q; 
+  exact = e;
+  isos_piece = Iso.empty
 }
 
 
-let create_piece ?(q = 0) ?(e = false) ?(n = "") m =
-  {matrix = m; name = n; quantity = q; exact = e}
 
 (* display a boolean matrix *)
 let display_boolean_matrix m = 
@@ -34,8 +53,6 @@ let display_boolean_matrix m =
         else Format.printf "False "
     ) col; Format.printf "@."
   ) m
-
-
 
 (* Board position testing *)
 
@@ -59,6 +76,59 @@ let is_possible_position piece board x y =
   with 
     | Exit -> false
 
+(* Isometries *)
+
+let comput_coordinates iso (x, y) h l =
+  match iso with 
+    | Id -> (x, y)
+    | Rot90a -> (h - y, x)
+    | Rot180 -> (l - x , h - y)
+    | Rot90h -> (y, l - x)
+    | HorizRef -> (x, h - y)
+    | VertRef -> (l - x, y)
+    | Diag13Ref -> (y, x) 
+    | Diag24Ref -> (h - y, l - x)
+
+let comput_size iso (h, l) = 
+	match iso with 
+		| Id  
+		| HorizRef 
+		| VertRef  
+		| Rot180 -> (h, l)
+		| Rot90a  
+		| Rot90h  
+		| Diag13Ref   
+		| Diag24Ref -> (l, h)
+
+
+let apply iso matrix = 
+  let l, h = Array.length matrix, Array.length matrix in
+  let l_new, h_new = comput_size iso (l, h) in
+  let new_m = Array.make_matrix h_new l_new false in
+    Array.iteri (
+      fun i col -> Array.iteri (
+        fun j cell -> 
+          let new_i, new_j = comput_coordinates iso (i, j) h l in
+            new_m.(new_i).(new_j) <- cell
+      ) col
+    ) matrix;
+    new_m
+
+let get_isos matrix = 
+  let iso_set = ref Iso.empty in
+  let table = Hashtbl.create 8 in
+    Hashtbl.add table (matrix) Id;
+    Hashtbl.add table (apply Rot90a matrix) Rot90a;
+    Hashtbl.add table (apply Rot90h matrix) Rot90h;
+    Hashtbl.add table (apply Rot180 matrix) Rot180;
+    Hashtbl.add table (apply HorizRef matrix) HorizRef;
+    Hashtbl.add table (apply VertRef matrix) VertRef;
+    Hashtbl.add table (apply Diag13Ref matrix) Diag13Ref;
+    Hashtbl.add table (apply Diag24Ref matrix) Diag24Ref;
+    Hashtbl.iter (
+      fun _ iso -> iso_set := Iso.add iso !iso_set 
+    ) table;
+    !iso_set
 
 
 (* Symmetries *)
@@ -107,47 +177,6 @@ let has_vertical_symmetry piece =
       | Exit -> false
 
 
-(* Matrix transormations *)
-
-
-(* rotate a matrix 180° *)
-let half_turn m = 
-  let h = Array.length m.(0) in 
-  let l = Array.length m in 
-  let new_m = Array.make_matrix l h false in
-    Array.iteri (
-      fun i col -> Array.iteri (
-        fun j cell -> 
-          new_m.(l - 1 - i).(h - 1 - j) <- cell
-      ) col
-    ) m;
-    new_m
-
-(* rotate a matrix clockwise (90°)*)
-let quarter_turn_clockwise m = 
-  let old_l = Array.length m in 
-  let new_m = Array.make_matrix (Array.length m.(0)) old_l false in
-    Array.iteri (
-      fun i col -> Array.iteri (
-        fun j cell -> 
-          new_m.(j).(old_l - 1 - i) <- cell
-      ) col
-    ) m;
-    new_m
-
-(* rotate a matrix anti-clockwise (90°)*)
-let quarter_turn_anticlockwise m = 
-  let old_h = Array.length m.(0) in 
-  let new_m = Array.make_matrix old_h (Array.length m) false in
-    Array.iteri (
-      fun i col -> Array.iteri (
-        fun j cell -> 
-          new_m.(old_h - 1 - j).(i) <- cell
-      ) col
-    ) m;
-    new_m
-
-
    (* return a list of pieces containing the rotations of the piece, 
     including itself 
     *)
@@ -184,15 +213,23 @@ let get_all_rotations pieces =
 (* return an array of size n representing the way to put piece p at 
  position x y on the board of size l*n
  *)
-let one_line l n piece x y = 
+let one_line l n piece_id piece x y = 
   let line = Array.make n false in
     for i = 0 to Array.length piece.matrix - 1 do  
       for j = 0 to Array.length piece.matrix.(0) - 1 do  
         if piece.matrix.(i).(j) then
-          line.((x + i) * l + y + j) <- true
+          line.((x + i) * l + y + j) <- true;
+        if piece.quantity <> 0 then begin 
+          line.(piece_id) <- true;
+        end 
       done 
     done;
     line 
+
+let one_line_piece_only n piece_id piece =
+  let line = Array.make n false in
+    line.(piece_id) <- true;
+    line
 
 let comput_matrix_size board pieces =
   let h = Array.length board in 
@@ -206,28 +243,35 @@ let comput_matrix_size board pieces =
           acc
     ) 0 pieces
 
-
-
-
 (* return a boolean matrix representing the set of way to put all pieces
  * on the board
  * *)
-let matrix_of_game board pieces =
-  let h = Array.length board in 
-  let l = Array.length board.(0) in 
-  let n = comput_matrix_size board pieces in
+let emc problem =
+  let w = Array.length problem.grid in 
+  let h = Array.length problem.grid.(0) in 
+  let n = comput_matrix_size problem.grid problem.pieces in
+  let piece_id = ref (h * w) in
   let lines = ref [] in 
-  let add_piece piece = 
-    for i = 0 to h - 1 do
-      for j = 0 to l - 1 do
-        if is_possible_position piece board i j then
-          lines := one_line l n piece i j::!lines
-      done 
-    done;
+  let add_piece i j piece = 
+        if is_possible_position piece problem.grid i j then
+          if piece.quantity = 0 then 
+            lines := one_line w n !piece_id piece i j::!lines
+          else 
+            for k = 0 to piece.quantity do
+              if not piece.exact then begin
+                lines := one_line_piece_only n !piece_id piece::!lines;
+                lines := one_line w n !piece_id piece i j::!lines;
+                incr piece_id
+              end
+            done
   in 
-    List.iter add_piece pieces; 
-    Array.of_list !lines
+  for i = 0 to h - 1 do
+    for j = 0 to w - 1 do
+      List.iter (add_piece i j) problem.pieces; 
+    done 
+  done;
+  Array.of_list !lines
 
-  
+ 
 
 
