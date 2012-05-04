@@ -10,17 +10,20 @@ type node = {
     mutable name : string;
 }
 
-val print_solutions:
-  bool array array -> unit
+val print_solutions: bool array array -> unit
 
-val print_first_solution :
-  bool array array -> unit
+val print_first_solution : bool array array -> unit
+
+val get_first_solution : bool array array -> int list
             
-val count_solutions :
-  bool array array -> int
+val count_solutions : bool array array -> int
 
-val get_solution_array :
-  bool array array -> int list array
+val get_solution_array : bool array array -> int list array
 
-val print_solution_array :
-  int list array -> unit
+val get_solution_list : bool array array -> int list list
+
+val print_solution_array : int list array -> unit
+
+val list_of_solution : node array * int -> int list 
+
+val iter_solution : (node array * int -> unit) -> bool array array-> unit

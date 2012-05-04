@@ -3,9 +3,3 @@
 
   make a functor for arbitrary precision arithmetic
 
-  module type ARITH = sig
-    type t
-    val zero: t
-    val one: t
-    val add: t -> t -> t
-  end

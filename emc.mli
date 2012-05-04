@@ -11,7 +11,23 @@ module type S = sig
 
   val iter_solution: (solution -> unit) -> problem -> unit
 
-  val count_solution: problem -> int
+  val count_solutions: problem -> int
 
+  (*
+  module type ARITH = sig
+    type t
+    val zero: t
+    val one: t
+    val add: t -> t -> t
+  end
+
+  module Count(A: ARITH) : sig val count_solutions: problem -> A.t end
+  *)
 end
+
+(** DLX-based implementation *)
+module D: S
+
+(** ZDD-based implementation *)
+module Z: S
 

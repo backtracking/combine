@@ -2,6 +2,7 @@
 
 type unique = int
 
+type set = int list
 (* invariant:
    - elements increase when we descend in subtrees
    - the right subtree of a ZDD is never Bottom *)
@@ -170,6 +171,61 @@ let column j m =
   Format.printf "column %d: %d@." j (size r);
   r
 
+
+let tiling m =
+  let width = Array.length m.(0) in
+  let rec tiling j zdd_acc =
+    printf " => %d@." (size zdd_acc);
+    if j < 0 then
+      zdd_acc
+    else
+      tiling (j-1) (inter (column j m) zdd_acc)
+  in
+  tiling (width-2) (column (width-1) m)
+
+
+let any_element zdd = 
+  let rec any_element zdd l = 
+    match zdd with 
+      | Node(u, i, _, ct) -> any_element ct (i::l)
+      | _ -> []
+  in 
+    any_element zdd []
+
+
+let iter_element f zdd = 
+  let rec iter_element f zdd l = 
+    match zdd with 
+      | Top -> f l
+      | Bottom -> ()
+      | Node (_, i, z1, z2)-> iter_element f z1 l;
+                              iter_element f z2 (i::l)
+  in 
+    iter_element f zdd []
+
+
+
+
+    (*
+     let rec singleton s = 
+     match s with 
+     | [] -> Top
+     | h::t -> Node(h, Bottom, singleton t)
+       *)
+
+
+    (*
+     let rec is_in s zdd = 
+     match s, ct with 
+     | [], Top -> true
+     | h::t, Node(i, ct1, ct2) -> 
+     if i = h then is_in t ct2
+     else false
+     | _, _ -> false
+       *)
+
+
+
 (**
 let column j m = 
   let length = Array.length m in 
@@ -195,45 +251,5 @@ let column j m =
     Format.printf "Debug : %d@." (cardinal result);
     result
 ***)
-
-let tiling m =
-  let width = Array.length m.(0) in
-  let rec tiling j zdd_acc =
-    printf " => %d@." (size zdd_acc);
-    if j < 0 then
-      zdd_acc
-    else
-      tiling (j-1) (inter (column j m) zdd_acc)
-  in
-  tiling (width-2) (column (width-1) m)
-
-
-    (*
-     let rec Top_elt zdd = 
-     match zdd with 
-     | Node(i, _, ct) -> i::Top_elt ct
-     | _ -> []
-       *)
-
-    (*
-     let rec singleton s = 
-     match s with 
-     | [] -> Top
-     | h::t -> Node(h, Bottom, singleton t)
-       *)
-
-
-    (*
-     let rec is_in s zdd = 
-     match s, ct with 
-     | [], Top -> true
-     | h::t, Node(i, ct1, ct2) -> 
-     if i = h then is_in t ct2
-     else false
-     | _, _ -> false
-       *)
-
-
-
 
 

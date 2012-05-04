@@ -11,6 +11,17 @@ val cardinal: t -> int
 
 val inter: t -> t -> t
 
+
+type set = int list
+
+             (*
+module S : Set.S with type elt = int
+*)
+
+val any_element: t -> set
+val iter_element: (set -> unit) -> t -> unit
+
+
 val size: t -> int
   (** Number of internal nodes of a given ZDD.
       Each node occupies 5 words, so the total space used by a ZDD [z]

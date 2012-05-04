@@ -14,7 +14,6 @@ type node = {
 }
 
 exception Solution of node array * int
-exception NotFound
 
 let one_node () =
   let rec h = { name = "head"; c = h; s = 0; up = h; 
@@ -236,8 +235,6 @@ let iter_solution f m =
   let o = Array.init (Array.length m.(0)) (fun _ -> one_node ()) in
     search f 0 dlm o
 
-
-
 (* Visible functions *)
 
 (* retourne le nombre de solutions *)
@@ -252,9 +249,17 @@ let get_solution_array m =
   let s_array = Array.make n [] in 
   let i = ref 0 in 
     iter_solution (
-      fun (o, k) -> s_array.(!i) <- list_of_solution (o, k); i := !i + 1
+      fun (o, k) -> s_array.(!i) <- list_of_solution (o, k); incr i
     ) m;
     s_array
+
+let get_solution_list m =
+  let list_ref = ref [] in 
+    iter_solution (
+      fun (o, k) -> list_ref := list_of_solution (o, k)::!list_ref
+    ) m;
+    !list_ref
+
 
 (* Print all solutions from a solution array on stdout *)
 let print_solution_array s_array = 
@@ -269,10 +274,18 @@ let print_solutions m =
 let print_first_solution m =
   try 
     iter_solution (fun (o, k) -> ignore(raise (Solution (o, k)))) m; 
-    raise NotFound
+    raise Not_found
   with 
     | Solution (o, k) -> print_solution (o, k)
-    | NotFound -> Format.printf "No solutions.@."
+
+let get_first_solution m =
+  try 
+    iter_solution (fun (o, k) -> ignore(raise (Solution (o, k)))) m; 
+    raise Not_found
+  with 
+    | Solution (o, k) -> list_of_solution (o, k)
+
+
 
 
 
