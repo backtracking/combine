@@ -36,15 +36,27 @@ let problem =
 
 let m = Tiling.emc problem
 
-module CZDD = Emc.Z.Count(Num)
+(*
+let ()  =
+  Tiling.display_boolean_matrix m;
+ *)
+
+open Num
+
+module A = struct
+  type t = Num.num
+  let zero = Num.num_of_int 0
+  let one = Num.num_of_int 1
+  let add = Num.add_num
+end
+
+module CZDD = Emc.Z.Count(A)
 
 let () = 
   if !zdd then 
-    printf "ZDD : solutions : %d@." (Emc.Z.simple_count_solutions m);
+    printf "ZDD solutions : %s@." (string_of_num (CZDD.count_solutions m));
   if !dlx then 
     printf "DLX : solutions : %d@." (Emc.D.simple_count_solutions m)
-
-
 
 
 (*

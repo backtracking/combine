@@ -36,7 +36,7 @@ EXE = @EXE@
 
 INCLUDES = 
 BFLAGS = -g $(INCLUDES)
-OFLAGS = $(INCLUDES) -annot
+OFLAGS = -annot$(INCLUDES) nums.cmxa
 
 # main target
 #############
@@ -60,7 +60,7 @@ $(NAME).byte: $(CMO)
 	$(OCAMLC) $(BFLAGS) -o $@ $^
 
 $(NAME).opt: $(CMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ $^
+	$(OCAMLOPT) $(OFLAGS) -o $@ $^ 
 
 VERSION=0.1
 

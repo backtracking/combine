@@ -158,17 +158,17 @@ let print_to_dot fmt z =
   fprintf fmt "}@]@."
 
 let column j m =
-  let n = Array.length m in
-  (* we build the solution from bottom up, i.e. i = n-1,...,1,0 *)
-  let rec build z zf i =
-    (* z  = exactly one i such that m[i][j]=true
-       zf = only i such that m[i][j]=false *)
-    if i < 0 then z
-    else if m.(i).(j) then build (construct i z zf) zf (i-1)
-    else build (construct i z z) (construct i zf zf) (i-1)
-  in
-  let r = build bottom top (n-1) in
-  r
+	let n = Array.length m in
+	(* we build the solution from bottom up, i.e. i = n-1,...,1,0 *)
+	let rec build z zf i =
+		 (* z  = exactly one i such that m[i][j]=true
+		zf = only i such that m[i][j]=false *)
+		if i < 0 then z
+		else if m.(i).(j) then build (construct i z zf) zf (i-1)
+		else build (construct i z z) (construct i zf zf) (i-1)
+	in
+	let r = build bottom top (n-1) in
+		r
 
 
 let tiling m =

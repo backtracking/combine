@@ -22,13 +22,16 @@ module type S = sig
     val one: t
     val add: t -> t -> t
   end
+    (** simple arithmetic module with big integers *)
+
   module Count(A: ARITH) : sig val count_solutions: problem -> A.t end
+    (** Functor usage of arithmetics *)
 
 end
 
-(** DLX-based implementation *)
+  (** DLX-based implementation *)
 module D: S
 
-(** ZDD-based implementation *)
+  (** ZDD-based implementation *)
 module Z: S
 

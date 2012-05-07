@@ -3,7 +3,7 @@
 type problem = bool array array
 
 type solution = int list
-(** a solution is a set of rows *)
+  (** a solution is a set of rows *)
 
 module type S = sig
   val find_solution: problem -> solution
@@ -15,11 +15,9 @@ module type S = sig
     val one: t
     val add: t -> t -> t
   end
-
   module Count(A: ARITH) : sig 
     val count_solutions: problem -> A.t 
   end
-
 end
 
 
@@ -27,16 +25,13 @@ module D = struct
   let find_solution p = Dlx.get_first_solution p
   let iter_solution f p = Dlx.iter_solution (
     fun e -> f (Dlx.list_of_solution e)) p
-
-   let simple_count_solutions = Dlx.count_solutions 
-
+  let simple_count_solutions = Dlx.count_solutions 
   module type ARITH = sig
     type t
     val zero: t
     val one: t
     val add: t -> t -> t
   end
-
   module Count = functor (A: ARITH) ->  
   struct
     let count_solutions p = 
@@ -44,26 +39,19 @@ module D = struct
         iter_solution (fun _ -> r:= A.add !r A.one) p;
         !r
   end
-
 end
-
-
 
 
 module Z = struct
   let find_solution p = Zdd.any_element (Zdd.tiling p)
   let iter_solution f p = Zdd.iter_element f (Zdd.tiling p)
-
-   let simple_count_solutions p = Zdd.cardinal (Zdd.tiling p) 
-
+  let simple_count_solutions p = Zdd.cardinal (Zdd.tiling p) 
   module type ARITH = sig
     type t
     val zero: t
     val one: t
     val add: t -> t -> t
   end
-
-
   module Htbl = 
     Hashtbl.Make 
       (struct
@@ -71,7 +59,6 @@ module Z = struct
          let hash = Zdd.unique 
          let equal = (==) 
        end)
-
   module Count = functor (A: ARITH) ->  
   struct
     let count_solutions p = 
@@ -91,7 +78,6 @@ module Z = struct
       in 
         cardinal zdd
   end
-
 end
 
 

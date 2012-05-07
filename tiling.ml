@@ -49,8 +49,8 @@ let display_boolean_matrix m =
   Array.iter (
     fun col -> Array.iter (
       fun cell -> 
-        if cell then Format.printf "True "
-        else Format.printf "False "
+        if cell then Format.printf "1"
+        else Format.printf "0"
     ) col; Format.printf "@."
   ) m
 
