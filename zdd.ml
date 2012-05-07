@@ -168,14 +168,12 @@ let column j m =
     else build (construct i z z) (construct i zf zf) (i-1)
   in
   let r = build bottom top (n-1) in
-  Format.printf "column %d: %d@." j (size r);
   r
 
 
 let tiling m =
   let width = Array.length m.(0) in
   let rec tiling j zdd_acc =
-    printf " => %d@." (size zdd_acc);
     if j < 0 then
       zdd_acc
     else
@@ -194,14 +192,13 @@ let any_element zdd =
 
 
 let iter_element f zdd = 
-  let rec iter_element f zdd l = 
-    match zdd with 
+  let rec iter_element f l = function
       | Top -> f l
       | Bottom -> ()
-      | Node (_, i, z1, z2)-> iter_element f z1 l;
-                              iter_element f z2 (i::l)
+      | Node (_, i, z1, z2)-> iter_element f l z1 ;
+                              iter_element f (i::l) z2 
   in 
-    iter_element f zdd []
+    iter_element f [] zdd
 
 
 

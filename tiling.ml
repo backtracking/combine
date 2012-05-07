@@ -247,8 +247,8 @@ let comput_matrix_size board pieces =
  * on the board
  * *)
 let emc problem =
-  let w = Array.length problem.grid in 
-  let h = Array.length problem.grid.(0) in 
+  let h = Array.length problem.grid in 
+  let w = Array.length problem.grid.(0) in 
   let n = comput_matrix_size problem.grid problem.pieces in
   let piece_id = ref (h * w) in
   let lines = ref [] in 

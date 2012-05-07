@@ -1,10 +1,11 @@
 open Format
 
-exception NoBoard
-
+let zdd = ref false
+let dlx = ref false
 
 let msg = "usage: project [options] file"
-let spec = [] 
+let spec = ["--zdd", Arg.Set zdd, "  Count solutions using Zdd";  
+            "--dlx", Arg.Set dlx, "  Count solutions using Dlx"]  
 
 let file = ref None
 let set_file f = match !file with
@@ -33,34 +34,48 @@ let problem =
   begin match !file with Some _ -> close_in c | None -> () end;
   p
 
-open Zdd
-
 let m = Tiling.emc problem
-let () = Tiling.display_boolean_matrix m
-let () = printf "%d x %d@." (Array.length m) (Array.length m.(0))
+
+module CZDD = Emc.Z.Count(Num)
 
 let () = 
-  printf "ZDD : solutions : %d@." 
-    (Zdd.cardinal (Zdd.tiling m));
+  if !zdd then 
+    printf "ZDD : solutions : %d@." (Emc.Z.simple_count_solutions m);
+  if !dlx then 
+    printf "DLX : solutions : %d@." (Emc.D.simple_count_solutions m)
+
+
+
+
 (*
-  printf "ZDD : solutions : %d@." 
-    (Zdd.cardinal (Zdd.tiling (Tiling.emc problem)));
+let () = 
+  let c = open_out "test_on_file.txt" in
+  let fmt = Format.formatter_of_out_channel c in
+  let print_on_file l =
+    List.iter (fun e -> Format.fprintf fmt "%d " e) l;
+    Format.fprintf fmt "@."
+  in 
+    Emc.Z.iter_solution print_on_file m
+ *)
+
+(*
   printf "DLX : solutions : %d@." 
     (Dlx.count_solutions (Tiling.emc problem));
+ *)
 
+(*
   let z = Zdd.column 0 [|[|true|];
 			 [|true|];
 			 [|false|];
 			 [|true|];
 			 [|false|];|] in
-  
   let c = open_out "test.dot" in
   let fmt = Format.formatter_of_out_channel c in
   Zdd.print_to_dot fmt z;
   close_out c;
   ignore (Sys.command "dot -Tps test.dot | gv -")
-*)
 ()
+ *)
 
   
 

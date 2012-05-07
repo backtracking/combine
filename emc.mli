@@ -10,19 +10,20 @@ module type S = sig
     (** raises [Not_found] if the problem has no solution *)
 
   val iter_solution: (solution -> unit) -> problem -> unit
+    (** [Emc.iter_solution f p] applies [f] in turn to each problem [p] 
+      solutions *)
 
-  val count_solutions: problem -> int
+  val simple_count_solutions: problem -> int
+    (** Return the number of solutions to this problem *)
 
-  (*
   module type ARITH = sig
     type t
     val zero: t
     val one: t
     val add: t -> t -> t
   end
-
   module Count(A: ARITH) : sig val count_solutions: problem -> A.t end
-  *)
+
 end
 
 (** DLX-based implementation *)

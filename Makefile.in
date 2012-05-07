@@ -36,7 +36,7 @@ EXE = @EXE@
 
 INCLUDES = 
 BFLAGS = -g $(INCLUDES)
-OFLAGS = $(INCLUDES)
+OFLAGS = $(INCLUDES) -annot
 
 # main target
 #############
