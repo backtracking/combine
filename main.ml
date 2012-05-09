@@ -39,41 +39,28 @@ let m = Tiling.emc problem
 (*
 let ()  =
   Tiling.display_boolean_matrix m;
- *)
 
+ *)
 open Num
 
-module A = struct
-  type t = Num.num
-  let zero = Num.num_of_int 0
-  let one = Num.num_of_int 1
-  let add = Num.add_num
-end
+module CZDD = 
+  Emc.Z.Count
+    ( struct
+        type t = Num.num
+        let zero = Num.num_of_int 0
+        let one = Num.num_of_int 1
+        let add = Num.add_num
+      end
+    )
 
-module CZDD = Emc.Z.Count(A)
 
 let () = 
   if !zdd then 
     printf "ZDD solutions : %s@." (string_of_num (CZDD.count_solutions m));
+    
   if !dlx then 
     printf "DLX : solutions : %d@." (Emc.D.simple_count_solutions m)
 
-
-(*
-let () = 
-  let c = open_out "test_on_file.txt" in
-  let fmt = Format.formatter_of_out_channel c in
-  let print_on_file l =
-    List.iter (fun e -> Format.fprintf fmt "%d " e) l;
-    Format.fprintf fmt "@."
-  in 
-    Emc.Z.iter_solution print_on_file m
- *)
-
-(*
-  printf "DLX : solutions : %d@." 
-    (Dlx.count_solutions (Tiling.emc problem));
- *)
 
 (*
   let z = Zdd.column 0 [|[|true|];

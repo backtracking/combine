@@ -14,7 +14,7 @@ val inter: t -> t -> t
 
 type set = int list
 
-             (*
+(*
 module S : Set.S with type elt = int
 *)
 
@@ -22,11 +22,16 @@ val any_element: t -> set
   (** [any_element z] find and return a solution in an arbitrary way 
   Not_found is raised if there is no solution *)
 
-
-
 val iter_element: (set -> unit) -> t -> unit
 
-
+module type ARITH = sig
+  type t
+  val zero: t
+  val one: t
+  val add: t -> t -> t
+end
+  
+module Cardinal(A: ARITH) : sig val cardinal: t -> A.t end
 
 val size: t -> int
   (** Number of internal nodes of a given ZDD.
@@ -38,6 +43,3 @@ val print_to_dot: Format.formatter -> t -> unit
    to the drawing of the Zdd [z] *)
 
 
-(* à déplacer *)
-val column: int -> bool array array -> t
-val tiling: bool array array -> t

@@ -35,9 +35,8 @@ OCAMLWIN32 = @OCAMLWIN32@
 EXE = @EXE@
 
 INCLUDES = 
-BFLAGS = -g $(INCLUDES)
+BFLAGS = -g $(INCLUDES) nums.cma
 OFLAGS = -annot$(INCLUDES) nums.cmxa
-
 # main target
 #############
 
@@ -57,7 +56,7 @@ byte: $(NAME).byte
 opt: $(NAME).opt
 
 $(NAME).byte: $(CMO)
-	$(OCAMLC) $(BFLAGS) -o $@ $^
+	$(OCAMLC) $(BFLAGS) -o $@ $^ 
 
 $(NAME).opt: $(CMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^ 

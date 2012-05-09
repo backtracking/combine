@@ -32,7 +32,9 @@ let create_problem ?(n = "") g ps = {
   pname = n; 
   pieces = ps;
   isos_grid = Iso.empty
+
 }
+
 
 let create_piece ?(q = 0) ?(e = false) ?(n = "") m ={
   matrix = m; 

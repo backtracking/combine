@@ -78,6 +78,33 @@ let cardinal zdd =
   in 
     cardinal zdd
 
+module type ARITH = sig
+  type t
+  val zero: t
+  val one: t
+  val add: t -> t -> t
+end
+  
+module Cardinal(A: ARITH) : sig val cardinal: t -> A.t end = struct
+
+  let cardinal zdd = 
+    let table = H1.create hsize in
+    let rec cardinal = function
+      | Top -> A.one
+      | Bottom -> A.zero
+      | Node(_, i, z1, z2) -> A.add (memo z1) (memo z2)
+    and memo z =
+      try
+	H1.find table z
+      with Not_found ->
+	let c = cardinal z in
+	H1.add table z c;
+	c
+    in 
+    cardinal zdd
+
+end
+
 module H2 = 
   Hashtbl.Make 
     (struct 
@@ -156,31 +183,6 @@ let print_to_dot fmt z =
   fprintf fmt "@[<hov 2>digraph ZDD {@\n";
   ignore (visit z);
   fprintf fmt "}@]@."
-
-let column j m =
-	let n = Array.length m in
-	(* we build the solution from bottom up, i.e. i = n-1,...,1,0 *)
-	let rec build z zf i =
-		 (* z  = exactly one i such that m[i][j]=true
-		zf = only i such that m[i][j]=false *)
-		if i < 0 then z
-		else if m.(i).(j) then build (construct i z zf) zf (i-1)
-		else build (construct i z z) (construct i zf zf) (i-1)
-	in
-	let r = build bottom top (n-1) in
-		r
-
-
-let tiling m =
-  let width = Array.length m.(0) in
-  let rec tiling j zdd_acc =
-    if j < 0 then
-      zdd_acc
-    else
-      tiling (j-1) (inter (column j m) zdd_acc)
-  in
-  tiling (width-2) (column (width-1) m)
-
 
 let any_element zdd = 
   let rec any_element zdd l = 
