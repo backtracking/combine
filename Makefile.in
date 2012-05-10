@@ -35,8 +35,8 @@ OCAMLWIN32 = @OCAMLWIN32@
 EXE = @EXE@
 
 INCLUDES = 
-BFLAGS = -g $(INCLUDES) nums.cma
-OFLAGS = -annot$(INCLUDES) nums.cmxa
+BFLAGS = -g $(INCLUDES) nums.cma str.cma
+OFLAGS = -annot$(INCLUDES) nums.cmxa str.cmxa
 # main target
 #############
 
@@ -47,13 +47,13 @@ all: $(OCAMLBEST) test
 # bytecode and native-code compilation
 ######################################
 
-CMO = tiling.cmo dlx.cmo zdd.cmo emc.cmo parser.cmo main.cmo 
+CMO = tiling.cmo dlx.cmo zdd.cmo emc.cmo parser.cmo sudoku.cmo main.cmo 
 CMX = $(CMO:.cmo=.cmx)
 
 GENERATED = parser.ml version.ml
 
 byte: $(NAME).byte
-opt: $(NAME).opt
+opt: $(NAME).opt sudoku.opt
 
 $(NAME).byte: $(CMO)
 	$(OCAMLC) $(BFLAGS) -o $@ $^ 
@@ -75,6 +75,11 @@ test: test.opt
 
 test.opt: tiling.cmx dlx.cmx zdd.cmx parser.cmx test.cmx
 	$(OCAMLOPT) -o $@ $^
+
+
+
+sudoku.opt: tiling.cmx dlx.cmx zdd.cmx emc.cmx sudoku.cmx
+	$(OCAMLOPT) -o $@ str.cmxa $^ 
 
 # installation
 ##############

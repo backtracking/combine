@@ -44,18 +44,6 @@ let create_piece ?(q = 0) ?(e = false) ?(n = "") m ={
   isos_piece = Iso.empty
 }
 
-
-
-(* display a boolean matrix *)
-let display_boolean_matrix m = 
-  Array.iter (
-    fun col -> Array.iter (
-      fun cell -> 
-        if cell then Format.printf "1"
-        else Format.printf "0"
-    ) col; Format.printf "@."
-  ) m
-
 (* Board position testing *)
 
 (* return true if position x y is on the board *)

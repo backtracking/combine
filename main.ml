@@ -55,11 +55,11 @@ module CZDD =
 
 
 let () = 
-  if !zdd then 
-    printf "ZDD solutions : %s@." (string_of_num (CZDD.count_solutions m));
-    
-  if !dlx then 
-    printf "DLX : solutions : %d@." (Emc.D.simple_count_solutions m)
+ 
+    if !zdd then 
+      printf "ZDD solutions : %s@." (string_of_num (CZDD.count_solutions m));
+    if !dlx then 
+      printf "DLX : solutions : %d@." (Emc.D.simple_count_solutions m);
 
 
 (*

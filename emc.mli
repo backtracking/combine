@@ -29,6 +29,8 @@ module type S = sig
 
 end
 
+val display_boolean_matrix : bool array array -> unit
+
   (** DLX-based implementation *)
 module D: S
 

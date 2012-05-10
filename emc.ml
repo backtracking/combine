@@ -7,6 +7,17 @@ type problem = bool array array
 type solution = int list
 (** a solution is a set of rows *)
 
+(* display a boolean matrix *)
+let display_boolean_matrix m = 
+  Array.iter (
+    fun col -> Array.iter (
+      fun cell -> 
+        if cell then Format.printf "1"
+        else Format.printf "0"
+    ) col; Format.printf "@."
+  ) m
+
+
 module type S = sig
   val find_solution: problem -> solution
   val iter_solution: (solution -> unit) -> problem -> unit
@@ -100,6 +111,7 @@ module Z = struct
       printf "size = %d@." (size cols.(max));
       cols.(max)
 
+
   let tiling m =
     let width = Array.length m.(0) in
     let cols = Array.init width (fun j -> (* j, min_row j 0, *) column j m) in
@@ -109,6 +121,7 @@ module Z = struct
   let find_solution p = any_element (tiling p)
   let iter_solution f p = iter_element f (tiling p)
   let simple_count_solutions p = cardinal (tiling p) 
+
 
   module type ARITH = sig
     type t

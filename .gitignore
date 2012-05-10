@@ -11,6 +11,7 @@ reml.byte
 reml.opt
 test.opt
 test.dot
+sudoku.opt
 .*.swp
 parser.ml
 *~
