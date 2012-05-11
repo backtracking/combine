@@ -224,31 +224,3 @@ let iter_element f zdd =
        *)
 
 
-
-(**
-let column j m = 
-  let length = Array.length m in 
-  let rec column i exist =
-    if i >= length then 
-      if exist then Top
-      else Bottom
-    else if exist then 
-      if m.(i).(j) then 
-        column (i + 1) exist
-      else 
-        construct i (column (i + 1) true) (column (i + 1) true)
-    else 
-      if m.(i).(j) then  
-        construct i (column (i + 1) false) (column (i + 1) true) 
-      else 
-        if i <> length - 1 then 
-          construct i (column (i + 1) false) (column (i + 1) false) 
-        else 
-          Bottom
-  in 
-  let result = column 0 false in
-    Format.printf "Debug : %d@." (cardinal result);
-    result
-***)
-
-

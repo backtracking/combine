@@ -5,6 +5,10 @@ let size = 9
 
 let emc_size = size * size * 4
 
+let zdd = ref false
+let dlx = ref false
+
+
 let display_sudoku_line line = 
   Array.iter (fun e -> printf "%d" e) line;
   printf "@."
@@ -36,6 +40,41 @@ let read s =
     in 
       read lines 0;
       sudoku_array
+
+
+
+let msg = "usage: project file"
+
+let file = ref None
+let set_file f = match !file with
+  | Some _ -> Arg.usage [] msg; exit 1
+  | None when Sys.file_exists f -> file := Some f
+  | None -> eprintf "%s: no such file@." f; exit 1
+
+let () = Arg.parse [] set_file msg
+
+let error_pieces_board () = 
+  eprintf "problem must have board and piece(s) @."; 
+  exit 1 
+
+let sudoku =
+  let c = match !file with
+    | Some f -> open_in f
+    | None -> stdin
+  in
+  let p = 
+    try
+      let s = String.make (in_channel_length c) ' ' in 
+        really_input c s 0 (in_channel_length c - 1);
+        read s
+    with Invalid_argument msg ->
+      eprintf "invalid input file: %s@." msg;
+      exit 1
+  in
+    begin match !file with Some _ -> close_in c | None -> () end;
+    p
+
+
 
 let ok_in_cell v celli cellj sudoku = 
   for iteri = celli to celli + 2 do
@@ -107,10 +146,7 @@ let emc sudoku =
       for j = 0 to size - 1 do
         for v = 1 to size do
           if ok v i j sudoku then
-            begin
-              printf "%d %d %d@." v i j;
               lr := get_line v i j :: !lr 
-            end
         done
       done
     done;
@@ -133,51 +169,39 @@ let print_emc_sudoku () =
   printf "@."
 
 
-let sudoku = "
-000206003
-060080000
-071003000
-006000910
-007809600
-024000800
-000100540
-000030080
-200608000"
+let decode m emc_array i = 
+  if i < Array.length emc_array - 1 then begin
+    let c = ref 0 in 
+    let l = ref 0 in 
+    let v = ref 0 in 
+      for j = 0 to 161 do 
+        if emc_array.(i).(j) then begin
+          if j < 81 then begin
+            c := j / 9;
+            v := j mod 9 + 1
+          end
+          else
+            l := (j - 81) / 9;
+        end
+      done;
+      assert (!v <> 0);
+      m.(!l).(!c) <- !v 
+  end
 
 
 let () = 
-  let m = read sudoku in 
+  let m = sudoku in 
+  let emc_array = emc m in 
     display_sudoku m;
-    let emc_array = emc m in 
-      printf "DLX : emc_size : %dx%d @.solutions : @." 
-        (Array.length emc_array) (Array.length emc_array.(0));
-      try 
-        let s = Emc.D.find_solution emc_array in
-        let n = List.length s in 
-          printf "%d@." n;
-          let decode i = 
-            if i < Array.length emc_array - 1 then begin
-              let c = ref 0 in 
-              let l = ref 0 in 
-              let v = ref 0 in 
-                for j = 0 to 161 do 
-                  if emc_array.(i).(j) then begin
-                    if j < 81 then begin
-                      c := j / 9;
-                      v := j mod 9 + 1
-                    end
-                    else
-                      l := (j - 81) / 9;
-                  end
-                done;
-                printf "%d %d %d@." !v !l !c; 
-                assert (!v <> 0);
-                m.(!l).(!c) <- !v 
-            end
-          in 
-            List.iter decode s;
-            display_sudoku m
-
+    printf "DLX : emc_size : %dx%d @." 
+      (Array.length emc_array) (Array.length emc_array.(0));
+    try 
+      let s = Emc.D.find_solution emc_array in
+      let n = List.length s in 
+        printf "solution size : %d@." n;
+        List.iter (decode m emc_array) s;
+        display_sudoku m;
+        printf "%d solutions@." (Emc.D.count_solutions emc_array)
     with Not_found -> printf "No solution@."
 
 

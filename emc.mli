@@ -13,7 +13,9 @@ module type S = sig
     (** [Emc.iter_solution f p] applies [f] in turn to each problem [p] 
       solutions *)
 
-  val simple_count_solutions: problem -> int
+
+
+  val count_solutions: problem -> int
     (** Return the number of solutions to this problem *)
 
   module type ARITH = sig
@@ -29,7 +31,8 @@ module type S = sig
 
 end
 
-val display_boolean_matrix : bool array array -> unit
+val print_boolean_matrix : bool array array -> unit
+val print_problem_size: problem -> unit 
 
   (** DLX-based implementation *)
 module D: S

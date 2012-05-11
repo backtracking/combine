@@ -47,13 +47,13 @@ all: $(OCAMLBEST) test
 # bytecode and native-code compilation
 ######################################
 
-CMO = tiling.cmo dlx.cmo zdd.cmo emc.cmo parser.cmo sudoku.cmo main.cmo 
+CMO = tiling.cmo dlx.cmo zdd.cmo emc.cmo parser.cmo queens.cmo sudoku.cmo main.cmo 
 CMX = $(CMO:.cmo=.cmx)
 
 GENERATED = parser.ml version.ml
 
 byte: $(NAME).byte
-opt: $(NAME).opt sudoku.opt
+opt: $(NAME).opt sudoku.opt queens.opt
 
 $(NAME).byte: $(CMO)
 	$(OCAMLC) $(BFLAGS) -o $@ $^ 
@@ -76,10 +76,12 @@ test: test.opt
 test.opt: tiling.cmx dlx.cmx zdd.cmx parser.cmx test.cmx
 	$(OCAMLOPT) -o $@ $^
 
-
-
 sudoku.opt: tiling.cmx dlx.cmx zdd.cmx emc.cmx sudoku.cmx
 	$(OCAMLOPT) -o $@ str.cmxa $^ 
+
+queens.opt: tiling.cmx dlx.cmx zdd.cmx emc.cmx queens.cmx
+	$(OCAMLOPT) -o $@ $^ 
+
 
 # installation
 ##############

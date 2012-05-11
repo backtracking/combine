@@ -12,6 +12,7 @@ reml.opt
 test.opt
 test.dot
 sudoku.opt
+queens.opt
 .*.swp
 parser.ml
 *~

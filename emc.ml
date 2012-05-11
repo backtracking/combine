@@ -8,7 +8,7 @@ type solution = int list
 (** a solution is a set of rows *)
 
 (* display a boolean matrix *)
-let display_boolean_matrix m = 
+let print_boolean_matrix m = 
   Array.iter (
     fun col -> Array.iter (
       fun cell -> 
@@ -17,11 +17,14 @@ let display_boolean_matrix m =
     ) col; Format.printf "@."
   ) m
 
+let print_problem_size p = 
+  printf "%dx%d@." (Array.length p) (Array.length p.(0))
+
 
 module type S = sig
   val find_solution: problem -> solution
   val iter_solution: (solution -> unit) -> problem -> unit
-  val simple_count_solutions: problem -> int
+  val count_solutions: problem -> int
   module type ARITH = sig
     type t
     val zero: t
@@ -38,7 +41,7 @@ module D = struct
   let find_solution p = Dlx.get_first_solution p
   let iter_solution f p = Dlx.iter_solution (
     fun e -> f (Dlx.list_of_solution e)) p
-  let simple_count_solutions = Dlx.count_solutions 
+  let count_solutions = Dlx.count_solutions 
   module type ARITH = sig
     type t
     val zero: t
@@ -120,7 +123,7 @@ module Z = struct
 
   let find_solution p = any_element (tiling p)
   let iter_solution f p = iter_element f (tiling p)
-  let simple_count_solutions p = cardinal (tiling p) 
+  let count_solutions p = cardinal (tiling p) 
 
 
   module type ARITH = sig
