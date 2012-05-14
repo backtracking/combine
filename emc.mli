@@ -1,21 +1,21 @@
 
-type problem = bool array array
-
 type solution = int list
     (** a solution is a set of rows *)
 
 module type S = sig
 
-  val find_solution: problem -> solution
+  type t
+
+  val create: ?primary:int -> bool array array -> t
+
+  val find_solution: t -> solution
     (** raises [Not_found] if the problem has no solution *)
 
-  val iter_solution: (solution -> unit) -> problem -> unit
+  val iter_solution: (solution -> unit) -> t -> unit
     (** [Emc.iter_solution f p] applies [f] in turn to each problem [p] 
       solutions *)
 
-
-
-  val count_solutions: problem -> int
+  val count_solutions: t -> int
     (** Return the number of solutions to this problem *)
 
   module type ARITH = sig
@@ -26,13 +26,14 @@ module type S = sig
   end
     (** simple arithmetic module with big integers *)
 
-  module Count(A: ARITH) : sig val count_solutions: problem -> A.t end
+  module Count(A: ARITH) : sig val count_solutions: t -> A.t end
     (** Functor usage of arithmetics *)
 
 end
 
 val print_boolean_matrix : bool array array -> unit
-val print_problem_size: problem -> unit 
+val print_problem_size: bool array array -> unit
+
 
   (** DLX-based implementation *)
 module D: S

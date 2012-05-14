@@ -2,8 +2,6 @@
 
 open Format
 
-type problem = bool array array
-
 type solution = int list
 (** a solution is a set of rows *)
 
@@ -22,9 +20,11 @@ let print_problem_size p =
 
 
 module type S = sig
-  val find_solution: problem -> solution
-  val iter_solution: (solution -> unit) -> problem -> unit
-  val count_solutions: problem -> int
+  type t
+  val create: ?primary:int -> bool array array -> t
+  val find_solution: t -> solution
+  val iter_solution: (solution -> unit) -> t -> unit
+  val count_solutions: t -> int
   module type ARITH = sig
     type t
     val zero: t
@@ -32,16 +32,18 @@ module type S = sig
     val add: t -> t -> t
   end
   module Count(A: ARITH) : sig 
-    val count_solutions: problem -> A.t 
+    val count_solutions: t -> A.t 
   end
 end
 
 
 module D = struct
+  type t = Dlx.t
+  let create = Dlx.create
   let find_solution p = Dlx.get_first_solution p
   let iter_solution f p = Dlx.iter_solution (
     fun e -> f (Dlx.list_of_solution e)) p
-  let count_solutions = Dlx.count_solutions 
+  let count_solutions p = Dlx.count_solutions p
   module type ARITH = sig
     type t
     val zero: t
@@ -52,8 +54,8 @@ module D = struct
   struct
     let count_solutions p = 
       let r = ref A.zero in
-        iter_solution (fun _ -> r:= A.add !r A.one) p;
-        !r
+      iter_solution (fun _ -> r:= A.add !r A.one) p;
+      !r
   end
 end
 
@@ -62,17 +64,25 @@ module Z = struct
 
   open Zdd
 
-  let column j m =
+  type t = Zdd.t
+
+  let column ?primary j m =
     let n = Array.length m in
     (* we build the solution from bottom up, i.e. i = n-1,...,1,0 *)
     let rec build z zf i =
-   (* z  = exactly one i such that m[i][j]=true
-    zf = only i such that m[i][j]=false *)
+    (* z  = exactly one i such that m[i][j]=true
+     zf = only i such that m[i][j]=false *)
       if i < 0 then z
       else if m.(i).(j) then build (construct i z zf) zf (i-1)
       else build (construct i z z) (construct i zf zf) (i-1)
     in
-    let r = build bottom top (n-1) in
+    let r = 
+      match primary with 
+        | None -> build bottom top (n-1)
+        | Some p -> 
+            if j >= p then build top top (n-1) 
+            else build bottom top (n-1) 
+       in
       r
 
   let inter_right_to_left cols = 
@@ -115,15 +125,17 @@ module Z = struct
       cols.(max)
 
 
-  let tiling m =
+  let tiling ?primary m =
     let width = Array.length m.(0) in
-    let cols = Array.init width (fun j -> (* j, min_row j 0, *) column j m) in
+    let cols = Array.init width (fun j -> 
+        (* j, min_row j 0, *) column ?primary j m) in
       inter_middle_balancing cols
 
 
-  let find_solution p = any_element (tiling p)
-  let iter_solution f p = iter_element f (tiling p)
-  let count_solutions p = cardinal (tiling p) 
+  let create ?primary m = tiling ?primary m
+  let find_solution p = any_element p
+  let iter_solution f p = iter_element f p
+  let count_solutions p = cardinal p 
 
 
   module type ARITH = sig
@@ -134,7 +146,7 @@ module Z = struct
   end
   module Count(A: ARITH) = struct
     module C = Cardinal(A)
-    let count_solutions p = C.cardinal (tiling p)
+    let count_solutions p = C.cardinal p
   end
 end
 

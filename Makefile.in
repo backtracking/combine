@@ -47,7 +47,7 @@ all: $(OCAMLBEST) test
 # bytecode and native-code compilation
 ######################################
 
-CMO = tiling.cmo dlx.cmo zdd.cmo emc.cmo parser.cmo queens.cmo sudoku.cmo main.cmo 
+CMO = tiling.cmo dlx.cmo zdd.cmo emc.cmo parser.cmo main.cmo 
 CMX = $(CMO:.cmo=.cmx)
 
 GENERATED = parser.ml version.ml

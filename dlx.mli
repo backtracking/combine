@@ -10,20 +10,27 @@ type node = {
     mutable name : string;
 }
 
-val print_solutions: bool array array -> unit
+type t
 
-val print_first_solution : bool array array -> unit
+val create: ?primary:int -> bool array array -> t
+  (** If [primary] is given, it means that the first [primary] columns are
+      primary; otherwise, all columns are primary columns *)
 
-val get_first_solution : bool array array -> int list
+val print_solutions: t -> unit
+
+val print_first_solution : t -> unit
+
+val get_first_solution : t -> int list
             
-val count_solutions : bool array array -> int
+val count_solutions : t -> int
 
-val get_solution_array : bool array array -> int list array
+val get_solution_array : t -> int list array
+  (** return all solutions *)
 
-val get_solution_list : bool array array -> int list list
+val get_solution_list : t -> int list list
 
 val print_solution_array : int list array -> unit
 
 val list_of_solution : node array * int -> int list 
 
-val iter_solution : (node array * int -> unit) -> bool array array-> unit
+val iter_solution : (node array * int -> unit) -> t -> unit

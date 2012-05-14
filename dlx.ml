@@ -15,6 +15,11 @@ type node = {
 
 exception Solution of node array * int
 
+type t = { 
+  header: node;
+  nc    : int;  (* number of columns *)
+}
+
 let one_node () =
   let rec h = { name = "head"; c = h; s = 0; up = h; 
                 down = h; left = h; right = h } in h
@@ -40,48 +45,42 @@ let add_below n1 n2 =
 (* Adds row after the headers in the DLM *)
 let add_row headers row i =
   let rec addi_rec n previous = 
-    if n = (Array.length row) then  begin
-      () (* si on arrive au bout de la ligne on arrete *)
-    end
-    else 
-      if row.(n) = true then ( (* si la case est à true *)
+    if n < Array.length row then
+      if row.(n) then begin (* si la case est à true *)
         let element = one_node () in
-          element.s <- i; (* creation de l'element e ajouter *)
-          element.c <- headers.(n);
-          element.name <- "";
-          headers.(n).s <- headers.(n).s + 1;
-          if n != 0 then (* ajout au previous si non premier *)
-            add_right previous element; 
-          add_below headers.(n) element; (* ajout sous le headers.(i) *)
-          addi_rec (n + 1) element (* au suivant *)
-      )
-      else 
+        element.s <- i; (* creation de l'element e ajouter *)
+        element.c <- headers.(n);
+        element.name <- "";
+        headers.(n).s <- headers.(n).s + 1;
+        if n != 0 then (* ajout au previous si non premier *)
+          add_right previous element; 
+        add_below headers.(n) element; (* ajout sous le headers.(i) *)
+        addi_rec (n + 1) element (* au suivant *)
+      end else 
         addi_rec (n + 1) previous (* rien a traiter, au suivant *)
   in 
-    addi_rec 0 (one_node ()) 
+  addi_rec 0 (one_node ()) 
 
 
 
 (* Returns a DLM only with the headers *)
-let generate_headers m h =
+let generate_headers ?primary m h =
   let size = Array.length m.(0) in 
   let headers = Array.init size (fun _ -> one_node ()) in
-  let rec link_rec n = 
-    if n = size then (* en arrivant à la derniere case on arrete*)
-      ()
-    else begin
-      headers.(n).s<-0;
-      headers.(n).name<-String.concat "" ["line";string_of_int n];
-      add_right headers.(n - 1) headers.(n); 
-      (* on lie le header a droite du precedent *)
-      link_rec (n + 1) (* suivant *)
-    end
+  let primary = match primary with
+    | None -> size
+    | Some p -> if p < 0 || p >= size then invalid_arg "create"; p 
   in
-    headers.(0).s<-0;
+    headers.(0).s <- 0;
+    headers.(0).name <- "C0";
     add_right h headers.(0); (* on lie le premier à droite de la tete *)
-    link_rec 1; 
-    headers (* on retourne le node array *)
-
+    for n = 1 to primary - 1 do
+      headers.(n).s <- 0;
+      headers.(n).name <- String.concat "" ["C";string_of_int n];
+      add_right headers.(n - 1) headers.(n); 
+    (* on lie le header a droite du precedent *)
+    done;
+  headers (* on retourne le node array *)
 
 
 (* Applies f to elements of the DLM, from left to right*)
@@ -96,6 +95,19 @@ let iter_right ?(self = true) f n =
       rec_iter_right n.right
 
 
+
+
+(* Creates a DLM from a boolean matrix *)
+let create ?primary m = 
+  let h = one_node () in (* creation de la tete *)
+  let headers = generate_headers ?primary m h in (* on recupere les headers *)
+  (* On ajoute les lignes en partant de la derniere *)
+  for i = Array.length m - 1 downto 0 do
+    add_row headers m.(i) i (* ajout sous les headers *)
+  done;
+  let nc = Array.length m.(0) in
+  { header = h; (* retourne la tete *)
+    nc     = nc; }
 
 (* Applies f to elements of the DLM, from up to down*)
 let iter_down ?(self = true) f n = 
@@ -133,17 +145,6 @@ let iter_up ?(self = true) f n =
     in 
       rec_iter_up n.up
 
-
-
-(* Creates a DLM from a boolean matrix *)
-let create m = 
-  let h = one_node () in (* creation de la tete *)
-  let headers = generate_headers m h in (* on recupere les headers *)
-    (* On ajoute les lignes en partant de la derniere *)
-    for i = Array.length m - 1 downto 0 do
-      add_row headers m.(i) i (* ajout sous les headers *)
-    done;
-    h (* retourne la tete *)
 
 
 
@@ -208,9 +209,9 @@ let choose_min h =
       (* si le nombre de 1 dans la colonne n > ... de la colonne min *)
       rec_chose node node.right 
     else 
-        rec_chose min node.right
+      rec_chose min node.right
   in 
-    rec_chose h.right h.right.right 
+  rec_chose h.right h.right.right 
 
 (* Search the solution set of matrix covering problem and apply f on it 
 * *)
@@ -230,10 +231,9 @@ let rec search f k h o =
 
 (* Applies f to all solutions returned by search 
    function from a boolean matrix*)
-let iter_solution f m =
-  let dlm = create m in
-  let o = Array.init (Array.length m.(0)) (fun _ -> one_node ()) in
-    search f 0 dlm o
+let iter_solution f dlm =
+  let o = Array.init dlm.nc (fun _ -> one_node ()) in
+  search f 0 dlm.header o
 
 (* Visible functions *)
 

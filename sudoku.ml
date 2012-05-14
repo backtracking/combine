@@ -196,12 +196,13 @@ let () =
     printf "DLX : emc_size : %dx%d @." 
       (Array.length emc_array) (Array.length emc_array.(0));
     try 
-      let s = Emc.D.find_solution emc_array in
+      let p = Emc.D.create emc_array in
+      let s = Emc.D.find_solution p in
       let n = List.length s in 
         printf "solution size : %d@." n;
         List.iter (decode m emc_array) s;
         display_sudoku m;
-        printf "%d solutions@." (Emc.D.count_solutions emc_array)
+        printf "%d solutions@." (Emc.D.count_solutions p)
     with Not_found -> printf "No solution@."
 
 
