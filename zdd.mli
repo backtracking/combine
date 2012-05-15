@@ -1,28 +1,18 @@
 
 type unique = int
-type t = private Bottom | Top | Node of unique * int * t * t
+type zdd = private Bottom | Top | Node of unique * int * zdd * zdd
+
+module S : Set.S with type elt = int
+include Set.S with type t = zdd and type elt = S.t
 
 val bottom: t
 val top: t
-
 val construct: int -> t -> t -> t
 
-val cardinal: t -> int
+val choose_list: t -> int list
+val iter_list: (int list -> unit) -> t -> unit
+
 val unique : t -> int
-
-val inter: t -> t -> t
-
-type set = int list
-
-(*
-module S : Set.S with type elt = int
-*)
-
-val any_element: t -> set
-  (** [any_element z] find and return a solution in an arbitrary way 
-  Not_found is raised if there is no solution *)
-
-val iter_element: (set -> unit) -> t -> unit
 
 module type ARITH = sig
   type t

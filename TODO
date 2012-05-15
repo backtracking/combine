@@ -1,5 +1,15 @@
 
-- counting solutions
+Zdd
+- documentation
+- weak hash tables
+- stat function
 
-  make a functor for arbitrary precision arithmetic
+Dlx
+- documentation
 
+Emc
+- Z: sort columns using an heuristic, before inter_middle_balancing
+
+Tiling
+- a better language
+- symetries

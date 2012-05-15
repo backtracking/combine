@@ -27,19 +27,19 @@ let read_sudoku_line s =
 
 let read s = 
   let lines = Str.split (Str.regexp "\n") s in
-    let sudoku_array = Array.make_matrix size size 0 in 
-    let rec read lines i = 
-      match lines with
-        | [] -> ()
-        | h::t -> 
-            if h <> "" then begin 
-              sudoku_array.(i) <- read_sudoku_line h;
-              read t (i + 1)
-            end else
-              read t i
-    in 
-      read lines 0;
-      sudoku_array
+  let sudoku_array = Array.make_matrix size size 0 in 
+  let rec read lines i = 
+    match lines with
+      | [] -> ()
+      | h::t -> 
+          if h <> "" then begin 
+            sudoku_array.(i) <- read_sudoku_line h;
+            read t (i + 1)
+          end else
+            read t i
+  in 
+  read lines 0;
+  sudoku_array
 
 
 
@@ -65,14 +65,14 @@ let sudoku =
   let p = 
     try
       let s = String.make (in_channel_length c) ' ' in 
-        really_input c s 0 (in_channel_length c - 1);
-        read s
+      really_input c s 0 (in_channel_length c - 1);
+      read s
     with Invalid_argument msg ->
       eprintf "invalid input file: %s@." msg;
       exit 1
   in
-    begin match !file with Some _ -> close_in c | None -> () end;
-    p
+  begin match !file with Some _ -> close_in c | None -> () end;
+  p
 
 
 
@@ -88,22 +88,22 @@ let ok v i j sudoku =
   try 
     if sudoku.(i).(j) <> 0 then raise Exit;
     let celli, cellj = (i / 3) * 3, (j / 3) * 3 in
-      ok_in_cell v celli cellj sudoku;
-      let rec iteri_out_cell first last = 
-        if first > last then ()
-        else if sudoku.(first).(j) = v then raise Exit
-        else iteri_out_cell (first + 1) last
-      in
-      let rec iterj_out_cell first last = 
-        if first > last then ()
-        else if sudoku.(i).(first) = v then raise Exit
-        else iterj_out_cell (first + 1) last
-      in
-        iteri_out_cell 0 (celli - 1);
-        iteri_out_cell (celli + 3) (size - 1);
-        iterj_out_cell 0 (cellj - 1);
-        iterj_out_cell (cellj + 3) (size - 1);
-        true
+    ok_in_cell v celli cellj sudoku;
+    let rec iteri_out_cell first last = 
+      if first > last then ()
+      else if sudoku.(first).(j) = v then raise Exit
+      else iteri_out_cell (first + 1) last
+    in
+    let rec iterj_out_cell first last = 
+      if first > last then ()
+      else if sudoku.(i).(first) = v then raise Exit
+      else iterj_out_cell (first + 1) last
+    in
+    iteri_out_cell 0 (celli - 1);
+    iteri_out_cell (celli + 3) (size - 1);
+    iterj_out_cell 0 (cellj - 1);
+    iterj_out_cell (cellj + 3) (size - 1);
+    true
   with Exit -> false
 
 
@@ -122,35 +122,35 @@ let set_val v i j line =
 
 let get_line v i j = 
   let line = Array.make emc_size false in
-    set_val v i j line; 
-    line
+  set_val v i j line; 
+  line
 
 
 let const_line sudoku = 
   let line = Array.make emc_size false in
-    for i = 0 to size - 1 do
-      for j = 0 to size - 1 do
-        let v = sudoku.(i).(j) in
-          if v <> 0 then begin
-            set_val v i j line
-          end
-      done 
-    done;
-    line
+  for i = 0 to size - 1 do
+    for j = 0 to size - 1 do
+      let v = sudoku.(i).(j) in
+      if v <> 0 then begin
+        set_val v i j line
+      end
+    done 
+  done;
+  line
 
 
 
 let emc sudoku = 
   let lr = ref [const_line sudoku] in
-    for i = 0 to size - 1 do
-      for j = 0 to size - 1 do
-        for v = 1 to size do
-          if ok v i j sudoku then
-              lr := get_line v i j :: !lr 
-        done
+  for i = 0 to size - 1 do
+    for j = 0 to size - 1 do
+      for v = 1 to size do
+        if ok v i j sudoku then
+          lr := get_line v i j :: !lr 
       done
-    done;
-    Array.of_list !lr
+    done
+  done;
+  Array.of_list !lr
 
 
 
@@ -174,35 +174,35 @@ let decode m emc_array i =
     let c = ref 0 in 
     let l = ref 0 in 
     let v = ref 0 in 
-      for j = 0 to 161 do 
-        if emc_array.(i).(j) then begin
-          if j < 81 then begin
-            c := j / 9;
-            v := j mod 9 + 1
-          end
-          else
-            l := (j - 81) / 9;
+    for j = 0 to 161 do 
+      if emc_array.(i).(j) then begin
+        if j < 81 then begin
+          c := j / 9;
+          v := j mod 9 + 1
         end
-      done;
-      assert (!v <> 0);
-      m.(!l).(!c) <- !v 
+        else
+          l := (j - 81) / 9;
+      end
+    done;
+    assert (!v <> 0);
+    m.(!l).(!c) <- !v 
   end
 
 
 let () = 
   let m = sudoku in 
   let emc_array = emc m in 
+  display_sudoku m;
+  printf "DLX : emc_size : %dx%d @." 
+    (Array.length emc_array) (Array.length emc_array.(0));
+  try 
+    let p = Emc.D.create emc_array in
+    let s = Emc.D.find_solution p in
+    let n = List.length s in 
+    printf "solution size : %d@." n;
+    List.iter (decode m emc_array) s;
     display_sudoku m;
-    printf "DLX : emc_size : %dx%d @." 
-      (Array.length emc_array) (Array.length emc_array.(0));
-    try 
-      let p = Emc.D.create emc_array in
-      let s = Emc.D.find_solution p in
-      let n = List.length s in 
-        printf "solution size : %d@." n;
-        List.iter (decode m emc_array) s;
-        display_sudoku m;
-        printf "%d solutions@." (Emc.D.count_solutions p)
-    with Not_found -> printf "No solution@."
+    printf "%d solutions@." (Emc.D.count_solutions p)
+  with Not_found -> printf "No solution@."
 
 

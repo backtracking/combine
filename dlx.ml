@@ -262,13 +262,12 @@ let get_solution_list m =
 
 
 (* Print all solutions from a solution array on stdout *)
-let print_solution_array s_array = 
+let print_solutions_array s_array = 
   Array.iteri (
     fun i s -> Format.printf "Solution %d :" i;
                print_list_solution s
   ) s_array
 
-(* Print all solution on stdout *)
 let print_solutions m = 
   iter_solution print_solution m
 

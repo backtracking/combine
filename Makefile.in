@@ -73,7 +73,7 @@ version.ml: Makefile
 test: test.opt
 	./test.opt
 
-test.opt: tiling.cmx dlx.cmx zdd.cmx parser.cmx test.cmx
+test.opt: tiling.cmx dlx.cmx zdd.cmx emc.cmx parser.cmx queens.cmx test.cmx
 	$(OCAMLOPT) -o $@ $^
 
 sudoku.opt: tiling.cmx dlx.cmx zdd.cmx emc.cmx sudoku.cmx
@@ -103,9 +103,12 @@ install-opt: install-indep
 # documentation
 ###############
 
-DOCFILES=manual.ps manual.html
+.PHONY: doc
 
-doc: $(DOCFILES)
+DOCFILES=zdd.mli dlx.mli emc.mli tiling.mli
+
+doc:
+	ocamldoc -d doc -html $(DOCFILES)
 
 # export
 ########

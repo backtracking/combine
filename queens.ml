@@ -11,11 +11,8 @@ let msg = "usage: ./queens -n value"
 let spec = ["-n", Arg.Set_int range, "   Range of the queens problem" ]
 
 let () = Arg.parse spec (fun _ ->()) msg
-let () = if !range < 1 then begin Arg.usage spec msg; exit 1 end
 
-let n = !range
-
-let get_line i j = 
+let get_line i j n = 
   let line = Array.make (6 * n - 2) false in
   line.(i) <- true;
   line.(n + j) <- true;
@@ -27,17 +24,22 @@ let emc n =
   let lr = ref [] in 
   for i = 0 to n - 1 do
     for j = 0 to n - 1 do
-      lr := get_line i j :: !lr 
+      lr := get_line i j n :: !lr 
     done
   done;
   Array.of_list !lr
 
 let () = 
-  printf "Range : %d@." !range;
-  let emc_array = emc n in 
-  Emc.print_problem_size emc_array;
-  let p = Emc.Z.create ~primary:(2 * n) emc_array in
-  printf "DLX : solutions : %d@." (Emc.Z.count_solutions p)
+  if !range > 0 then begin
+    printf "Range : %d@." !range;
+    let emc_array = emc !range in 
+    Emc.print_problem_size emc_array;
+    let p = Emc.D.create ~primary:(2 * !range) emc_array in
+    printf "DLX : solutions : %d@." (Emc.D.count_solutions p);
+    let p = Emc.Z.create ~primary:(2 * !range) emc_array in
+    printf "ZDD : solutions : %d@." (Emc.Z.count_solutions p)
+  end
+
 
 
 
