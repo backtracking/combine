@@ -3,6 +3,7 @@ Zdd
 - documentation
 - weak hash tables
 - stat function
+- Local versus global memo tables
 
 Dlx
 - documentation

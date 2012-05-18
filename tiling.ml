@@ -2,36 +2,275 @@
 
 (* Misc *)
 
-type iso = Id | Rot90h | Rot90a | Rot180 | VertRef | HorizRef |
-              Diag13Ref | Diag24Ref
 
-module Iso = 
-  Set.Make 
-    (struct
-       type t = iso
-       let compare iso1 iso2 = if iso1 = iso2 then 0 else 1
-     end)
+module Iso = struct
+  type t = Id | Rot90 | Rot180 | Rot270 | VertRefl | HorizRefl |
+               Diag1Refl | Diag2Refl
+
+  type iso = t
+
+  module S = Set.Make (
+  struct
+    type t = iso
+    let compare = Pervasives.compare 
+  end)
+
+  let compose i1 i2 = match i1, i2 with 
+    | Id, a | a, Id -> a
+    (* rotations *)
+    | Rot90, Rot270
+    | Rot270, Rot90
+    | Rot180, Rot180 -> Id
+    | Rot180, Rot270
+    | Rot270, Rot180 -> Rot90
+    | Rot90, Rot90
+    | Rot270, Rot270 -> Rot180
+    | Rot180, Rot90
+    | Rot90, Rot180 -> Rot270
+    (* reflections *)
+    | VertRefl, VertRefl
+    | HorizRefl, HorizRefl
+    | Diag1Refl, Diag1Refl
+    | Diag2Refl, Diag2Refl -> Id
+    | VertRefl, Diag2Refl
+    | Diag2Refl, HorizRefl
+    | HorizRefl, Diag1Refl
+    | Diag1Refl, VertRefl -> Rot90
+    | VertRefl, HorizRefl
+    | HorizRefl, VertRefl
+    | Diag2Refl, Diag1Refl
+    | Diag1Refl, Diag2Refl -> Rot180
+    | HorizRefl, Diag2Refl
+    | Diag2Refl, VertRefl
+    | VertRefl, Diag1Refl
+    | Diag1Refl, HorizRefl -> Rot270
+    (* rotation/reflection *)
+    | Rot90, VertRefl
+    | Rot270, HorizRefl
+    | Rot180, Diag2Refl
+    | VertRefl, Rot270
+    | HorizRefl, Rot90
+    | Diag2Refl, Rot180 -> Diag1Refl
+    | Rot90, HorizRefl
+    | Rot180, Diag1Refl
+    | Rot270, VertRefl 
+    | VertRefl, Rot90 
+    | HorizRefl, Rot270
+    | Diag1Refl, Rot180 -> Diag2Refl
+    | Rot90, Diag1Refl
+    | Rot180, VertRefl
+    | Rot270, Diag2Refl
+    | VertRefl, Rot180 
+    | Diag1Refl, Rot270
+    | Diag2Refl, Rot90 -> HorizRefl
+    | Rot90, Diag2Refl 
+    | Rot180, HorizRefl
+    | Rot270, Diag1Refl
+    | HorizRefl, Rot180
+    | Diag1Refl, Rot90 
+    | Diag2Refl, Rot270 -> VertRefl
+ 
+
+ let to_string = function
+   | Id -> "Id"
+   | HorizRefl -> "HorizRefl"
+   | VertRefl -> "VertRefl"
+   | Rot180 -> "Rot180"
+   | Rot270 -> "Rot270"
+   | Rot90 -> "Rot90" 
+   | Diag1Refl -> "Diag1Refl"  
+   | Diag2Refl -> "Diag2Refl"
+
+  let all = 
+    ( S.add Id 
+    ( S.add Rot90
+    ( S.add Rot270
+    ( S.add Rot180
+    ( S.add VertRefl
+    ( S.add HorizRefl
+    ( S.add Diag2Refl
+    ( S.add Diag1Refl S.empty))))))))
+
+  let positive = function 
+    | Id | Rot90 | Rot180 | Rot270 -> true
+    | VertRefl | HorizRefl | Diag1Refl | Diag2Refl -> false
+
+  (* sanity checks for compose *)
+
+  (* 1. positivity rules *)
+  let () = 
+    S.iter (fun a -> 
+    S.iter (fun b -> assert (
+      positive (compose a b) = (positive a = positive b))
+    ) all ) all 
+
+  (* 2. compose is associative *)
+  let () = 
+    S.iter (
+      fun a -> 
+        S.iter (
+          fun b -> 
+            S.iter (
+              fun c -> 
+                assert (compose a (compose b c) = compose (compose a b) c)) all
+        ) all ) all 
+
+  let apply iso =
+    match iso with 
+      | Id -> fun ?(w = 0) ?(h = 0) p -> p
+      | Rot180 -> fun ?(w = 0) ?(h = 0) (x, y) -> (w - 1 - x , h - 1 - y)
+      | HorizRefl -> fun ?(w = 0) ?(h = 0) (x, y) -> (x, h - 1 - y)
+      | VertRefl -> fun ?(w = 0) ?(h = 0) (x, y) -> (w - 1- x, y)
+      | Rot90 -> fun ?(w = 0) ?(h = 0) (x, y) -> (h - 1 - y, x)
+      | Rot270 -> fun ?(w = 0) ?(h = 0) (x, y) -> (y, w - 1 - x)
+      | Diag1Refl -> fun ?(w = 0) ?(h = 0) (x, y) -> (y, x) 
+      | Diag2Refl -> fun ?(w = 0) ?(h = 0) (x, y) -> (h - 1 - y, w - 1 - x)
+
+  let trans_size iso (h, l) = 
+    match iso with 
+      | Id  
+      | HorizRefl 
+      | VertRefl  
+      | Rot180 -> (h, l)
+      | Rot270  
+      | Rot90  
+      | Diag1Refl   
+      | Diag2Refl -> (l, h)
+
+  let print fmt iso = Format.fprintf fmt "%s" (to_string iso)
+
+end
+
+
+module Pattern = struct 
+
+  type t = {
+    grid   : bool array array;
+    height : int;
+    width  : int;
+  }
+
+  let create g =
+    let h = Array.length g in
+    if h = 0 then invalid_arg "Pattern.create";
+    { grid = g;
+      height = h;
+      width = Array.length g.(0); }
+
+  let apply iso p = 
+    let trans = Iso.apply iso in
+    let w, h = p.width, p.height in
+    let new_w, new_h = Iso.trans_size iso (w, h) in
+    let new_m = Array.make_matrix new_h new_w false in
+    for y = 0 to h-1 do
+      for x = 0 to w-1 do
+        let new_x, new_y = trans ~w ~h (x, y)  in
+        new_m.(new_y).(new_x) <- p.grid.(y).(x)
+      done
+    done;
+    { grid = new_m; height = new_h; width = new_w }
+
+(*
+  let f_fig = 
+    [|
+     [|true; true; true; true|];
+     [|true; false; false; false|];
+     [|true; true; true; false|];
+     [|true; false; false; false|];
+     [|true; false; false; false|];
+    |]
+
+  let genere () = 
+    Iso.S.iter (
+      fun a -> 
+        Iso.S.iter (
+          fun b -> 
+            Iso.S.iter (
+              fun c -> 
+                try 
+                  let m1 = apply b (apply a f_fig) in
+                  let m2 = apply c f_fig in 
+                  if m1 = m2 then raise Exit 
+                with 
+                  | Exit -> 
+                    Format.printf "| %a, %a -> %a@." 
+                      Iso.print a Iso.print b Iso.print c
+            ) Iso.all ) Iso.all ) Iso.all
+
+  let () = 
+    genere ()
+*)
+
+  let print fmt p = 
+    for y = p.height-1 downto 0 do
+      Array.iter (
+        fun cell -> 
+          if cell then Format.fprintf fmt "#"
+          else Format.fprintf fmt " "
+      ) p.grid.(y);
+      if y > 0 then Format.fprintf fmt "@\n"
+    done
+
+    (*
+    print_boolean_matrix f_fig;
+    Format.printf "@.";
+    print_boolean_matrix (apply Iso.Diag1Refl (apply Iso.Diag2Refl f_fig));
+    Format.printf "@.";
+    print_boolean_matrix (apply Iso.Diag2Refl (apply Iso.Diag1Refl f_fig))
+    *)
+
+  (* TODO: improve efficiency (do not call [apply]) *)
+  let has_iso iso p = p = apply iso p
+
+  let get_isos p = 
+    Iso.S.filter (fun iso -> has_iso iso p) Iso.all
+
+end 
+
+module Tile = struct
+
+  type t = {
+    pattern: Pattern.t;
+    isos   : Iso.S.t;   (* the pattern is invariant by these isometries *)
+  }
+
+  let create p =
+    { pattern = p;
+      isos    = Pattern.get_isos p; }
+
+  let apply iso t =
+    if Iso.S.mem iso t.isos then t
+    else create (Pattern.apply iso t.pattern)
+
+  let print fmt t =
+    Format.fprintf fmt "%a@\n" Pattern.print t.pattern;
+    Format.fprintf fmt "{ ";
+    Iso.S.iter (fun iso -> Format.fprintf fmt "%a, " Iso.print iso) t.isos;
+    Format.fprintf fmt "}"
+
+end
+
 
 type piece = {
   mutable matrix : bool array array;
   mutable name : string;
   mutable quantity : int;
   mutable exact : bool; 
-  mutable isos_piece : Iso.t
+  mutable isos_piece : Iso.S.t
 }
 
 type problem = {
   mutable grid : bool array array;
   mutable pname : string;
   mutable pieces : piece list;
-  mutable isos_grid: Iso.t
+  mutable isos_grid: Iso.S.t
 }
 
 let create_problem ?(n = "") g ps = {
   grid = g; 
   pname = n; 
   pieces = ps;
-  isos_grid = Iso.empty
+  isos_grid = Iso.S.empty
 
 }
 
@@ -41,7 +280,7 @@ let create_piece ?(q = 0) ?(e = false) ?(n = "") m ={
   name = n; 
   quantity = q; 
   exact = e;
-  isos_piece = Iso.empty
+  isos_piece = Iso.S.empty
 }
 
 (* Board position testing *)
@@ -67,60 +306,6 @@ let is_possible_position piece board x y =
     | Exit -> false
 
 (* Isometries *)
-
-let comput_coordinates iso (x, y) h l =
-  match iso with 
-    | Id -> (x, y)
-    | Rot90a -> (h - y, x)
-    | Rot180 -> (l - x , h - y)
-    | Rot90h -> (y, l - x)
-    | HorizRef -> (x, h - y)
-    | VertRef -> (l - x, y)
-    | Diag13Ref -> (y, x) 
-    | Diag24Ref -> (h - y, l - x)
-
-let comput_size iso (h, l) = 
-	match iso with 
-		| Id  
-		| HorizRef 
-		| VertRef  
-		| Rot180 -> (h, l)
-		| Rot90a  
-		| Rot90h  
-		| Diag13Ref   
-		| Diag24Ref -> (l, h)
-
-
-let apply iso matrix = 
-  let l, h = Array.length matrix, Array.length matrix in
-  let l_new, h_new = comput_size iso (l, h) in
-  let new_m = Array.make_matrix h_new l_new false in
-    Array.iteri (
-      fun i col -> Array.iteri (
-        fun j cell -> 
-          let new_i, new_j = comput_coordinates iso (i, j) h l in
-            new_m.(new_i).(new_j) <- cell
-      ) col
-    ) matrix;
-    new_m
-
-let get_isos matrix = 
-  let iso_set = ref Iso.empty in
-  let table = Hashtbl.create 8 in
-    Hashtbl.add table (matrix) Id;
-    Hashtbl.add table (apply Rot90a matrix) Rot90a;
-    Hashtbl.add table (apply Rot90h matrix) Rot90h;
-    Hashtbl.add table (apply Rot180 matrix) Rot180;
-    Hashtbl.add table (apply HorizRef matrix) HorizRef;
-    Hashtbl.add table (apply VertRef matrix) VertRef;
-    Hashtbl.add table (apply Diag13Ref matrix) Diag13Ref;
-    Hashtbl.add table (apply Diag24Ref matrix) Diag24Ref;
-    Hashtbl.iter (
-      fun _ iso -> iso_set := Iso.add iso !iso_set 
-    ) table;
-    !iso_set
-
-
 (* Symmetries *)
 
 (* return true if a piece has a diagonal symmetry *)

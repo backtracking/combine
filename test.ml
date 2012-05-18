@@ -43,7 +43,24 @@ let () =
   assert (Emc.Z.count_solutions qp_zdd = 10);
   assert (Emc.D.count_solutions qp_dlx = 10)
 
+let p =
+  Pattern.create
+    [|
+     [|true; true; true; true|];
+     [|true; false; false; false|];
+     [|true; true; true; false|];
+     [|true; false; false; false|];
+     [|true; false; false; false|];
+    |]
+let p =
+  Pattern.create
+    [|
+     [|true; true;|];
+     [|true; false;|];
+    |]
 
+let () = printf "%a@\n@." Pattern.print p
 
+let t = Tile.create p
 
-
+let () = printf "%a@." Tile.print t
