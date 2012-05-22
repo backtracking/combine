@@ -4,7 +4,7 @@
 %}
 
 %token TILE PROBLEM CONSTANT FALSE TRUE PATTERN
-%token EQUAL LSBRA RSBRA COMMA
+%token EQUAL LSBRA RSBRA RPAR LPAR COMMA
 %token <string> IDENT
 %token <int * int> DIM
 %token <bool array array> ASCII
@@ -27,12 +27,15 @@ tile_list:
 ;
 
 expr:
+| LPAR; e = expr; RPAR { e }
 | id = IDENT
     { Var id }
+| LPAR; CONSTANT; d = DIM; b = bool; RPAR
+    { let w,h = d in Pattern (Array.make h (Array.make w b)) }
 | CONSTANT; d = DIM; b = bool
     { let w,h = d in Pattern (Array.make h (Array.make w b)) }
 | PATTERN; d = DIM; a = ASCII
-    { ignore (d); (* TODO: adfapter a à la dimension d *) Pattern a }
+    { ignore (d); (* TODO: adapter a à la dimension d *) Pattern a }
 ;
 
 bool:

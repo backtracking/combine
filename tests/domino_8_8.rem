@@ -6,7 +6,7 @@
 
 tile chessboard = constant 8x8 true
 
-tile a = constant 2x1 true
+tile a = ((constant 2x1 true))
   # pattern 2x1 {**}
 
 tile b = constant 1x2 true
@@ -22,4 +22,4 @@ tile b = constant 1x2 true
 
 problem domino_8_8 = chessboard [a, b]
 
-problem domino_6_6 = constant 6x6 true [a, b]
+problem domino_6_6 = (constant 6x6 true) [a, b]

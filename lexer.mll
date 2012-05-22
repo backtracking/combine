@@ -51,6 +51,10 @@ rule token = parse
       { RSBRA }
   | ","
       { COMMA }
+  | "("
+      { LPAR }
+  | ")"
+      { RPAR }
 (*
   | '{'
       { read_lines lexbuf }

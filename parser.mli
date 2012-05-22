@@ -4,9 +4,11 @@ type token =
   | TRUE
   | TILE
   | RSBRA
+  | RPAR
   | PROBLEM
   | PATTERN
   | LSBRA
+  | LPAR
   | IDENT of (string)
   | FALSE
   | EQUAL
