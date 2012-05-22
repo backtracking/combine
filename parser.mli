@@ -1,6 +1,20 @@
+exception Error
 
-type grid = char * bool array array
+type token = 
+  | TRUE
+  | TILE
+  | RSBRA
+  | PROBLEM
+  | PATTERN
+  | LSBRA
+  | IDENT of (string)
+  | FALSE
+  | EQUAL
+  | EOF
+  | DIM of (int * int)
+  | CONSTANT
+  | COMMA
+  | ASCII of (bool array array)
 
-val raw_parser: in_channel -> grid list
 
-val read_problem: in_channel -> Tiling.problem
+val file: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Ast.file)

@@ -9,7 +9,7 @@ module Iso : sig
   
   val to_string : t -> string
 
-  val apply : t -> ?w:int -> ?h:int -> int * int -> int * int
+  val apply : t -> w:int -> h:int -> int * int -> int * int
   val trans_size : t -> int * int -> int * int
 
   module S: Set.S with type elt = t
@@ -46,10 +46,9 @@ module Pattern : sig
   val shift: t -> ofsx:int -> ofsy:int -> t
 
   val union: t -> t -> t
-
   val inter: t -> t -> t
-
   val diff : t -> t -> t
+  val xor : t -> t -> t
 
   val has_iso: Iso.t -> t -> bool
 

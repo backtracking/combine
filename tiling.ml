@@ -117,25 +117,25 @@ module Iso = struct
 
   let apply iso =
     match iso with 
-      | Id -> fun ?(w = 0) ?(h = 0) p -> p
-      | Rot180 -> fun ?(w = 0) ?(h = 0) (x, y) -> (w - 1 - x , h - 1 - y)
-      | HorizRefl -> fun ?(w = 0) ?(h = 0) (x, y) -> (x, h - 1 - y)
-      | VertRefl -> fun ?(w = 0) ?(h = 0) (x, y) -> (w - 1- x, y)
-      | Rot90 -> fun ?(w = 0) ?(h = 0) (x, y) -> (h - 1 - y, x)
-      | Rot270 -> fun ?(w = 0) ?(h = 0) (x, y) -> (y, w - 1 - x)
-      | Diag1Refl -> fun ?(w = 0) ?(h = 0) (x, y) -> (y, x) 
-      | Diag2Refl -> fun ?(w = 0) ?(h = 0) (x, y) -> (h - 1 - y, w - 1 - x)
+      | Id -> fun ~w ~h p -> p
+      | Rot180 -> fun ~w ~h (x, y) -> (w - 1 - x , h - 1 - y)
+      | HorizRefl -> fun ~w ~h (x, y) -> (x, h - 1 - y)
+      | VertRefl -> fun ~w ~h (x, y) -> (w - 1- x, y)
+      | Rot90 -> fun ~w ~h (x, y) -> (h - 1 - y, x)
+      | Rot270 -> fun ~w ~h (x, y) -> (y, w - 1 - x)
+      | Diag1Refl -> fun ~w ~h (x, y) -> (y, x) 
+      | Diag2Refl -> fun ~w ~h (x, y) -> (h - 1 - y, w - 1 - x)
 
-  let trans_size iso (h, l) = 
+  let trans_size iso (h, w) = 
     match iso with 
       | Id  
       | HorizRefl 
       | VertRefl  
-      | Rot180 -> (h, l)
+      | Rot180 -> (h, w)
       | Rot270  
       | Rot90  
       | Diag1Refl   
-      | Diag2Refl -> (l, h)
+      | Diag2Refl -> (w, h)
 
   let print fmt iso = Format.fprintf fmt "%s" (to_string iso)
 
@@ -172,11 +172,9 @@ module Pattern = struct
 
 
 
+(* Generating compositions pattern matching source code *)
 
-
-
-
-(*
+ (*
   let f_fig = 
     [|
      [|true; true; true; true|];
@@ -187,25 +185,24 @@ module Pattern = struct
     |]
 
   let genere () = 
-    Iso.S.iter (
-      fun a -> 
-        Iso.S.iter (
-          fun b -> 
-            Iso.S.iter (
-              fun c -> 
-                try 
-                  let m1 = apply b (apply a f_fig) in
-                  let m2 = apply c f_fig in 
-                  if m1 = m2 then raise Exit 
-                with 
-                  | Exit -> 
-                    Format.printf "| %a, %a -> %a@." 
-                      Iso.print a Iso.print b Iso.print c
-            ) Iso.all ) Iso.all ) Iso.all
+    Iso.S.iter ( fun a -> 
+      Iso.S.iter ( fun b -> 
+        Iso.S.iter ( fun c -> 
+          try 
+            let m1 = apply b (apply a f_fig) in
+            let m2 = apply c f_fig in 
+            if m1 = m2 then raise Exit 
+           with 
+            | Exit -> 
+              Format.printf "| %a, %a -> %a@." 
+              Iso.print a Iso.print b Iso.print c
+        ) Iso.all 
+      ) Iso.all 
+    ) Iso.all
 
   let () = 
     genere ()
-*)
+    *)
 
   let print fmt p = 
     for y = p.height-1 downto 0 do
@@ -217,7 +214,6 @@ module Pattern = struct
       if y > 0 then Format.fprintf fmt "@\n"
     done
 
-
   let resize p ~w ~h  = 
     let min_w, min_h = min w p.width, min h p.height in
     let m = Array.make_matrix h w false in 
@@ -228,8 +224,6 @@ module Pattern = struct
     done;
     { grid = m; height = h; width = w }
 
-
-
   let crop p ~x ~y ~w ~h = 
     let m = Array.make_matrix h w false in 
     for y' = y to min p.height h - 1 do
@@ -238,7 +232,6 @@ module Pattern = struct
       done
     done;
     { grid = m; height = h; width = w }
-
 
   let shift p ~ofsx ~ofsy = 
     let h, w = p.height, p.width in
@@ -252,47 +245,22 @@ module Pattern = struct
     done;
     { grid = m; height = h; width = w }
 
-  let union p1 p2 = 
+  let binary_op op p1 p2 = 
     if p1.height <> p2.height || p1.width <> p2.width then
-      invalid_arg "union"
-    else 
-      let w, h = p1.height, p1.width in
-      let m = Array.make_matrix h w false in
-      for y = 0 to h - 1 do
-        for x = 0 to w - 1 do 
-          m.(y).(x) <- p1.grid.(y).(x) || p2.grid.(y).(x)
-        done 
-      done;
-      { grid = m; height = h; width = w }
+      invalid_arg "union";
+    let w, h = p1.height, p1.width in
+    let m = Array.make_matrix h w false in
+    for y = 0 to h - 1 do
+      for x = 0 to w - 1 do 
+        m.(y).(x) <- op p1.grid.(y).(x) p2.grid.(y).(x)
+      done 
+    done;
+    { grid = m; height = h; width = w }
 
-
-   let inter p1 p2 = 
-    if p1.height <> p2.height || p1.width <> p2.width then
-      invalid_arg "inter"
-    else 
-      let w, h = p1.height, p1.width in
-      let m = Array.make_matrix h w false in
-      for y = 0 to h - 1 do
-        for x = 0 to w - 1 do 
-          m.(y).(x) <- p1.grid.(y).(x) && p2.grid.(y).(x)
-        done 
-      done;
-      { grid = m; height = h; width = w }
-
-
-  let diff p1 p2 = 
-    if p1.height <> p2.height || p1.width <> p2.width then
-      invalid_arg "diff"
-    else 
-      let w, h = p1.height, p1.width in
-      let m = Array.make_matrix h w false in
-      for y = 0 to h - 1 do
-        for x = 0 to w - 1 do 
-          let a, b = p1.grid.(y).(x), p2.grid.(y).(x) in 
-          m.(y).(x) <- (not a && b) || (a && not b) (* xor operation *)
-        done 
-      done;
-      { grid = m; height = h; width = w }
+  let union = binary_op (||)
+  let inter = binary_op (&&)
+  let diff  = binary_op (fun a b -> a && not b)
+  let xor = binary_op (fun a b -> a && not b || b && not a)
         
     (*
     print_boolean_matrix f_fig;
@@ -302,18 +270,17 @@ module Pattern = struct
     print_boolean_matrix (apply Iso.Diag2Refl (apply Iso.Diag1Refl f_fig))
     *)
 
-  (* TODO: improve efficiency (do not call [apply]) *)
-  let has_iso iso p = 
-
-let trans = Iso.apply iso in 
-    for y = 0 to p.height do
-      for x = 0 to p.width do
-let new_x, new_y = trans p.width p.height x y in
-        try
-          if not p.grid.(new_y).
-
-          
-
+  let has_iso iso p =
+    let w = p.width and h = p.height in
+    let new_h, new_w = Iso.trans_size iso (h, w) in
+    new_w = p.width && new_h = p.height &&
+    let trans = Iso.apply iso in 
+    try for y = 0 to p.height - 1 do
+      for x = 0 to p.width -1 do
+        let new_x, new_y = trans ~w ~h (x, y) in
+        if p.grid.(new_y).(new_x) <> p.grid.(y).(x) then raise Exit
+      done
+    done;true with Exit -> false
 
   let get_isos p = 
     Iso.S.filter (fun iso -> has_iso iso p) Iso.all

@@ -1,45 +1,25 @@
 
-# Test
-#
+# true  '*'
+# true  '%'
+# false '.'
+# newline '$'
 
-$********
-*$$$$$$$$
-*$$$$$$$$
-*$$$$$$$$
-*$$$$$$$$
-*$$$$$$$$
-*$$$$$$$$
-*$$$$$$$$
-*$$$$$$$$
+tile chessboard = constant 8x8 true
 
-a**
-*aa
+tile a = constant 2x1 true
+  # pattern 2x1 {**}
 
-c*
-*c
-*c
+tile b = constant 1x2 true
+  # pattern 1x2 {*$*}
 
+# tile A = 3x3 {
+#  .*.
+#  ***
+#  .*.
+# }
 
+# tile B = rotate 90 A
 
+problem domino_8_8 = chessboard [a, b]
 
-#A***
-#* %
-#*%%%
-#* %
-
-#B**
-#*%%
-#* %
-#*	%
-#* %
-
-
-#C**
-#*%
-#*%
-#* %
-#* %
-#* %
-
-
-
+problem domino_6_6 = constant 6x6 true [a, b]

@@ -14,7 +14,11 @@ test.dot
 sudoku.opt
 queens.opt
 .*.swp
+lexer.ml
 parser.ml
+parser.mli
+parser.automaton
+parser.output
 *~
 *.annot
 doc

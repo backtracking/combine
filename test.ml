@@ -14,8 +14,10 @@ let () = assert (count_solutions (create (emc p1)) = 2)
 
 let p =
   let c = open_in "tests/domino_8_8.rem" in
-  let r = Parser.read_problem c in
+  let lb = Lexing.from_channel c in
+  let r = Parser.file Lexer.token lb in
   close_in c;
+  let r = List.hd (Interp.interp r) in (* FIXME *)
   Tiling.emc r
 
 

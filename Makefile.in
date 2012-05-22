@@ -26,7 +26,7 @@ OCAMLC   = @OCAMLC@
 OCAMLOPT = @OCAMLOPT@
 OCAMLDEP = @OCAMLDEP@
 OCAMLLEX = @OCAMLLEX@
-OCAMLYACC= @OCAMLYACC@
+OCAMLYACC= menhir
 OCAMLLIB = @OCAMLLIB@
 OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
@@ -50,10 +50,10 @@ all: $(OCAMLBEST) test
 LIBCMO = dlx.cmo zdd.cmo emc.cmo tiling.cmo
 LIBCMX = $(LIBCMO:.cmo=.cmx)
 
-CMO = $(LIBCMO) parser.cmo main.cmo 
+CMO = $(LIBCMO) parser.cmo lexer.cmo interp.cmo main.cmo 
 CMX = $(CMO:.cmo=.cmx)
 
-GENERATED = parser.ml version.ml
+GENERATED = parser.ml parser.mli lexer.ml version.ml
 
 byte: $(NAME).byte
 opt: $(NAME).opt sudoku.opt queens.opt
@@ -76,7 +76,7 @@ version.ml: Makefile
 test: test.opt
 	./test.opt
 
-test.opt: $(LIBCMX) parser.cmx queens.cmx test.cmx
+test.opt: $(LIBCMX) parser.cmx lexer.cmx interp.cmx queens.cmx test.cmx
 	$(OCAMLOPT) -o $@ $^
 
 sudoku.opt: $(LIBCMX) sudoku.cmx

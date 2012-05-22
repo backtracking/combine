@@ -19,22 +19,25 @@ let error_pieces_board () =
   eprintf "problem must have board and piece(s) @."; 
   exit 1 
 
-let problem =
+let problems =
   let c = match !file with
     | Some f -> open_in f
     | None -> stdin
   in
+  let lb = Lexing.from_channel c in
   let p = 
     try
-      Parser.read_problem c
+      Parser.file Lexer.token lb
     with Invalid_argument msg ->
       eprintf "invalid input file: %s@." msg;
       exit 1
   in
   begin match !file with Some _ -> close_in c | None -> () end;
-  p
+  Interp.interp p
 
-let m = Tiling.emc problem
+let m = match problems with
+  | [] -> printf "the file contains no problem@."; exit 0
+  | p :: _ -> Tiling.emc p
 
 (*
 let ()  =
