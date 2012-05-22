@@ -40,16 +40,16 @@ module Pattern : sig
 
   val apply: Iso.t -> t -> t
 
-(***
   val resize: t -> w:int -> h:int -> t
   val crop  : t -> x:int -> y:int -> w:int -> h:int -> t
 
   val shift: t -> ofsx:int -> ofsy:int -> t
 
   val union: t -> t -> t
+
   val inter: t -> t -> t
+
   val diff : t -> t -> t
-***)
 
   val has_iso: Iso.t -> t -> bool
 

@@ -170,6 +170,12 @@ module Pattern = struct
     done;
     { grid = new_m; height = new_h; width = new_w }
 
+
+
+
+
+
+
 (*
   let f_fig = 
     [|
@@ -206,10 +212,87 @@ module Pattern = struct
       Array.iter (
         fun cell -> 
           if cell then Format.fprintf fmt "#"
-          else Format.fprintf fmt " "
+          else Format.fprintf fmt "'"
       ) p.grid.(y);
       if y > 0 then Format.fprintf fmt "@\n"
     done
+
+
+  let resize p ~w ~h  = 
+    let min_w, min_h = min w p.width, min h p.height in
+    let m = Array.make_matrix h w false in 
+    for y = 0 to min_h - 1 do
+      for x = 0 to min_w - 1 do
+        m.(y).(x) <- p.grid.(y).(x)
+      done 
+    done;
+    { grid = m; height = h; width = w }
+
+
+
+  let crop p ~x ~y ~w ~h = 
+    let m = Array.make_matrix h w false in 
+    for y' = y to min p.height h - 1 do
+      for x' = x to min p.width w - 1 do
+        m.(y' - y).(x' - x) <- p.grid.(y').(x')
+      done
+    done;
+    { grid = m; height = h; width = w }
+
+
+  let shift p ~ofsx ~ofsy = 
+    let h, w = p.height, p.width in
+    let m = Array.make_matrix h w false in 
+    for y = 0 to h - 1 do
+      for x = 0 to w - 1 do
+        let new_x, new_y = x + ofsx, y + ofsy in
+        if new_x < w && new_x >= 0 && new_y < h && new_y >= 0 then 
+          m.(new_y).(new_x) <- p.grid.(y).(x)
+      done
+    done;
+    { grid = m; height = h; width = w }
+
+  let union p1 p2 = 
+    if p1.height <> p2.height || p1.width <> p2.width then
+      invalid_arg "union"
+    else 
+      let w, h = p1.height, p1.width in
+      let m = Array.make_matrix h w false in
+      for y = 0 to h - 1 do
+        for x = 0 to w - 1 do 
+          m.(y).(x) <- p1.grid.(y).(x) || p2.grid.(y).(x)
+        done 
+      done;
+      { grid = m; height = h; width = w }
+
+
+   let inter p1 p2 = 
+    if p1.height <> p2.height || p1.width <> p2.width then
+      invalid_arg "inter"
+    else 
+      let w, h = p1.height, p1.width in
+      let m = Array.make_matrix h w false in
+      for y = 0 to h - 1 do
+        for x = 0 to w - 1 do 
+          m.(y).(x) <- p1.grid.(y).(x) && p2.grid.(y).(x)
+        done 
+      done;
+      { grid = m; height = h; width = w }
+
+
+  let diff p1 p2 = 
+    if p1.height <> p2.height || p1.width <> p2.width then
+      invalid_arg "diff"
+    else 
+      let w, h = p1.height, p1.width in
+      let m = Array.make_matrix h w false in
+      for y = 0 to h - 1 do
+        for x = 0 to w - 1 do 
+          let a, b = p1.grid.(y).(x), p2.grid.(y).(x) in 
+          m.(y).(x) <- (not a && b) || (a && not b) (* xor operation *)
+        done 
+      done;
+      { grid = m; height = h; width = w }
 
     (*
     print_boolean_matrix f_fig;
