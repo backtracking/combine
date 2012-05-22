@@ -293,7 +293,7 @@ module Pattern = struct
         done 
       done;
       { grid = m; height = h; width = w }
-
+        
     (*
     print_boolean_matrix f_fig;
     Format.printf "@.";
@@ -303,7 +303,17 @@ module Pattern = struct
     *)
 
   (* TODO: improve efficiency (do not call [apply]) *)
-  let has_iso iso p = p = apply iso p
+  let has_iso iso p = 
+
+let trans = Iso.apply iso in 
+    for y = 0 to p.height do
+      for x = 0 to p.width do
+let new_x, new_y = trans p.width p.height x y in
+        try
+          if not p.grid.(new_y).
+
+          
+
 
   let get_isos p = 
     Iso.S.filter (fun iso -> has_iso iso p) Iso.all
