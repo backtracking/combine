@@ -26,14 +26,14 @@ and interp_setop d e = function
   | Shift -> 
       let ofsx, ofsy = d in 
       Pattern.shift (interp_expr e) ?ofsx ?ofsy
-  | SetXY (b)-> 
+  | SetXY b-> 
       let p = interp_expr e in
       let x, y = d in 
       p.Pattern.grid.(y).(x) <- b; p
   | Resize -> 
     let w, h = d in 
     Pattern.resize (interp_expr e) ?w ?h
-  | Crop (pos) ->
+  | Crop pos ->
     let (x, y), (w, h) = pos, d in 
     Pattern.crop (interp_expr e) ?x ?y ?w ?h
 

@@ -4,15 +4,17 @@
 %}
 
 %token TILE PROBLEM CONSTANT FALSE TRUE
-%token INFDIFF PREFDIFF UNION XOR INTER 
 %token SET SHIFT CROP RESIZE
+%token INFDIFF PREFDIFF UNION XOR INTER 
 %token EQUAL LSBRA RSBRA RPAR LPAR COMMA
 %token <string> IDENT
 %token <int * int> DIM
 %token <bool array array> ASCII
 %token EOF
 
-%right INFDIFF UNION XOR INTER
+%right PREFDIFF
+%right XOR INTER INFDIFF UNION
+
 
 %start <Ast.file> file
 
@@ -46,19 +48,16 @@ expr:
     { Binary (Inter, e1, e2) }
 | e1 = expr; XOR ;e2 = expr
     { Binary (Xor, e1, e2) }
-
 | SET; e = expr; d = DIM; b = bool
     { SetOp (SetXY (b), d, e) }
-
-| CROP; pos = DIM ;d = DIM; e = expr
+| CROP; pos = DIM ;d = DIM; LPAR; e = expr; RPAR
     { SetOp (Crop(pos), d, e)}
-
+| CROP; pos = DIM ;d = DIM; id = IDENT
+    { SetOp (Crop(pos), d, Var id)}
 | SHIFT; e = expr; d = DIM
     { SetOp (Shift, d, e) }
-
 | RESIZE; e = expr; d = DIM
     { SetOp (Resize, d, e) }
-
 | a = ASCII
     { Pattern a }
 ;

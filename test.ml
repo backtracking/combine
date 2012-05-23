@@ -54,6 +54,9 @@ let p =
      [|true; false;|];
     |]
 
+
+(*
+
 let () = printf "%a\n@." Pattern.print p
 
 let () = printf "%a\n@." Pattern.print (Pattern.shift p 1 1)
@@ -68,5 +71,5 @@ let () = printf "%a\n@." Pattern.print (Pattern.diff p p)
 let t = Tile.create p
 
 let () = printf "%a@." Tile.print t
-
+*)
 
