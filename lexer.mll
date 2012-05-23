@@ -6,16 +6,32 @@
 
   type grid = char * bool array array
 
-  let bool_array_of_string m s =
-    let a = Array.create m false in
-    for i = 0 to min (m - 1) (String.length s - 1) do
-      if s.[i] <> ' ' then a.(i) <- true
-    done;
-    a
+  let lines = ref []
+
+  let line_buffer = Buffer.create 1024
+
+  let bool_array_of_string s =
+    Array.init (String.length s) (fun i -> s.[i] = '*')
+
+  let push_line () =
+    let s = Buffer.contents line_buffer in
+    Buffer.clear line_buffer;
+    if s <> "" then lines := bool_array_of_string s :: !lines
+
+  let create_bool_array () =
+    let w = List.fold_left (fun w a -> max w (Array.length a)) 0 !lines in
+    let m = Array.of_list !lines in
+    lines := [];
+    let adapt a =
+      let n = Array.length a in
+      if n = w then a else Array.init w (fun i -> if i < n then a.(i) else false)
+    in
+    Array.map adapt m
 
 }
 
-let space = [' ' '\t' '\n']
+let space = [' ' '\t']
+let newline = '\n'
 let comment = '#' [^ '\n']* '\n'
 let letter = ['a'-'z' 'A'-'Z']
 let integer = ['0'-'9']+
@@ -25,7 +41,7 @@ let options = ("exact" space* ['1'-'9']*)
 rule token = parse
   | comment
       { token lexbuf }
-  | space+
+  | space+ | newline
       { token lexbuf }
   | "tile"
       { TILE }
@@ -37,8 +53,24 @@ rule token = parse
       { TRUE }
   | "constant"
       { CONSTANT }
-  | "pattern"
-      { PATTERN }
+  | "-"
+      { INFDIFF }
+  | "diff"
+      { PREFDIFF }
+  | "union"
+      { UNION }
+  | "inter"
+      { INTER }
+  | "xor"
+      { XOR }
+  | "set"
+      { SET }
+  | "shift"
+      { SHIFT }
+  | "resize"
+      { RESIZE }
+  | "crop"
+      { CROP }
   | ident as id
       { IDENT id }
   | (integer as w) 'x' (integer as h)
@@ -55,29 +87,24 @@ rule token = parse
       { LPAR }
   | ")"
       { RPAR }
-(*
-  | '{'
+  | '{' space* newline?
       { read_lines lexbuf }
-*)
   | _ as c
       { eprintf "parse error: invalid character `%c'@." c; exit 1 }
   | eof
       { EOF }
 
-(***
 and read_lines = parse
-  | space* '\n' | eof
-      { [] }
-  | comment
-      { read_lines m lexbuf }
-  | '*' ([^ '\n']* as s) '\n'
-      { let line = bool_array_of_string m s in
-	line :: read_lines m lexbuf }
+  | space+
+      { read_lines lexbuf }
+  | comment | newline | '$'
+      { push_line (); read_lines lexbuf }
   | '}'
-    { ASCII m }
+    { push_line (); ASCII (create_bool_array ()) }
   | _ as c
-      { eprintf "parse error: invalid character `%c'@." c; exit 1 }
-***)
+      { Buffer.add_char line_buffer c; read_lines lexbuf }
+  | eof
+      { eprintf "unterminated pattern@."; exit 1 }
 
 {
 

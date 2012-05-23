@@ -6,20 +6,29 @@
 
 tile chessboard = constant 8x8 true
 
-tile a = ((constant 2x1 true))
-  # pattern 2x1 {**}
+tile a = {**}
 
 tile b = constant 1x2 true
-  # pattern 1x2 {*$*}
 
-# tile A = 3x3 {
-#  .*.
-#  ***
-#  .*.
-# }
+tile c = {*$*}
+
+tile bar = shift {*.$*.} 1x0
+tile foo = resize {*$*} 2x2
+
+tile test = foo union bar
+
+
+tile A = {
+ .*.
+ ***
+ .*.
+}
+
+#tile a = set a 1x0 true
+
 
 # tile B = rotate 90 A
 
-problem domino_8_8 = chessboard [a, b]
+problem domino_8_8 = chessboard [a, c]
 
 problem domino_6_6 = (constant 6x6 true) [a, b]

@@ -35,15 +35,7 @@ let problems =
   begin match !file with Some _ -> close_in c | None -> () end;
   Interp.interp p
 
-let m = match problems with
-  | [] -> printf "the file contains no problem@."; exit 0
-  | p :: _ -> Tiling.emc p
 
-(*
-let ()  =
-  Tiling.display_boolean_matrix m;
-
- *)
 open Num
 
 module CZDD = 
@@ -56,34 +48,19 @@ module CZDD =
       end
     )
 
-
+(* imprimer tous les problemes *)
 let () = 
- 
-    if !zdd then 
-      printf "ZDD solutions : %s@."
-	(string_of_num (CZDD.count_solutions (Emc.Z. create m)));
-    if !dlx then 
-      printf "DLX : solutions : %d@." (Emc.D.count_solutions (Emc.D.create m));
-
-
-(*
-  let z = Zdd.column 0 [|[|true|];
-			 [|true|];
-			 [|false|];
-			 [|true|];
-			 [|false|];|] in
-  let c = open_out "test.dot" in
-  let fmt = Format.formatter_of_out_channel c in
-  Zdd.print_to_dot fmt z;
-  close_out c;
-  ignore (Sys.command "dot -Tps test.dot | gv -")
-()
- *)
+  printf "########## Problems #########\n@." ;
+  List.iter (
+    fun p -> 
+      printf "%a" Tiling.print_problem p;
+      printf "Solutions : %s\n@." 
+        (Num.string_of_num 
+           (CZDD.count_solutions 
+              (Emc.Z.create (Tiling.emc p))))
+  ) problems
 
   
-
-
-
 
 
 

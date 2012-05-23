@@ -22,3 +22,4 @@ parser.output
 *~
 *.annot
 doc
+*.conflicts

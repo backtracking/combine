@@ -208,8 +208,8 @@ module Pattern = struct
     for y = p.height-1 downto 0 do
       Array.iter (
         fun cell -> 
-          if cell then Format.fprintf fmt "#"
-          else Format.fprintf fmt "'"
+          if cell then Format.fprintf fmt "*"
+          else Format.fprintf fmt "."
       ) p.grid.(y);
       if y > 0 then Format.fprintf fmt "@\n"
     done
@@ -290,12 +290,17 @@ end
 module Tile = struct
 
   type t = {
+    name: string option;
+    quantity: int option;
+    exact: bool option;
     pattern: Pattern.t;
     isos   : Iso.S.t;   (* the pattern is invariant by these isometries *)
   }
 
-  let create p =
-    { pattern = p;
+  let create ?name ?quantity ?exact p =
+    { name = name; pattern = p;
+      quantity = quantity;
+      exact = exact;
       isos    = Pattern.get_isos p; }
 
   let apply iso t =
@@ -303,6 +308,8 @@ module Tile = struct
     else create (Pattern.apply iso t.pattern)
 
   let print fmt t =
+    begin match t.name with Some s ->
+    Format.printf "name : %s@\n"s; | None -> () end;
     Format.fprintf fmt "%a@\n" Pattern.print t.pattern;
     Format.fprintf fmt "{ ";
     Iso.S.iter (fun iso -> Format.fprintf fmt "%a, " Iso.print iso) t.isos;
@@ -311,53 +318,48 @@ module Tile = struct
 end
 
 
-type piece = {
-  mutable matrix : bool array array;
-  mutable name : string;
-  mutable quantity : int;
-  mutable exact : bool; 
-  mutable isos_piece : Iso.S.t
-}
 
 type problem = {
-  mutable grid : bool array array;
-  mutable pname : string;
-  mutable pieces : piece list;
-  mutable isos_grid: Iso.S.t
+  grid : Pattern.t;
+  pname : string option;
+  pieces : Tile.t list;
 }
 
-let create_problem ?(n = "") g ps = {
+let create_problem ?name g ps = {
   grid = g; 
-  pname = n; 
+  pname = name; 
   pieces = ps;
-  isos_grid = Iso.S.empty
-
 }
 
 
-let create_piece ?(q = 0) ?(e = false) ?(n = "") m ={
-  matrix = m; 
-  name = n; 
-  quantity = q; 
-  exact = e;
-  isos_piece = Iso.S.empty
-}
+
+
+let print_problem fmt problem = 
+  begin match problem.pname with 
+    | Some s -> Format.fprintf fmt "name : %s@\n" s;
+    | None -> () end;
+  Format.fprintf fmt "%a@\n" Pattern.print problem.grid;
+  List.iter (fun t -> Format.fprintf fmt "%a@\n" Tile.print t) problem.pieces
+
+  
+
+
 
 (* Board position testing *)
 
 (* return true if position x y is on the board *)
-let existing_position board x y = 
-  x < Array.length board 
-  && y < Array.length board.(0) 
-  && board.(x).(y)
+let existing_position problem x y = 
+  x < problem.grid.Pattern.width
+  && y < problem.grid.Pattern.height
+  && problem.grid.Pattern.grid.(y).(x)
 
 (* return true if piece could be put at position x y*)
-let is_possible_position piece board x y =
+let is_possible_position tile board x y =
   try
-    for i = 0 to Array.length piece.matrix - 1 do
-      for j = 0 to Array.length piece.matrix.(0) - 1 do
-        if piece.matrix.(i).(j) 
-        && not (existing_position board (x + i) (y + j))
+    for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do
+      for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do
+        if tile.Tile.pattern.Pattern.grid.(y').(x') 
+        && not (existing_position board (x + x') (y + y'))
         then raise Exit
       done
     done;
@@ -365,140 +367,67 @@ let is_possible_position piece board x y =
   with 
     | Exit -> false
 
-(* Isometries *)
-(* Symmetries *)
-
-(* return true if a piece has a diagonal symmetry *)
-let has_diagonal_symmetry piece =
-  let h = Array.length piece.matrix.(0) in 
-  let l = Array.length piece.matrix in 
-    try
-      for i = 0 to Array.length piece.matrix / 2 - 1 do
-        for j = 0 to h / 2 - 1 do
-          if piece.matrix.(i).(j) <> piece.matrix.(l - i).(h - j) 
-          then raise Exit
-        done
-      done;
-      true
-    with 
-      | Exit -> false
-
-(* return true if a piece has an horizontal symmetry *)
-let has_horizontal_symmetry piece = 
-  let h = Array.length piece.matrix.(0) in 
-    try
-      for i = 0 to Array.length piece.matrix / 2 - 1 do
-        for j = 0 to h / 2 - 1 do
-          if piece.matrix.(i).(j) <> piece.matrix.(i).(h - j) 
-          then raise Exit
-        done
-      done;
-      true
-    with 
-      | Exit -> false
-
-(* return true if a piece has a vertical symmetry *)
-let has_vertical_symmetry piece = 
-  let l = Array.length piece.matrix in 
-    try
-      for i = 0 to l / 2 - 1 do
-        for j = 0 to Array.length piece.matrix.(0) / 2 - 1 do
-          if piece.matrix.(i).(j) <> piece.matrix.(i).(j) 
-          then raise Exit
-        done
-      done;
-      true
-    with 
-      | Exit -> false
-
-
-   (* return a list of pieces containing the rotations of the piece, 
-    including itself 
-    *)
-(* TODO : Modify and add 180° and 90° rotations*)
-(*
-let get_rotations piece = 
-  let rec rec_get i piece rotations = 
-    if i <> 3 then
-      let rot_piece = create_piece piece.matrix in 
-        if List.mem rot_piece rotations then
-          rec_get (i + 1) rot_piece rotations
-        else 
-          rec_get (i + 1) rot_piece (rot_piece::rotations);
-    else rotations
-  in 
-    rec_get 0 piece [piece]
-    
-
-(* return a list of pieces containing rotations of all start pieces *)
-let get_all_rotations pieces = 
-  let rec rec_add_rotations pieces with_rotations = 
-    match pieces with
-      | [] -> with_rotations
-      | h::t -> rec_add_rotations t (get_rotations h)@with_rotations
-  in 
-    rec_add_rotations pieces []
-
-*)
-
-
-
 (* Placing piece on board *)
 
 (* return an array of size n representing the way to put piece p at 
  position x y on the board of size l*n
  *)
-let one_line l n piece_id piece x y = 
+
+let one_line l n tile_id tile x y = 
   let line = Array.make n false in
-    for i = 0 to Array.length piece.matrix - 1 do  
-      for j = 0 to Array.length piece.matrix.(0) - 1 do  
-        if piece.matrix.(i).(j) then
-          line.((x + i) * l + y + j) <- true;
-        if piece.quantity <> 0 then begin 
-          line.(piece_id) <- true;
-        end 
-      done 
-    done;
-    line 
+  for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do  
+    for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do  
+      if tile.Tile.pattern.Pattern.grid.(y').(x') then begin
+        line.((x + x') * l + y + y') <- true;
+        match tile.Tile.quantity with
+          | Some n when n <> 0 -> line.(tile_id) <- true
+          | _ -> ()
+      end
+    done 
+  done;
+  line 
 
 let one_line_piece_only n piece_id piece =
   let line = Array.make n false in
     line.(piece_id) <- true;
     line
 
-let comput_matrix_size board pieces =
-  let h = Array.length board in 
-  let l = Array.length board.(0) in 
-  let n = l * h  in
+let comput_matrix_size problem=
+  let h = problem.grid.Pattern.height in 
+  let w = problem.grid.Pattern.width in 
+  let n = w * h  in
     n + List.fold_left (
       fun acc e ->
-        if e.quantity <> 0 then
-          acc + e.quantity
-        else 
-          acc
-    ) 0 pieces
+        match e.Tile.quantity with
+          | Some n when n <> 0 -> acc + n 
+          | _ -> acc
+    ) 0 problem.pieces
 
 (* return a boolean matrix representing the set of way to put all pieces
  * on the board
  * *)
 let emc problem =
-  let h = Array.length problem.grid in 
-  let w = Array.length problem.grid.(0) in 
-  let n = comput_matrix_size problem.grid problem.pieces in
-  let piece_id = ref (h * w) in
+  let h = problem.grid.Pattern.height in 
+  let w = problem.grid.Pattern.width in 
+  let n = comput_matrix_size problem in
+  let tile_id = ref (h * w) in
   let lines = ref [] in 
-  let add_piece i j piece = 
-        if is_possible_position piece problem.grid i j then
-          if piece.quantity = 0 then 
-            lines := one_line w n !piece_id piece i j::!lines
-          else 
-            for k = 0 to piece.quantity do
-              if not piece.exact then begin
-                lines := one_line_piece_only n !piece_id piece::!lines;
-                lines := one_line w n !piece_id piece i j::!lines;
-                incr piece_id
-              end
+  let add_piece i j tile = 
+    if is_possible_position tile problem i j then
+      (* TODO *)
+      match tile.Tile.quantity with
+        | Some q when q <> 0 -> 
+            for k = 0 to q do
+              match tile.Tile.exact with
+                | Some b when not b -> 
+                    lines := one_line_piece_only n !tile_id tile::!lines;
+                    lines := one_line w n !tile_id tile i j::!lines;
+                    incr tile_id
+                | _ -> ()
             done
+        | _ -> 
+            lines := one_line w n !tile_id tile i j::!lines
+
   in 
   for i = 0 to h - 1 do
     for j = 0 to w - 1 do

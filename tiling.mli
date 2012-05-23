@@ -59,11 +59,15 @@ end
 module Tile : sig
 
   type t = private {
+    name: string option;
+    quantity: int option;
+    exact: bool option;
     pattern: Pattern.t;
     isos   : Iso.S.t;   (* the pattern is invariant by these isometries *)
   }
 
-  val create: Pattern.t -> t
+  val create: 
+             ?name:string -> ?quantity:int -> ?exact:bool -> Pattern.t -> t
 
   val apply: Iso.t -> t -> t
 
@@ -71,18 +75,15 @@ module Tile : sig
 
 end
 
-(***
-val dominos: Tile.t list
-val pentaminos: Tile.t list
-***)
+type problem = private {
+  grid : Pattern.t;
+  pname : string option;
+  pieces : Tile.t list;
+}
 
-type piece
+val create_problem : ?name:string -> Pattern.t -> Tile.t list -> problem
 
-val create_piece : ?q:int -> ?e:bool -> ?n:string -> bool array array -> piece
-
-type problem
-
-val create_problem : ?n:string -> bool array array -> piece list -> problem
+val print_problem: Format.formatter -> problem -> unit
 
 val emc: problem -> bool array array
 

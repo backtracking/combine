@@ -3,12 +3,16 @@
   open Ast
 %}
 
-%token TILE PROBLEM CONSTANT FALSE TRUE PATTERN
+%token TILE PROBLEM CONSTANT FALSE TRUE
+%token INFDIFF PREFDIFF UNION XOR INTER 
+%token SET SHIFT CROP RESIZE
 %token EQUAL LSBRA RSBRA RPAR LPAR COMMA
 %token <string> IDENT
 %token <int * int> DIM
 %token <bool array array> ASCII
 %token EOF
+
+%right INFDIFF UNION XOR INTER
 
 %start <Ast.file> file
 
@@ -30,12 +34,33 @@ expr:
 | LPAR; e = expr; RPAR { e }
 | id = IDENT
     { Var id }
-| LPAR; CONSTANT; d = DIM; b = bool; RPAR
-    { let w,h = d in Pattern (Array.make h (Array.make w b)) }
 | CONSTANT; d = DIM; b = bool
     { let w,h = d in Pattern (Array.make h (Array.make w b)) }
-| PATTERN; d = DIM; a = ASCII
-    { ignore (d); (* TODO: adapter a à la dimension d *) Pattern a }
+| PREFDIFF; e1 = expr; e2 = expr
+    { Binary (Diff, e1, e2) }
+| e1 = expr; INFDIFF ;e2 = expr
+    { Binary (Diff, e1, e2) }
+| e1 = expr; UNION ;e2 = expr
+    { Binary (Union, e1, e2) }
+| e1 = expr; INTER ;e2 = expr
+    { Binary (Inter, e1, e2) }
+| e1 = expr; XOR ;e2 = expr
+    { Binary (Xor, e1, e2) }
+
+| SET; e = expr; d = DIM; b = bool
+    { SetOp (SetXY (b), d, e) }
+
+| CROP; pos = DIM ;d = DIM; e = expr
+    { SetOp (Crop(pos), d, e)}
+
+| SHIFT; e = expr; d = DIM
+    { SetOp (Shift, d, e) }
+
+| RESIZE; e = expr; d = DIM
+    { SetOp (Resize, d, e) }
+
+| a = ASCII
+    { Pattern a }
 ;
 
 bool:
