@@ -15,8 +15,7 @@ tile c = {*$*}
 tile bar = shift {*.$*.} 1x0
 tile foo = resize {*$*} 2x2
 
-tile test = foo union bar
-
+tile test = foo || bar
 
 tile A = {
  .*.
@@ -32,3 +31,5 @@ tile A = {
 problem domino_8_8 = chessboard [a, c]
 
 problem domino_6_6 = (constant 6x6 true) [a, b]
+
+problem test = (constant 6x6 true) [bar, foo]

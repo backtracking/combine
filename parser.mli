@@ -11,20 +11,23 @@ type token =
   | RPAR
   | RESIZE
   | PROBLEM
-  | PREFDIFF
+  | MINUS
   | LSBRA
   | LPAR
   | INTER
-  | INFDIFF
   | IDENT of (string)
+  | HAT
   | FALSE
   | EQUAL
   | EOF
   | DIM of (int * int)
+  | DIFF
   | CROP
   | CONSTANT
   | COMMA
+  | BARBAR
   | ASCII of (bool array array)
+  | AMPAMP
 
 
 val file: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Ast.file)

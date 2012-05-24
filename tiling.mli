@@ -31,7 +31,7 @@ module Pattern : sig
   *)
 
   type t = private {
-    grid   : bool array array;
+    matrix   : bool array array;
     height : int;
     width  : int;
   }
@@ -58,16 +58,19 @@ end
 
 module Tile : sig
 
+  type symetries = Snone | Srotations | Sall
+  type multiplicity = Minf | Mexact of int | Mmax of int
+
   type t = private {
     name: string option;
-    quantity: int option;
-    exact: bool option;
     pattern: Pattern.t;
+    multiplicity : multiplicity;
+    symetries : symetries;
     isos   : Iso.S.t;   (* the pattern is invariant by these isometries *)
   }
 
   val create: 
-             ?name:string -> ?quantity:int -> ?exact:bool -> Pattern.t -> t
+             ?name:string -> ?s:symetries -> ?m:multiplicity -> Pattern.t -> t
 
   val apply: Iso.t -> t -> t
 

@@ -28,6 +28,8 @@
     in
     Array.map adapt m
 
+  exception Lexical_error of string
+
 }
 
 let space = [' ' '\t']
@@ -40,9 +42,11 @@ let options = ("exact" space* ['1'-'9']*)
 
 rule token = parse
   | comment
+      { new_line lexbuf; token lexbuf }
+  | space+
       { token lexbuf }
-  | space+ | newline
-      { token lexbuf }
+  | newline
+      { new_line lexbuf; token lexbuf }
   | "tile"
       { TILE }
   | "problem"
@@ -54,9 +58,15 @@ rule token = parse
   | "constant"
       { CONSTANT }
   | "-"
-      { INFDIFF }
+      { MINUS }
+  | "&&"
+      { AMPAMP }
+  | "||"
+      { BARBAR }
+  | "^"
+      { HAT }
   | "diff"
-      { PREFDIFF }
+      { DIFF }
   | "union"
       { UNION }
   | "inter"
@@ -87,26 +97,55 @@ rule token = parse
       { LPAR }
   | ")"
       { RPAR }
-  | '{' space* newline?
+  | '{' space*
       { read_lines lexbuf }
+  | '{' space* newline
+      { new_line lexbuf; read_lines lexbuf }
   | _ as c
-      { eprintf "parse error: invalid character `%c'@." c; exit 1 }
+      { raise (Lexical_error (sprintf "invalid character `%c'@." c)) }
   | eof
       { EOF }
 
 and read_lines = parse
   | space+
       { read_lines lexbuf }
-  | comment | newline | '$'
+  | comment | newline
+      { new_line lexbuf; push_line (); read_lines lexbuf }
+  | '$'
       { push_line (); read_lines lexbuf }
   | '}'
     { push_line (); ASCII (create_bool_array ()) }
   | _ as c
       { Buffer.add_char line_buffer c; read_lines lexbuf }
   | eof
-      { eprintf "unterminated pattern@."; exit 1 }
+      { raise (Lexical_error "unterminated pattern") }
 
 {
+
+  let print_loc fmt lb =
+    let pos = lexeme_start_p lb in
+    let c = (pos.pos_cnum - pos.pos_bol) in
+    fprintf fmt "File \"%s\", line %d, characters %d-%d:" pos.pos_fname
+      pos.pos_lnum c c
+
+  let parse_file fname =
+    let c = open_in fname in
+    let lb = from_channel c in
+    lb.lex_curr_p <- { lb.lex_curr_p with pos_fname = fname };
+    let p = 
+      try
+	Parser.file token lb
+      with
+	| Lexical_error msg ->
+  	  eprintf "%a@\nlexical error: %s@." print_loc lb msg;
+  	  exit 1
+	| Parser.Error ->
+	  eprintf "%a@\nsyntax error@." print_loc lb;
+	  exit 1
+    in
+    close_in c;
+    p
+
 
 (***
   let raw_parser c =
@@ -129,4 +168,6 @@ and read_lines = parse
       | None -> invalid_arg "read_problem"
       | Some g -> Tiling.create_problem g !pieces
 ***)
+
+
 }

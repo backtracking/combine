@@ -145,7 +145,7 @@ end
 module Pattern = struct 
 
   type t = {
-    grid   : bool array array;
+    matrix   : bool array array;
     height : int;
     width  : int;
   }
@@ -153,7 +153,7 @@ module Pattern = struct
   let create g =
     let h = Array.length g in
     if h = 0 then invalid_arg "Pattern.create";
-    { grid = g;
+    { matrix = g;
       height = h;
       width = Array.length g.(0); }
 
@@ -165,10 +165,12 @@ module Pattern = struct
     for y = 0 to h-1 do
       for x = 0 to w-1 do
         let new_x, new_y = trans ~w ~h (x, y)  in
-        new_m.(new_y).(new_x) <- p.grid.(y).(x)
+        new_m.(new_y).(new_x) <- p.matrix.(y).(x)
       done
     done;
-    { grid = new_m; height = new_h; width = new_w }
+    { matrix = new_m; height = new_h; width = new_w }
+
+
 
 
 
@@ -210,7 +212,7 @@ module Pattern = struct
         fun cell -> 
           if cell then Format.fprintf fmt "*"
           else Format.fprintf fmt "."
-      ) p.grid.(y);
+      ) p.matrix.(y);
       if y > 0 then Format.fprintf fmt "@\n"
     done
 
@@ -219,19 +221,19 @@ module Pattern = struct
     let m = Array.make_matrix h w false in 
     for y = 0 to min_h - 1 do
       for x = 0 to min_w - 1 do
-        m.(y).(x) <- p.grid.(y).(x)
+        m.(y).(x) <- p.matrix.(y).(x)
       done 
     done;
-    { grid = m; height = h; width = w }
+    { matrix = m; height = h; width = w }
 
   let crop p ~x ~y ~w ~h = 
     let m = Array.make_matrix h w false in 
     for y' = y to min p.height h - 1 do
       for x' = x to min p.width w - 1 do
-        m.(y' - y).(x' - x) <- p.grid.(y').(x')
+        m.(y' - y).(x' - x) <- p.matrix.(y').(x')
       done
     done;
-    { grid = m; height = h; width = w }
+    {matrix = m; height = h; width = w }
 
   let shift p ~ofsx ~ofsy = 
     let h, w = p.height, p.width in
@@ -240,10 +242,10 @@ module Pattern = struct
       for x = 0 to w - 1 do
         let new_x, new_y = x + ofsx, y + ofsy in
         if new_x < w && new_x >= 0 && new_y < h && new_y >= 0 then 
-          m.(new_y).(new_x) <- p.grid.(y).(x)
+          m.(new_y).(new_x) <- p.matrix.(y).(x)
       done
     done;
-    { grid = m; height = h; width = w }
+    { matrix = m; height = h; width = w }
 
   let binary_op op p1 p2 = 
     if p1.height <> p2.height || p1.width <> p2.width then
@@ -252,10 +254,10 @@ module Pattern = struct
     let m = Array.make_matrix h w false in
     for y = 0 to h - 1 do
       for x = 0 to w - 1 do 
-        m.(y).(x) <- op p1.grid.(y).(x) p2.grid.(y).(x)
+        m.(y).(x) <- op p1.matrix.(y).(x) p2.matrix.(y).(x)
       done 
     done;
-    { grid = m; height = h; width = w }
+    { matrix = m; height = h; width = w }
 
   let union = binary_op (||)
   let inter = binary_op (&&)
@@ -278,7 +280,7 @@ module Pattern = struct
     try for y = 0 to p.height - 1 do
       for x = 0 to p.width -1 do
         let new_x, new_y = trans ~w ~h (x, y) in
-        if p.grid.(new_y).(new_x) <> p.grid.(y).(x) then raise Exit
+        if p.matrix.(new_y).(new_x) <> p.matrix.(y).(x) then raise Exit
       done
     done;true with Exit -> false
 
@@ -289,23 +291,36 @@ end
 
 module Tile = struct
 
+  type symetries = Snone | Srotations | Sall
+  type multiplicity = Minf | Mexact of int | Mmax of int
+
   type t = {
     name: string option;
-    quantity: int option;
-    exact: bool option;
     pattern: Pattern.t;
+    multiplicity : multiplicity;
+    symetries : symetries;
     isos   : Iso.S.t;   (* the pattern is invariant by these isometries *)
   }
 
-  let create ?name ?quantity ?exact p =
+  let create ?name ?(s=Snone) ?(m=Minf) p =
     { name = name; pattern = p;
-      quantity = quantity;
-      exact = exact;
+      multiplicity = m;
+      symetries = s;
       isos    = Pattern.get_isos p; }
 
   let apply iso t =
     if Iso.S.mem iso t.isos then t
     else create (Pattern.apply iso t.pattern)
+
+
+let symetries t = 
+  Iso.S.fold (fun iso l -> apply iso t :: l ) (Iso.S.diff Iso.all t.isos) [t] 
+
+  (*   let generate_all tiles =  *)
+
+
+
+
 
   let print fmt t =
     begin match t.name with Some s ->
@@ -351,14 +366,14 @@ let print_problem fmt problem =
 let existing_position problem x y = 
   x < problem.grid.Pattern.width
   && y < problem.grid.Pattern.height
-  && problem.grid.Pattern.grid.(y).(x)
+  && problem.grid.Pattern.matrix.(y).(x)
 
 (* return true if piece could be put at position x y*)
 let is_possible_position tile board x y =
   try
     for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do
       for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do
-        if tile.Tile.pattern.Pattern.grid.(y').(x') 
+        if tile.Tile.pattern.Pattern.matrix.(y').(x') 
         && not (existing_position board (x + x') (y + y'))
         then raise Exit
       done
@@ -373,15 +388,17 @@ let is_possible_position tile board x y =
  position x y on the board of size l*n
  *)
 
+open Tile
+
 let one_line l n tile_id tile x y = 
   let line = Array.make n false in
   for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do  
     for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do  
-      if tile.Tile.pattern.Pattern.grid.(y').(x') then begin
+      if tile.Tile.pattern.Pattern.matrix.(y').(x') then begin
         line.((x + x') * l + y + y') <- true;
-        match tile.Tile.quantity with
-          | Some n when n <> 0 -> line.(tile_id) <- true
-          | _ -> ()
+        match tile.Tile.multiplicity with
+          | Mexact _ | Mmax _ -> line.(tile_id) <- true
+          | Minf -> ()
       end
     done 
   done;
@@ -398,9 +415,9 @@ let comput_matrix_size problem=
   let n = w * h  in
     n + List.fold_left (
       fun acc e ->
-        match e.Tile.quantity with
-          | Some n when n <> 0 -> acc + n 
-          | _ -> acc
+        match e.Tile.multiplicity with
+          | Mexact n | Mmax n -> acc + n 
+          | Minf -> acc
     ) 0 problem.pieces
 
 (* return a boolean matrix representing the set of way to put all pieces
@@ -415,19 +432,14 @@ let emc problem =
   let add_piece i j tile = 
     if is_possible_position tile problem i j then
       (* TODO *)
-      match tile.Tile.quantity with
-        | Some q when q <> 0 -> 
-            for k = 0 to q do
-              match tile.Tile.exact with
-                | Some b when not b -> 
-                    lines := one_line_piece_only n !tile_id tile::!lines;
-                    lines := one_line w n !tile_id tile i j::!lines;
-                    incr tile_id
-                | _ -> ()
+      match tile.Tile.multiplicity with
+        | Mexact q | Mmax q -> 
+            for k = 0 to q - 1 do
+              lines := one_line w n !tile_id tile i j::!lines;
+              incr tile_id
             done
-        | _ -> 
+        | Minf -> 
             lines := one_line w n !tile_id tile i j::!lines
-
   in 
   for i = 0 to h - 1 do
     for j = 0 to w - 1 do

@@ -19,22 +19,11 @@ let error_pieces_board () =
   eprintf "problem must have board and piece(s) @."; 
   exit 1 
 
-let problems =
-  let c = match !file with
-    | Some f -> open_in f
-    | None -> stdin
-  in
-  let lb = Lexing.from_channel c in
-  let p = 
-    try
-      Parser.file Lexer.token lb
-    with Invalid_argument msg ->
-      eprintf "invalid input file: %s@." msg;
-      exit 1
-  in
-  begin match !file with Some _ -> close_in c | None -> () end;
-  Interp.interp p
+let ptree = match !file with
+  | Some f -> Lexer.parse_file f
+  | None -> exit 0
 
+let problems = Interp.interp ptree
 
 open Num
 

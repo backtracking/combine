@@ -5,16 +5,15 @@
 
 %token TILE PROBLEM CONSTANT FALSE TRUE
 %token SET SHIFT CROP RESIZE
-%token INFDIFF PREFDIFF UNION XOR INTER 
+%token MINUS AMPAMP BARBAR HAT DIFF UNION XOR INTER 
 %token EQUAL LSBRA RSBRA RPAR LPAR COMMA
 %token <string> IDENT
 %token <int * int> DIM
 %token <bool array array> ASCII
 %token EOF
 
-%right PREFDIFF
-%right XOR INTER INFDIFF UNION
-
+%nonassoc UNION INTER DIFF XOR prec_crop
+%left AMPAMP MINUS BARBAR HAT
 
 %start <Ast.file> file
 
@@ -38,22 +37,26 @@ expr:
     { Var id }
 | CONSTANT; d = DIM; b = bool
     { let w,h = d in Pattern (Array.make h (Array.make w b)) }
-| PREFDIFF; e1 = expr; e2 = expr
-    { Binary (Diff, e1, e2) }
-| e1 = expr; INFDIFF ;e2 = expr
-    { Binary (Diff, e1, e2) }
-| e1 = expr; UNION ;e2 = expr
+| UNION; e1 = expr; e2 = expr
     { Binary (Union, e1, e2) }
-| e1 = expr; INTER ;e2 = expr
+| INTER; e1 = expr; e2 = expr
     { Binary (Inter, e1, e2) }
-| e1 = expr; XOR ;e2 = expr
+| DIFF; e1 = expr; e2 = expr
+    { Binary (Diff, e1, e2) }
+| XOR; e1 = expr; e2 = expr
+    { Binary (Xor, e1, e2) }
+| e1 = expr; MINUS ;e2 = expr
+    { Binary (Diff, e1, e2) }
+| e1 = expr; AMPAMP ;e2 = expr
+    { Binary (Inter, e1, e2) }
+| e1 = expr; BARBAR ;e2 = expr
+    { Binary (Union, e1, e2) }
+| e1 = expr; HAT ;e2 = expr
     { Binary (Xor, e1, e2) }
 | SET; e = expr; d = DIM; b = bool
     { SetOp (SetXY (b), d, e) }
-| CROP; pos = DIM ;d = DIM; LPAR; e = expr; RPAR
+| CROP; pos = DIM ;d = DIM; e = expr; %prec prec_crop
     { SetOp (Crop(pos), d, e)}
-| CROP; pos = DIM ;d = DIM; id = IDENT
-    { SetOp (Crop(pos), d, Var id)}
 | SHIFT; e = expr; d = DIM
     { SetOp (Shift, d, e) }
 | RESIZE; e = expr; d = DIM

@@ -29,7 +29,7 @@ and interp_setop d e = function
   | SetXY b-> 
       let p = interp_expr e in
       let x, y = d in 
-      p.Pattern.grid.(y).(x) <- b; p
+      p.Pattern.matrix.(y).(x) <- b; p
   | Resize -> 
     let w, h = d in 
     Pattern.resize (interp_expr e) ?w ?h
