@@ -1,0 +1,101 @@
+\pdfminorversion 7
+\pdfobjcompresslevel 3
+
+\documentclass[a4paper]{article}
+\special{papersize=210mm,297mm}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{cite}
+\usepackage[francais]{babel}
+\usepackage[bookmarks=false,colorlinks,linkcolor=blue]{hyperref}
+\usepackage[top=3cm,bottom=2cm,left=3cm,right=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{subfig}
+\usepackage{eso-pic}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{eurosym}
+\usepackage{url}
+\usepackage{textcomp}
+\usepackage{fancyhdr} 
+
+\title{Rapport de Stage, Licence Informatique 3\up{ème} Année}
+\author{Rémy \textsc{EL-SIBAIE BESOGNET}}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+
+\begin{document}
+
+
+\input{./title.tex}
+
+~
+\vfill
+
+\begin{center}
+\section*{Résumé}
+\end{center}
+En informatique, de nombreux problèmes de combinatoire tels que le problème des 
+n-reines ou les problèmes de recouvrement de tuiles peuvent se formaliser d'une
+façon commune :
+Le recouvrement exact de matrice, soit EMC\footnote{Exact Matrix Covering}. 
+Plusieurs algorithmes permettent alors 
+de résoudre cette question et donc les problèmes ci-dessus de façon générique.
+
+Le but de mon stage est d'implémenter, en Ocaml, deux algorithmes de
+résolution du recouvrement exact de matrice ayant pour nom 
+Zero-suppressed Binary Decision
+Diagram et Dancing Links. 
+Ensuite, l'objectif est d'apporter des méthodes 
+simplifiant la formalisation des problèmes de combinatoire pour les ramener
+à un probleme de type EMC. L'utilisateur pourra par 
+exemple utiliser un mini langage pour décrire son problème.
+
+Pour finir, cette bibliothèque doit être organisée de façon à être soumise à la 
+Caml-list. Ainsi, la communauté Caml pourra en bénéficier, selon son utilité.
+
+\vfill
+
+
+
+
+\newpage
+\section*{Remerciements}
+
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+
+\newpage
+\section{Présentation}
+
+
+\section{Problématique}
+\subsection{Problèmes concrets}
+\subsection{Recouvrement Exact de Matrices}
+
+\section{Recherche des solutions}
+
+Deux algorithmes de backtracking
+
+\subsection{La structure Zero-Supressed Binary Decision Diagram}
+\subsection{L'algorithme Dancing Links}
+\subsection{ZDD vs DLX}
+
+
+\section{Généralisation des problèmes}
+\subsection{Création d'un mini langage déclaratif}
+\subsection{Optimisation des symétries}
+
+\section{Conclusion}
+
+	
+	
+
+
+
+
+\end{document}

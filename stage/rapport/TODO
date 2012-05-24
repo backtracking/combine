@@ -1,0 +1,77 @@
+Plan : 
+
+ascendant? descendant?
+
+
+- Pavage : 
+- biblio : Knuth * 2  : ZDD & DLX
+
+
+
+
+
+Résumé
+
+table des matières
+
+remerciements
+
+Présentation
+
+I. Problématique 
+
+1. problemes concrets
+problemes de pavage : pentaminos
+n queens, sudoku
+images
+
+
+2. formalisation
+Recouvrement exact de matrice
+trouver l'ensemble des solutions : 
+un sous ensemble de lignes tq ...
+exemple (du probleme à la matrice EMC)
+
+
+
+II. Algorithmes solution
+
+1. DLX
+Principe de DLX
+l'algo
+Intéret, performances
+exemple
+
+2. ZDD
+origine (BDD)
+principe / méthode de parcourt
+interet / performances
+ajout d'une heuristique (zdd dépend de la matrice)
+exemple (de la matrice au zdd)
+
+
+
+3. DLX / ZDD
+
+why dlx? why zdd?
+
+
+III. Généralisation des problemes de pavage
+- création d'un mini langage déclaratif et d'un parser
+exemple
+
+- optimisation des symétries
+8 isométries du carré
+
+parser->main
+					|
+					v
+			Tiling 
+					|
+					|
+					v
+				EMC
+				|		|
+				|		|
+				v		v
+			zdd		dlx
