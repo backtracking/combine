@@ -30,6 +30,25 @@
 
   exception Lexical_error of string
 
+  let ident_of_keyword =
+    let h = Hashtbl.create 17 in
+    List.iter (fun (s, k) -> Hashtbl.add h s k)
+      [ "pattern", PATTERN;
+	"problem", PROBLEM;
+	"false", FALSE;
+	"true", TRUE;
+	"constant", CONSTANT;
+	"diff", DIFF;
+	"union", UNION;
+	"inter", INTER;
+	"xor", XOR;
+	"set", SET;
+	"shift", SHIFT;
+	"resize", RESIZE;
+	"crop", CROP;
+      ];
+    fun s -> try Hashtbl.find h s with Not_found -> IDENT s
+
 }
 
 let space = [' ' '\t']
@@ -47,16 +66,6 @@ rule token = parse
       { token lexbuf }
   | newline
       { new_line lexbuf; token lexbuf }
-  | "tile"
-      { TILE }
-  | "problem"
-      { PROBLEM }
-  | "false"
-      { FALSE }
-  | "true"
-      { TRUE }
-  | "constant"
-      { CONSTANT }
   | "-"
       { MINUS }
   | "&&"
@@ -65,24 +74,12 @@ rule token = parse
       { BARBAR }
   | "^"
       { HAT }
-  | "diff"
-      { DIFF }
-  | "union"
-      { UNION }
-  | "inter"
-      { INTER }
-  | "xor"
-      { XOR }
-  | "set"
-      { SET }
-  | "shift"
-      { SHIFT }
-  | "resize"
-      { RESIZE }
-  | "crop"
-      { CROP }
   | ident as id
-      { IDENT id }
+      { ident_of_keyword id }
+  | "~one"
+      { ONE }
+  | "~sym"
+      { SYM }
   | (integer as w) 'x' (integer as h)
       { DIM (int_of_string w, int_of_string h) }
   | "="

@@ -59,7 +59,7 @@ end
 module Tile : sig
 
   type symetries = Snone | Srotations | Sall
-  type multiplicity = Minf | Mexact of int | Mmax of int
+  type multiplicity = Minf | Mone (* Mexact of int | Mmax of int *)
 
   type t = private {
     name: string option;

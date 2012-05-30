@@ -292,7 +292,7 @@ end
 module Tile = struct
 
   type symetries = Snone | Srotations | Sall
-  type multiplicity = Minf | Mexact of int | Mmax of int
+  type multiplicity = Minf | Mone (* Mexact of int | Mmax of int *)
 
   type t = {
     name: string option;
@@ -310,11 +310,27 @@ module Tile = struct
 
   let apply iso t =
     if Iso.S.mem iso t.isos then t
-    else create (Pattern.apply iso t.pattern)
+    else create ~m:t.multiplicity (Pattern.apply iso t.pattern)
 
 
-let symetries t = 
-  Iso.S.fold (fun iso l -> apply iso t :: l ) (Iso.S.diff Iso.all t.isos) [t] 
+  let symetries t = 
+    Iso.S.fold (fun iso l -> apply iso t :: l ) (Iso.S.diff Iso.all t.isos) [t] 
+
+  let symetries_problem t = 
+    let h = Hashtbl.create 8 in
+    let l = 
+      begin match t.symetries with
+        | Snone -> Iso.S.add Iso.Id Iso.S.empty 
+        | Srotations -> Iso.S.filter Iso.positive Iso.all
+        | Sall-> Iso.all 
+      end in
+    Iso.S.iter (fun iso -> Hashtbl.replace h (apply iso t) ()) 
+      (Iso.S.diff l t.isos);
+    Hashtbl.fold (fun k _ acc -> k :: acc) h []
+
+
+
+
 
   (*   let generate_all tiles =  *)
 
@@ -380,7 +396,7 @@ let is_possible_position tile board x y =
     done;
     true
   with 
-    | Exit -> false
+    | Exit ->  false
 
 (* Placing piece on board *)
 
@@ -390,15 +406,29 @@ let is_possible_position tile board x y =
 
 open Tile
 
-let one_line l n tile_id tile x y = 
+
+let get_id_col_emc problem x y = 
+  let id = ref 0 in
+  try
+    for y' = 0 to problem.grid.Pattern.height -1 do
+      for x' = 0 to problem.grid.Pattern.width - 1 do
+        if y' = y && x' = x then raise Exit;
+        if problem.grid.Pattern.matrix.(y').(x') then
+          incr id
+      done 
+    done;
+    !id
+  with Exit -> !id
+
+
+let one_line l n tile_id tile problem x y = 
   let line = Array.make n false in
   for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do  
     for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do  
       if tile.Tile.pattern.Pattern.matrix.(y').(x') then begin
-        line.((x + x') * l + y + y') <- true;
-        match tile.Tile.multiplicity with
-          | Mexact _ | Mmax _ -> line.(tile_id) <- true
-          | Minf -> ()
+        line.(get_id_col_emc problem (x + x') (y + y')) <- true;
+        if tile.Tile.multiplicity = Mone then 
+          line.(tile_id) <- true 
       end
     done 
   done;
@@ -409,16 +439,27 @@ let one_line_piece_only n piece_id piece =
     line.(piece_id) <- true;
     line
 
-let comput_matrix_size problem=
+
+let get_position_number problem = 
   let h = problem.grid.Pattern.height in 
   let w = problem.grid.Pattern.width in 
-  let n = w * h  in
-    n + List.fold_left (
-      fun acc e ->
-        match e.Tile.multiplicity with
-          | Mexact n | Mmax n -> acc + n 
-          | Minf -> acc
-    ) 0 problem.pieces
+  let realn = ref 0 in 
+  for y = 0 to h - 1 do
+    for x = 0 to w - 1 do
+      if problem.grid.Pattern.matrix.(y).(x) then
+        incr realn
+    done 
+  done;
+  !realn
+
+let comput_matrix_size problem=
+  let n = get_position_number problem in
+  n + List.fold_left (
+    fun acc e ->
+      match e.Tile.multiplicity with
+        | Mone -> acc + 1
+        | Minf -> acc
+  ) 0 problem.pieces
 
 (* return a boolean matrix representing the set of way to put all pieces
  * on the board
@@ -427,23 +468,24 @@ let emc problem =
   let h = problem.grid.Pattern.height in 
   let w = problem.grid.Pattern.width in 
   let n = comput_matrix_size problem in
-  let tile_id = ref (h * w) in
+let position_number = get_position_number problem in
+  let tile_id = ref position_number in
   let lines = ref [] in 
   let add_piece i j tile = 
-    if is_possible_position tile problem i j then
-      (* TODO *)
-      match tile.Tile.multiplicity with
-        | Mexact q | Mmax q -> 
-            for k = 0 to q - 1 do
-              lines := one_line w n !tile_id tile i j::!lines;
-              incr tile_id
-            done
-        | Minf -> 
-            lines := one_line w n !tile_id tile i j::!lines
+    let possible = ref false in 
+    List.iter (
+      fun t -> 
+        if is_possible_position t problem i j then begin
+          possible := true;
+          lines := one_line w n !tile_id t problem i j :: !lines;
+        end
+    ) (tile :: Tile.symetries_problem tile);
+    if tile.Tile.multiplicity = Mone && !possible then incr tile_id
   in 
   for i = 0 to h - 1 do
     for j = 0 to w - 1 do
-      List.iter (add_piece i j) problem.pieces; 
+        List.iter (add_piece i j) problem.pieces; 
+        tile_id := position_number
     done 
   done;
   Array.of_list !lines

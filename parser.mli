@@ -4,13 +4,15 @@ type token =
   | XOR
   | UNION
   | TRUE
-  | TILE
+  | SYM
   | SHIFT
   | SET
   | RSBRA
   | RPAR
   | RESIZE
   | PROBLEM
+  | PATTERN
+  | ONE
   | MINUS
   | LSBRA
   | LPAR

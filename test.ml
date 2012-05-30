@@ -5,10 +5,12 @@ open Zdd
 open Tiling
 open Format
 
-let p =
-  let r = Lexer.parse_file "tests/domino_8_8.rem" in
-  let r = List.hd (Interp.interp r) in (* FIXME *)
-  Tiling.emc r
+
+let r = Lexer.parse_file "tests/non-regression.rem"
+let problems = Interp.interp r
+let p = List.hd problems
+  
+  
 
 
 let to_set l =
@@ -28,12 +30,15 @@ let () =
   assert (Zdd.mem s2 z3)
 
 let () = 
-  assert (Emc.Z.count_solutions (Emc.Z.create p) = 12988816) ;
+  assert (Emc.Z.count_solutions 
+    (Emc.Z.create (* ~primary:(Tiling.emc_primaries p)*) (Tiling.emc p)) =
+      12988816) ;
   let emc = Queens.emc 5 in 
   let qp_zdd = (Emc.Z.create ~primary:(2 * 5) emc) in
   let qp_dlx = (Emc.D.create ~primary:(2 * 5) emc) in
   assert (Emc.Z.count_solutions qp_zdd = 10);
   assert (Emc.D.count_solutions qp_dlx = 10)
+
 
 let p =
   Pattern.create

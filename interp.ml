@@ -11,8 +11,8 @@ let rec interp_expr = function
       try
         let value = Hashtbl.find var_env s in
         value
-      with Not_found -> failwith ("Error : Unbound value" ^ s) end
-  | Pattern m -> Pattern.create m
+      with Not_found -> failwith ("Error : Unbound value " ^ s) end
+  | Constant m -> Pattern.create m
   | Binary (op, e1, e2) -> interp_binary e1 e2 op
   | SetOp (op, d, e) -> interp_setop d e op
 
@@ -40,13 +40,13 @@ and interp_setop d e = function
   (* SetXY (e, d, b) -> 
        *)
 
-let tile e = 
+let tile ~s ~m e = 
   let p = interp_expr e in
   let name = match e with Var id -> Some id | _ -> None in
-  Tile.create ?name p
+  Tile.create ?name ~s ~m p
 
 let interp_decl = function
-  | Tile (id, z) ->
+  | Pattern (id, z) ->
       let value = interp_expr z in
       Hashtbl.replace var_env id value
   | Problem (id, e, el) ->
@@ -54,8 +54,8 @@ let interp_decl = function
       Hashtbl.replace problem_env id (
         value, 
         List.map (
-          fun e -> 
-            tile e
+          fun (e, s, m) -> 
+            tile ~s ~m e
         ) el
       )
 

@@ -7,14 +7,16 @@ type setop = Shift | SetXY of bool | Resize | Crop of dim
 
 
 type expr =
-  | Pattern of bool array array
+  | Constant of bool array array
   | Var of string
   (* other operations: union, diff, rotations, etc. *)
   | Binary of binop * expr * expr
   | SetOp of setop * dim * expr
 
+type tile = expr * Tiling.Tile.symetries * Tiling.Tile.multiplicity
+
 type decl =
-  | Tile of string * expr
-  | Problem of string * expr * expr list
+  | Pattern of string * expr
+  | Problem of string * expr * tile list
 
 type file = decl list

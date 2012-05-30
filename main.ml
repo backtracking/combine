@@ -27,8 +27,11 @@ let problems = Interp.interp ptree
 
 open Num
 
-module CZDD = 
-  Emc.Z.Count
+
+
+
+module C = 
+  Emc.D.Count
     ( struct
         type t = Num.num
         let zero = Num.num_of_int 0
@@ -37,20 +40,19 @@ module CZDD =
       end
     )
 
+open Tiling
+
 (* imprimer tous les problemes *)
-let () = 
+let () =
   printf "########## Problems #########\n@." ;
   List.iter (
     fun p -> 
-      printf "%a" Tiling.print_problem p;
-      printf "Solutions : %s\n@." 
+      printf "Solutions : %s\n@."
         (Num.string_of_num 
-           (CZDD.count_solutions 
-              (Emc.Z.create (Tiling.emc p))))
+           (C.count_solutions 
+              (Emc.D.create
+                 (Tiling.emc p))))
   ) problems
-
-  
-
 
 
 
