@@ -1,11 +1,10 @@
 
+# Scott's pentaminos problem
+
 # true  '*'
 # true  '%'
 # false '.'
 # newline '$'
-
-#pattern chessboard = constant 8x8 true
-
 
 pattern pentaminosboard = {
 ********

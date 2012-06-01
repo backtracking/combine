@@ -59,7 +59,7 @@ end
 module Tile : sig
 
   type symetries = Snone | Srotations | Sall
-  type multiplicity = Minf | Mone (* Mexact of int | Mmax of int *)
+  type multiplicity = Minf | Mone | Mmaybe
 
   type t = private {
     name: string option;
@@ -88,6 +88,6 @@ val create_problem : ?name:string -> Pattern.t -> Tile.t list -> problem
 
 val print_problem: Format.formatter -> problem -> unit
 
-val emc: problem -> bool array array
+val emc: problem -> int * bool array array
 
 

@@ -120,14 +120,18 @@ module Z = struct
     balancing min max;
     cols.(max)
 
+  let first_row j m =
+    let h = Array.length m in
+    let rec lookup i = if m.(i).(j) || i = h then i else lookup (i+1) in
+    lookup 0
 
   let tiling ?primary m =
     let width = Array.length m.(0) in
-    let cols = Array.init width (fun j -> 
-                                   column ?primary j m) in
-    inter_middle_balancing cols
-
-
+    let cols =
+      Array.init width (fun j -> first_row j m, column ?primary j m) in
+    let compare (i1, _) (i2, _) = Pervasives.compare i2 i1 in
+    Array.sort compare cols;
+    inter_middle_balancing (Array.map snd cols)
 
 
   let create ?primary m = tiling ?primary m

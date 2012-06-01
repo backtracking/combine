@@ -69,7 +69,7 @@ let generate_headers ?primary m h =
   let headers = Array.init size (fun _ -> one_node ()) in
   let primary = match primary with
     | None -> size
-    | Some p -> if p < 0 || p >= size then invalid_arg "create"; p 
+    | Some p -> if p < 0 || p > size then invalid_arg "create"; p 
   in
     headers.(0).s <- 0;
     headers.(0).name <- "C0";

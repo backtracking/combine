@@ -25,34 +25,34 @@ let ptree = match !file with
 
 let problems = Interp.interp ptree
 
-open Num
-
-
-
-
-module C = 
-  Emc.Z.Count
-    ( struct
-        type t = Num.num
-        let zero = Num.num_of_int 0
-        let one = Num.num_of_int 1
-        let add = Num.add_num
-      end
-    )
+module N = struct
+  type t = Num.num
+  let zero = Num.num_of_int 0
+  let one = Num.num_of_int 1
+  let add = Num.add_num
+  let print fmt n = Format.fprintf fmt "%s" (Num.string_of_num n)
+end
+module ZCount = Emc.Z.Count(N)
+module DCount = Emc.D.Count(N)
 
 open Tiling
+
+let handle_problem p =
+  printf "%a@." print_problem p;
+  let primary, m = Tiling.emc p in
+  if !zdd then begin
+    let p = Emc.Z.create ~primary m in
+    printf "ZDD solutions: %a\n@." N.print (ZCount.count_solutions p)
+  end;
+  if !dlx then begin
+    let p = Emc.D.create ~primary m in
+    printf "DLX solutions: %a\n@." N.print (DCount.count_solutions p)
+  end
 
 (* imprimer tous les problemes *)
 let () =
   printf "########## Problems #########\n@." ;
-  List.iter (
-    fun p -> 
-      printf "Solutions : %s\n@."
-        (Num.string_of_num 
-           (C.count_solutions 
-              (Emc.Z.create
-                 (Tiling.emc p))))
-  ) problems
+  List.iter handle_problem problems
 
 
 

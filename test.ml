@@ -30,9 +30,8 @@ let () =
   assert (Zdd.mem s2 z3)
 
 let () = 
-  assert (Emc.Z.count_solutions 
-    (Emc.Z.create (* ~primary:(Tiling.emc_primaries p)*) (Tiling.emc p)) =
-      12988816) ;
+  let primary, m = Tiling.emc p in
+  assert (Emc.Z.count_solutions (Emc.Z.create ~primary m) = 12988816) ;
   let emc = Queens.emc 5 in 
   let qp_zdd = (Emc.Z.create ~primary:(2 * 5) emc) in
   let qp_dlx = (Emc.D.create ~primary:(2 * 5) emc) in

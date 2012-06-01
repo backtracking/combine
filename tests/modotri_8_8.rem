@@ -1,0 +1,17 @@
+
+# Tiling a 8x8 chessboard with monominoes, domnioes and triominoes
+# TAOCP vol 4A page 252
+
+pattern chessboard = constant 8x8 true
+
+pattern a = {**}
+
+pattern b = {*}
+
+pattern c = {**$*}
+pattern d = {***}
+
+problem domino8_8 = chessboard [a ~sym, b ~sym, c ~sym, d ~sym]
+
+
+

@@ -292,7 +292,7 @@ end
 module Tile = struct
 
   type symetries = Snone | Srotations | Sall
-  type multiplicity = Minf | Mone (* Mexact of int | Mmax of int *)
+  type multiplicity = Minf | Mone | Mmaybe
 
   type t = {
     name: string option;
@@ -314,22 +314,19 @@ module Tile = struct
 
 
   let symetries t = 
-    Iso.S.fold (fun iso l -> apply iso t :: l ) (Iso.S.diff Iso.all t.isos) [t] 
+    Iso.S.fold
+      (fun iso l -> apply iso t :: l ) (Iso.S.diff Iso.all t.isos) [t] 
 
-  let symetries_problem t = 
+  let create_all_symetries t = 
     let h = Hashtbl.create 8 in
-    let l = 
-      begin match t.symetries with
-        | Snone -> Iso.S.add Iso.Id Iso.S.empty 
-        | Srotations -> Iso.S.filter Iso.positive Iso.all
-        | Sall-> Iso.all 
-      end in
+    let l = match t.symetries with
+      | Snone -> Iso.S.add Iso.Id Iso.S.empty 
+      | Srotations -> Iso.S.filter Iso.positive Iso.all
+      | Sall-> Iso.all 
+    in
     Iso.S.iter (fun iso -> Hashtbl.replace h (apply iso t) ()) 
       (Iso.S.diff l t.isos);
     Hashtbl.fold (fun k _ acc -> k :: acc) h []
-
-
-
 
 
   (*   let generate_all tiles =  *)
@@ -440,7 +437,7 @@ let one_line_piece_only n piece_id piece =
     line
 
 
-let get_position_number problem = 
+let number_of_cell_columns problem = 
   let h = problem.grid.Pattern.height in 
   let w = problem.grid.Pattern.width in 
   let realn = ref 0 in 
@@ -452,14 +449,14 @@ let get_position_number problem =
   done;
   !realn
 
-let comput_matrix_size problem=
-  let n = get_position_number problem in
-  n + List.fold_left (
-    fun acc e ->
+let number_of_tile_columns problem =
+  List.fold_left (
+    fun (prim, sec as acc) e ->
       match e.Tile.multiplicity with
-        | Mone -> acc + 1
+        | Mone -> (prim + 1, sec)
+	| Mmaybe -> (prim, sec + 1)
         | Minf -> acc
-  ) 0 problem.pieces
+  ) (0, 0) problem.pieces
 
 (* return a boolean matrix representing the set of way to put all pieces
  * on the board
@@ -467,28 +464,34 @@ let comput_matrix_size problem=
 let emc problem =
   let h = problem.grid.Pattern.height in 
   let w = problem.grid.Pattern.width in 
-  let n = comput_matrix_size problem in
-let position_number = get_position_number problem in
-  let tile_id = ref position_number in
+  let ncc = number_of_cell_columns problem in
+  let prim, sec = number_of_tile_columns problem in
+  let n = ncc + prim + sec in
+  let tile_id_prim = ref ncc in
+  let tile_id_sec  = ref (ncc + prim) in
   let lines = ref [] in 
   let add_piece i j tile = 
-    let possible = ref false in 
-    List.iter (
-      fun t -> 
+    let tile_id = match tile.multiplicity with
+      | Mone -> let v = !tile_id_prim in incr tile_id_prim; v
+      | Mmaybe -> let v = !tile_id_sec in incr tile_id_sec; v
+      | Minf -> -1 (* useless *)
+    in
+    List.iter
+      (fun t -> 
         if is_possible_position t problem i j then begin
-          possible := true;
-          lines := one_line w n !tile_id t problem i j :: !lines;
+          lines := one_line w n tile_id t problem i j :: !lines;
         end
-    ) (tile :: Tile.symetries_problem tile);
-    if tile.Tile.multiplicity = Mone && !possible then incr tile_id
+      )
+      (tile :: Tile.create_all_symetries tile)
   in 
   for i = 0 to h - 1 do
     for j = 0 to w - 1 do
         List.iter (add_piece i j) problem.pieces; 
-        tile_id := position_number
+        tile_id_prim := ncc;
+        tile_id_sec := ncc + prim
     done 
   done;
-  Array.of_list !lines
+  ncc + prim, Array.of_list !lines
 
  
 
