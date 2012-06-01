@@ -39,5 +39,6 @@ val print_problem_size: bool array array -> unit
 module D: S
 
   (** ZDD-based implementation *)
-module Z: S
+module Z: S with type t = Zdd.t
+
 

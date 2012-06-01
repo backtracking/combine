@@ -13,12 +13,17 @@
 \usepackage{wrapfig}
 \usepackage{subfig}
 \usepackage{eso-pic}
+\usepackage{array}
+\usepackage{color}
+\usepackage[table]{xcolor}
 \usepackage{url}
 \usepackage{listings}
 \usepackage{eurosym}
 \usepackage{url}
 \usepackage{textcomp}
 \usepackage{fancyhdr} 
+
+\definecolor{lightgray}{gray}{0.9}
 
 \title{Rapport de Stage, Licence Informatique 3\up{ème} Année}
 \author{Rémy \textsc{EL-SIBAIE BESOGNET}}
@@ -49,7 +54,7 @@ résolution du recouvrement exact de matrice ayant pour nom
 Zero-suppressed Binary Decision
 Diagram et Dancing Links. 
 Ensuite, l'objectif est d'apporter des méthodes 
-simplifiant la formalisation des problèmes de combinatoire pour les ramener
+simplifiant la modélisation des problèmes de combinatoire pour les ramener
 à un probleme de type EMC. L'utilisateur pourra par 
 exemple utiliser un mini langage pour décrire son problème.
 
@@ -72,16 +77,206 @@ Caml-list. Ainsi, la communauté Caml pourra en bénéficier, selon son utilité
 \newpage
 \section{Présentation}
 
-contexte du stage
+
+J'ai effectué ce stage dans le cadre de ma troisième année de Licence en 
+Informatique, sous la direction de Jean-Christophe Filliâtre (Equipe ProVal, 
+LRI, Université Paris Sud 11 et CNRS / INRIA Saclay - Île-de-France). L'équipe 
+ProVal a pour objectif de présenter des outils permettant de démontrer la 
+validité de programmes par rapport à un comportement attendu en utilisant des
+méthodes formelles de preuve.
+Ces outils sont en majorité dévellopés en langage OCaml. 
+
+Le but de mon stage n'est donc pas concentré sur le coeur de metier de 
+l'équipe. Il correspond plutôt à une contribution au langage OCaml. 
+Cette contribution
+est sous la forme d'une bibliothèque OCaml pour la combinatoire, apportant
+des méthodes simple permettant de modéliser des problèmes de combinatoire
+sous forme de matrice de contraintes. Elle inclue aussi l'implémentation de 
+deux algorithmes permettant de résoudre le problème du recouvrement exact de
+matrice.
+
 
 \section{Recouvrement Exact de Matrices}
 
 \subsection{Définition}
 
+Résoudre le problème de recouvrement exact de matrice 
+(ou EMC~\footnote{Exact Matrix Covering en Anglais}) revient à,
+partant d'une matrice de booléens donnée, trouver un sous ensemble de 
+lignes de cette matrice tel qu'il n'y ai qu'un et un seul '1' (ou \emph{true}) 
+par colonne.
+On considère par exemple la matrice suivante, de taille 4x5 avec les lignes
+notées de 'a' à 'e' : 
+
+\[
+  \begin{array}{ c }
+   a. \\
+   b. \\
+   c. \\
+   d. \\
+   e. \\
+  \end{array}
+\left(
+  \begin{array}{ c c c c c }
+   1 & 0 & 1 & 1 \\
+   0 & 1 & 1 & 0 \\
+   1 & 1 & 0 & 1 \\
+   1 & 0 & 0 & 1 \\
+   0 & 1 & 0 & 0
+  \end{array} \right)
+\]
+
+Dans cette exemple, on choisit alors differents sous ensemble et on vérifie 
+s'ils correspondent à une solution :
+
+\begin{description}
+\item[$ {d, e} $] ne correspond pas à une solution du probleme (pas de 1 dans la 3\up{e} colonne)
+\item[$ {a, e} $] constitue bien une solution (un et un seul 1 par colonne)
+\item[$ {b, d} $] de même
+\end{description}
+
+Il faut comprendre que le problème EMC correspond en fait à une liste de 
+contraintes. Le but est donc de choisir un ensemble de cas qui satisfaint 
+chaque contrainte une seule et une seule fois.
+Ce problème est connu pour avoir une complexité importante. On pourra observer 
+plus tard qu'il peut être résolu par \emph{backtracking}.
+
+
+
 \subsection{Applications}
 
+Résoudre EMC est finalement une forme de programmation par contrainte. 
+Plusieurs problèmes peuvent donc être encapsulés dans EMC à 
+condition de pouvoir les modéliser tels quels. Je donnerais ici quelques 
+exemples connus.
+
+
 \subsubsection{Pavage}
+Un problème de pavage est la recherche du nombre de façon de recouvrir un
+plateau de jeu avec des tuiles (c'est à dire des pièces) d'une taille et d'une
+forme choisie. 
+Ces problème correspondent parfaitement à la situation
+et sont relativement simples à représenter. 
+Effectivement dans un problème
+de pavage on cherche généralement à recouvrir chaque case une seule et une 
+seule fois. Ce qui ressemble étrangement à la règle d'un problème EMC.
+
+\newpage
+On prend le problème trivial suivant : 
+
+\emph{De combien de façon peut-on recouvrir un échiquier (taille 8x8) par des 
+des dominos ?}
+\\
+
+\begin{figure}
+\centering
+\rowcolors{1}{lightgray}{lightgray}
+\caption{\label{chessboard4x4} Echiquier 4x4 et dominos}
+\[
+  \begin{array}{|c|c|c|c|}
+		\hline
+   	0 & 1 & 2 & 3 \\
+		\hline
+    4	& 5 & 6 & 7 \\
+		\hline
+   	8 & 9 & 10 & 11 \\
+		\hline
+   	12 & 13 & 14 & 15 \\
+		\hline
+\end{array}
+	\textrm{ }
+\begin{array}{ |c| }
+	\hline
+		\\
+	\hline
+    \\
+	\hline
+  \end{array}
+	\textrm{ }
+\begin{array}{ |c|c| }
+	\hline
+		& \\ 
+	\hline
+  \end{array}
+\]
+\end{figure}
+
+Ce problème est trivial puisqu'il existe une formule mathématique pour le 
+résoudre. On en connait donc facilement les solutions. De plus, on ne prend 
+pas en compte la quantité de domino que l'on peut poser ni les symétries 
+éventuelles du problème. On construit alors la
+matrice EMC correspondante. Une colonne de la matrice représente une case de l'éc
+hiquier et une ligne de cette même matrice représente une façon de poser 
+une tuile. On numérote donc les cases de 0 à 15.
+
+Par exemple, poser un domino horizontalement sur la sur la case 0 donne la ligne
+de matrice suivante : 
+
+\[
+  \begin{array}{ c c c c c c c c c c c c c c c c }
+	1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 
+  \end{array}
+\]
+
+On continue l'opération pour chaque case et on ajoute la ligne correspondante
+si la pièce peut être posée à cet endroit. 
+Une fois que toutes les cases du plateau on été testées pour chacune des pièces,
+on obtient la matrice EMC résultat. On a bien modélisé un problème de pavage 
+sous forme de problème EMC dont nous verrons les algorithmes de résolution par
+la suite.
+
 \subsubsection{Sudoku}
+
+Il n'est pas indispensable de décrire à nouveau le principe du 
+Sudoku~\cite{sudoku} qui est massivement connu. Mais une explication concernant
+sa modélisation en EMC s'impose.
+Pour les problèmes de pavage, la contrainte se situait au niveau des cases. Par
+contre, en Sudoku, mettre une valeur dans une case du quadrillage impose et
+dépend de 5 contraintes sur la valeur et l'espace : 
+\begin{itemize}
+\item la case (l'espace)
+\item la ligne (la valeur)
+\item la colonne (la valeur)
+\item la cellule (la valeur)
+\end{itemize}
+
+
+\begin{figure}
+\centering
+\rowcolors{1}{lightgray}{lightgray}
+\caption{\label{sudoku} Echiquier 4x4 et dominos}
+\[
+  \begin{array}{|c|c|c|c|}
+		\hline
+   	0 & 1 & 2 & 3 \\
+		\hline
+    4	& 5 & 6 & 7 \\
+		\hline
+   	8 & 9 & 10 & 11 \\
+		\hline
+   	12 & 13 & 14 & 15 \\
+		\hline
+\end{array}
+\end{figure}
+
+5 & 3 &  &  & 7 &  &  &  & 
+6&0&0&1&9&5&0&0&0
+0&9&8&0&0&0&0&6&0
+8&0&0&0&6&0&0&0&3
+4&0&0&8&0&3&0&0&1
+7&0&0&0&2&0&0&0&6
+0&6&0&0&0&0&2&8&0
+0&0&0&4&1&9&0&0&5
+0&0&0&0&8&0&0&7&9
+
+
+Effectivement, une fois qu'un élément est mit dans une case, il utilise l'espace
+de cette case et empêche n'importe quel élément de prendre sa position. 
+Par contre, il empêche aussi qu'un élément de même \emph{valeur} soit mis dans 
+sa colonne, sa ligne et sa cellule (sous entendu les grosses cases de taille 
+3x3). Il faut donc représenter chacune de ces contraintes dans les lignes de 
+la futur matrice EMC. 
+
 \subsubsection{N-reines}
 
 \section{Recherche des solutions}

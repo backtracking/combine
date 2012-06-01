@@ -32,4 +32,5 @@ val print_to_dot: Format.formatter -> t -> unit
   (** [print_to_dot fmt z] write a string on dot format corresponding 
    to the drawing of the Zdd [z] *)
 
+val print_to_dot_file: string -> t -> unit
 

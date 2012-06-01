@@ -31,7 +31,7 @@ open Num
 
 
 module C = 
-  Emc.D.Count
+  Emc.Z.Count
     ( struct
         type t = Num.num
         let zero = Num.num_of_int 0
@@ -50,7 +50,7 @@ let () =
       printf "Solutions : %s\n@."
         (Num.string_of_num 
            (C.count_solutions 
-              (Emc.D.create
+              (Emc.Z.create
                  (Tiling.emc p))))
   ) problems
 

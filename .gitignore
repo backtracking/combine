@@ -23,3 +23,7 @@ parser.output
 *.annot
 doc
 *.conflicts
+*.dvi
+*.nav
+*.snm
+*.out

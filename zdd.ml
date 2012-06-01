@@ -260,7 +260,14 @@ let print_to_dot fmt z =
   in
   fprintf fmt "@[<hov 2>digraph ZDD {@\n";
   ignore (visit z);
-  fprintf fmt "}@]@."
+  fprintf fmt "}@]@\n"
+
+let print_to_dot_file f z =
+  let c = open_out f in
+  let fmt = formatter_of_out_channel c in
+  print_to_dot fmt z;
+  fprintf fmt "@.";
+  close_out c
 
 let choose zdd = 
   let rec any_element zdd s = match zdd with 
