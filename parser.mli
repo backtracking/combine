@@ -14,6 +14,7 @@ type token =
   | PATTERN
   | ONE
   | MINUS
+  | MAYBE
   | LSBRA
   | LPAR
   | INTER

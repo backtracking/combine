@@ -78,6 +78,8 @@ rule token = parse
       { ident_of_keyword id }
   | "~one"
       { ONE }
+  | "~maybe"
+      { MAYBE }
   | "~sym"
       { SYM }
   | (integer as w) 'x' (integer as h)

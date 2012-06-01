@@ -2,10 +2,13 @@ open Format
 
 let zdd = ref false
 let dlx = ref false
+let debug = ref false
 
 let msg = "usage: project [options] file"
 let spec = ["--zdd", Arg.Set zdd, "  Count solutions using Zdd";  
-            "--dlx", Arg.Set dlx, "  Count solutions using Dlx"]  
+            "--dlx", Arg.Set dlx, "  Count solutions using Dlx";
+	    "--debug", Arg.Set debug, "  Set the debug flag";
+	   ]  
 
 let file = ref None
 let set_file f = match !file with
@@ -40,6 +43,10 @@ open Tiling
 let handle_problem p =
   printf "%a@." print_problem p;
   let primary, m = Tiling.emc p in
+  if !debug then begin
+    Emc.print_boolean_matrix m;
+    printf "  %d primary columns@." primary
+  end;
   if !zdd then begin
     let p = Emc.Z.create ~primary m in
     printf "ZDD solutions: %a\n@." N.print (ZCount.count_solutions p)

@@ -1,11 +1,16 @@
 
 %{
   open Ast
+  open Tiling.Tile
+  type option =
+    | M of multiplicity
+    | S of symetries
+
 %}
 
 %token PATTERN PROBLEM CONSTANT FALSE TRUE
 %token SET SHIFT CROP RESIZE
-%token MINUS AMPAMP BARBAR HAT DIFF UNION XOR INTER ONE SYM
+%token MINUS AMPAMP BARBAR HAT DIFF UNION XOR INTER ONE MAYBE SYM
 %token EQUAL LSBRA RSBRA RPAR LPAR COMMA
 %token <string> IDENT
 %token <int * int> DIM
@@ -29,21 +34,23 @@ decl:
     { Problem (id, e, tl) }
 ;
 
-options:
-|         { Tiling.Tile.Snone, Tiling.Tile.Minf }
-| ONE     { Tiling.Tile.Snone, Tiling.Tile.Mone }
-| SYM     { Tiling.Tile.Sall,  Tiling.Tile.Minf }
-| ONE SYM { Tiling.Tile.Sall,  Tiling.Tile.Mone }
-| SYM ONE { Tiling.Tile.Sall,  Tiling.Tile.Mone }
-;
+option:
+| ONE   { M Mone }
+| MAYBE { M Mmaybe }
+| SYM   { S Sall }
 
 tile_list:
 | LSBRA; l = separated_list(COMMA, tile); RSBRA { l }
 ;
 
 tile:
-| e = expr; o = options
-    { let s,m = o in e,s,m }
+| e = expr; o = list(option)
+    { let option (s, m) = function
+        | M m' -> s, m' (* FIXME: fail on ambiguity *)
+	| S s' -> s', m (* idem *)
+      in
+      let s,m = List.fold_left option (Snone, Minf) o in
+      e,s,m }
 ;
 
 expr:

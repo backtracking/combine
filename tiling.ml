@@ -424,7 +424,7 @@ let one_line l n tile_id tile problem x y =
     for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do  
       if tile.Tile.pattern.Pattern.matrix.(y').(x') then begin
         line.(get_id_col_emc problem (x + x') (y + y')) <- true;
-        if tile.Tile.multiplicity = Mone then 
+        if tile.Tile.multiplicity <> Minf then 
           line.(tile_id) <- true 
       end
     done 
