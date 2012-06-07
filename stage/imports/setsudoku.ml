@@ -1,4 +1,4 @@
-let ligne = Array.make 320 false in
+let ligne = Array.make 324 false in
 
 let v = ... (* valeur de l'element *)
 let i, j = ... (* position : i en abcisse, j en ordonnee*)

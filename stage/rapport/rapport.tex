@@ -76,13 +76,13 @@ travail, répondre à mes nombreuses questions ainsi que me critiquer de façon
 positive ou négative.
 Je remercie évidemment l'ensemble de l'équipe ProVal pour cette ambiance 
 chaleureuse durant les moments de pause et l'entraide dont j'ai pu 
-bénéficier de la part de ses différents membres. Tout particulièrement je 
+bénéficier de la part de ses différents membres. Tout particulièrement, je 
 remercie Sylvain Conchon pour le cours de Programmation Fonctionnelle du
 premier semestre qui m'a donné envie de faire ce stage et qui l'a rendu 
 possible.
 
 Merci également à Nicolas, Léon et Joël pour m'avoir supporté déjà deux mois. 
-Ainsi qu'à Astrid, Jean Noël, Florence, Lénaïc et les autres.
+Ainsi qu'à Astrid, Jean Noël, Florence, Lénaïc et les Pacatiens.
 
 
 \newpage
@@ -117,11 +117,11 @@ matrice ainsi qu'un langage pour décrire les problèmes de pavage.
 \subsection{Définition}
 
 Résoudre le problème de recouvrement exact de matrice 
-(ou EMC~\footnote{Exact Matrix Covering en Anglais}) revient à,
-partant d'une matrice de booléens donnée, trouver un sous-ensemble de 
+(ou EMC~\footnote{Exact Matrix Covering en Anglais}) revient,
+partant d'une matrice de booléens donnée, à trouver un sous-ensemble de 
 lignes de cette matrice tel qu'il n'y ait qu'un et un seul '1' (ou \emph{true}) 
 par colonne.
-On considère par exemple la matrice suivante, de taille 4x5 avec les lignes
+On considère par exemple la matrice suivante de taille 4x5 avec les lignes
 notées de '0' à '5' : 
 
 \[
@@ -152,7 +152,7 @@ Dans cette exemple, on vérifie que :
 
 Il faut comprendre que le problème EMC correspond en fait à une liste de 
 contraintes. Le but est donc de choisir un ensemble de lignes qui satisfassent 
-chaque contrainte une seule et une seule fois.
+chaque contrainte une et une seule fois.
 Ce problème est connu pour avoir une complexité importante. On pourra observer 
 plus tard qu'il peut être résolu par \emph{backtracking}.
 
@@ -170,13 +170,13 @@ Un problème de pavage est la recherche du nombre de façon
 (ou d'au moins une façon) de recouvrir un
 plateau de jeu avec des tuiles (c'est-à-dire des pièces) d'une taille et d'une
 forme choisie. Ces problème s'encodent parfaitement dans un problème EMC
-puisqu'on cherche généralement à recouvrir chaque case une seule et une 
+puisqu'on cherche généralement à recouvrir chaque case une et une 
 seule fois. 
 On prend le problème trivial suivant : \\
 
 
-\emph{De combien de façon peut-on recouvrir un échiquier de taille 4x4 par 
-des dominos ?}
+\emph{De combien de façon peut-on recouvrir un échiquier de taille 
+$4\times4$ par des dominos ?}
 \\
 
 Ce problème est trivial puisqu'il existe une formule mathématique pour le 
@@ -243,7 +243,7 @@ Il n'est pas indispensable de décrire à nouveau le principe du
 Sudoku~\cite{sudoku} qui est massivement connu. Mais une explication concernant
 sa modélisation en EMC s'impose.
 Pour les problèmes de pavage, la contrainte se situait au niveau des cases.Dans
-le cas du Sudoku, mettre une valeur dans une case du quadrillage impose et
+le cas du Sudoku, mettre une valeur dans une case du quadrillage impose 
 5 contraintes sur la valeur et l'espace : 
 \begin{itemize}
 \item la case (l'espace)
@@ -342,7 +342,7 @@ D'après la figure \ref{8queens}, on voit que les contraintes se font sur :
 
 On peut éviter des considèrer les cases dans les contraintes : L'utilisation
 d'une case est déjà comprise dans les quatres informations ci dessus (si une
-reine une utilise une ligne et une colonne choisie, alors elle utilise
+reine utilise une ligne et une colonne choisie, alors elle utilise
 forcément une seule case).
 De plus, au lieu d'avoir une matrice dont la largeur 
 (le nombre de colonne de EMC) est
@@ -360,7 +360,11 @@ On a :
 Ce qui correspond à une matrice de 46 colonnes (et non 64 si on avait choisis
 les cases comme contrainte).
 Cette façon de représenter le problème des N-Queens en EMC vient de Knuth, qu'il
-décrit dans son article Dancing~Links~\cite{dlx} (que l'on verra plus loin).
+décrit dans son article Dancing~Links~\cite{dlx} (que l'on verra plus loin). 
+Un problème subsiste dans cette configuration. On remarque que jamais 8 reines
+ne pourront recouvrir 15 diagonales. On ajoute alors le principe de colonnes 
+secondaires. Ce sont des colonnes de la matrice EMC qui n'ont pas forcément
+besoin de contenir un 1. Elle pourront alors contenir au maximum un 1.
 
 Par exemple, si on place une reine en (a,8) (voir figure \ref{8queens}), on 
 génère alors la ligne de matrice EMC représentée par le code OCaml suivant : 
@@ -428,11 +432,11 @@ l'algorithme X et elle est surtout très peu coûteuse.
 Le nom poétique de cette algorithme vient de la manipulation astucieuse des 
 pointeurs.
 
-Maintenant que l'on connaît le principe, il faut comprendre pourquoi il est
+Maintenant que l'on connaît le principe, il faut comprendre comment il est
 utilisé. Avant de faire tourner l'algorithme, nous devons génerer une structure
 de donnée adaptée à partir de la matrice EMC. Cette structure (exotique) 
-est une matrice construite à partir de listes doublements
- chaînées, c'est à dire une \emph{matrice doublement chaînée} que l'on appellera 
+est une matrice construite à partir de listes doublement
+ chaînées, c'est-à-dire une \emph{matrice doublement chaînée} que l'on appellera 
  matrice DLX. Cette dernière ne relie que les valeurs \emph{true} ou '1' de
  la matrice EMC.
 
@@ -441,19 +445,20 @@ est une matrice construite à partir de listes doublements
 \begin{array}{c c}
 \left(\begin{array}{ c c c c c }
    1 & 1 \\
-   0 & 1 
+   1 & 0 
   \end{array}\right) &
-\includegraphics[scale=0.4]{../imports/dlx_matrice.png}
+\includegraphics[scale=0.5]{../imports/dlx_matrice.pdf}
 \end{array}$
-\caption{\label{fig:gen_dlx}Creation de la matrice DLX}
+\caption{\label{fig:gen_dlx}Création de la matrice DLX}
 \end{center}
 \end{figure}
 
 
 
-Dans l'exemple~\ref{fig:gen_dlx}, on observe bien que seul les '1' sont représentés.
+Dans l'exemple~\ref{fig:gen_dlx}, on observe bien que seuls les '1' 
+sont représentés.
 De plus, la matrice DLX contient un en-tête général \emph{h} duquel l'algorithme
-démarre le parcourt ainsi qu'un en-tête par colonne.
+démarre le parcours ainsi qu'un en-tête par colonne.
 Il faut évidemment bien faire attention au fait que la représentation est
 cyclique et que le dernier élément d'une ligne pointe vers le premier et 
 réciproquement (de même pour les colonnes). On peut définir cette structure en langage OCaml de la façon suivante : 
@@ -476,7 +481,7 @@ applique la fonction \emph{f} passée en paramètre :
 
 \lstinputlisting[language=Caml]{../imports/search.ml}
 
-Il suffit ensuite de passer à \emph{search} une fonction f permettant de
+Il suffit ensuite de passer à \emph{recherche} une fonction f permettant de
 compter le nombre de solutions, ou qui les affiche.
 
 \subsection{La structure Zero-Supressed Binary Decision Diagram}
@@ -489,7 +494,7 @@ Decision Diagram). BDD est utilisé pour décrire une fonction booléenne. Un
 BDD correspond à un graphe orienté acyclique (un arbre) dont les feuilles ont 
 pour valeur
 \emph{true} et \emph{false}. Les n\oe uds ont chacun deux fils et contiennent 
-des variables booléennes. Le soucis de BDD dans les problèmes de combinatoire 
+des variables booléennes. Le défaut de BDD dans les problèmes de combinatoire 
 est que la majorité des 
 champs finissent sur \emph{false} (ou $\bot$). C'est là qu'intervient le ZDD 
 qui a simplement une interprétation différente d'un BDD. Grâce au ZDD on 
@@ -497,11 +502,11 @@ supprime environ 40\% des n\oe uds.
 Cette structure est décrite par Donald E. Knuth dans 
 The Art of Computer Programming \cite[p.249]{taocp4a}.
 
-\subsubsection{Definition et construction}
+\subsubsection{Définition et construction}
 
 
 
-Basiquement un ZDD est un arbre binaire avec quelques propriétées : 
+Basiquement, un ZDD est un arbre binaire avec quelques propriétées : 
 
 \begin{itemize}
 \item Si un n\oe ud est une feuille alors sa valeur est $\bot$ (Bottom) ou 
@@ -519,9 +524,9 @@ que $A_1$ et $A_2$ ne contiennent pas d'élément j avec j $\leq$ i \\
 \caption{\label{fig:zdd_exemple} Un exemple de ZDD}
 \end{figure}
 
-Une façon simple d'imaginer un ZDD est de le voir comme un ensemble d'ensemble 
+Une façon simple d'imaginer un ZDD est de le voir comme un ensemble d'ensembles 
 d'entiers. 
-On prend l'ensemble E = \{0, 1,...,n\}, $n \leq 1$. Un ZDD de E est une partie de 
+On prend l'ensemble E = \{0, 1,...,n\}, $n \geq 1$. Un ZDD de E est une partie de 
 l'ensemble 
 des parties de E, soit un élément de P(P(E)). Le passage d'un ensemble à un ZDD
 est bijectif. L'arbre gauche représente les ensembles ne contenant 
@@ -531,8 +536,8 @@ L'ensemble représenté par un ZDD contient autant d'élément que le ZDD
 a de feuilles 
 dont la valeur est $\top$.
 
-On prend pour exemple le ZDD de la Figure \ref{fig:zdd_exemple}. les traits en 
-poitillés représentent les fils gauches et les traits pleins les fils droits.
+On prend pour exemple le ZDD de la Figure \ref{fig:zdd_exemple}. Les traits en 
+pointillés représentent les fils gauches et les traits pleins les fils droits.
 Le moyen mnémotechnique pour obtenir l'ensemble représenté sur des 
 exemples triviaux est de parcourir 
 l'arbre de bas en haut à partir des $\top$. Quand on passe d'un n\oe ud fils à un n\oe ud père, si le fils était à droite
@@ -563,11 +568,10 @@ l'arbre depuis l'ensemble).
 \subsubsection{Une structure optimisée}
 
 Représenter un ZDD de taille immense demande forcément une place importante en 
-mémoire. Cependant, en fonction du ZDD construit, de nombreux sous arbres
+mémoire. Cependant, en fonction du ZDD construit, de nombreux sous-arbres
 peuvent parfois se répéter. Sachant que l'arbre se construit de façon récursive
-, la méthode consiste à réutiliser les sous 
-arbres déjà existants. On économise alors en mémoire
-et en temps.
+, la méthode consiste à réutiliser les sous-
+arbres déjà existants. 
 Dans l'exemple de la Figure \ref{fig:zdd_exemple}, on peut donc reduire l'arbre
 de la façon suivante : 
 \begin{center}
@@ -578,7 +582,7 @@ Ceci est possible grâce au \emph{hash consing} qui est une
 technique utilisée pour partager des valeurs structurellement égales. Ici,
 les arbres sont stockés dans une table de hachage et au moment où un arbre est 
 construit, on le cherche dans la table (en temps quasi-constant). S'il y est 
-présent on le retourne, sinon on le créer.
+présent on le renvoie, sinon on le créé.
 
 En OCaml, on utilise le type suivant pour représenter notre structure : 
 
@@ -599,12 +603,12 @@ si un arbre a déjà été construit ou non.
 Avec ces outils optimisés on peut alors imaginer vouloir calculer le nombre de 
 feuilles $\top$ et donc par la même occasion le cardinal de l'ensemble 
 représenté par le ZDD. On utilise cette fois une technique qui utilise des
-méthodes communes au \emph{hash consing} : la \emph{mémoization}. Le principe
+méthodes communes au \emph{hash consing} : la \emph{mémoïsation}. Le principe
 est d'utiliser à nouveau une table de hachage pour aller stocker et récupérer
 les résultats d'une fonction. 
 En l'occurence, on créer donc une fonction \emph{cardinal} qui vérifie si le 
 cardinal
-de l'arbre passé en paramètre est dans la table. Si c'est le cas, il le retourne
+de l'arbre passé en paramètre est dans la table. Si c'est le cas, il le renvoie
 , sinon il le calcule et l'ajoute.
 On peut, de cette façon, calculer des valeurs gargantuesques, très rapidement. 
 
@@ -613,7 +617,7 @@ On peut, de cette façon, calculer des valeurs gargantuesques, très rapidement.
 Les solutions de EMC sont des ensembles de lignes de la matrice. Si on 
 représente les lignes par leur numéro, on a des ensembles d'entiers.
 Rechercher l'ensemble des solutions d'un problème EMC revient donc à chercher 
-un ensemble d'ensemble d'entiers. C'est à dire un ZDD. Pour commencer, 
+un ensemble d'ensemble d'entiers, c'est à dire un ZDD. Pour commencer, 
 observons ce problème sur une matrice EMC de taille 1x3 : 
 
 \[
@@ -664,10 +668,10 @@ matrice EMC de la partie 1.
 \]
 
 On remarque que dans l'exemple précédent, on obtenait tous les ensembles pour
-une colonne. Cette fois on veut les ensemble respectants les contraintes pour
+une colonne. Cette fois on veut les ensembles respectant les contraintes pour
 la colonne 0, mais aussi la colonne 1 etc. On calcule donc séparément le ZDD
 de chaque colonne, 
-pour ensuite effectuer une intersection de tout ces arbres.
+pour ensuite effectuer une intersection de tous ces arbres.
 Par exemple pour la colonne 0, on obtient l'arbre suivant : 
 
 \begin{center}
@@ -676,7 +680,7 @@ Par exemple pour la colonne 0, on obtient l'arbre suivant :
 
 L'intersection peut être un procédé assez long à réaliser. L'utilisation 
 du \emph{hash consing} est donc indispensable ici aussi. Dans la table, deux 
-font office de clé et la valeur est le résultat de leur intersection.
+ZDD font office de clé et la valeur est le résultat de leur intersection.
 Après avoir effectué l'intersection de tous les arbres on obtient : 
 
 
@@ -695,25 +699,25 @@ Chacun a ses avantages et ses inconvenients :
 
 \paragraph{En temps}
 
-, ZDD est l'algorithme le plus puissant des deux. Il peut
+: ZDD est l'algorithme le plus puissant des deux. Il peut
 atteindre un nombre de solutions approchant la valeur $10^{23}$ en moins d'une 
 dizaine de secondes. Pour la simple raison qu'il ne calcule pas les solutions
-une par une grâce à la \emph{memoïzation}. Cela semble évident quand on admet
-grossière qu'un ordinateur "moyen" peut faire un milliard d'opérations par
-seconde. DLX ne pourrait même pas atteindre cette valeur puiqu'il trouve les 
+une par une, grâce à la \emph{memoïzation}. Cela semble évident quand on admet
+grossièrement qu'un ordinateur "moyen" peut faire un milliard d'opérations par
+seconde. DLX ne pourrait même pas atteindre cette valeur puisqu'il trouve les 
 solutions une par une. C'est un algorithme de \emph{backtracking}.
 
 Le soucis de ZDD est par contre la construction de l'arbre 
-(c'est à dire l'intersection de tout les arbres des colonnes de EMC). 
+(c'est-à-dire l'intersection de tous les arbres des colonnes de EMC). 
 Cette construction
 est vraiment fonction de l'aspect de la matrice. Selon la façon dont cette 
 dernière est formée, un même problème de pavage peut par exemple être 
 résolu quasiment instantanément ou jamais. Effectivement, plus ZDD arrive à 
 construire des sous arbre de taille croissante et plus il sera efficace.
-ZDD dépends alors d'une heuristique
+ZDD dépend alors d'une heuristique
 qui ordonne les colonnes de la matrice EMC dans un certain ordre 
 avant de démarrer.
-Cependant, une fois l'arbre construit, le calcule du nombre de solution sera
+Cependant, une fois l'arbre construit, le calcul du nombre de solutions sera
 toujours particulièrement rapide.
 DLX est moins dépendant 
 de la matrice EMC,
@@ -721,7 +725,7 @@ même si certaines heuristiques peuvent lui permettre d'optimiser sa vitesse.
 
 \paragraph{En mémoire}
 
-, DLX est le moins gourmand. DLX utilise simple une 
+: DLX est le moins gourmand. DLX utilise simple une 
 matrice doublement chaînée qui 
 prend une très petite place en mémoire. Au contraire pour ZDD, son autre
 défaut majeur est l'utilisation mémoire. Si la création ne se déroule 
@@ -734,15 +738,15 @@ un peu ardu.
 
 : Sur le problème des N-Queens ou du Sudoku, DLX est très efficace 
 puisqu'il atteint le rang 14 des N-Queens dans un temps assez correct 
-(une quinzaine de secondes) et résouds un Sudoku à une solution instantanément. 
+(une quinzaine de secondes) et résoud un Sudoku à une solution instantanément. 
 Au contraire, ZDD fait exploser l'utilisation
-mémoire (sur la machine utilisée en stage) avant d'atteindre son but, dans les 
+mémoire (sur la mâchine utilisée en stage) avant d'atteindre son but, dans les 
 deux cas.
 
-A l'inverse ZDD bat à place couture DLX dans les problèmes de pavage comme 
+A l'inverse, ZDD bat à plate couture DLX dans les problèmes de pavage comme 
 NxN-Dominos (recouvrire un échiquier de taille nxn avec des dominos) ainsi que
 le problème de Knuth \cite[ex. 130, p252]{taocp4a} pour lequel il atteint le nombre 
-hallucinant de 92.109.458.286.284.989.468.604 solutions (soit $10^{23}$). 
+hallucinant de 92.109.458.286.284.989.468.604 solutions (soit $\simeq 10^{23}$). 
 
 
 \section{Une bibliothèque OCaml}
@@ -771,12 +775,12 @@ importantes et utilise la même interface que le module Set.S de OCaml. Il faut
 cependant éviter certaines opérations qui ne seront pas efficaces avec cette 
 structure. 
 Dans le cas de Dlx, le module regroupe simplement l'algorithme ainsi que 
-différentes façon de parcourir les solutions. Le module EMC est l'interface qui
+différentes façons de parcourir les solutions. Le module EMC est l'interface qui
 utilise Zdd et Dlx et leur permet d'être indépendant des problèmes EMC.
 Les modules Queens et Sudoku correspondent plutôt à une gallerie pour montrer
 l'interêt et la puissance des algorithmes de Knuth. Ils utilisent évidemment la 
 modélisation qui a été décrite dans la partie 1. 
-Pour finir, une grosse partie de ce travail a été fournie dans le devellopement
+Pour finir, une grosse partie de ce travail a été fournie dans le developpement
 du module Tiling, permettant de modéliser les problèmes de pavage. Ce dernier
 traîte différentes formes de tuiles à partir de matrices de booléens. 
 Evidemment chacun de ces modules peut être utilisé à part entière.
@@ -790,10 +794,10 @@ et de définir des variables de type problème prenant en paramètre des listes 
 patrons. Le langage est directement interprété et le module Main recherche 
 alors les solutions pour chaque problème énoncé. 
 
-On peut définir les patron de façon différentes. Soit directement avec le mot
-clé \emph{constant} suivit de la taille et du remplissage par defaut des carrés,
+On peut définir les patron de façon différentes : Soit directement avec le mot
+clé \emph{constant} suivi de la taille et du remplissage par defaut des carrés,
 soit en dessinant directement en ASCII entre 
-\emph{\{\}}. Le caratère "\emph{*}" correspond à un carré plein et "\emph{.}" à
+\emph{\{\}}. Le caractère "\emph{*}" correspond à un carré plein et "\emph{.}" à
 un carré vide.
 
 \begin{figure}[h]
@@ -817,24 +821,24 @@ L'exemple suivant permet par exemple de décrire le problème du pavage d'un
 
 \lstinputlisting[language=Caml]{../imports/non-regression.rem}
 
-On observe que dans la définition du problème, on passe une liste de pièce (qui
+On observe que dans la définition du problème, on passe une liste de pièces (qui
 dans ce cas n'en contient qu'une), ainsi qu'une option "\emph{$\sim$sym}" qui 
 signifie que l'on veut que toute les transformations de la pièce soient 
 appliquées.
-Par transformation on entend les huits isométries du carré (les 8 isométries
+Par transformation, on entend les huits isométries du carré (les 8 isométries
 qui laissent un carré invariant) : 
 
 \begin{description}
-\item[Les positive] rotations 90°, 180°, 270° et Identité
-\item[Les négatives] Réflexion vertical, horizontale, première et 
-deuxième diagonal
+\item[Les positives] : rotations 90°, 180°, 270° et Identité
+\item[Les négatives] : Réflexion verticale, horizontale, par rapport aux 
+première et deuxième diagonales
 \end{description}
 On ajoute alors dans la matrice EMC une ligne par position pour chaque 
 transformation qui ne laisse pas la pièce invariante.
 On peut aussi passer une option "\emph{$\sim$one}" ou "\emph{$\sim$maybe}" 
 qui donne une information sur le dénombrement de
 la pièce. En l'absence de cette option, on peut la poser de façon infinie.
-Avec l'option, elle peut être posée une seule et une seule fois pour \emph{one}
+Avec l'option, elle peut être posée une et une seule fois pour \emph{one}
 et zero ou une fois pour \emph{maybe}.
 Dans ce cas, on ajoute
 une colonne à la matrice EMC qui ajoutera alors une contrainte sur la pose de 
@@ -863,24 +867,26 @@ comme les Pentaminos~\cite{pentamino}.
 \section{Conclusion}
 
 Le travail principal de ce stage était donc d'effectuer une implémentation des
-techniques existantes pour résoudre une famille de problèmes de combinatoire. 
-C'est à dire ceux encodable sous Exact Matrice Covering. Les résultats sont 
+techniques existantes pour résoudre une famille de problèmes de combinatoire, à
+savoir ceux encodables sous Exact Matrice Covering. Les résultats sont 
 satisfaisant puisque les algorithmes implémentés donnent des réponses 
-correspondants à la réalité. La facilité d'usage de ce programme en fait une 
-contribution intéressante pour n'importe quel programmeur OCaml qui aimerai
-traiter ce sujet. Cette bibliothèque, apporte au langage de 
+correctes dans un temps raisonnable. 
+La facilité d'usage de ce programme en fait une 
+contribution intéressante pour n'importe quel programmeur OCaml qui aimerait
+traiter ce sujet. Cette bibliothèque apporte au langage de 
 nombreux outils. Certains aspects mériteraient d'être implémentées pour 
 aller plus loin : gestion 
-des symétries du problème lui même pour réduire le temps de calcul, amélioration
+des symétries du problème lui-même pour réduire le temps de calcul, amélioration
 du mini-langage, etc. 
 C'est donc ce qui m'attend dans la seconde partie de mon stage.
 
 En conclusion, ce stage m'aura énormément appris. J'avais espérer travailler 
-en OCaml et j'ai été très largement servis. En plus de connaitre beaucoup
+en OCaml et j'ai été très largement servi. En plus de connaître beaucoup
 plus de détails et de structures intéressantes dans ce langage j'ai eu la 
 chance de travailler en parallèle avec plusieurs paradigmes de programmation et
-me renseigner grâce a de la littérature.
-J'ai aussi eu la chance d'avoir directement des conseils  et des critiques 
+me renseigner grâce à de la littérature.
+J'ai aussi eu la possibilité d'obtenir directement des conseils 
+et des critiques 
 sur le style de programmation et l'agorithmique. C'est finalement une chose qui
 a manqué durant ma formation.
 J'ai même eu le loisir d'orienter le sujet comme il me plaisait et ainsi 
@@ -895,6 +901,7 @@ de postuler pour une thèse après mon Master.
 
 
 \newpage
+\addcontentsline{toc}{section}{\protect\numberline{}Bibliographie}
 \bibliographystyle{plain}
 \bibliography{./biblio}
 

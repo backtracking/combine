@@ -179,7 +179,6 @@ Une utilisation astucieuse des listes doublements chaînées :
 \includegraphics[scale=0.5]{../imports/add_elmt_dll.png}
 \end{center}
 \end{figure}
-Ajouter un élément
 \end{frame}
 
 \begin{frame}{Principe de base de DLX}
@@ -214,7 +213,7 @@ La matrice doublement chaînée
 
 %%% 3 ZDD
 \begin{frame}{Zero-Suppressed Binary Decision Diagram (ZDD)}
-Un type de BDD\\
+Une variante de BDD\\
 
 \begin{center}
 \includegraphics[scale=0.3]{../imports/zdd_ex.pdf}
@@ -256,11 +255,11 @@ Comme pour les BBD
 
   \begin{displaymath}
    \left(\begin{array}{ c c c c c }
-   1 & 0 & 1 & 1 \\
-   0 & 1 & 1 & 0 \\
-   1 & 1 & 0 & 1 \\
-   1 & 0 & 0 & 1 \\
-   0 & 1 & 0 & 0
+   1 & 0 & 1 &\cellcolor{red} 1 \\
+   0 & 1 & 1 &\cellcolor{red} 0 \\
+   1 & 1 & 0 &\cellcolor{red} 1 \\
+   1 & 0 & 0 &\cellcolor{red} 1 \\
+   0 & 1 & 0 &\cellcolor{red} 0
   \end{array}\right)
   \end{displaymath}
 
@@ -293,11 +292,11 @@ Comme pour les BBD
     \includegraphics[height=0.5\textheight]{../imports/vs.pdf}
 \end{center}
 \begin{itemize}
-\item DLX : avantage en mémoire mais lent
+\item DLX : rapide mais trouver les solutions une à une.
 \item ZDD : avantage en temps mais peut faire exploser la mémoire \\
 \end{itemize}
 ~\\
-Conclusion : Ca dépend
+Conclusion : dépend du problème et/ou de la question.
 \end{frame}
 
 
@@ -315,14 +314,14 @@ Conclusion : Ca dépend
 \begin{frame}{ReMl : Architecture des modules}
 \begin{figure}[htp]
 \begin{center}
-\includegraphics[scale=0.5]{../imports/archi.pdf}
+\includegraphics[scale=0.5]{../imports/archi_slide.pdf}
 \end{center}
 \end{figure}
 \end{frame}
 
 \begin{frame}[fragile]{ReMl : Un mini langage pour le pavage}
 
-Probleme sous forme de patrons : 
+Problème sous forme de patrons : 
 \begin{columns}
     \column{0.3\textwidth}
 \begin{lstlisting}
@@ -339,7 +338,7 @@ pattern b = {
 \end{columns}
 \end{frame}
 
-\begin{frame}{ReMl : definir un problème}
+\begin{frame}{ReMl : définir un problème}
 
 \lstinputlisting[language=Caml]{../imports/non-regression.rem}
 
@@ -364,13 +363,13 @@ Les 8 isométries du carré : \\
 
 Résultats :  
 \begin{itemize}
-\item Des algoritmhes qui fonctionnent (résultats cohérent)
+\item Des algorithmes qui fonctionnent (résultats cohérents)
 \item Une bibliothèque facile d'utilisation
 \end{itemize}
 
- Aller plus loin : 
+Pour aller plus loin : 
 \begin{itemize}
-\item Optimisations des calcules en fonction des symmétries du problème
+\item Optimisations des calculs en fonction des symétries du problème
 \item Ajout de fonctionnalités dans le langage
 \item Documentation
 \end{itemize}
