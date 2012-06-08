@@ -1,11 +1,6 @@
 
 # Scott's pentaminos problem
 
-# true  '*'
-# true  '%'
-# false '.'
-# newline '$'
-
 pattern pentaminosboard = {
 ********
 ********
