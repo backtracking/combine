@@ -4,7 +4,7 @@
 \usepackage{listings}
 \usepackage[utf8]{inputenc}
 \usepackage[french]{babel}
-\usepackage{xcolor,colortbl}
+\usepackage{xcolor,colortbl,verbatim}
 
 
 
@@ -292,11 +292,11 @@ Comme pour les BBD
     \includegraphics[height=0.5\textheight]{../imports/vs.pdf}
 \end{center}
 \begin{itemize}
-\item DLX : rapide mais trouver les solutions une à une.
+\item DLX : rapide mais trouve les solutions une à une
 \item ZDD : avantage en temps mais peut faire exploser la mémoire \\
 \end{itemize}
 ~\\
-Conclusion : dépend du problème et/ou de la question.
+Conclusion : dépend du problème et/ou de la question
 \end{frame}
 
 
@@ -324,13 +324,13 @@ Conclusion : dépend du problème et/ou de la question.
 Problème sous forme de patrons : 
 \begin{columns}
     \column{0.3\textwidth}
-\begin{lstlisting}
+\begin{verbatim}
 pattern b = {
 **
 .*
 **
 }
-\end{lstlisting}
+\end{verbatim}
     \column{0.1\textwidth}
 		$\rightarrow$
     \column{0.3\textwidth}
@@ -340,10 +340,10 @@ pattern b = {
 
 \begin{frame}{ReMl : définir un problème}
 
-\lstinputlisting[language=Caml]{../imports/non-regression.rem}
+\verbatiminput{../imports/non-regression.rem}
 
-\#options :  
-\emph{$\sim$sym}, \emph{$\sim$one} ou \emph{$\sim$maybe}
+options :  
+\texttt{$\sim$sym}, \texttt{$\sim$one} ou \texttt{$\sim$maybe}
  
  \end{frame}
 
@@ -367,6 +367,7 @@ Résultats :
 \item Une bibliothèque facile d'utilisation
 \end{itemize}
 
+\medskip
 Pour aller plus loin : 
 \begin{itemize}
 \item Optimisations des calculs en fonction des symétries du problème
