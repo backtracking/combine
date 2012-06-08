@@ -8,7 +8,7 @@
 
 %}
 
-%token PATTERN PROBLEM CONSTANT FALSE TRUE
+%token PATTERN TILES PROBLEM CONSTANT FALSE TRUE
 %token SET SHIFT CROP RESIZE
 %token MINUS AMPAMP BARBAR HAT DIFF UNION XOR INTER ONE MAYBE SYM
 %token EQUAL LSBRA RSBRA RPAR LPAR COMMA
@@ -30,7 +30,9 @@ file:
 decl:
 | PATTERN; id = IDENT; EQUAL; e = expr
     { Pattern (id, e) }
-| PROBLEM; id = IDENT; EQUAL; e = expr; tl = tile_list
+| TILES; id = IDENT; EQUAL; l = tile_list
+    { Tiles (id, l) }
+| PROBLEM; id = IDENT; EQUAL; e = expr; tl = tiles
     { Problem (id, e, tl) }
 ;
 
@@ -38,6 +40,11 @@ option:
 | ONE   { M Mone }
 | MAYBE { M Mmaybe }
 | SYM   { S Sall }
+
+tiles:
+| l = tile_list { Tiles_list l }
+| id = IDENT    { Tiles_id  id }
+;
 
 tile_list:
 | LSBRA; l = separated_list(COMMA, tile); RSBRA { l }

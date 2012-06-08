@@ -1,0 +1,111 @@
+
+pattern a = {
+*****
+}
+
+pattern b = {
+***
+*
+*
+}
+
+pattern c = {
+.**
+.*
+**
+}
+
+pattern d = {
+***
+**
+}
+
+pattern e = {
+***.
+..**
+}
+
+pattern f = {
+.**
+**
+*
+}
+
+pattern g = {
+****
+.*
+}
+
+pattern h = {
+***
+.*
+.*
+}
+
+pattern i = {
+.**
+**
+.*
+}
+
+pattern j = {
+***
+*.*
+}
+
+pattern k = {
+****
+*
+}
+pattern l = {
+.*.
+***
+.*.
+}
+
+tiles pentaminos =
+[ a ~one ~sym, b ~one ~sym, c ~one ~sym, d ~one ~sym,
+  e ~one ~sym, f ~one ~sym, g ~one ~sym, h ~one ~sym,
+  i ~one ~sym, j ~one ~sym, k ~one ~sym, l ~one ~sym ]
+
+# Scott's pentaminos problem
+
+pattern scott_board = {
+********
+********
+********
+***..***
+***..***
+********
+********
+********
+}
+
+problem scott_problem = scott_board pentaminos
+
+problem problem_23 = {
+********
+********
+***..***
+***..***
+********
+********
+********
+********
+} pentaminos
+
+problem problem_00 = {
+..******
+..******
+********
+********
+********
+********
+********
+********
+} pentaminos
+
+
+
+
+

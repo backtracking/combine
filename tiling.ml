@@ -12,10 +12,10 @@ module Iso = struct
   module S = Set.Make (
   struct
     type t = iso
-    let compare = Pervasives.compare 
+    let compare = Pervasives.compare
   end)
 
-  let compose i1 i2 = match i1, i2 with 
+  let compose i1 i2 = match i1, i2 with
     | Id, a | a, Id -> a
     (* rotations *)
     | Rot90, Rot270
@@ -53,23 +53,23 @@ module Iso = struct
     | Diag2Refl, Rot180 -> Diag1Refl
     | Rot90, HorizRefl
     | Rot180, Diag1Refl
-    | Rot270, VertRefl 
-    | VertRefl, Rot90 
+    | Rot270, VertRefl
+    | VertRefl, Rot90
     | HorizRefl, Rot270
     | Diag1Refl, Rot180 -> Diag2Refl
     | Rot90, Diag1Refl
     | Rot180, VertRefl
     | Rot270, Diag2Refl
-    | VertRefl, Rot180 
+    | VertRefl, Rot180
     | Diag1Refl, Rot270
     | Diag2Refl, Rot90 -> HorizRefl
-    | Rot90, Diag2Refl 
+    | Rot90, Diag2Refl
     | Rot180, HorizRefl
     | Rot270, Diag1Refl
     | HorizRefl, Rot180
-    | Diag1Refl, Rot90 
+    | Diag1Refl, Rot90
     | Diag2Refl, Rot270 -> VertRefl
- 
+
 
  let to_string = function
    | Id -> "Id"
@@ -77,12 +77,12 @@ module Iso = struct
    | VertRefl -> "VertRefl"
    | Rot180 -> "Rot180"
    | Rot270 -> "Rot270"
-   | Rot90 -> "Rot90" 
-   | Diag1Refl -> "Diag1Refl"  
+   | Rot90 -> "Rot90"
+   | Diag1Refl -> "Diag1Refl"
    | Diag2Refl -> "Diag2Refl"
 
-  let all = 
-    ( S.add Id 
+  let all =
+    ( S.add Id
     ( S.add Rot90
     ( S.add Rot270
     ( S.add Rot180
@@ -91,50 +91,50 @@ module Iso = struct
     ( S.add Diag2Refl
     ( S.add Diag1Refl S.empty))))))))
 
-  let positive = function 
+  let positive = function
     | Id | Rot90 | Rot180 | Rot270 -> true
     | VertRefl | HorizRefl | Diag1Refl | Diag2Refl -> false
 
   (* sanity checks for compose *)
 
   (* 1. positivity rules *)
-  let () = 
-    S.iter (fun a -> 
+  let () =
+    S.iter (fun a ->
     S.iter (fun b -> assert (
       positive (compose a b) = (positive a = positive b))
-    ) all ) all 
+    ) all ) all
 
   (* 2. compose is associative *)
-  let () = 
+  let () =
     S.iter (
-      fun a -> 
+      fun a ->
         S.iter (
-          fun b -> 
+          fun b ->
             S.iter (
-              fun c -> 
+              fun c ->
                 assert (compose a (compose b c) = compose (compose a b) c)) all
-        ) all ) all 
+        ) all ) all
 
   let apply iso =
-    match iso with 
+    match iso with
       | Id -> fun ~w ~h p -> p
       | Rot180 -> fun ~w ~h (x, y) -> (w - 1 - x , h - 1 - y)
       | HorizRefl -> fun ~w ~h (x, y) -> (x, h - 1 - y)
       | VertRefl -> fun ~w ~h (x, y) -> (w - 1- x, y)
       | Rot90 -> fun ~w ~h (x, y) -> (h - 1 - y, x)
       | Rot270 -> fun ~w ~h (x, y) -> (y, w - 1 - x)
-      | Diag1Refl -> fun ~w ~h (x, y) -> (y, x) 
+      | Diag1Refl -> fun ~w ~h (x, y) -> (y, x)
       | Diag2Refl -> fun ~w ~h (x, y) -> (h - 1 - y, w - 1 - x)
 
-  let trans_size iso (h, w) = 
-    match iso with 
-      | Id  
-      | HorizRefl 
-      | VertRefl  
+  let trans_size iso (h, w) =
+    match iso with
+      | Id
+      | HorizRefl
+      | VertRefl
       | Rot180 -> (h, w)
-      | Rot270  
-      | Rot90  
-      | Diag1Refl   
+      | Rot270
+      | Rot90
+      | Diag1Refl
       | Diag2Refl -> (w, h)
 
   let print fmt iso = Format.fprintf fmt "%s" (to_string iso)
@@ -142,7 +142,7 @@ module Iso = struct
 end
 
 
-module Pattern = struct 
+module Pattern = struct
 
   type t = {
     matrix   : bool array array;
@@ -157,7 +157,7 @@ module Pattern = struct
       height = h;
       width = Array.length g.(0); }
 
-  let apply iso p = 
+  let apply iso p =
     let trans = Iso.apply iso in
     let w, h = p.width, p.height in
     let new_w, new_h = Iso.trans_size iso (w, h) in
@@ -177,7 +177,7 @@ module Pattern = struct
 (* Generating compositions pattern matching source code *)
 
  (*
-  let f_fig = 
+  let f_fig =
     [|
      [|true; true; true; true|];
      [|true; false; false; false|];
@@ -186,48 +186,48 @@ module Pattern = struct
      [|true; false; false; false|];
     |]
 
-  let genere () = 
-    Iso.S.iter ( fun a -> 
-      Iso.S.iter ( fun b -> 
-        Iso.S.iter ( fun c -> 
-          try 
+  let genere () =
+    Iso.S.iter ( fun a ->
+      Iso.S.iter ( fun b ->
+        Iso.S.iter ( fun c ->
+          try
             let m1 = apply b (apply a f_fig) in
-            let m2 = apply c f_fig in 
-            if m1 = m2 then raise Exit 
-           with 
-            | Exit -> 
-              Format.printf "| %a, %a -> %a@." 
+            let m2 = apply c f_fig in
+            if m1 = m2 then raise Exit
+           with
+            | Exit ->
+              Format.printf "| %a, %a -> %a@."
               Iso.print a Iso.print b Iso.print c
-        ) Iso.all 
-      ) Iso.all 
+        ) Iso.all
+      ) Iso.all
     ) Iso.all
 
-  let () = 
+  let () =
     genere ()
     *)
 
-  let print fmt p = 
+  let print fmt p =
     for y = p.height-1 downto 0 do
       Array.iter (
-        fun cell -> 
+        fun cell ->
           if cell then Format.fprintf fmt "*"
           else Format.fprintf fmt "."
       ) p.matrix.(y);
       if y > 0 then Format.fprintf fmt "@\n"
     done
 
-  let resize p ~w ~h  = 
+  let resize p ~w ~h  =
     let min_w, min_h = min w p.width, min h p.height in
-    let m = Array.make_matrix h w false in 
+    let m = Array.make_matrix h w false in
     for y = 0 to min_h - 1 do
       for x = 0 to min_w - 1 do
         m.(y).(x) <- p.matrix.(y).(x)
-      done 
+      done
     done;
     { matrix = m; height = h; width = w }
 
-  let crop p ~x ~y ~w ~h = 
-    let m = Array.make_matrix h w false in 
+  let crop p ~x ~y ~w ~h =
+    let m = Array.make_matrix h w false in
     for y' = y to min p.height h - 1 do
       for x' = x to min p.width w - 1 do
         m.(y' - y).(x' - x) <- p.matrix.(y').(x')
@@ -235,27 +235,27 @@ module Pattern = struct
     done;
     {matrix = m; height = h; width = w }
 
-  let shift p ~ofsx ~ofsy = 
+  let shift p ~ofsx ~ofsy =
     let h, w = p.height, p.width in
-    let m = Array.make_matrix h w false in 
+    let m = Array.make_matrix h w false in
     for y = 0 to h - 1 do
       for x = 0 to w - 1 do
         let new_x, new_y = x + ofsx, y + ofsy in
-        if new_x < w && new_x >= 0 && new_y < h && new_y >= 0 then 
+        if new_x < w && new_x >= 0 && new_y < h && new_y >= 0 then
           m.(new_y).(new_x) <- p.matrix.(y).(x)
       done
     done;
     { matrix = m; height = h; width = w }
 
-  let binary_op op p1 p2 = 
+  let binary_op op p1 p2 =
     if p1.height <> p2.height || p1.width <> p2.width then
       invalid_arg "union";
     let w, h = p1.height, p1.width in
     let m = Array.make_matrix h w false in
     for y = 0 to h - 1 do
-      for x = 0 to w - 1 do 
+      for x = 0 to w - 1 do
         m.(y).(x) <- op p1.matrix.(y).(x) p2.matrix.(y).(x)
-      done 
+      done
     done;
     { matrix = m; height = h; width = w }
 
@@ -263,7 +263,7 @@ module Pattern = struct
   let inter = binary_op (&&)
   let diff  = binary_op (fun a b -> a && not b)
   let xor = binary_op (fun a b -> a && not b || b && not a)
-        
+
     (*
     print_boolean_matrix f_fig;
     Format.printf "@.";
@@ -276,7 +276,7 @@ module Pattern = struct
     let w = p.width and h = p.height in
     let new_h, new_w = Iso.trans_size iso (h, w) in
     new_w = p.width && new_h = p.height &&
-    let trans = Iso.apply iso in 
+    let trans = Iso.apply iso in
     try for y = 0 to p.height - 1 do
       for x = 0 to p.width -1 do
         let new_x, new_y = trans ~w ~h (x, y) in
@@ -284,10 +284,10 @@ module Pattern = struct
       done
     done;true with Exit -> false
 
-  let get_isos p = 
+  let get_isos p =
     Iso.S.filter (fun iso -> has_iso iso p) Iso.all
 
-end 
+end
 
 module Tile = struct
 
@@ -313,18 +313,18 @@ module Tile = struct
     else create ~m:t.multiplicity (Pattern.apply iso t.pattern)
 
 
-  let symetries t = 
+  let symetries t =
     Iso.S.fold
-      (fun iso l -> apply iso t :: l ) (Iso.S.diff Iso.all t.isos) [t] 
+      (fun iso l -> apply iso t :: l ) (Iso.S.diff Iso.all t.isos) [t]
 
-  let create_all_symetries t = 
+  let create_all_symetries t =
     let h = Hashtbl.create 8 in
     let l = match t.symetries with
-      | Snone -> Iso.S.add Iso.Id Iso.S.empty 
+      | Snone -> Iso.S.add Iso.Id Iso.S.empty
       | Srotations -> Iso.S.filter Iso.positive Iso.all
-      | Sall-> Iso.all 
+      | Sall-> Iso.all
     in
-    Iso.S.iter (fun iso -> Hashtbl.replace h (apply iso t) ()) 
+    Iso.S.iter (fun iso -> Hashtbl.replace h (apply iso t) ())
       (Iso.S.diff l t.isos);
     Hashtbl.fold (fun k _ acc -> k :: acc) h []
 
@@ -349,34 +349,32 @@ end
 
 type problem = {
   grid : Pattern.t;
-  pname : string option;
+  pname : string;
   pieces : Tile.t list;
 }
 
-let create_problem ?name g ps = {
-  grid = g; 
-  pname = name; 
+let create_problem ?(name="") g ps = {
+  grid = g;
+  pname = name;
   pieces = ps;
 }
 
 
 
 
-let print_problem fmt problem = 
-  begin match problem.pname with 
-    | Some s -> Format.fprintf fmt "name : %s@\n" s;
-    | None -> () end;
+let print_problem fmt problem =
+  if problem.pname <> "" then Format.fprintf fmt "name : %s@\n" problem.pname;
   Format.fprintf fmt "%a@\n" Pattern.print problem.grid;
   List.iter (fun t -> Format.fprintf fmt "%a@\n" Tile.print t) problem.pieces
 
-  
+
 
 
 
 (* Board position testing *)
 
 (* return true if position x y is on the board *)
-let existing_position problem x y = 
+let existing_position problem x y =
   x < problem.grid.Pattern.width
   && y < problem.grid.Pattern.height
   && problem.grid.Pattern.matrix.(y).(x)
@@ -386,25 +384,25 @@ let is_possible_position tile board x y =
   try
     for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do
       for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do
-        if tile.Tile.pattern.Pattern.matrix.(y').(x') 
+        if tile.Tile.pattern.Pattern.matrix.(y').(x')
         && not (existing_position board (x + x') (y + y'))
         then raise Exit
       done
     done;
     true
-  with 
+  with
     | Exit ->  false
 
 (* Placing piece on board *)
 
-(* return an array of size n representing the way to put piece p at 
+(* return an array of size n representing the way to put piece p at
  position x y on the board of size l*n
  *)
 
 open Tile
 
 
-let get_id_col_emc problem x y = 
+let get_id_col_emc problem x y =
   let id = ref 0 in
   try
     for y' = 0 to problem.grid.Pattern.height -1 do
@@ -412,24 +410,24 @@ let get_id_col_emc problem x y =
         if y' = y && x' = x then raise Exit;
         if problem.grid.Pattern.matrix.(y').(x') then
           incr id
-      done 
+      done
     done;
     !id
   with Exit -> !id
 
 
-let one_line l n tile_id tile problem x y = 
+let one_line l n tile_id tile problem x y =
   let line = Array.make n false in
-  for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do  
-    for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do  
+  for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do
+    for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do
       if tile.Tile.pattern.Pattern.matrix.(y').(x') then begin
         line.(get_id_col_emc problem (x + x') (y + y')) <- true;
-        if tile.Tile.multiplicity <> Minf then 
-          line.(tile_id) <- true 
+        if tile.Tile.multiplicity <> Minf then
+          line.(tile_id) <- true
       end
-    done 
+    done
   done;
-  line 
+  line
 
 let one_line_piece_only n piece_id piece =
   let line = Array.make n false in
@@ -437,15 +435,15 @@ let one_line_piece_only n piece_id piece =
     line
 
 
-let number_of_cell_columns problem = 
-  let h = problem.grid.Pattern.height in 
-  let w = problem.grid.Pattern.width in 
-  let realn = ref 0 in 
+let number_of_cell_columns problem =
+  let h = problem.grid.Pattern.height in
+  let w = problem.grid.Pattern.width in
+  let realn = ref 0 in
   for y = 0 to h - 1 do
     for x = 0 to w - 1 do
       if problem.grid.Pattern.matrix.(y).(x) then
         incr realn
-    done 
+    done
   done;
   !realn
 
@@ -462,37 +460,37 @@ let number_of_tile_columns problem =
  * on the board
  * *)
 let emc problem =
-  let h = problem.grid.Pattern.height in 
-  let w = problem.grid.Pattern.width in 
+  let h = problem.grid.Pattern.height in
+  let w = problem.grid.Pattern.width in
   let ncc = number_of_cell_columns problem in
   let prim, sec = number_of_tile_columns problem in
   let n = ncc + prim + sec in
   let tile_id_prim = ref ncc in
   let tile_id_sec  = ref (ncc + prim) in
-  let lines = ref [] in 
-  let add_piece i j tile = 
+  let lines = ref [] in
+  let add_piece i j tile =
     let tile_id = match tile.multiplicity with
       | Mone -> let v = !tile_id_prim in incr tile_id_prim; v
       | Mmaybe -> let v = !tile_id_sec in incr tile_id_sec; v
       | Minf -> -1 (* useless *)
     in
     List.iter
-      (fun t -> 
+      (fun t ->
         if is_possible_position t problem i j then begin
           lines := one_line w n tile_id t problem i j :: !lines;
         end
       )
       (tile :: Tile.create_all_symetries tile)
-  in 
+  in
   for i = 0 to h - 1 do
     for j = 0 to w - 1 do
-        List.iter (add_piece i j) problem.pieces; 
+        List.iter (add_piece i j) problem.pieces;
         tile_id_prim := ncc;
         tile_id_sec := ncc + prim
-    done 
+    done
   done;
   ncc + prim, Array.of_list !lines
 
- 
+
 
 

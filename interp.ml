@@ -3,8 +3,8 @@ open Ast
 open Tiling
 
 let var_env = Hashtbl.create 50
-
-let problem_env = Hashtbl.create 50
+let tiles_env = Hashtbl.create 50
+let problems = ref []
 
 let rec interp_expr = function
   | Var s -> begin
@@ -23,53 +23,51 @@ and interp_binary e1 e2 = function
   | Xor -> Pattern.xor (interp_expr e1) (interp_expr e2)
 
 and interp_setop d e = function
-  | Shift -> 
-      let ofsx, ofsy = d in 
+  | Shift ->
+      let ofsx, ofsy = d in
       Pattern.shift (interp_expr e) ?ofsx ?ofsy
-  | SetXY b-> 
+  | SetXY b->
       let p = interp_expr e in
-      let x, y = d in 
+      let x, y = d in
       p.Pattern.matrix.(y).(x) <- b; p
-  | Resize -> 
-    let w, h = d in 
+  | Resize ->
+    let w, h = d in
     Pattern.resize (interp_expr e) ?w ?h
   | Crop pos ->
-    let (x, y), (w, h) = pos, d in 
+    let (x, y), (w, h) = pos, d in
     Pattern.crop (interp_expr e) ?x ?y ?w ?h
 
-  (* SetXY (e, d, b) -> 
+  (* SetXY (e, d, b) ->
        *)
 
-let tile ~s ~m e = 
+let tile ~s ~m e =
   let p = interp_expr e in
   let name = match e with Var id -> Some id | _ -> None in
   Tile.create ?name ~s ~m p
+
+let tile_list = List.map (fun (e, s, m) -> tile ~s ~m e)
+
+let tiles = function
+  | Tiles_id id ->
+      begin try Hashtbl.find tiles_env id
+      with Not_found -> failwith ("Error: unbound tile list " ^ id) end
+  | Tiles_list l -> tile_list l
 
 let interp_decl = function
   | Pattern (id, z) ->
       let value = interp_expr z in
       Hashtbl.replace var_env id value
+  | Tiles (id, l) ->
+      Hashtbl.replace tiles_env id (tile_list l)
   | Problem (id, e, el) ->
       let value = interp_expr e in
-      Hashtbl.replace problem_env id (
-        value, 
-        List.map (
-          fun (e, s, m) -> 
-            tile ~s ~m e
-        ) el
-      )
+      let p = Tiling.create_problem ?name:(Some id) value (tiles el) in
+      problems := p :: !problems
 
 let interp dl =
-  let problems = ref [] in
+  problems := [];
   Hashtbl.clear var_env;
-  Hashtbl.clear problem_env;
+  Hashtbl.clear tiles_env;
   List.iter (fun d -> interp_decl d) dl;
-  Hashtbl.iter (
-    fun id value -> 
-      let g, pl = value in 
-      let problem = 
-        Tiling.create_problem ?name:(Some id) g pl in
-      problems := problem :: !problems
-  ) problem_env;
-  !problems
+  List.rev !problems
 

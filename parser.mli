@@ -4,6 +4,7 @@ type token =
   | XOR
   | UNION
   | TRUE
+  | TILES
   | SYM
   | SHIFT
   | SET

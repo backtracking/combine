@@ -80,7 +80,7 @@ end
 
 type problem = private {
   grid : Pattern.t;
-  pname : string option;
+  pname : string;
   pieces : Tile.t list;
 }
 
