@@ -3,11 +3,13 @@ open Format
 let zdd = ref false
 let dlx = ref false
 let debug = ref false
+let stats = ref false
 
 let msg = "usage: project [options] file"
 let spec = ["--zdd", Arg.Set zdd, "  Count solutions using Zdd";
             "--dlx", Arg.Set dlx, "  Count solutions using Dlx";
-	    "--debug", Arg.Set debug, "  Set the debug flag";
+            "--debug", Arg.Set debug, "  Set the debug flag";
+            "--stats", Arg.Set stats, "  Set the stats flag";
 	   ]
 
 let file = ref None
@@ -60,7 +62,9 @@ let handle_problem p =
 (* imprimer tous les problemes *)
 let () =
   printf "########## Problems #########\n@." ;
-  List.iter handle_problem problems
+  List.iter handle_problem problems;
+  if !stats then begin Gc.print_stat stdout; Zdd.print_stat stdout end
+
 
 
 

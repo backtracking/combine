@@ -31,35 +31,143 @@ let unique = function
   | Top -> 1
   | Node (u , _, _, _) -> u
 
-module ZddHashtbl = 
-  Hashtbl.Make 
-    (struct 
-       type t = zdd
-       let hash = function
-         | Bottom -> 0
-         | Top -> 1
-         | Node (_, i, z1, z2) ->
-             (19 * (19 * i + unique z1) + unique z2) land max_int
-       let equal k1 k2 = 
-         match k1, k2 with
-           | Top, Top 
-           | Bottom, Bottom -> true
-           | Node (_, i1, l1, r1), Node (_, i2, l2, r2) ->
-               i1 = i2 && unique l1 = unique l2 && unique r1 = unique r2
-           | _ -> false
-     end 
-    )
-
-let hsize = 19997 (* 200323 *)
-
-let global_table = ZddHashtbl.create hsize
+let hash_node i z1 z2 = (19 * (19 * i + unique z1) + unique z2) land max_int
 
 let unique_ref = ref 2
 
+module HashedZdd = struct 
+  type t = zdd
+  let hash = function
+    | Bottom -> 0
+    | Top -> 1
+    | Node (_, i, z1, z2) -> hash_node i z2 z2 
+  let equal k1 k2 = 
+    match k1, k2 with
+      | Top, Top 
+      | Bottom, Bottom -> true
+      | Node (_, i1, l1, r1), Node (_, i2, l2, r2) ->
+        i1 = i2 && unique l1 = unique l2 && unique r1 = unique r2
+      | _ -> false
+end
 
+module Weaktbl = struct
+
+  type t = {
+    mutable table : zdd Weak.t array;
+    mutable totsize : int;             (* sum of the bucket sizes *)
+    mutable limit : int;               (* max ratio totsize/table length *)
+  }
+
+  let hash = HashedZdd.hash
+
+  let create sz =
+    let sz = if sz < 7 then 7 else sz in
+    let sz = if sz > Sys.max_array_length then Sys.max_array_length else sz in
+    let emptybucket = Weak.create 0 in
+    { table = Array.create sz emptybucket;
+      totsize = 0;
+      limit = 3; }
+
+  let fold f t init =
+    let rec fold_bucket i b accu =
+      if i >= Weak.length b then accu else
+        match Weak.get b i with
+          | Some v -> fold_bucket (i+1) b (f v accu)
+          | None -> fold_bucket (i+1) b accu
+    in
+    Array.fold_right (fold_bucket 0) t.table init
+
+  let next_sz n = min (3*n/2 + 3) (Sys.max_array_length - 1)
+
+  let rec resize t =
+    let oldlen = Array.length t.table in 
+    let newlen = next_sz oldlen in
+    if newlen > oldlen then begin
+      let newt = create newlen in
+      newt.limit <- t.limit + 100;          (* prevent resizing of newt *)
+      fold (fun d () -> add newt d) t ();
+      t.table <- newt.table;
+      t.limit <- t.limit + 2;
+    end
+
+  and add t z =
+    add_index t z ((hash z) mod (Array.length t.table))
+
+  and add_index t d index =
+    let bucket = t.table.(index) in
+    let sz = Weak.length bucket in
+    let rec loop i =
+      if i >= sz then begin
+        let newsz = min (sz + 3) (Sys.max_array_length - 1) in
+        if newsz <= sz then 
+          failwith "Hashcons.Make: hash bucket cannot grow more";
+        let newbucket = Weak.create newsz in
+        Weak.blit bucket 0 newbucket 0 sz;
+        Weak.set newbucket i (Some d);
+        t.table.(index) <- newbucket;
+        t.totsize <- t.totsize + (newsz - sz);
+        if t.totsize > t.limit * Array.length t.table then resize t;
+      end else begin
+        if Weak.check bucket i
+        then loop (i+1)
+        else Weak.set bucket i (Some d)
+      end
+    in
+    loop 0
+
+
+
+  let hashconstruct t v z1 z2 =
+    if z2 = Bottom then z1 else
+    let index = (hash_node v z1 z2) mod (Array.length t.table) in
+    let bucket = t.table.(index) in
+    let sz = Weak.length bucket in
+    let rec loop i =
+      if i >= sz then begin
+        let hnode = Node (!unique_ref, v, z1, z2) in
+        incr unique_ref;
+        add_index t hnode index;
+        hnode
+      end else begin
+        match Weak.get_copy bucket i with
+          | Some Node(_, v', z1', z2') when v==v' && z1==z1' && z2==z2' ->
+              begin match Weak.get bucket i with
+                | Some v -> v
+                | None -> loop (i+1)
+              end
+          | _ -> loop (i+1)
+      end
+    in
+    loop 0
+
+
+
+
+end 
+
+
+
+
+
+
+let hsize = 19997 (* 200323 *)
+
+let global_table = Weaktbl.create hsize
+
+
+let construct = Weaktbl.hashconstruct global_table
+
+
+
+(*
+module ZddHashtbl = Hashtbl.Make(HashedZdd)
+
+let global_table = ZddHashtbl.create hsize
 
 let construct i z1 z2 =
+
   if z2 = Bottom then z1 else
+
     let zdd = Node (!unique_ref, i, z1, z2) in 
     try
       ZddHashtbl.find global_table zdd 
@@ -67,6 +175,8 @@ let construct i z1 z2 =
       ZddHashtbl.add global_table zdd zdd;
       incr unique_ref;
       zdd
+
+ *)
 
 (* z1 = z2 iff z1 == z2 iff unique z1 = unique z2 *)
 
@@ -108,7 +218,7 @@ module Cardinal(A: ARITH) : sig val cardinal: zdd -> A.t end = struct
       fun cardinal -> function
         | Top -> A.one
         | Bottom -> A.zero
-        | Node(_, i, z1, z2) -> A.add (cardinal z1) (cardinal z2))
+        | Node(_, _, z1, z2) -> A.add (cardinal z1) (cardinal z2))
 
 end
 
@@ -162,9 +272,9 @@ let union =
           if i1 = i2 then
             construct i1 (union (l1, l2)) (union (r1, r2))
           else if i1 > i2 then
-            union (z1, l2)
-          else
-            union (z2, l1)
+            construct i2 (union (z1, l2)) r2
+          else (* i1 < i2 *)
+            construct i1 (union (l1, z2)) r1
   )
 
 let union z1 z2 = 
@@ -343,6 +453,7 @@ let min_elt zdd =
 
 
 
-
-
+let print_stat out =
+  let fmt = formatter_of_out_channel out in
+  fprintf fmt "ZDD: %d unique trees built@." !unique_ref
 

@@ -33,4 +33,8 @@ val print_to_dot: Format.formatter -> t -> unit
    to the drawing of the Zdd [z] *)
 
 val print_to_dot_file: string -> t -> unit
+  (** [print_to_dot_file f z] write a string on dot format corresponding 
+   to the drawing of the Zdd [z] in the given file [f]*)
 
+
+val print_stat: Pervasives.out_channel -> unit

@@ -1,0 +1,65 @@
+elsibaie - ~/ocaml-comb% time ./reml.opt --stats --zdd tests/modotri_8_8.rem
+########## Problems #########
+
+problem domino8_8
+  ********
+  ********
+  ********
+  ********
+  ********
+  ********
+  ********
+  ********
+  ZDD solutions: 92109458286284989468604
+
+minor_words: 63188128
+promoted_words: 52645106
+major_words: 58974549
+minor_collections: 2071
+major_collections: 23
+heap_words: 45202944
+heap_chunks: 285
+top_heap_words: 45202944
+live_words: 44932680
+live_blocks: 10803744
+free_words: 170407
+free_blocks: 27307
+largest_free: 111043
+fragments: 99857
+compactions: 0
+./reml.opt --stats --zdd tests/modotri_8_8.rem  8.24s user 0.31s system 99% cpu 8.571 total
+
+
+------------------------------------------------------------------------------
+with weak pointers
+
+########## Problems #########
+
+problem domino8_8
+  ********
+  ********
+  ********
+  ********
+  ********
+  ********
+  ********
+  ********
+  ZDD solutions: 92109458286284989468604
+
+minor_words: 117667376
+promoted_words: 47731693
+major_words: 58722996
+minor_collections: 3715
+major_collections: 22
+heap_words: 43325440
+heap_chunks: 271
+top_heap_words: 43325440
+live_words: 31611413
+live_blocks: 7714613
+free_words: 11652758
+free_blocks: 2585186
+largest_free: 1279872
+fragments: 61269
+compactions: 0
+./reml.opt --stats --zdd tests/modotri_8_8.rem  9.82s user 0.38s system 99% cpu 10.239 total
+

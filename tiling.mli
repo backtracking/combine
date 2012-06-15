@@ -6,10 +6,15 @@ module Iso : sig
                Diag1Refl | Diag2Refl
 
   val compose: t -> t -> t
+    (* [compose i1 i2] returns the isometry result of the composition 
+      of [i1] and [i2] *)
   
   val to_string : t -> string
 
   val apply : t -> w:int -> h:int -> int * int -> int * int
+    (* [apply i w h x y] returns the couple result of the isometry [i]
+       applied on the couple [x, y] *)
+
   val trans_size : t -> int * int -> int * int
 
   module S: Set.S with type elt = t
@@ -37,18 +42,40 @@ module Pattern : sig
   }
 
   val create: bool array array -> t
+    (* [create m] creates a pattern of type t from a boolean matrix*)
 
   val apply: Iso.t -> t -> t
+    (* [apply i p] creates a new pattern which is the result of the 
+       transformation from [p] by [i] *)
 
   val resize: t -> w:int -> h:int -> t
+    (* [resize p w h] change the size of [p] to [w] (width) [h] (height) 
+      elements which are over [w] and [h] will not appears *)
+
+
   val crop  : t -> x:int -> y:int -> w:int -> h:int -> t
+    (* [crop p x y w h] creates a pattern from [p] with a rectangle of size
+       [w, h] drawned in position [x, y] on [p] *)
 
   val shift: t -> ofsx:int -> ofsy:int -> t
+    (* [shift p ofsx ofsy] creates a pattern from the shifting [osfx, osfy]
+      of [p] *)
 
   val union: t -> t -> t
+    (* [union p1 p2] creates a pattern from the logical union beetween [p1] and 
+        [p2] *)
+
   val inter: t -> t -> t
+    (* [inter p1 p2] creates a pattern from the logical intersection 
+     beetween [p1] and  [p2] *)
+
   val diff : t -> t -> t
+    (* [inter p1 p2] creates a pattern from the logical difference 
+     beetween [p1] and  [p2] *)
+
   val xor : t -> t -> t
+    (* [xor p1 p2] creates a pattern from the logical xor 
+     beetween [p1] and  [p2] *)
 
   val has_iso: Iso.t -> t -> bool
 

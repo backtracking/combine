@@ -7,6 +7,9 @@ module type S = sig
   type t
 
   val create: ?primary:int -> bool array array -> t
+    (** construct the algorithm corresponding structure
+       doubly linked matrix for dlx and a zdd for zdd*)
+
 
   val find_solution: t -> solution
     (** raises [Not_found] if the problem has no solution *)
@@ -32,6 +35,8 @@ module type S = sig
 end
 
 val print_boolean_matrix : bool array array -> unit
+
+
 val print_problem_size: bool array array -> unit
 
 
