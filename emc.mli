@@ -35,6 +35,7 @@ module type S = sig
 end
 
 val print_boolean_matrix : bool array array -> unit
+val print_boolean_array : bool array -> unit
 
 
 val print_problem_size: bool array array -> unit

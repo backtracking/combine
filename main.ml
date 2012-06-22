@@ -28,7 +28,22 @@ let ptree = match !file with
   | Some f -> Lexer.parse_file f
   | None -> exit 0
 
-let problems = Interp.interp ptree
+open Lexing
+
+let () = 
+  try 
+    Interp.interp ptree
+  with 
+    | Interp.Error (pos, err) -> 
+        let start, stop = pos in
+        printf "File \"%s\", line %d, characters %d-%d : @\n" 
+          start.pos_fname start.pos_lnum 
+          (start.pos_cnum - start.pos_bol) 
+          (stop.pos_cnum - stop.pos_bol) ;
+        printf "Error : %a@\n" Interp.print_error err;
+        exit 0
+        
+
 
 module N = struct
   type t = Num.num
@@ -45,7 +60,12 @@ open Tiling
 let handle_problem p =
   printf "problem %s@\n" p.pname;
   printf "  @[%a@]@." Pattern.print p.grid;
-  let primary, m = Tiling.emc p in
+  let primary, m, decode_tbl = Tiling.emc p in
+  let solution = Emc.D.find_solution (Emc.D.create ~primary m) in 
+let width, height = p.grid.Pattern.width * 100, p.grid.Pattern.height * 100 in
+  Tiling.print_solution_to_svg_file "test.svg" 
+    solution p decode_tbl width height;
+  printf "%a@." (Tiling.print_solution_ascii p decode_tbl) solution ;
   if !debug then begin
     Emc.print_boolean_matrix m;
     printf "  %d primary columns@." primary
@@ -59,10 +79,9 @@ let handle_problem p =
     printf "  DLX solutions: %a\n@." N.print (DCount.count_solutions p)
   end
 
-(* imprimer tous les problemes *)
+
+
 let () =
-  printf "########## Problems #########\n@." ;
-  List.iter handle_problem problems;
   if !stats then begin Gc.print_stat stdout; Zdd.print_stat stdout end
 
 

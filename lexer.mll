@@ -33,20 +33,41 @@
   let ident_of_keyword =
     let h = Hashtbl.create 17 in
     List.iter (fun (s, k) -> Hashtbl.add h s k)
-      [ "pattern", PATTERN;
-        "tiles", TILES;
-	"problem", PROBLEM;
-	"false", FALSE;
-	"true", TRUE;
-	"constant", CONSTANT;
-	"diff", DIFF;
-	"union", UNION;
-	"inter", INTER;
-	"xor", XOR;
-	"set", SET;
-	"shift", SHIFT;
-	"resize", RESIZE;
-	"crop", CROP;
+[ "pattern",    PATTERN;
+  "tiles",      TILES;
+	"problem",    PROBLEM;
+	"false",      FALSE;
+	"true",       TRUE;
+	"constant",   CONSTANT;
+  "assert",     ASSERT;
+  "print",      PRINT;
+  "svg",        SVG_OUT;
+  "ascii",      ASCII_OUT;
+  "solve",      SOLVE;
+  "count",      COUNT;
+  "dlx",        DLX;
+  "zdd",        ZDD;
+  "debug",      DEBUG;
+  "timing",     TIMING;
+  "on",         ON;
+  "off",        OFF;
+  "diff",       DIFF;
+	"union",      UNION;
+	"inter",      INTER;
+	"xor",        XOR;
+	"set",        SET;
+	"shift",      SHIFT;
+	"resize",     RESIZE;
+	"crop",       CROP;
+  "apply",      APPLY;
+  "Id",         ID; 
+  "Rot90",      ROT90;
+  "Rot180",     ROT180; 
+  "Rot270",     ROT270; 
+  "VertRefl",   VERTREFL;
+  "HorizRefl",  HORIZREFL;
+  "Diag1Refl",  DIAG1REFL;
+  "Diag2Refl",  DIAG2REFL;
       ];
     fun s -> try Hashtbl.find h s with Not_found -> IDENT s
 
@@ -59,6 +80,9 @@ let letter = ['a'-'z' 'A'-'Z']
 let integer = ['0'-'9']+
 let ident = letter (letter | '_' | ['0'-'9'])*
 let options = ("exact" space* ['1'-'9']*)
+
+
+
 
 rule token = parse
   | comment
@@ -83,6 +107,8 @@ rule token = parse
       { MAYBE }
   | "~sym"
       { SYM }
+  | "~rot"
+      { ROT }
   | (integer as w) 'x' (integer as h)
       { DIM (int_of_string w, int_of_string h) }
   | "="

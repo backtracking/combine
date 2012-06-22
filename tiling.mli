@@ -115,6 +115,23 @@ val create_problem : ?name:string -> Pattern.t -> Tile.t list -> problem
 
 val print_problem: Format.formatter -> problem -> unit
 
-val emc: problem -> int * bool array array
+val emc: 
+  problem -> int * bool array array * (int, Tile.t * int * int) Hashtbl.t
+
+
+val print_solution_to_svg : 
+int -> int -> problem -> ('a, Tile.t * int * int) Hashtbl.t ->
+  Format.formatter -> 'a list -> unit
+
+
+val print_solution_to_svg_file : 
+string -> 'a list -> problem -> ('a, Tile.t * int * int) Hashtbl.t ->
+  int -> int -> unit
+
+
+val print_solution_ascii : problem -> ('a, Tile.t * int * int) Hashtbl.t ->
+  Format.formatter -> 'a list -> unit
+
+
 
 

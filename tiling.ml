@@ -468,6 +468,7 @@ let emc problem =
   let tile_id_prim = ref ncc in
   let tile_id_sec  = ref (ncc + prim) in
   let lines = ref [] in
+  let decodes = ref [] in  
   let add_piece i j tile =
     let tile_id = match tile.multiplicity with
       | Mone -> let v = !tile_id_prim in incr tile_id_prim; v
@@ -476,20 +477,147 @@ let emc problem =
     in
     List.iter
       (fun t ->
-        if is_possible_position t problem i j then begin
-          lines := one_line w n tile_id t problem i j :: !lines;
-        end
+         if is_possible_position t problem i j then begin
+           lines := one_line w n tile_id t problem i j :: !lines;
+           decodes :=  (t, i, j) :: !decodes
+         end
       )
       (tile :: Tile.create_all_symetries tile)
   in
   for i = 0 to h - 1 do
     for j = 0 to w - 1 do
-        List.iter (add_piece i j) problem.pieces;
-        tile_id_prim := ncc;
-        tile_id_sec := ncc + prim
+      List.iter (add_piece i j) problem.pieces;
+      tile_id_prim := ncc;
+      tile_id_sec := ncc + prim
     done
   done;
-  ncc + prim, Array.of_list !lines
+  let matrix = Array.of_list !lines in 
+  let decode_tbl = Hashtbl.create (Array.length matrix) in 
+  ignore(List.fold_left (fun count tile_pos -> 
+    Hashtbl.add decode_tbl count tile_pos; count + 1) 0 !decodes);
+  ncc + prim, matrix, decode_tbl
+
+
+
+open Format
+open Pattern
+open Char
+open Graphics
+
+let print_board_svg width height u fmt = 
+  for i = 0 to height do 
+    fprintf fmt "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" \ 
+style=\"stroke:black;stroke-width:1;\" />@\n" 
+      0 (i * u) (u * width) (i * u)
+  done;
+  for i = 0 to width do 
+    fprintf fmt "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" \ 
+style=\"stroke:black;stroke-width:1;\" />@\n" 
+      (i * u) 0 (i * u) (u * height) 
+  done
+
+let print_square_svg x y u color fmt = 
+let r, g, b = color in 
+  fprintf fmt 
+    "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" \
+style=\"fill:rgb(%d, %d, %d);\" />@\n"
+    (x * u + 1) (y * u + 1) (u - 1) (u - 1) r g b 
+
+let print_tile_svg x y u color fmt t = 
+    (*
+  fprintf fmt 
+    "<pattern
+style=\"stroke:#000000;stroke-width:2;\
+stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;\"@\n\
+width=\"%d\"@\n\
+height=\"%d\">@\n" (t.pattern.width * u) (t.pattern.height * u);
+     *)
+  for y' = 0 to t.Tile.pattern.height - 1 do
+    for x' = 0 to t.Tile.pattern.width - 1 do
+      if t.Tile.pattern.matrix.(y').(x') then
+        print_square_svg (x + x') (y + y') u color fmt 
+    done
+  done
+  (* ;
+  fprintf fmt "</pattern>@\n"
+  *)
+
+let golden_ratio = 0.618033988749895
+
+
+let hsv_to_rgb h s v =
+    let c = v *. s in
+    let h = int_of_float h in 
+    let hh = (h mod 360)/60 in
+    let hhf = (mod_float (float_of_int h) 360.) /. 60. in
+    let x = c *. (1. -. (abs_float (mod_float hhf 2. -. 1.))) in
+    let m = v -. c in
+    let cc = int_of_float ((c +. m) *. 255.) in
+    let xx = int_of_float ((x +. m) *. 255.) in
+    let mm = int_of_float (m *. 255.) in
+    match hh with
+    | 0 -> cc, xx, mm
+    | 1 -> xx, cc, mm
+    | 2 -> mm, cc, xx
+    | 3 -> mm, xx, cc
+    | 4 -> xx, mm, cc
+    | 5 -> cc, mm, xx
+    | _ -> mm, mm, mm
+
+
+let print_solution_to_svg width height p decoder fmt s = 
+  let u = 100 in 
+  fprintf fmt 
+"<?xml version=\"1.0\" standalone=\"no\"?> @\n\
+@[<hov 2><svg xmlns=\"http://www.w3.org/2000/svg\" \
+width=\"%d\" height=\"%d\">@\n"
+  width height;
+  print_board_svg p.grid.width p.grid.height u fmt;
+  let inc = golden_ratio *. 360. in
+  Random.self_init ();
+  let h = ref (Random.float 360.)  in 
+  List.iter (
+    fun e -> 
+      let color = hsv_to_rgb !h 0.7 0.95 in
+      h := !h +. inc;
+      let t, x, y = Hashtbl.find decoder e in
+      print_tile_svg x y u color fmt t; 
+  ) s;
+  fprintf fmt "@]@\n</svg>"
+
+let print_solution_to_svg_file f s p decoder width height = 
+  let c = open_out f in
+  let fmt = formatter_of_out_channel c in
+  print_solution_to_svg width height p decoder fmt s ;
+  fprintf fmt "@.";
+  close_out c
+
+
+
+let put_char tile board x y c =
+  for y' = 0 to tile.Tile.pattern.height - 1 do
+    for x' = 0 to tile.Tile.pattern.width - 1 do
+      if tile.Tile.pattern.matrix.(y').(x') then
+        board.(y + y').(x' + x) <- c
+    done
+  done
+
+
+let print_solution_ascii p d fmt s = 
+  let unique = ref 48 in 
+  let board = Array.make_matrix (p.grid.width) (p.grid.height) '.' in 
+  List.iter (
+    fun e -> 
+      let t, x, y = Hashtbl.find d e in
+      put_char t board x y (chr !unique);
+      incr unique
+  ) s;
+  for y = 0 to p.grid.height - 1 do
+    if y > 0 then fprintf fmt "@\n";
+    for x = 0 to p.grid.width - 1 do
+      fprintf fmt "%c" board.(y).(x)
+    done 
+  done
 
 
 

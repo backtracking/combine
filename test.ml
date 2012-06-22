@@ -7,7 +7,7 @@ open Format
 
 
 let r = Lexer.parse_file "tests/non-regression.rem"
-let problems = Interp.interp r
+let problems = Interp.interp_problems r
 let p = List.hd problems
   
 (* sets of sets of integers *)
@@ -71,7 +71,7 @@ let () =
   assert (Zdd.mem s2 z3)
 
 let () = 
-  let primary, m = Tiling.emc p in
+  let primary, m, uncode_tbl = Tiling.emc p in
   assert (Emc.Z.count_solutions (Emc.Z.create ~primary m) = 12988816) ;
   let emc = Queens.emc 5 in 
   let qp_zdd = (Emc.Z.create ~primary:(2 * 5) emc) in
@@ -80,15 +80,7 @@ let () =
   assert (Emc.D.count_solutions qp_dlx = 10)
 
 
-let p =
-  Pattern.create
-    [|
-     [|true; true; true; true|];
-     [|true; false; false; false|];
-     [|true; true; true; false|];
-     [|true; false; false; false|];
-     [|true; false; false; false|];
-    |]
+
 let p =
   Pattern.create
     [|
@@ -97,9 +89,17 @@ let p =
     |]
 
 
-(*
+let p2 =
+  Pattern.create
+    [|
+     [|true; true;|];
+     [|true; true;|];
+    |]
 
-let () = printf "%a\n@." Pattern.print p
+
+
+
+(*
 
 let () = printf "%a\n@." Pattern.print (Pattern.shift p 1 1)
 
@@ -110,8 +110,5 @@ let () = printf "%a\n@." Pattern.print (Pattern.inter p (Pattern.shift p 1 1))
 let () = printf "%a\n@." Pattern.print (Pattern.diff p (Pattern.shift p 1 1))
 let () = printf "%a\n@." Pattern.print (Pattern.diff p p)
 
-let t = Tile.create p
 
-let () = printf "%a@." Tile.print t
-*)
-
+ *)

@@ -5,14 +5,18 @@ open Format
 type solution = int list
 (** a solution is a set of rows *)
 
+let print_boolean_array a = 
+  Array.iter (
+    fun cell -> 
+      if cell then Format.printf "1"
+      else Format.printf "0"
+  ) a
+
 (* display a boolean matrix *)
 let print_boolean_matrix m = 
   Array.iter (
-    fun col -> Array.iter (
-      fun cell -> 
-        if cell then Format.printf "1"
-        else Format.printf "0"
-    ) col; Format.printf "@."
+    fun col -> 
+      print_boolean_array col
   ) m
 
 let print_problem_size p = 
