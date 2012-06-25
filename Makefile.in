@@ -1,15 +1,15 @@
 #
 # sample Makefile for Objective Caml
 # Copyright (C) 2001 Jean-Christophe FILLIATRE
-# 
+#
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
 # License version 2, as published by the Free Software Foundation.
-# 
+#
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# 
+#
 # See the GNU Library General Public License version 2 for more details
 # (enclosed in the file LGPL).
 
@@ -34,7 +34,7 @@ OCAMLWEB = @OCAMLWEB@
 OCAMLWIN32 = @OCAMLWIN32@
 EXE = @EXE@
 
-INCLUDES = 
+INCLUDES =
 BFLAGS = -g $(INCLUDES) nums.cma str.cma
 OFLAGS = -annot$(INCLUDES) nums.cmxa str.cmxa
 # main target
@@ -50,7 +50,7 @@ all: $(OCAMLBEST) test
 LIBCMO = dlx.cmo zdd.cmo emc.cmo tiling.cmo
 LIBCMX = $(LIBCMO:.cmo=.cmx)
 
-CMO = $(LIBCMO) parser.cmo lexer.cmo interp.cmo main.cmo 
+CMO = $(LIBCMO) parser.cmo lexer.cmo interp.cmo main.cmo
 CMX = $(CMO:.cmo=.cmx)
 
 GENERATED = parser.ml parser.mli lexer.ml version.ml
@@ -59,10 +59,10 @@ byte: $(NAME).byte
 opt: $(NAME).opt sudoku.opt queens.opt
 
 $(NAME).byte: $(CMO)
-	$(OCAMLC) $(BFLAGS) -o $@ $^ 
+	$(OCAMLC) $(BFLAGS) -o $@ $^
 
 $(NAME).opt: $(CMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ $^ 
+	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
 VERSION=0.1
 
@@ -77,19 +77,19 @@ test: test.opt
 	./test.opt
 
 test.opt: $(LIBCMX) parser.cmx lexer.cmx interp.cmx queens.cmx test.cmx
-	$(OCAMLOPT) -o $@ $^
+	$(OCAMLOPT) -o $@ $(OFLAGS) $^
 
 sudoku.opt: $(LIBCMX) sudoku.cmx
-	$(OCAMLOPT) -o $@ str.cmxa $^ 
+	$(OCAMLOPT) -o $@ str.cmxa $^
 
 queens.opt: $(LIBCMX) queens.cmx
-	$(OCAMLOPT) -o $@ $^ 
+	$(OCAMLOPT) -o $@ $^
 
 
 # installation
 ##############
 
-install-indep: 
+install-indep:
 	mkdir -p $(BINDIR)
 	mkdir -p $(MANDIR)/man1
 	cp -f $(NAME).1 $(MANDIR)/man1
@@ -129,7 +129,7 @@ FILES = *.ml* $(NAME).1 manual.tex	     \
 export: source binary export-doc
 	cp README COPYING GPL CHANGES $(FTP)
 
-source: 
+source:
 	mkdir -p export/$(EXPORTDIR)
 	cp $(FILES) export/$(EXPORTDIR)
 	cd export ; tar cf $(TAR) $(EXPORTDIR) ; gzip -f --best $(TAR)
@@ -154,7 +154,7 @@ binary: $(NAME).$(OCAMLBEST) $(DOCFILES)
 # literate programming
 ######################
 
-SOURCES = 
+SOURCES =
 
 $(NAME).tex: $(SOURCES)
 	$(OCAMLWEB) -o $@ $^
@@ -189,7 +189,7 @@ $(NAME).tex: $(SOURCES)
 	latex $< && latex $<
 
 .dvi.ps:
-	dvips $< -o $@ 
+	dvips $< -o $@
 
 .tex.html:
 	hevea $<
@@ -217,7 +217,7 @@ config.status: configure
 	./config.status --recheck
 
 configure: configure.in
-	autoconf 
+	autoconf
 
 # clean
 #######
