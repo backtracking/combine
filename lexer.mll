@@ -1,3 +1,19 @@
+(**************************************************************************)
+(*                                                                        *)
+(*  Copyright (C) 2012                                                    *)
+(*    Remy El Sibaie                                                      *)
+(*    Jean-Christophe Filliatre                                           *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU Library General Public           *)
+(*  License version 2.1, with the special exception on linking            *)
+(*  described in file LICENSE.                                            *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(**************************************************************************)
 
 {
   open Format
@@ -24,7 +40,8 @@
     lines := [];
     let adapt a =
       let n = Array.length a in
-      if n = w then a else Array.init w (fun i -> if i < n then a.(i) else false)
+      if n = w then a else Array.init w 
+        (fun i -> if i < n then a.(i) else false)
     in
     Array.map adapt m
 
@@ -79,6 +96,7 @@ let comment = '#' [^ '\n']* '\n'
 let letter = ['a'-'z' 'A'-'Z']
 let integer = ['0'-'9']+
 let ident = letter (letter | '_' | ['0'-'9'])*
+let string = letter (letter | '_' | '.' | ['0'-'9'])*
 let options = ("exact" space* ['1'-'9']*)
 
 
@@ -101,6 +119,8 @@ rule token = parse
       { HAT }
   | ident as id
       { ident_of_keyword id }
+  | "\""(string as s)"\""
+      { STRING s}
   | "~one"
       { ONE }
   | "~maybe"
@@ -117,6 +137,8 @@ rule token = parse
       { LSBRA }
   | "]"
       { RSBRA }
+  | integer as i 
+      {INT (int_of_string i)}
   | ","
       { COMMA }
   | "("
@@ -160,7 +182,7 @@ and read_lines = parse
     lb.lex_curr_p <- { lb.lex_curr_p with pos_fname = fname };
     let p = 
       try
-	Parser.file token lb
+	Parser.queue token lb
       with
 	| Lexical_error msg ->
   	  eprintf "%a@\nlexical error: %s@." print_loc lb msg;

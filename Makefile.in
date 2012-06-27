@@ -1,3 +1,20 @@
+##########################################################################
+#                                                                        #
+#  Copyright (C) 2012                                                    #
+#    Remy El Sibaie                                                      #
+#    Jean-Christophe Filliatre                                           #
+#                                                                        #
+#  This software is free software; you can redistribute it and/or        #
+#  modify it under the terms of the GNU Library General Public           #
+#  License version 2.1, with the special exception on linking            #
+#  described in file LICENSE.                                            #
+#                                                                        #
+#  This software is distributed in the hope that it will be useful,      #
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  #
+#                                                                        #
+##########################################################################
+
 #
 # sample Makefile for Objective Caml
 # Copyright (C) 2001 Jean-Christophe FILLIATRE
@@ -26,7 +43,7 @@ OCAMLC   = @OCAMLC@
 OCAMLOPT = @OCAMLOPT@
 OCAMLDEP = @OCAMLDEP@
 OCAMLLEX = @OCAMLLEX@
-OCAMLYACC= menhir
+MENHIR = menhir # developers should have menhir installed
 OCAMLLIB = @OCAMLLIB@
 OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
@@ -35,8 +52,8 @@ OCAMLWIN32 = @OCAMLWIN32@
 EXE = @EXE@
 
 INCLUDES =
-BFLAGS = -g $(INCLUDES) nums.cma str.cma
-OFLAGS = -annot$(INCLUDES) nums.cmxa str.cmxa
+BFLAGS = -g $(INCLUDES) nums.cma str.cma unix.cma
+OFLAGS = -annot$(INCLUDES) nums.cmxa str.cmxa unix.cmxa
 # main target
 #############
 
@@ -64,7 +81,7 @@ $(NAME).byte: $(CMO)
 $(NAME).opt: $(CMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
-VERSION=0.1
+VERSION=0.42
 
 version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > version.ml
@@ -122,18 +139,18 @@ TAR=$(EXPORTDIR).tar
 FTP = $$HOME/ftp/$(NAME)
 WWW = $$HOME/WWW/$(NAME)
 
-FILES = *.ml* $(NAME).1 manual.tex	     \
-	Makefile.in configure configure.in   \
-	.depend README INSTALL COPYING GPL CHANGES
+FILES = *.ml* Makefile.in configure configure.in .depend tests/*.rem \
+	README INSTALL LICENSE
 
 export: source binary export-doc
 	cp README COPYING GPL CHANGES $(FTP)
+	cp export/$(TAR).gz $(FTP)
 
 source:
 	mkdir -p export/$(EXPORTDIR)
-	cp $(FILES) export/$(EXPORTDIR)
+	cp --parents $(FILES) export/$(EXPORTDIR)
+	rm -f export/$(EXPORTDIR)/parser.mly
 	cd export ; tar cf $(TAR) $(EXPORTDIR) ; gzip -f --best $(TAR)
-	cp export/$(TAR).gz $(FTP)
 
 export-doc: $(DOCFILES)
 	gzip -c manual.ps > $(FTP)/manual.ps.gz
@@ -180,10 +197,11 @@ $(NAME).tex: $(SOURCES)
 	$(OCAMLLEX) $<
 
 .mly.ml:
-	$(OCAMLYACC) -v $<
+	$(MENHIR) -v $<
+	perl -pi -e 's/4611686018427387903/max_int/g' parser.ml
 
 .mly.mli:
-	$(OCAMLYACC) -v $<
+	$(MENHIR) -v $<
 
 .tex.dvi:
 	latex $< && latex $<
@@ -193,6 +211,14 @@ $(NAME).tex: $(SOURCES)
 
 .tex.html:
 	hevea $<
+
+###############
+# file headers
+###############
+
+headers:
+	headache -c misc/headache_config.txt -h misc/header.txt \
+	    Makefile.in configure.in *.ml* README
 
 # Emacs tags
 ############

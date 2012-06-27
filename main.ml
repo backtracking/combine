@@ -1,3 +1,20 @@
+(**************************************************************************)
+(*                                                                        *)
+(*  Copyright (C) 2012                                                    *)
+(*    Remy El Sibaie                                                      *)
+(*    Jean-Christophe Filliatre                                           *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU Library General Public           *)
+(*  License version 2.1, with the special exception on linking            *)
+(*  described in file LICENSE.                                            *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(**************************************************************************)
+
 open Format
 
 let zdd = ref false
@@ -60,12 +77,7 @@ open Tiling
 let handle_problem p =
   printf "problem %s@\n" p.pname;
   printf "  @[%a@]@." Pattern.print p.grid;
-  let primary, m, decode_tbl = Tiling.emc p in
-  let solution = Emc.D.find_solution (Emc.D.create ~primary m) in 
-let width, height = p.grid.Pattern.width * 100, p.grid.Pattern.height * 100 in
-  Tiling.print_solution_to_svg_file "test.svg" 
-    solution p decode_tbl width height;
-  printf "%a@." (Tiling.print_solution_ascii p decode_tbl) solution ;
+  let { primary = primary; matrix = m; tiles = decode_tbl } = Tiling.emc p in
   if !debug then begin
     Emc.print_boolean_matrix m;
     printf "  %d primary columns@." primary

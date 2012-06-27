@@ -1,0 +1,15 @@
+
+You need Objective Caml 3.11 or higher.
+
+Configure with
+
+	  ./configure
+
+Compile with
+
+	  make
+
+Install (as root if needed) with
+
+	  make install
+

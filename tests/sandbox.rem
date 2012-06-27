@@ -7,5 +7,5 @@ problem test = chessboard [a ~one ~sym ~maybe, {**} ~maybe ~sym]
 
 assert {***} = {***}
 
-solve dlx test
+solve dlx test ascii
 

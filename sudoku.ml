@@ -1,3 +1,20 @@
+(**************************************************************************)
+(*                                                                        *)
+(*  Copyright (C) 2012                                                    *)
+(*    Remy El Sibaie                                                      *)
+(*    Jean-Christophe Filliatre                                           *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU Library General Public           *)
+(*  License version 2.1, with the special exception on linking            *)
+(*  described in file LICENSE.                                            *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(**************************************************************************)
+
 (* Sudoku Module *)
 open Format
 
@@ -43,15 +60,20 @@ let read s =
 
 
 
-let msg = "usage: project file"
-
 let file = ref None
+let out = ref ""
+
+let msg = "usage: project [options] file"
+let spec = ["-o", Arg.Set_string out, "  Count solutions using Zdd";
+	   ]
+
 let set_file f = match !file with
   | Some _ -> Arg.usage [] msg; exit 1
   | None when Sys.file_exists f -> file := Some f
   | None -> eprintf "%s: no such file@." f; exit 1
 
-let () = Arg.parse [] set_file msg
+let () = Arg.parse spec set_file msg
+
 
 let error_pieces_board () = 
   eprintf "problem must have board and piece(s) @."; 

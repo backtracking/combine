@@ -1,3 +1,20 @@
+(**************************************************************************)
+(*                                                                        *)
+(*  Copyright (C) 2012                                                    *)
+(*    Remy El Sibaie                                                      *)
+(*    Jean-Christophe Filliatre                                           *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU Library General Public           *)
+(*  License version 2.1, with the special exception on linking            *)
+(*  described in file LICENSE.                                            *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(**************************************************************************)
+
 (* ZDD *)
 
 
@@ -387,7 +404,23 @@ let choose zdd =
   in 
   any_element zdd S.empty
 
-let choose_list zdd = S.elements (choose zdd)
+let random_chose zdd = 
+  Random.self_init ();
+  let rec any_element zdd s = match zdd with 
+    | Node (_, i, z1, z2) -> 
+        let z = if Random.bool () && not (equal z1 Bottom) then z1 
+        else if not (equal z2 Bottom) then z2 else z1 in            
+        any_element z (S.add i s)
+    | Top -> s
+    | Bottom -> raise Not_found
+  in 
+  any_element zdd S.empty
+
+
+
+let choose_list zdd = S.elements (random_chose zdd)
+
+
 
 let iter_list f zdd = 
   let rec iter_element f l = function

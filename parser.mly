@@ -1,3 +1,19 @@
+/**************************************************************************/
+/*                                                                        */
+/*  Copyright (C) 2012                                                    */
+/*    Remy El Sibaie                                                      */
+/*    Jean-Christophe Filliatre                                           */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Library General Public           */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
 
 %{
   open Ast
@@ -17,17 +33,19 @@
 %token ASCII_OUT SVG_OUT PRINT
 %token SOLVE COUNT DEBUG TIMING ON OFF DLX ZDD
 %token <string> IDENT
+%token <string> STRING
 %token <int * int> DIM
 %token <bool array array> ASCII
+%token <int> INT
 %token EOF
 
 %nonassoc UNION INTER DIFF XOR prec_crop
 %left AMPAMP MINUS BARBAR HAT
 
-%start <Ast.file> file
+%start <Ast.queue> queue
 
 %%
-file:
+queue:
   l = list(decl); EOF { l }
 ;
 
@@ -46,10 +64,14 @@ decl:
       decl_node = Assert b}}
 | PRINT; id = IDENT {{decl_pos = ($startpos, $endpos);
       decl_node = Command (Print, id)}}
-| SOLVE; a = algo; id = IDENT {{decl_pos = ($startpos, $endpos);
-      decl_node = Command (Solve a, id)}}
-| COUNT; a = algo; id = IDENT {{decl_pos = ($startpos, $endpos);
+| SOLVE; a = algo; id = IDENT; out = output {{decl_pos = ($startpos, $endpos);
+      decl_node = Command (Solve (a, out), id)}}
+| COUNT; a = algo; id = IDENT{{decl_pos = ($startpos, $endpos);
       decl_node = Command (Count a, id)}}
+| DEBUG; st = state; {{decl_pos = ($startpos, $endpos);
+      decl_node = Debug st}}
+| TIMING; st = state; {{decl_pos = ($startpos, $endpos);
+      decl_node = Timing st}}
 ;
 
 algo:
@@ -74,6 +96,10 @@ tiles:
 tile_list:
 | LSBRA; l = separated_list(COMMA, tile); RSBRA { l }
 ;
+
+output:
+| SVG_OUT; s = STRING { Svg s }
+| ASCII_OUT { Ascii }
 
 isometry:
 | ID { Id }
@@ -148,6 +174,8 @@ expr:
 | a = ASCII
     {{expr_pos = ($startpos, $endpos); 
        expr_node = Constant a}}
+| i = INT {{expr_pos = ($startpos, $endpos); 
+       expr_node = Integer i}}
 ;
 
 bool:

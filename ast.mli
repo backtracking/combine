@@ -1,3 +1,19 @@
+(**************************************************************************)
+(*                                                                        *)
+(*  Copyright (C) 2012                                                    *)
+(*    Remy El Sibaie                                                      *)
+(*    Jean-Christophe Filliatre                                           *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU Library General Public           *)
+(*  License version 2.1, with the special exception on linking            *)
+(*  described in file LICENSE.                                            *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(**************************************************************************)
 
 type dim = int * int
 
@@ -5,8 +21,14 @@ type binop = Union | Inter | Diff | Xor
 
 type algo = Dlx | Zdd
 
+type file = string
+
+type state = On | Off
+
+type output = Svg of file | Ascii
+
 type setop = Shift | SetXY of bool | Resize | Crop of dim
-type problem_command = Count of algo | Solve of algo | Print 
+type problem_command = Count of algo | Solve of algo * output | Print 
 type compop = Equal
 
 type pos = Lexing.position * Lexing.position
@@ -23,6 +45,9 @@ and expr_node =
   | Binary of binop * expr * expr
   | SetOp of setop * dim * expr
   | Apply of Tiling.Iso.t * expr
+  | Integer of int
+
+
 
 type bool_expr = 
   | Boolean of bool
@@ -47,6 +72,8 @@ and decl_node =
   | Problem of problem
   | Assert of bool_expr
   | Command of problem_command * string
+  | Debug of state
+  | Timing of state
 
 
-type file = decl list
+type queue = decl list

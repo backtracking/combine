@@ -1,3 +1,20 @@
+(**************************************************************************)
+(*                                                                        *)
+(*  Copyright (C) 2012                                                    *)
+(*    Remy El Sibaie                                                      *)
+(*    Jean-Christophe Filliatre                                           *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU Library General Public           *)
+(*  License version 2.1, with the special exception on linking            *)
+(*  described in file LICENSE.                                            *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(**************************************************************************)
+
 (* Tiling Module *)
 
 (* Misc *)
@@ -456,6 +473,12 @@ let number_of_tile_columns problem =
         | Minf -> acc
   ) (0, 0) problem.pieces
 
+type emc = {
+  primary: int;			        (* number of primary columns *)
+  matrix : bool array array;
+  tiles  : (Tile.t * int * int) array;	(* row -> tile and its position *)
+}
+
 (* return a boolean matrix representing the set of way to put all pieces
  * on the board
  * *)
@@ -492,10 +515,10 @@ let emc problem =
     done
   done;
   let matrix = Array.of_list !lines in 
-  let decode_tbl = Hashtbl.create (Array.length matrix) in 
-  ignore(List.fold_left (fun count tile_pos -> 
-    Hashtbl.add decode_tbl count tile_pos; count + 1) 0 !decodes);
-  ncc + prim, matrix, decode_tbl
+  let decode_tbl = Array.of_list !decodes in 
+  { primary = ncc + prim;
+    matrix = matrix;
+    tiles = decode_tbl }
 
 
 
@@ -521,26 +544,19 @@ let r, g, b = color in
   fprintf fmt 
     "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" \
 style=\"fill:rgb(%d, %d, %d);\" />@\n"
-    (x * u + 1) (y * u + 1) (u - 1) (u - 1) r g b 
+    (x * u) (y * u) u u r g b 
 
 let print_tile_svg x y u color fmt t = 
-    (*
   fprintf fmt 
-    "<pattern
-style=\"stroke:#000000;stroke-width:2;\
-stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;\"@\n\
-width=\"%d\"@\n\
-height=\"%d\">@\n" (t.pattern.width * u) (t.pattern.height * u);
-     *)
+    "<g style=\"stroke:#000000;stroke-width:2;\
+stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;\">@\n";
   for y' = 0 to t.Tile.pattern.height - 1 do
     for x' = 0 to t.Tile.pattern.width - 1 do
       if t.Tile.pattern.matrix.(y').(x') then
         print_square_svg (x + x') (y + y') u color fmt 
     done
-  done
-  (* ;
-  fprintf fmt "</pattern>@\n"
-  *)
+  done;
+  fprintf fmt "</g>@\n"
 
 let golden_ratio = 0.618033988749895
 
@@ -565,14 +581,14 @@ let hsv_to_rgb h s v =
     | _ -> mm, mm, mm
 
 
-let print_solution_to_svg width height p decoder fmt s = 
+let print_solution_to_svg fmt ~width ~height p {tiles=decoder} s = 
   let u = 100 in 
   fprintf fmt 
 "<?xml version=\"1.0\" standalone=\"no\"?> @\n\
 @[<hov 2><svg xmlns=\"http://www.w3.org/2000/svg\" \
 width=\"%d\" height=\"%d\">@\n"
   width height;
-  print_board_svg p.grid.width p.grid.height u fmt;
+  (* print_board_svg p.grid.width p.grid.height u fmt; *)
   let inc = golden_ratio *. 360. in
   Random.self_init ();
   let h = ref (Random.float 360.)  in 
@@ -580,15 +596,15 @@ width=\"%d\" height=\"%d\">@\n"
     fun e -> 
       let color = hsv_to_rgb !h 0.7 0.95 in
       h := !h +. inc;
-      let t, x, y = Hashtbl.find decoder e in
+      let t, x, y = decoder.(e) in
       print_tile_svg x y u color fmt t; 
   ) s;
   fprintf fmt "@]@\n</svg>"
 
-let print_solution_to_svg_file f s p decoder width height = 
+let print_solution_to_svg_file f ~width ~height p emc s = 
   let c = open_out f in
   let fmt = formatter_of_out_channel c in
-  print_solution_to_svg width height p decoder fmt s ;
+  print_solution_to_svg fmt ~width ~height p emc s ;
   fprintf fmt "@.";
   close_out c
 
@@ -603,12 +619,12 @@ let put_char tile board x y c =
   done
 
 
-let print_solution_ascii p d fmt s = 
+let print_solution_ascii fmt p {tiles=d} s = 
   let unique = ref 48 in 
   let board = Array.make_matrix (p.grid.width) (p.grid.height) '.' in 
   List.iter (
     fun e -> 
-      let t, x, y = Hashtbl.find d e in
+      let t, x, y = d.(e) in
       put_char t board x y (chr !unique);
       incr unique
   ) s;
@@ -617,7 +633,8 @@ let print_solution_ascii p d fmt s =
     for x = 0 to p.grid.width - 1 do
       fprintf fmt "%c" board.(y).(x)
     done 
-  done
+  done;
+  fprintf fmt "@\n"
 
 
 

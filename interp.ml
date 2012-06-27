@@ -1,3 +1,20 @@
+(**************************************************************************)
+(*                                                                        *)
+(*  Copyright (C) 2012                                                    *)
+(*    Remy El Sibaie                                                      *)
+(*    Jean-Christophe Filliatre                                           *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU Library General Public           *)
+(*  License version 2.1, with the special exception on linking            *)
+(*  described in file LICENSE.                                            *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(**************************************************************************)
+
 open Ast
 open Tiling
 open Format
@@ -6,6 +23,11 @@ open Emc
 type error = string
 let print_error fmt error = fprintf fmt "%s" error
 exception Error of pos * error
+
+let timer = ref 0.
+
+let debug = ref false
+let timing = ref false
 
 let var_env = Hashtbl.create 50
 let tiles_env = Hashtbl.create 50
@@ -60,7 +82,6 @@ let tile ~s ~m e =
 
 let tile_list = List.map (fun (e, s, m) -> tile ~s ~m e)
 
-
 module N = struct
   type t = Num.num
   let zero = Num.num_of_int 0
@@ -72,23 +93,63 @@ end
 module ZCount = Emc.Z.Count(N)
 module DCount = Emc.D.Count(N)
 
-let count p algo = 
-  let primary, m, decode_tbl = Tiling.emc p in
-  match algo with
-  | Dlx -> 
-    let p = Emc.D.create ~primary m in
-    printf "  DLX solutions: %a\n@." N.print (DCount.count_solutions p)
-  | Zdd -> 
-    let p = Emc.Z.create ~primary m in
-    printf "  ZDD solutions: %a\n@." N.print (ZCount.count_solutions p)
 
-let solve algo p = failwith "Not implemented yet."
+let init_timer () = 
+  timer := Unix.gettimeofday ()
+
+
+
+let finish_timer fmt () = 
+  let elapsed = Unix.gettimeofday () -. !timer in 
+  fprintf fmt "%fs" elapsed;
+  timer := 0.
+
+
+
+
+let count p algo = 
+  let { primary = primary; matrix = m; tiles = decode_tbl } = Tiling.emc p in
+  printf "%s : @?" p.pname;
+  init_timer ();
+  begin match algo with
+    | Dlx -> 
+        let p = Emc.D.create ~primary m in
+        printf "(DLX) %a solutions@." N.print (DCount.count_solutions p)
+    | Zdd -> 
+        let p = Emc.Z.create ~primary m in
+        printf "(ZDD) %a solutions@." N.print (ZCount.count_solutions p)
+  end;
+  if !timing then printf "%s solutions counted in %a@." p.pname finish_timer ()
+  
+
+
+let solve output p algo = 
+  let emc = Tiling.emc p in
+  let { primary = primary; matrix = m; tiles = decode_tbl } = emc in
+  init_timer ();
+  let width, height = 
+    p.grid.Pattern.width * 100, p.grid.Pattern.height * 100 in
+  let print = begin match output with 
+    | Svg f -> 
+        printf "out : %s@\n" f;
+        print_solution_to_svg_file f ~width ~height p emc;
+    | Ascii ->
+        print_solution_ascii Format.std_formatter p emc end in
+  let solution = begin match algo with
+    | Dlx -> 
+        Emc.D.find_solution (Emc.D.create ~primary m)
+    | Zdd -> 
+        let zdd = Emc.Z.create ~primary m in
+        Emc.Z.find_solution zdd end in
+  if !timing then printf "%s solved in %a@." p.pname finish_timer ();
+  print solution 
+
 
 
 let interp_problem_command p = function 
   | Print -> printf "%a@\n" Tiling.print_problem p
-  | Solve algo -> solve p algo 
-  | Count algo -> count p algo 
+  | Solve (algo, output) -> solve output p algo
+  | Count algo -> count p algo  
 
 
 let tiles = function
@@ -117,6 +178,11 @@ let interp_decl decl =
           | Not_found -> raise 
               (Error (decl.decl_pos, "Unbound problem " ^ id)) end in
         interp_problem_command p c
+    | Debug st -> begin match st with On -> debug := true 
+        | Off -> debug := false end
+    | Timing st -> begin match st with On -> timing := true 
+        | Off -> timing := false end
+    
 
 
 let interp dl =

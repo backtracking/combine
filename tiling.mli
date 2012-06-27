@@ -1,3 +1,19 @@
+(**************************************************************************)
+(*                                                                        *)
+(*  Copyright (C) 2012                                                    *)
+(*    Remy El Sibaie                                                      *)
+(*    Jean-Christophe Filliatre                                           *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU Library General Public           *)
+(*  License version 2.1, with the special exception on linking            *)
+(*  described in file LICENSE.                                            *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(**************************************************************************)
 
 
 module Iso : sig
@@ -115,22 +131,23 @@ val create_problem : ?name:string -> Pattern.t -> Tile.t list -> problem
 
 val print_problem: Format.formatter -> problem -> unit
 
-val emc: 
-  problem -> int * bool array array * (int, Tile.t * int * int) Hashtbl.t
+type emc = {
+  primary: int;			        (* number of primary columns *)
+  matrix : bool array array;
+  tiles  : (Tile.t * int * int) array;	(* row -> tile and its position *)
+}
+
+val emc: problem -> emc
+
+val print_solution_to_svg : Format.formatter ->
+  width:int -> height:int -> problem -> emc -> int list -> unit
 
 
-val print_solution_to_svg : 
-int -> int -> problem -> ('a, Tile.t * int * int) Hashtbl.t ->
-  Format.formatter -> 'a list -> unit
+val print_solution_to_svg_file : string ->
+  width:int -> height:int -> problem -> emc -> int list -> unit
 
-
-val print_solution_to_svg_file : 
-string -> 'a list -> problem -> ('a, Tile.t * int * int) Hashtbl.t ->
-  int -> int -> unit
-
-
-val print_solution_ascii : problem -> ('a, Tile.t * int * int) Hashtbl.t ->
-  Format.formatter -> 'a list -> unit
+val print_solution_ascii :
+  Format.formatter -> problem -> emc -> int list -> unit
 
 
 

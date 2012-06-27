@@ -11,7 +11,10 @@ pattern b = {*}
 pattern c = {**$*}
 pattern d = {***}
 
-problem domino8_8 = chessboard [a ~sym, b ~sym, c ~sym, d ~sym]
+problem modotri = chessboard [a ~sym, b ~sym, c ~sym, d ~sym]
 
 
 
+timing on
+solve zdd modotri svg "test.svg"
+timing off

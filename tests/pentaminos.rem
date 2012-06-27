@@ -81,7 +81,14 @@ pattern scott_board = {
 ********
 }
 
+
+
 problem scott_problem = scott_board pentaminos
+
+timing on
+count dlx scott_problem
+
+solve dlx scott_problem svg "test.svg"
 
 #problem problem_23 = {
 #********

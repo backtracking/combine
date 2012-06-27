@@ -10,6 +10,7 @@ type token =
   | TILES
   | SYM
   | SVG_OUT
+  | STRING of (string)
   | SOLVE
   | SHIFT
   | SET
@@ -31,6 +32,7 @@ type token =
   | LSBRA
   | LPAR
   | INTER
+  | INT of (int)
   | IDENT of (string)
   | ID
   | HORIZREFL
@@ -56,4 +58,4 @@ type token =
   | AMPAMP
 
 
-val file: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Ast.file)
+val queue: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Ast.queue)

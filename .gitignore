@@ -28,3 +28,5 @@ doc
 *.snm
 *.out
 *.vrb
+test.svg
+export

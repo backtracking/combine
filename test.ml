@@ -1,3 +1,20 @@
+(**************************************************************************)
+(*                                                                        *)
+(*  Copyright (C) 2012                                                    *)
+(*    Remy El Sibaie                                                      *)
+(*    Jean-Christophe Filliatre                                           *)
+(*                                                                        *)
+(*  This software is free software; you can redistribute it and/or        *)
+(*  modify it under the terms of the GNU Library General Public           *)
+(*  License version 2.1, with the special exception on linking            *)
+(*  described in file LICENSE.                                            *)
+(*                                                                        *)
+(*  This software is distributed in the hope that it will be useful,      *)
+(*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+(*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+(*                                                                        *)
+(**************************************************************************)
+
 (* Test Module *)
 
 open Dlx
@@ -71,7 +88,7 @@ let () =
   assert (Zdd.mem s2 z3)
 
 let () = 
-  let primary, m, uncode_tbl = Tiling.emc p in
+  let { primary = primary; matrix = m; tiles = uncode_tbl } = Tiling.emc p in
   assert (Emc.Z.count_solutions (Emc.Z.create ~primary m) = 12988816) ;
   let emc = Queens.emc 5 in 
   let qp_zdd = (Emc.Z.create ~primary:(2 * 5) emc) in
