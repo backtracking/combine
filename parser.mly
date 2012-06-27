@@ -36,7 +36,6 @@
 %token <string> STRING
 %token <int * int> DIM
 %token <bool array array> ASCII
-%token <int> INT
 %token EOF
 
 %nonassoc UNION INTER DIFF XOR prec_crop
@@ -174,8 +173,6 @@ expr:
 | a = ASCII
     {{expr_pos = ($startpos, $endpos); 
        expr_node = Constant a}}
-| i = INT {{expr_pos = ($startpos, $endpos); 
-       expr_node = Integer i}}
 ;
 
 bool:

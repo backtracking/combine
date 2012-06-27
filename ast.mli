@@ -45,7 +45,6 @@ and expr_node =
   | Binary of binop * expr * expr
   | SetOp of setop * dim * expr
   | Apply of Tiling.Iso.t * expr
-  | Integer of int
 
 
 

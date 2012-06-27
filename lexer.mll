@@ -137,8 +137,6 @@ rule token = parse
       { LSBRA }
   | "]"
       { RSBRA }
-  | integer as i 
-      {INT (int_of_string i)}
   | ","
       { COMMA }
   | "("

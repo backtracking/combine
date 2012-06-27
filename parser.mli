@@ -32,7 +32,6 @@ type token =
   | LSBRA
   | LPAR
   | INTER
-  | INT of (int)
   | IDENT of (string)
   | ID
   | HORIZREFL
