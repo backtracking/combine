@@ -33,7 +33,8 @@ let print_boolean_array a =
 let print_boolean_matrix m = 
   Array.iter (
     fun col -> 
-      print_boolean_array col
+      print_boolean_array col;
+      printf "@\n"
   ) m
 
 let print_problem_size p = 

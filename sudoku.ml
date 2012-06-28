@@ -191,7 +191,7 @@ let print_emc_sudoku () =
   printf "@."
 
 
-let decode m emc_array i = 
+let decode sudoku emc_array i = 
   if i < Array.length emc_array - 1 then begin
     let c = ref 0 in 
     let l = ref 0 in 
@@ -207,14 +207,50 @@ let decode m emc_array i =
       end
     done;
     assert (!v <> 0);
-    m.(!l).(!c) <- !v 
+    sudoku.(!l).(!c) <- !v 
   end
+
+let print_board_svg u fmt = 
+  for i = 0 to 9 do 
+    fprintf fmt "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" \ 
+style=\"stroke:black;stroke-width:1;\" />@\n" 
+      0 (i * u) (u * 9) (i * u);
+    fprintf fmt "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" \ 
+style=\"stroke:black;stroke-width:1;\" />@\n" 
+      (i * u) 0 (i * u) (u * 9);
+    fprintf fmt "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" \ 
+style=\"stroke:black;fill-opacity:0;stroke-width:3;\"/>@\n" 
+      ((i mod 3) * u * 3) ((i / 3) * u * 3) (u * 3) (u * 3) 
+  done
+
+let print_solution_to_svg fmt ~width ~height m = 
+  let u = 100 in 
+  fprintf fmt 
+"<?xml version=\"1.0\" standalone=\"no\"?> @\n\
+@[<hov 2><svg xmlns=\"http://www.w3.org/2000/svg\" \
+width=\"%d\" height=\"%d\">@\n"
+  width height;
+  for i = 0 to 9 - 1 do
+    for j = 0 to 9 -1 do
+  fprintf fmt "<text x=\"%d\" y=\"%d\" style= \"font-size:50px;\
+text-anchor:middle;\" >\ %d</text>" (i * u + 50) (j * u + 65) m.(j).(i)
+    done
+  done;
+  print_board_svg u fmt;
+  fprintf fmt "@]@\n</svg>"
+
+
+let print_solution_to_svg_file f ~width ~height m = 
+  let c = open_out f in
+  let fmt = formatter_of_out_channel c in
+  print_solution_to_svg fmt ~width ~height m;
+  fprintf fmt "@.";
+  close_out c
 
 
 let () = 
-  let m = sudoku in 
-  let emc_array = emc m in 
-  display_sudoku m;
+  let emc_array = emc sudoku in 
+  display_sudoku sudoku;
   printf "DLX : emc_size : %dx%d @." 
     (Array.length emc_array) (Array.length emc_array.(0));
   try 
@@ -222,8 +258,12 @@ let () =
     let s = Emc.D.find_solution p in
     let n = List.length s in 
     printf "solution size : %d@." n;
-    List.iter (decode m emc_array) s;
-    display_sudoku m;
+    List.iter (decode sudoku emc_array) s;
+    display_sudoku sudoku;
+    if not (!out = "") then begin
+      print_solution_to_svg_file (!out) ~width:900 ~height:900 sudoku;
+      printf "out : %s@\n" !out     
+    end;
     printf "%d solutions@." (Emc.D.count_solutions p)
   with Not_found -> printf "No solution@."
 

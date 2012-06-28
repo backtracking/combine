@@ -23,11 +23,8 @@ let debug = ref false
 let stats = ref false
 
 let msg = "usage: project [options] file"
-let spec = ["--zdd", Arg.Set zdd, "  Count solutions using Zdd";
-            "--dlx", Arg.Set dlx, "  Count solutions using Dlx";
-            "--debug", Arg.Set debug, "  Set the debug flag";
-            "--stats", Arg.Set stats, "  Set the stats flag";
-	   ]
+let spec = [ "--debug", Arg.Set debug, "  Set the debug flag";
+            "--stats", Arg.Set stats, "  Set the stats flag"; ]
 
 let file = ref None
 let set_file f = match !file with

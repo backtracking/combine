@@ -540,10 +540,10 @@ style=\"stroke:black;stroke-width:1;\" />@\n"
   done
 
 let print_square_svg x y u color fmt = 
-let r, g, b = color in 
+  let r, g, b = color in 
   fprintf fmt 
     "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" \
-style=\"fill:rgb(%d, %d, %d);\" />@\n"
+    style=\"fill:rgb(%d, %d, %d);\" />@\n"
     (x * u) (y * u) u u r g b 
 
 let print_tile_svg x y u color fmt t = 
