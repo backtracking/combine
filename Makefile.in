@@ -92,6 +92,10 @@ version.ml: Makefile
 
 test: test.opt
 	./test.opt
+	for f in tests/*.rem; do ./$(NAME).opt --parse-only $$f ; done
+
+check: $(NAME).opt
+	for f in tests/*.rem; do ./$(NAME).opt $$f ; done
 
 test.opt: $(LIBCMX) parser.cmx lexer.cmx interp.cmx queens.cmx test.cmx
 	$(OCAMLOPT) -o $@ $(OFLAGS) $^
@@ -123,7 +127,7 @@ install-opt: install-indep
 # documentation
 ###############
 
-.PHONY: doc
+.PHONY: doc test check
 
 DOCFILES=zdd.mli dlx.mli emc.mli tiling.mli
 

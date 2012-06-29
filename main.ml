@@ -21,10 +21,12 @@ let zdd = ref false
 let dlx = ref false
 let debug = ref false
 let stats = ref false
+let parse_only = ref false
 
 let msg = "usage: project [options] file"
 let spec = [ "--debug", Arg.Set debug, "  Set the debug flag";
-            "--stats", Arg.Set stats, "  Set the stats flag"; ]
+            "--stats", Arg.Set stats, "  Set the stats flag"; 
+	    "--parse-only", Arg.Set parse_only, "  Stop after parsing";]
 
 let file = ref None
 let set_file f = match !file with
@@ -41,6 +43,8 @@ let error_pieces_board () =
 let ptree = match !file with
   | Some f -> Lexer.parse_file f
   | None -> exit 0
+
+let () = if !parse_only then exit 0
 
 open Lexing
 
