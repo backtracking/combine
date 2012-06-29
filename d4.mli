@@ -33,23 +33,38 @@ val apply : t -> w:int -> h:int -> int * int -> int * int
      applied on the couple [x, y] *)
 
 val trans_size : t -> int * int -> int * int
+  (* given a rectangle of size (w,h), [trans_size iso (w,h)] returns the size
+     (w',h') of the result rectangle by [iso] *)
 
 module S: Set.S with type elt = t
 
 val all: S.t
   (* all elements of D4 *)
 
-type sub_group
+type subgroup
 
-val quotient : sub_group -> sub_group -> sub_group
+val quotient : subgroup -> subgroup -> subgroup
   (* computes the quotient of two subgroups of D4 *)
 
-val d4: sub_group
-  (* D4 itself *)
+(* the 10 subgroups of D4 *)
+(* 1 element *)
+val id: subgroup 			(* { Id } *)
+(* 2 elements *)
+val vert: subgroup			(* { Id, VertRefl } *)
+val horiz: subgroup			(* { Id, HorizRefl } *)
+val rot180: subgroup
+val diag1: subgroup
+val diag2: subgroup
+(* 4 elements *)
+val positive: subgroup
+val refl_hv: subgroup
+val refl_12: subgroup
+(* 8 elements = D4 itself *)
+val d4: subgroup
 
-val elements: sub_group -> S.t
+val elements: subgroup -> S.t
 
-val generated_by: S.t -> sub_group
+val generated_by: S.t -> subgroup
 
 
 

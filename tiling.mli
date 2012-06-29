@@ -83,7 +83,7 @@ module Tile : sig
     pattern: Pattern.t;
     multiplicity : multiplicity;
     symetries : symetries;
-    isos   : D4.sub_group;   (* the pattern is invariant by these isometries *)
+    isos   : D4.subgroup;   (* the pattern is invariant by these isometries *)
   }
 
   val create: 

@@ -21,12 +21,6 @@ type t = Id | Rot90 | Rot180 | Rot270 | VertRefl | HorizRefl |
 
 type iso = t
 
-module S = Set.Make (
-  struct
-    type t = iso
-    let compare = Pervasives.compare
-  end)
-
 let compose i1 i2 = match i1, i2 with
   | Id, a | a, Id -> a
     (* rotations *)
@@ -93,6 +87,14 @@ let to_string = function
   | Diag1Refl -> "Diag1Refl"
   | Diag2Refl -> "Diag2Refl"
 
+let print fmt iso = Format.fprintf fmt "%s" (to_string iso)
+
+module S = Set.Make (
+  struct
+    type t = iso
+    let compare = Pervasives.compare
+  end)
+
 let all =
   ( S.add Id
       ( S.add Rot90
@@ -107,16 +109,16 @@ let is_positive = function
   | Id | Rot90 | Rot180 | Rot270 -> true
   | VertRefl | HorizRefl | Diag1Refl | Diag2Refl -> false
 
-  (* sanity checks for compose *)
+(* sanity checks for compose *)
 
-  (* 1. positivity rules *)
+(* 1. positivity rules *)
 let () =
   S.iter (fun a ->
     S.iter (fun b -> assert (
       is_positive (compose a b) = (is_positive a = is_positive b))
     ) all ) all
 
-  (* 2. compose is associative *)
+(* 2. compose is associative *)
 let () =
   S.iter (
     fun a ->
@@ -147,15 +149,53 @@ let trans_size iso (h, w) = match iso with
   | Diag1Refl
   | Diag2Refl -> (w, h)
 
-let print fmt iso = Format.fprintf fmt "%s" (to_string iso)
+type subgroup = S.t
 
-
-type sub_group = S.t
-
+(* the 10 subgroups of D4 *)
+(* 1 element *)
+let id = S.singleton Id
+(* 2 elements *)
+let vert = S.union id (S.singleton VertRefl)
+let horiz = S.union id (S.singleton HorizRefl)
+let rot180 = S.union id (S.singleton Rot180)
+let diag1 = S.union id (S.singleton Diag1Refl)
+let diag2 = S.union id (S.singleton Diag2Refl)
+(* 4 elements *)
+let positive = S.add Rot180 (S.add Rot90 (S.add Rot270 id))
+let refl_hv = S.add Rot180 (S.add VertRefl (S.add HorizRefl id))
+let refl_12 = S.add Rot180 (S.add Diag1Refl (S.add Diag2Refl id))
+(* 8 elements = D4 itself *)
 let d4 = all
 
 let quotient g1 g2 = 
-  assert false (* TODO *)
+  if S.equal g2 id then g1
+  else if S.equal g1 g2 then id
+  else if S.equal g1 refl_hv then
+    if S.equal g2 vert then horiz
+    else if S.equal g2 horiz then vert
+    else if S.equal g2 rot180 then refl_hv
+    else invalid_arg "quotient"
+  else if S.equal g1 positive then
+    if S.equal g2 rot180 then positive
+    else invalid_arg "quotient"
+  else if S.equal g1 refl_12 then
+    if S.equal g2 diag1 then diag2
+    else if S.equal g2 diag2 then diag1
+    else if S.equal g2 rot180 then refl_12
+    else invalid_arg "quotient"
+  else if S.equal g1 d4 then
+    if S.equal g2 refl_hv then positive
+    else if S.equal g2 positive then d4
+    else if S.equal g2 refl_12 then positive
+    else if S.equal g2 vert then positive
+    else if S.equal g2 horiz then positive
+    else if S.equal g2 rot180 then d4
+    else if S.equal g2 diag2 then positive
+    else if S.equal g2 diag1 then positive
+    else assert false
+  else
+    invalid_arg "quotient"
+    
 
 let elements g = g
 

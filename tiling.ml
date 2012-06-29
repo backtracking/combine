@@ -176,8 +176,18 @@ module Tile = struct
     pattern: Pattern.t;
     multiplicity : multiplicity;
     symetries : symetries;
-    isos   : D4.sub_group;   (* the pattern is invariant by these isometries *)
+    isos   : D4.subgroup;   (* the pattern is invariant by these isometries *)
   }
+
+
+  let print fmt t =
+    begin match t.name with Some s ->
+    Format.printf "name : %s@\n"s; | None -> () end;
+    Format.fprintf fmt "%a@\n" Pattern.print t.pattern;
+    Format.fprintf fmt "{ ";
+    D4.S.iter (fun iso -> Format.fprintf fmt "%a, " D4.print iso)
+      (D4.elements t.isos);
+    Format.fprintf fmt "}"
 
   let create ?name ?(s=Snone) ?(m=Minf) p =
     { name = name; pattern = p;
@@ -189,11 +199,12 @@ module Tile = struct
     if D4.S.mem iso (D4.elements t.isos) then t
     else create ~m:t.multiplicity (Pattern.apply iso t.pattern)
 
-
+(*
   let symetries t =
     D4.S.fold
       (fun iso l -> apply iso t :: l )
       (D4.S.diff D4.all (D4.elements t.isos)) [t]
+*)
 
   let create_all_symetries t =
     let h = Hashtbl.create 8 in
@@ -206,21 +217,27 @@ module Tile = struct
       (D4.S.diff l (D4.elements t.isos));
     Hashtbl.fold (fun k _ acc -> k :: acc) h []
 
+(*
+  let create_all_symetries t = match t.symetries with
+    | Snone ->
+        [t]
+    | Srotations | Sall as s ->
+        let g = D4.elements (D4.quotient D4.d4 t.isos) in
+	let g = if s = Srotations then D4.S.filter D4.is_positive g else g in
+        List.map (fun iso -> apply iso t) (D4.S.elements g)
+
+  let create_all_symetries t =
+    let l = create_all_symetries t in
+    Format.eprintf "@[<hov 2>create_all_symetries:@\n";
+    List.iter (fun t -> Format.eprintf "%a@\n" print t) l;
+    Format.eprintf "@]";
+    l
+*)
 
   (*   let generate_all tiles =  *)
 
 
 
-
-
-  let print fmt t =
-    begin match t.name with Some s ->
-    Format.printf "name : %s@\n"s; | None -> () end;
-    Format.fprintf fmt "%a@\n" Pattern.print t.pattern;
-    Format.fprintf fmt "{ ";
-    D4.S.iter (fun iso -> Format.fprintf fmt "%a, " D4.print iso)
-      (D4.elements t.isos);
-    Format.fprintf fmt "}"
 
 end
 
