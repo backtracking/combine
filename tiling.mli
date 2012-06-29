@@ -15,32 +15,6 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
-module Iso : sig
-
-  type t = Id | Rot90 | Rot180 | Rot270 | VertRefl | HorizRefl |
-               Diag1Refl | Diag2Refl
-
-  val compose: t -> t -> t
-    (* [compose i1 i2] returns the isometry result of the composition 
-      of [i1] and [i2] *)
-  
-  val to_string : t -> string
-
-  val apply : t -> w:int -> h:int -> int * int -> int * int
-    (* [apply i w h x y] returns the couple result of the isometry [i]
-       applied on the couple [x, y] *)
-
-  val trans_size : t -> int * int -> int * int
-
-  module S: Set.S with type elt = t
-
-  val all: S.t
-
-  val print : Format.formatter -> t -> unit
-
-end
-
 module Pattern : sig
 
   (*
@@ -60,7 +34,7 @@ module Pattern : sig
   val create: bool array array -> t
     (* [create m] creates a pattern of type t from a boolean matrix*)
 
-  val apply: Iso.t -> t -> t
+  val apply: D4.t -> t -> t
     (* [apply i p] creates a new pattern which is the result of the 
        transformation from [p] by [i] *)
 
@@ -93,7 +67,7 @@ module Pattern : sig
     (* [xor p1 p2] creates a pattern from the logical xor 
      beetween [p1] and  [p2] *)
 
-  val has_iso: Iso.t -> t -> bool
+  val has_iso: D4.t -> t -> bool
 
   val print : Format.formatter -> t -> unit
 
@@ -109,13 +83,13 @@ module Tile : sig
     pattern: Pattern.t;
     multiplicity : multiplicity;
     symetries : symetries;
-    isos   : Iso.S.t;   (* the pattern is invariant by these isometries *)
+    isos   : D4.sub_group;   (* the pattern is invariant by these isometries *)
   }
 
   val create: 
              ?name:string -> ?s:symetries -> ?m:multiplicity -> Pattern.t -> t
 
-  val apply: Iso.t -> t -> t
+  val apply: D4.t -> t -> t
 
   val print : Format.formatter -> t -> unit
 

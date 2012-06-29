@@ -64,7 +64,7 @@ all: $(OCAMLBEST) test
 # bytecode and native-code compilation
 ######################################
 
-LIBCMO = dlx.cmo zdd.cmo emc.cmo tiling.cmo
+LIBCMO = dlx.cmo zdd.cmo emc.cmo d4.cmo tiling.cmo
 LIBCMX = $(LIBCMO:.cmo=.cmx)
 
 CMO = $(LIBCMO) parser.cmo lexer.cmo interp.cmo main.cmo

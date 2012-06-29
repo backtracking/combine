@@ -18,7 +18,7 @@
 %{
   open Ast
   open Tiling.Tile
-  open Tiling.Iso
+  open D4
   type option =
     | M of multiplicity
     | S of symetries

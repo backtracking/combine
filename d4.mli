@@ -15,64 +15,43 @@
 (*                                                                        *)
 (**************************************************************************)
 
-type dim = int * int
+type t = Id | Rot90 | Rot180 | Rot270 | VertRefl | HorizRefl |
+               Diag1Refl | Diag2Refl
 
-type binop = Union | Inter | Diff | Xor
+val print : Format.formatter -> t -> unit
 
-type algo = Dlx | Zdd
+val is_positive: t -> bool
 
-type file = string
+val compose: t -> t -> t
+  (* [compose i1 i2] returns the isometry result of the composition 
+     of [i1] and [i2] *)
+  
+val to_string : t -> string
 
-type state = On | Off
+val apply : t -> w:int -> h:int -> int * int -> int * int
+  (* [apply i w h x y] returns the couple result of the isometry [i]
+     applied on the couple [x, y] *)
 
-type output = Svg of file | Ascii
+val trans_size : t -> int * int -> int * int
 
-type setop = Shift | SetXY of bool | Resize | Crop of dim
-type problem_command = Count of algo | Solve of algo * output | Print 
-type compop = Equal
+module S: Set.S with type elt = t
 
-type pos = Lexing.position * Lexing.position
+val all: S.t
+  (* all elements of D4 *)
 
+type sub_group
 
-type expr = {
-  expr_node : expr_node;
-  expr_pos : pos;
-}
-and expr_node = 
-  | Constant of bool array array
-  | Var of string
-  (* other operations: union, diff, rotations, etc. *)
-  | Binary of binop * expr * expr
-  | SetOp of setop * dim * expr
-  | Apply of D4.t * expr
+val quotient : sub_group -> sub_group -> sub_group
+  (* computes the quotient of two subgroups of D4 *)
 
+val d4: sub_group
+  (* D4 itself *)
 
+val elements: sub_group -> S.t
 
-type bool_expr = 
-  | Boolean of bool
-  | Comparison of compop * expr * expr
-
-type tile = expr * Tiling.Tile.symetries * Tiling.Tile.multiplicity
-
-type tiles =
-  | Tiles_id of string
-  | Tiles_list of tile list
-
-type problem = string * expr * tiles
-
-type decl = {
-  decl_node : decl_node;
-  decl_pos : pos;
-}
-
-and decl_node = 
-  | Pattern of string * expr
-  | Tiles of string * tile list
-  | Problem of problem
-  | Assert of bool_expr
-  | Command of problem_command * string
-  | Debug of state
-  | Timing of state
+val generated_by: S.t -> sub_group
 
 
-type queue = decl list
+
+
+
