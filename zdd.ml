@@ -157,24 +157,19 @@ module Weaktbl = struct
     in
     loop 0
 
-
-
-
-end 
-
-
-
-
-
+end
 
 let hsize = 19997 (* 200323 *)
 
-let global_table = Weaktbl.create hsize
+let global_table = Hashtbl.create 5003
 
-
-let construct = Weaktbl.hashconstruct global_table
-
-
+let construct v z1 z2 =
+  let t =
+    try Hashtbl.find global_table v
+    with Not_found ->
+      let h = Weaktbl.create hsize in Hashtbl.add global_table v h; h
+  in
+  Weaktbl.hashconstruct t v z1 z2
 
 (*
 module ZddHashtbl = Hashtbl.Make(HashedZdd)
