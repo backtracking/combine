@@ -15,5 +15,28 @@
 #                                                                        #
 ##########################################################################
 
-This is an OCaml library for combinatorics
+Reml is an OCaml library for combinatorics.
+
+
+* library
+
+  ocamlc -I +reml reml.cma <other files>
+
+
+* examples
+
+  - queens.ml
+
+  - sudoku.ml
+
+  - tests/*.rem
+
+
+* tiling language and interpreter
+
+  <expr> ::= <identifier>
+           | <expr> union <expr>
+
+
+
 

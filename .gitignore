@@ -9,9 +9,13 @@ config.status
 *.cm*
 reml.byte
 reml.opt
+reml.a
+test.byte
 test.opt
 test.dot
+sudoku.byte
 sudoku.opt
+queens.byte
 queens.opt
 .*.swp
 lexer.ml

@@ -22,23 +22,23 @@ open Format
 type solution = int list
 (** a solution is a set of rows *)
 
-let print_boolean_array a = 
+let print_boolean_array fmt a =
   Array.iter (
-    fun cell -> 
-      if cell then Format.printf "1"
-      else Format.printf "0"
+    fun cell ->
+      if cell then fprintf fmt "1"
+      else fprintf fmt "0"
   ) a
 
 (* display a boolean matrix *)
-let print_boolean_matrix m = 
+let print_boolean_matrix fmt m =
   Array.iter (
-    fun col -> 
-      print_boolean_array col;
-      printf "@\n"
+    fun col ->
+      print_boolean_array fmt col;
+      fprintf fmt "@\n"
   ) m
 
-let print_problem_size p = 
-  printf "%dx%d@." (Array.length p) (Array.length p.(0))
+let print_matrix_size fmt p =
+  fprintf fmt "%dx%d" (Array.length p) (Array.length p.(0))
 
 
 module type S = sig
@@ -53,8 +53,8 @@ module type S = sig
     val one: t
     val add: t -> t -> t
   end
-  module Count(A: ARITH) : sig 
-    val count_solutions: t -> A.t 
+  module Count(A: ARITH) : sig
+    val count_solutions: t -> A.t
   end
 end
 
@@ -72,9 +72,9 @@ module D = struct
     val one: t
     val add: t -> t -> t
   end
-  module Count = functor (A: ARITH) ->  
+  module Count = functor (A: ARITH) ->
   struct
-    let count_solutions p = 
+    let count_solutions p =
       let r = ref A.zero in
       iter_solution (fun _ -> r:= A.add !r A.one) p;
       !r
@@ -98,13 +98,13 @@ module Z = struct
       else if m.(i).(j) then build (construct i z zf) zf (i-1)
       else build (construct i z z) (construct i zf zf) (i-1)
     in
-    let primary = match primary with 
+    let primary = match primary with
       | None -> true
       | Some p -> j < p
     in
     build (if primary then bottom else top) top (n-1)
 
-  let inter_right_to_left cols = 
+  let inter_right_to_left cols =
     let width = Array.length cols in
     let z = ref cols.(0) in
     for j = 1 to width - 1 do
@@ -114,7 +114,7 @@ module Z = struct
     done;
     !z
 
-  let inter_left_to_right cols = 
+  let inter_left_to_right cols =
     let width = Array.length cols in
     let z = ref cols.(width - 1) in
     for j = width - 2 downto 0 do
@@ -125,12 +125,12 @@ module Z = struct
     !z
 
 
-  let inter_middle_balancing cols = 
+  let inter_middle_balancing cols =
     let width = Array.length cols in
-    let min = 0 in 
-    let max = width - 1 in 
-    let rec balancing min max = 
-      let mid = min + (max - min) / 2 + ((max - min) mod 2) in 
+    let min = 0 in
+    let max = width - 1 in
+    let rec balancing min max =
+      let mid = min + (max - min) / 2 + ((max - min) mod 2) in
       if min = max then ()
       else begin
         for j = min to mid - 1 do
@@ -138,7 +138,7 @@ module Z = struct
         done;
         balancing mid max
       end
-    in 
+    in
     balancing min max;
     cols.(max)
 
@@ -159,7 +159,7 @@ module Z = struct
   let create ?primary m = tiling ?primary m
   let find_solution p = choose_list p
   let iter_solution f p = iter_list f p
-  let count_solutions p = cardinal p 
+  let count_solutions p = cardinal p
 
 
   module type ARITH = sig

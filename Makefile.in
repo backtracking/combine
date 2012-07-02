@@ -52,12 +52,10 @@ OCAMLWIN32 = @OCAMLWIN32@
 EXE = @EXE@
 
 INCLUDES =
-BFLAGS = -g $(INCLUDES) nums.cma str.cma unix.cma
-OFLAGS = -annot$(INCLUDES) nums.cmxa str.cmxa unix.cmxa
+BFLAGS = -g $(INCLUDES)
+OFLAGS = -annot $(INCLUDES)
 # main target
 #############
-
-NAME = reml
 
 all: $(OCAMLBEST) test
 
@@ -66,20 +64,42 @@ all: $(OCAMLBEST) test
 
 LIBCMO = dlx.cmo zdd.cmo emc.cmo d4.cmo tiling.cmo
 LIBCMX = $(LIBCMO:.cmo=.cmx)
-
-CMO = $(LIBCMO) parser.cmo lexer.cmo interp.cmo main.cmo
-CMX = $(CMO:.cmo=.cmx)
+LIBMLI = $(LIBCMO:.cmo=.mli)
+$(LIBCMX): OFLAGS += -for-pack Reml
+CMA = reml.cma
+CMXA = reml.cmxa
 
 GENERATED = parser.ml parser.mli lexer.ml version.ml
 
-byte: $(NAME).byte
-opt: $(NAME).opt sudoku.opt queens.opt
+byte: $(CMA) reml.byte sudoku.byte queens.byte
+opt: $(CMXA) reml.opt sudoku.opt queens.opt
 
-$(NAME).byte: $(CMO)
-	$(OCAMLC) $(BFLAGS) -o $@ $^
+reml.cma: reml.cmo
+	$(OCAMLC) $(INCLUDES) -a -g -o $@ $^
 
-$(NAME).opt: $(CMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ $^
+reml.cmxa: reml.cmx
+	$(OCAMLOPT) $(INCLUDES) -a -o $@ $^
+
+reml.cmi: reml.cmo
+reml.o: reml.cmx
+
+reml.cmo: $(LIBCMO)
+	$(OCAMLC) $(INCLUDES) -pack -g -o $@ $^
+
+reml.cmx: $(LIBCMX)
+	$(OCAMLOPT) $(INCLUDES) -pack -o $@ $^
+
+CMO = parser.cmo lexer.cmo interp.cmo main.cmo
+CMX = $(CMO:.cmo=.cmx)
+
+ast.cmi $(CMO) queens.cmo sudoku.cmo test.cmo: reml.cmi
+$(CMX) queens.cmx sudoku.cmx test.cmx: reml.cmi
+
+reml.byte: $(CMA) $(CMO)
+	$(OCAMLC) $(BFLAGS) -o $@ nums.cma unix.cma $^
+
+reml.opt: $(CMXA) $(CMX)
+	$(OCAMLOPT) $(OFLAGS) -o $@ nums.cmxa unix.cmxa $^
 
 VERSION=0.42
 
@@ -90,39 +110,52 @@ version.ml: Makefile
 # test
 ######
 
-test: test.opt
-	./test.opt
-	for f in tests/*.rem; do ./$(NAME).opt --parse-only $$f ; done
+test: test.byte reml.byte
+	./test.byte
+	for f in tests/*.rem; do ./reml.byte --parse-only $$f ; done
 
-check: $(NAME).opt
-	for f in tests/*.rem; do ./$(NAME).opt $$f ; done
+check: reml.opt
+	for f in tests/*.rem; do ./reml.opt $$f ; done
 
-test.opt: $(LIBCMX) parser.cmx lexer.cmx interp.cmx queens.cmx test.cmx
+test.byte: $(CMA) parser.cmo lexer.cmo interp.cmo test.cmo
+	$(OCAMLC) -o $@ $(BFLAGS) nums.cma unix.cma $^
+
+test.opt: $(CMXA) parser.cmx lexer.cmx interp.cmx queens.cmx test.cmx
+	$(OCAMLOPT) -o $@ $(OFLAGS) nums.cmxa unix.cmxa $^
+
+sudoku.byte: $(CMA) sudoku.cmo
+	$(OCAMLC) -o $@ $(BFLAGS) str.cma $^
+
+sudoku.opt: $(CMXA) sudoku.cmx
+	$(OCAMLOPT) -o $@ $(OFLAGS) str.cmxa $^
+
+queens.byte: $(CMA) queens.cmo
+	$(OCAMLC) -o $@ $(BFLAGS) $^
+
+queens.opt: $(CMXA) queens.cmx
 	$(OCAMLOPT) -o $@ $(OFLAGS) $^
-
-sudoku.opt: $(LIBCMX) sudoku.cmx
-	$(OCAMLOPT) -o $@ str.cmxa $^
-
-queens.opt: $(LIBCMX) queens.cmx
-	$(OCAMLOPT) -o $@ $^
 
 
 # installation
 ##############
 
+INSTALL_LIBDIR=$(OCAMLLIB)/reml
+
 install-indep:
 	mkdir -p $(BINDIR)
-	mkdir -p $(MANDIR)/man1
-	cp -f $(NAME).1 $(MANDIR)/man1
+	mkdir -p $(INSTALL_LIBDIR)
+	# mkdir -p $(MANDIR)/man1
+	# cp -f reml.1 $(MANDIR)/man1
 
-install: install-indep
-	cp -f $(NAME).$(OCAMLBEST) $(BINDIR)/$(NAME)$(EXE)
+install: install-indep install-$(OCAMLBEST) install-byte
+	cp -f reml.$(OCAMLBEST) $(BINDIR)/reml$(EXE)
 
 install-byte: install-indep
-	cp -f $(NAME).byte $(BINDIR)/$(NAME)$(EXE)
+	cp -f reml.cmi $(CMA) $(INSTALL_LIBDIR)
+	cp -f $(LIBMLI) $(INSTALL_LIBDIR)
 
 install-opt: install-indep
-	cp -f $(NAME).opt $(BINDIR)/$(NAME)$(EXE)
+	cp -f reml.a $(CMXA) $(INSTALL_LIBDIR)
 
 # documentation
 ###############
@@ -137,11 +170,11 @@ doc:
 # export
 ########
 
-EXPORTDIR=$(NAME)-$(VERSION)
+EXPORTDIR=reml-$(VERSION)
 TAR=$(EXPORTDIR).tar
 
-FTP = $$HOME/ftp/$(NAME)
-WWW = $$HOME/WWW/$(NAME)
+FTP = $$HOME/ftp/reml
+WWW = $$HOME/WWW/reml
 
 FILES = *.ml* Makefile.in configure configure.in .depend tests/*.rem \
 	README INSTALL LICENSE
@@ -163,12 +196,12 @@ export-doc: $(DOCFILES)
 BINARY = $(EXPORTDIR)-$(OSTYPE)
 BINARYTAR=$(BINARY).tar
 
-BINARYFILES = README INSTALL COPYING GPL $(NAME).1
+BINARYFILES = README INSTALL COPYING GPL reml.1
 
-binary: $(NAME).$(OCAMLBEST) $(DOCFILES)
+binary: reml.$(OCAMLBEST) $(DOCFILES)
 	mkdir -p export/$(BINARY)
 	cp $(BINARYFILES) $(DOCFILES) export/$(BINARY)
-	cp $(NAME).$(OCAMLBEST) export/$(BINARY)/$(NAME)
+	cp reml.$(OCAMLBEST) export/$(BINARY)/reml
 	(cd export; tar czf $(BINARY).tar.gz $(BINARY))
 	cp export/$(BINARY).tar.gz $(FTP)
 
@@ -177,7 +210,7 @@ binary: $(NAME).$(OCAMLBEST) $(DOCFILES)
 
 SOURCES =
 
-$(NAME).tex: $(SOURCES)
+reml.tex: $(SOURCES)
 	$(OCAMLWEB) -o $@ $^
 
 # generic rules
@@ -255,8 +288,8 @@ configure: configure.in
 clean::
 	rm -f *.cm[iox] *.o *~
 	rm -f $(GENERATED) parser.output
-	rm -f $(NAME).byte $(NAME).opt
-	rm -f *.aux *.log $(NAME).tex $(NAME).dvi $(NAME).ps
+	rm -f reml.byte reml.opt
+	rm -f *.aux *.log reml.tex reml.dvi reml.ps
 
 dist-clean distclean:: clean
 	rm -f Makefile config.cache config.log config.status

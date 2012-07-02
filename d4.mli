@@ -23,9 +23,9 @@ val print : Format.formatter -> t -> unit
 val is_positive: t -> bool
 
 val compose: t -> t -> t
-  (* [compose i1 i2] returns the isometry result of the composition 
+  (* [compose i1 i2] returns the isometry result of the composition
      of [i1] and [i2] *)
-  
+
 val to_string : t -> string
 
 val apply : t -> w:int -> h:int -> int * int -> int * int

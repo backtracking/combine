@@ -15,47 +15,44 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* Dlx Module *)
-
-type node = {
-    mutable c : node;
-    mutable s: int;
-    mutable up: node;
-    mutable down: node;
-    mutable left: node;
-    mutable right: node;
-    mutable name : string;
-}
+(** Knuth's dancing links (aka DLX)
+    see http://en.wikipedia.org/wiki/Dancing_Links *)
 
 type t
+  (** The internal data structure for DLX *)
 
 val create: ?primary:int -> bool array array -> t
-  (** If [primary] is given, it means that the first [primary] columns are
-      primary; otherwise, all columns are primary columns *)
+  (** Creates a DLX data structure from a matrix of Boolean values.
+      The purpose of DLX is to solve the Exact Matrix Cover problem
+      for this matrix, that is to find one (or all) subsets of rows
+      such that each column contains exactly one value [true] for primary
+      columns and at most one [true] value for secondary columns.
 
-val print_solutions: t -> unit
-  (* Print all solutions *)
+      If [primary] is given, it means that the first [primary] columns are
+      primary; otherwise, all columns are primary columns. *)
 
-val print_first_solution : t -> unit
-  (** print the first arbitrary founded solution *)
+val get_first_solution: t -> int list
+  (** Returns the first solution that is found.
+      Raises [Not_found] if the problem has no solution. *)
 
-val get_first_solution : t -> int list
-  (** return the number of solutions of the given problem *)
-            
-val count_solutions : t -> int
-  (** return the number of solutions of the given problem *)
+val count_solutions: t -> int
+  (** Returns the number of solutions. *)
 
-val get_solution_array : t -> int list array
-  (** return all solutions as an array *)
+val get_solution_array: t -> int list array
+  (** Returns all solutions, as an array of lists.
+      Each solution is a list of row indices (rows are 0-based). *)
 
-val get_solution_list : t -> int list list
-  (** return all solutions as a list *)
+val get_solution_list: t -> int list list
+  (** Returns all solutions, as a list of lists. *)
 
-val print_solutions_array : int list array -> unit
-  (** Print all solutions *)
+type solution
 
-val list_of_solution : node array * int -> int list 
-  (** return a list from a given solution *)
+val iter_solution: (solution -> unit) -> t -> unit
+  (** [iter_solution f p] applies [f] on each solution of the problem [p],
+      one at a time *)
 
-val iter_solution : (node array * int -> unit) -> t -> unit
-  (** [inter_solution f p] applies [f] on all solutions of the problem [p]*)
+val list_of_solution: solution -> int list
+  (** Decodes a solution as a list of rows (rows are 0-based) *)
+
+val print_solution: Format.formatter -> solution -> unit
+  (** Print a solution, as a space-separated list of integers *)

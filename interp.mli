@@ -15,6 +15,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Reml
+
 type error
 val print_error : Format.formatter -> error -> unit
 exception Error of Ast.pos * error

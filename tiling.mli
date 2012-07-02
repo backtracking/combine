@@ -35,11 +35,11 @@ module Pattern : sig
     (* [create m] creates a pattern of type t from a boolean matrix*)
 
   val apply: D4.t -> t -> t
-    (* [apply i p] creates a new pattern which is the result of the 
+    (* [apply i p] creates a new pattern which is the result of the
        transformation from [p] by [i] *)
 
   val resize: t -> w:int -> h:int -> t
-    (* [resize p w h] change the size of [p] to [w] (width) [h] (height) 
+    (* [resize p w h] change the size of [p] to [w] (width) [h] (height)
       elements which are over [w] and [h] will not appears *)
 
 
@@ -52,26 +52,26 @@ module Pattern : sig
       of [p] *)
 
   val union: t -> t -> t
-    (* [union p1 p2] creates a pattern from the logical union beetween [p1] and 
+    (* [union p1 p2] creates a pattern from the logical union beetween [p1] and
         [p2] *)
 
   val inter: t -> t -> t
-    (* [inter p1 p2] creates a pattern from the logical intersection 
+    (* [inter p1 p2] creates a pattern from the logical intersection
      beetween [p1] and  [p2] *)
 
   val diff : t -> t -> t
-    (* [inter p1 p2] creates a pattern from the logical difference 
+    (* [inter p1 p2] creates a pattern from the logical difference
      beetween [p1] and  [p2] *)
 
   val xor : t -> t -> t
-    (* [xor p1 p2] creates a pattern from the logical xor 
+    (* [xor p1 p2] creates a pattern from the logical xor
      beetween [p1] and  [p2] *)
 
   val has_iso: D4.t -> t -> bool
 
   val print : Format.formatter -> t -> unit
 
-end 
+end
 
 module Tile : sig
 
@@ -86,7 +86,7 @@ module Tile : sig
     isos   : D4.subgroup;   (* the pattern is invariant by these isometries *)
   }
 
-  val create: 
+  val create:
              ?name:string -> ?s:symetries -> ?m:multiplicity -> Pattern.t -> t
 
   val apply: D4.t -> t -> t

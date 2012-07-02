@@ -1,97 +1,99 @@
 
-pattern a = {
+### the 12 pentaminos #########################################################
+### see for instance http://fr.wikipedia.org/wiki/Pentamino
+
+pattern I = {
 *****
 }
 
-pattern b = {
+pattern V = {
 ***
 *
 *
 }
 
-pattern c = {
+pattern Z = {
 .**
 .*
 **
 }
 
-pattern d = {
+pattern P = {
 ***
 **
 }
 
-pattern e = {
+pattern N = {
 ***.
 ..**
 }
 
-pattern f = {
+pattern W = {
 .**
 **
 *
 }
 
-pattern g = {
+pattern Y = {
 ****
 .*
 }
 
-pattern h = {
+pattern T = {
 ***
 .*
 .*
 }
 
-pattern i = {
+pattern F = {
 .**
 **
 .*
 }
 
-pattern j = {
+pattern U = {
 ***
 *.*
 }
 
-pattern k = {
+pattern L = {
 ****
 *
 }
-pattern l = {
+pattern X = {
 .*.
 ***
 .*.
 }
 
 tiles pentaminos =
-[ a ~one ~sym, b ~one ~sym, c ~one ~sym, d ~one ~sym,
-  e ~one ~sym, f ~one ~sym, g ~one ~sym, h ~one ~sym,
-  i ~one ~sym, j ~one ~sym, k ~one ~sym, l ~one ~sym ]
+[ L ~one ~sym, T ~one ~sym, V ~one ~sym, N ~one ~sym,
+  Z ~one ~sym, F ~one ~sym, X ~one ~sym, W ~one ~sym,
+  P ~one ~sym, I ~one ~sym, Y ~one ~sym, U ~one ~sym ]
 
-# Scott's pentaminos problem
+### Scott's pentaminos problem #############################################
+### we eliminate the symetries of the problem by using only one
+### orientation of pentamino F
 
 pattern scott_board = {
-.******.
 ********
 ********
 ********
+***..***
+***..***
 ********
 ********
 ********
-.******.
 }
 
-
-
-
-
-
-
-problem scott_problem = scott_board pentaminos
+problem scott_problem = scott_board
+[ L ~one ~sym, T ~one ~sym, V ~one ~sym, N ~one ~sym,
+  Z ~one ~sym, F ~one     , X ~one ~sym, W ~one ~sym,
+  P ~one ~sym, I ~one ~sym, Y ~one ~sym, U ~one ~sym ]
 
 #print scott_problem
 
-#timing on
+timing on
 count dlx scott_problem
 
 solve dlx scott_problem svg "test.svg"

@@ -16,6 +16,7 @@
 (**************************************************************************)
 
 open Format
+open Reml
 
 let zdd = ref false
 let dlx = ref false
@@ -80,7 +81,7 @@ let handle_problem p =
   printf "  @[%a@]@." Pattern.print p.grid;
   let { primary = primary; matrix = m; tiles = decode_tbl } = Tiling.emc p in
   if !debug then begin
-    Emc.print_boolean_matrix m;
+    printf "%a@." Emc.print_boolean_matrix m;
     printf "  %d primary columns@." primary
   end;
   if !zdd then begin
@@ -92,10 +93,11 @@ let handle_problem p =
     printf "  DLX solutions: %a\n@." N.print (DCount.count_solutions p)
   end
 
-
-
 let () =
-  if !stats then begin Gc.print_stat stdout; Zdd.print_stat stdout end
+  if !stats then begin
+    Gc.print_stat stdout;
+    printf "ZDD: %d unique trees built@." (Zdd.stat ())
+  end
 
 
 

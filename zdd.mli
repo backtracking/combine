@@ -15,20 +15,57 @@
 (*                                                                        *)
 (**************************************************************************)
 
-type unique = int
-type zdd = private Bottom | Top | Node of unique * int * zdd * zdd
+(** Zero-suppressed binary decision diagrams.
+    See for instance The Art of Computer Programming, volume 4A *)
 
-module S : Set.S with type elt = int
-include Set.S with type t = zdd and type elt = S.t
+type unique = int
+type t = private Bottom | Top | Node of unique * int * t * t
 
 val bottom: t
 val top: t
 val construct: int -> t -> t -> t
+  (** Primitive constructors for ZDD *)
 
+val unique: t -> int
+  (** Each ZDD has a unique integer *)
+
+(** {2 A ZDD represents a set of sets of integers.}
+    Hence this module provides all operations from OCaml's [Set],
+    with elements being sets of integers (see type [elt] below) *)
+
+module S : Set.S with type elt = int
+type elt = S.t
+val empty : t
+val is_empty : t -> bool
+val mem : elt -> t -> bool
+val add : elt -> t -> t
+val singleton : elt -> t
+val remove : elt -> t -> t
+val union : t -> t -> t
+val inter : t -> t -> t
+val diff : t -> t -> t
+val compare : t -> t -> int
+val equal : t -> t -> bool
+val subset : t -> t -> bool
+val iter : (elt -> unit) -> t -> unit
+val fold : (elt -> 'a -> 'a) -> t -> 'a -> 'a
+val for_all : (elt -> bool) -> t -> bool
+val exists : (elt -> bool) -> t -> bool
+val filter : (elt -> bool) -> t -> t
+val partition : (elt -> bool) -> t -> t * t
+val cardinal : t -> int
+val elements : t -> elt list
+val min_elt : t -> elt
+val max_elt : t -> elt
+val choose : t -> elt
+val split : elt -> t -> t * bool * t
 val choose_list: t -> int list
 val iter_list: (int list -> unit) -> t -> unit
 
-val unique : t -> int
+(** {2 Cardinal using big integers}
+    Function [cardinal] above may easily overflow. Therefore, we also
+    provide a functor to compute the cardinal of a ZDD using any arithmetic
+    (e.g. Num, Gmp, Zarith, etc.) *)
 
 module type ARITH = sig
   type t
@@ -36,8 +73,10 @@ module type ARITH = sig
   val one: t
   val add: t -> t -> t
 end
-  
+
 module Cardinal(A: ARITH) : sig val cardinal: t -> A.t end
+
+(** {2 Other functions} *)
 
 val size: t -> int
   (** Number of internal nodes of a given ZDD.
@@ -45,12 +84,11 @@ val size: t -> int
       is [size z * 5 * Sys.word_size lsl 3] bytes. *)
 
 val print_to_dot: Format.formatter -> t -> unit
-  (** [print_to_dot fmt z] write a string on dot format corresponding 
-   to the drawing of the Zdd [z] *)
+  (** [print_to_dot fmt z] prints a ZDD [z] in DOT format *)
 
 val print_to_dot_file: string -> t -> unit
-  (** [print_to_dot_file f z] write a string on dot format corresponding 
-   to the drawing of the Zdd [z] in the given file [f]*)
+  (** [print_to_dot f z] outputs ZDD [z] in DOT format in file [f] *)
 
+val stat: unit -> int
+  (** Returns the total number of unique ZDD built so far *)
 
-val print_stat: Pervasives.out_channel -> unit

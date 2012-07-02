@@ -17,6 +17,7 @@
 
 (* Sudoku Module *)
 open Format
+open Reml
 
 let size = 9
 

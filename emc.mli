@@ -31,7 +31,7 @@ module type S = sig
     (** raises [Not_found] if the problem has no solution *)
 
   val iter_solution: (solution -> unit) -> t -> unit
-    (** [Emc.iter_solution f p] applies [f] in turn to each problem [p] 
+    (** [Emc.iter_solution f p] applies [f] in turn to each problem [p]
       solutions *)
 
   val count_solutions: t -> int
@@ -50,17 +50,17 @@ module type S = sig
 
 end
 
-val print_boolean_matrix : bool array array -> unit
-val print_boolean_array : bool array -> unit
-
-
-val print_problem_size: bool array array -> unit
-
-
-  (** DLX-based implementation *)
+(** DLX-based implementation *)
 module D: S
 
-  (** ZDD-based implementation *)
+(** ZDD-based implementation *)
 module Z: S with type t = Zdd.t
 
+
+
+(* Misc. functions for debugging purposes *)
+
+val print_boolean_matrix : Format.formatter -> bool array array -> unit
+val print_boolean_array : Format.formatter -> bool array -> unit
+val print_matrix_size: Format.formatter -> 'a array array -> unit
 
