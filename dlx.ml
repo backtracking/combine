@@ -60,18 +60,18 @@ let add_below n1 n2 =
 let add_row headers row i =
   let rec addi_rec n previous =
     if n < Array.length row then
-      if row.(n) then begin (* si la case est à true *)
+      if row.(n) then begin 
         let element = one_node () in
-        element.s <- i; (* creation de l'element e ajouter *)
+        element.s <- i; 
         element.c <- headers.(n);
         element.name <- "";
         headers.(n).s <- headers.(n).s + 1;
-        if n != 0 then (* ajout au previous si non premier *)
+        if n != 0 then 
           add_right previous element;
-        add_below headers.(n) element; (* ajout sous le headers.(i) *)
-        addi_rec (n + 1) element (* au suivant *)
+        add_below headers.(n) element; 
+        addi_rec (n + 1) element 
       end else
-        addi_rec (n + 1) previous (* rien a traiter, au suivant *)
+        addi_rec (n + 1) previous 
   in
   addi_rec 0 (one_node ())
 
@@ -85,12 +85,11 @@ let generate_headers ?primary m h =
   in
     headers.(0).s <- 0;
     headers.(0).name <- "C0";
-    add_right h headers.(0); (* on lie le premier à droite de la tete *)
+    add_right h headers.(0); 
     for n = 1 to primary - 1 do
       headers.(n).s <- 0;
       headers.(n).name <- String.concat "" ["C";string_of_int n];
       add_right headers.(n - 1) headers.(n);
-    (* on lie le header a droite du precedent *)
     done;
   headers (* on retourne le node array *)
 
@@ -107,14 +106,13 @@ let iter_right ?(self = true) f n =
 
 (* Creates a DLM from a boolean matrix *)
 let create ?primary m =
-  let h = one_node () in (* creation de la tete *)
-  let headers = generate_headers ?primary m h in (* on recupere les headers *)
-  (* On ajoute les lignes en partant de la derniere *)
+  let h = one_node () in
+  let headers = generate_headers ?primary m h in
   for i = Array.length m - 1 downto 0 do
-    add_row headers m.(i) i (* ajout sous les headers *)
+    add_row headers m.(i) i
   done;
   let nc = Array.length m.(0) in
-  { header = h; (* retourne la tete *)
+  { header = h;
     nc     = nc; }
 
 (* Applies f to elements of the DLM, from up to down*)
@@ -155,29 +153,28 @@ let iter_up ?(self = true) f n =
 let cover column_header =
   column_header.right.left <- column_header.left;
   column_header.left.right <- column_header.right;
-  let cover_node n = (* retire l'elt *)
+  let cover_node n =
     n.down.up <- n.up;
     n.up.down <- n.down;
     n.c.s <- n.c.s - 1
   in
-  let cover_row n = (* retire la ligne *)
+  let cover_row n =
     iter_right ~self:false cover_node n
   in
-    (* retire la colonne, head non compris *)
     iter_down ~self:false cover_row column_header
 
 (* Un-removes the given column and all rows in column own list from
  the DLM*)
 let uncover column_header =
-  let uncover_node n = (* remet l'elt *)
+  let uncover_node n =
     n.c.s <- n.c.s + 1;
     n.down.up <- n;
     n.up.down <- n
   in
-  let uncover_row n = (* remet la ligne *)
+  let uncover_row n =
     iter_left ~self:false uncover_node n
   in
-    iter_up ~self:false uncover_row column_header; (* remet la colonne *)
+    iter_up ~self:false uncover_row column_header;
     column_header.right.left <- column_header;
     column_header.left.right <- column_header
 
@@ -201,9 +198,8 @@ let list_of_solution (o, k) =
 (* Returns the min column *)
 let choose_min h =
   let rec rec_chose min node =
-    if node == h then min (* si on retombe sur la tete on arrete *)
+    if node == h then min
     else if node.s < min.s then
-      (* si le nombre de 1 dans la colonne n > ... de la colonne min *)
       rec_chose node node.right
     else
       rec_chose min node.right
@@ -236,7 +232,6 @@ let iter_solution f dlm =
 
 (* Visible functions *)
 
-(* retourne le nombre de solutions *)
 let count_solutions m =
   let r = ref 0 in
     iter_solution (fun (_, _) -> r:= !r + 1) m;

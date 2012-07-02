@@ -15,9 +15,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(** {2 Exact Matrix Cover problem interface for ZDD and DLX} *)
+
+
 type solution = int list
     (** a solution is a set of rows *)
 
+(** a common interface for ZDD and DLX *)
 module type S = sig
 
   type t
@@ -25,7 +29,6 @@ module type S = sig
   val create: ?primary:int -> bool array array -> t
     (** construct the algorithm corresponding structure
        doubly linked matrix for dlx and a zdd for zdd*)
-
 
   val find_solution: t -> solution
     (** raises [Not_found] if the problem has no solution *)
@@ -56,9 +59,7 @@ module D: S
 (** ZDD-based implementation *)
 module Z: S with type t = Zdd.t
 
-
-
-(* Misc. functions for debugging purposes *)
+(** {2 Misc. functions for debugging purposes} *)
 
 val print_boolean_matrix : Format.formatter -> bool array array -> unit
 val print_boolean_array : Format.formatter -> bool array -> unit

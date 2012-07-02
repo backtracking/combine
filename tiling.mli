@@ -15,7 +15,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(** Tiling problems modeling and encoding to EMC *)
+
+(** Pattern representation as boolean matrix *)
 module Pattern : sig
+
 
   (*
     y ^
@@ -32,46 +36,49 @@ module Pattern : sig
   }
 
   val create: bool array array -> t
-    (* [create m] creates a pattern of type t from a boolean matrix*)
+    (** [create m] creates a pattern of type t from a boolean matrix*)
 
   val apply: D4.t -> t -> t
-    (* [apply i p] creates a new pattern which is the result of the
-       transformation from [p] by [i] *)
+    (** [apply i p] creates a new pattern which is the result of the
+       transformation of [p] by [i] *)
 
   val resize: t -> w:int -> h:int -> t
-    (* [resize p w h] change the size of [p] to [w] (width) [h] (height)
+    (** [resize p w h] change the size of [p] to [w] (width) [h] (height)
       elements which are over [w] and [h] will not appears *)
 
 
   val crop  : t -> x:int -> y:int -> w:int -> h:int -> t
-    (* [crop p x y w h] creates a pattern from [p] with a rectangle of size
+    (** [crop p x y w h] creates a pattern from [p] with a rectangle of size
        [w, h] drawned in position [x, y] on [p] *)
 
   val shift: t -> ofsx:int -> ofsy:int -> t
-    (* [shift p ofsx ofsy] creates a pattern from the shifting [osfx, osfy]
+    (** [shift p ofsx ofsy] creates a pattern from the shifting [osfx, osfy]
       of [p] *)
 
   val union: t -> t -> t
-    (* [union p1 p2] creates a pattern from the logical union beetween [p1] and
+    (** [union p1 p2] creates a pattern from the logical union beetween [p1] and
         [p2] *)
 
   val inter: t -> t -> t
-    (* [inter p1 p2] creates a pattern from the logical intersection
+    (** [inter p1 p2] creates a pattern from the logical intersection
      beetween [p1] and  [p2] *)
 
   val diff : t -> t -> t
-    (* [inter p1 p2] creates a pattern from the logical difference
+    (** [inter p1 p2] creates a pattern from the logical difference
      beetween [p1] and  [p2] *)
 
   val xor : t -> t -> t
-    (* [xor p1 p2] creates a pattern from the logical xor
+    (** [xor p1 p2] creates a pattern from the logical xor
      beetween [p1] and  [p2] *)
 
   val has_iso: D4.t -> t -> bool
+    (** [has_iso t p] returns true if [p] is invariant by [i] *)
 
   val print : Format.formatter -> t -> unit
+    (** print a pattern *)
 
 end
+
 
 module Tile : sig
 
@@ -86,12 +93,16 @@ module Tile : sig
     isos   : D4.subgroup;   (* the pattern is invariant by these isometries *)
   }
 
-  val create:
-             ?name:string -> ?s:symetries -> ?m:multiplicity -> Pattern.t -> t
+  val create: ?name:string -> ?s:symetries -> ?m:multiplicity -> Pattern.t -> t
+  (** construct a tile from his name, the usability of its symetries and
+    its quantification*)                                                                              
 
   val apply: D4.t -> t -> t
+    (** [apply i t] creates a new tile which is the result of the
+       transformation of [t] by [i] *)
 
-  val print : Format.formatter -> t -> unit
+  val print: Format.formatter -> t -> unit
+    (** print a tile *)
 
 end
 
@@ -102,8 +113,11 @@ type problem = private {
 }
 
 val create_problem : ?name:string -> Pattern.t -> Tile.t list -> problem
+  (** construct a problem from his name, the board pattern and
+      a list of tile *)                                                                              
 
 val print_problem: Format.formatter -> problem -> unit
+  (** print a problem *)
 
 type emc = {
   primary: int;			        (* number of primary columns *)
@@ -112,16 +126,20 @@ type emc = {
 }
 
 val emc: problem -> emc
+  (** Encode the given problem under EMC *)
 
 val print_solution_to_svg : Format.formatter ->
   width:int -> height:int -> problem -> emc -> int list -> unit
+  (** print a solution under the svg format *)
 
 
 val print_solution_to_svg_file : string ->
   width:int -> height:int -> problem -> emc -> int list -> unit
+  (** print a solution under the svg format on the given file *)
 
 val print_solution_ascii :
   Format.formatter -> problem -> emc -> int list -> unit
+  (** print a solution with ascii symboles to draw tiles*)
 
 
 

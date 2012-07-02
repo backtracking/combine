@@ -16,7 +16,7 @@
 (**************************************************************************)
 
 (** Zero-suppressed binary decision diagrams.
-    See for instance The Art of Computer Programming, volume 4A *)
+    See for instance The Art of Computer Programming, volume 4A p. 249 *)
 
 type unique = int
 type t = private Bottom | Top | Node of unique * int * t * t
