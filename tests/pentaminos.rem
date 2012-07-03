@@ -91,6 +91,7 @@ problem scott_problem = scott_board
   Z ~one ~sym, F ~one     , X ~one ~sym, W ~one ~sym,
   P ~one ~sym, I ~one ~sym, Y ~one ~sym, U ~one ~sym ]
 
+
 #print scott_problem
 
 timing on
@@ -98,27 +99,29 @@ count dlx scott_problem
 
 solve dlx scott_problem svg "test.svg"
 
-#problem problem_23 = {
-#********
-#********
-#***..***
-#***..***
-#********
-#********
-#********
-#********
-#} pentaminos
+exit
 
-#problem problem_00 = {
-#..******
-#..******
-#********
-#********
-#********
-#********
-#********
-#********
-#} pentaminos
+problem problem_23 = {
+********
+********
+***..***
+***..***
+********
+********
+********
+********
+} pentaminos
+
+problem problem_00 = {
+..******
+..******
+********
+********
+********
+********
+********
+********
+} pentaminos
 
 
 

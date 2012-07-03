@@ -40,7 +40,7 @@
     lines := [];
     let adapt a =
       let n = Array.length a in
-      if n = w then a else Array.init w 
+      if n = w then a else Array.init w
         (fun i -> if i < n then a.(i) else false)
     in
     Array.map adapt m
@@ -62,6 +62,8 @@
   "ascii",      ASCII_OUT;
   "solve",      SOLVE;
   "count",      COUNT;
+  "include",    INCLUDE;
+  "exit",       EXIT;
   "dlx",        DLX;
   "zdd",        ZDD;
   "debug",      DEBUG;
@@ -77,10 +79,10 @@
 	"resize",     RESIZE;
 	"crop",       CROP;
   "apply",      APPLY;
-  "Id",         ID; 
+  "Id",         ID;
   "Rot90",      ROT90;
-  "Rot180",     ROT180; 
-  "Rot270",     ROT270; 
+  "Rot180",     ROT180;
+  "Rot270",     ROT270;
   "VertRefl",   VERTREFL;
   "HorizRefl",  HORIZREFL;
   "Diag1Refl",  DIAG1REFL;
@@ -96,7 +98,7 @@ let comment = '#' [^ '\n']* '\n'
 let letter = ['a'-'z' 'A'-'Z']
 let integer = ['0'-'9']+
 let ident = letter (letter | '_' | ['0'-'9'])*
-let string = letter (letter | '_' | '.' | ['0'-'9'])*
+let string = letter (letter | '_' | '.' | ['0'-'9'] | '/')*
 let options = ("exact" space* ['1'-'9']*)
 
 
@@ -178,7 +180,7 @@ and read_lines = parse
     let c = open_in fname in
     let lb = from_channel c in
     lb.lex_curr_p <- { lb.lex_curr_p with pos_fname = fname };
-    let p = 
+    let p =
       try
 	Parser.queue token lb
       with
@@ -198,7 +200,7 @@ and read_lines = parse
     let lb = from_channel c in
     read lb
 
-  let read_problem c = 
+  let read_problem c =
     let pl = raw_parser c in
     if List.length pl <= 1 then invalid_arg "read_problem";
     let grid = ref None in

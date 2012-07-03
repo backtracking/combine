@@ -167,7 +167,10 @@ let refl_12 = S.add Rot180 (S.add Diag1Refl (S.add Diag2Refl id))
 (* 8 elements = D4 itself *)
 let d4 = all
 
-let quotient g1 g2 = 
+type group = Id | Vert | Horiz | Rot180 | Diag1 | Diag2 | Positive |
+  Refl_hv | Refl_12 | D4
+
+let quotient g1 g2 =
   if S.equal g2 id then g1
   else if S.equal g1 g2 then id
   else if S.equal g1 refl_hv then
@@ -195,9 +198,22 @@ let quotient g1 g2 =
     else assert false
   else
     invalid_arg "quotient"
-    
+
 
 let elements g = g
+
+let compl = function  
+    Id -> D4
+  | Vert -> Positive
+  | Horiz -> Positive
+  | Rot180 -> Refl_12
+  | Diag1 -> Refl_hv
+  | Diag2 -> Refl_hv
+  | Positive -> Vert
+  | Refl_hv -> Diag1
+  | Refl_12 -> Horiz
+  | D4 -> Id
+
 
 let generated_by s =
   s

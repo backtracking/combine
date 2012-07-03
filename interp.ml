@@ -35,13 +35,13 @@ let tiles_env = Hashtbl.create 50
 let problems = ref []
 let problem_tbl = Hashtbl.create 50
 
-let rec interp_expr expr = 
+let rec interp_expr expr =
   match expr.expr_node with
   | Var s -> begin
       try
         let value = Hashtbl.find var_env s in
         value
-      with Not_found -> raise (Error 
+      with Not_found -> raise (Error
                         (expr.expr_pos, "Unbound value " ^ s)) end
   | Constant m -> Pattern.create m
   | Binary (op, e1, e2) -> interp_binary e1 e2 op
@@ -71,7 +71,7 @@ and interp_setop d e = function
 
 let interp_bool_expr = function
   | Boolean b -> b
-  | Comparison (op, e1, e2)-> 
+  | Comparison (op, e1, e2)->
       match op with
         | Equal -> (interp_expr e1) = (interp_expr e2)
 
@@ -95,62 +95,62 @@ module ZCount = Emc.Z.Count(N)
 module DCount = Emc.D.Count(N)
 
 
-let init_timer () = 
+let init_timer () =
   timer := Unix.gettimeofday ()
 
 
 
-let finish_timer fmt () = 
-  let elapsed = Unix.gettimeofday () -. !timer in 
+let finish_timer fmt () =
+  let elapsed = Unix.gettimeofday () -. !timer in
   fprintf fmt "%fs" elapsed;
   timer := 0.
 
 
 
 
-let count p algo = 
+let count p algo =
   let { primary = primary; matrix = m; tiles = decode_tbl } = Tiling.emc p in
   printf "%s : @?" p.pname;
   init_timer ();
   begin match algo with
-    | Dlx -> 
+    | Dlx ->
         let p = Emc.D.create ~primary m in
         printf "(DLX) %a solutions@." N.print (DCount.count_solutions p)
-    | Zdd -> 
+    | Zdd ->
         let p = Emc.Z.create ~primary m in
         printf "(ZDD) %a solutions@." N.print (ZCount.count_solutions p)
   end;
   if !timing then printf "%s solutions counted in %a@." p.pname finish_timer ()
-  
 
 
-let solve output p algo = 
+
+let solve output p algo =
   let emc = Tiling.emc p in
   let { primary = primary; matrix = m; tiles = decode_tbl } = emc in
   init_timer ();
-  let width, height = 
+  let width, height =
     p.grid.Pattern.width * 100, p.grid.Pattern.height * 100 in
-  let print = begin match output with 
-    | Svg f -> 
+  let print = begin match output with
+    | Svg f ->
         printf "out : %s@\n" f;
         print_solution_to_svg_file f ~width ~height p emc;
     | Ascii ->
         print_solution_ascii Format.std_formatter p emc end in
   let solution = begin match algo with
-    | Dlx -> 
+    | Dlx ->
         Emc.D.find_solution (Emc.D.create ~primary m)
-    | Zdd -> 
+    | Zdd ->
         let zdd = Emc.Z.create ~primary m in
         Emc.Z.find_solution zdd end in
   if !timing then printf "%s solved in %a@." p.pname finish_timer ();
-  print solution 
+  print solution
 
 
 
-let interp_problem_command p = function 
+let interp_problem_command p = function
   | Print -> printf "%a@\n" Tiling.print_problem p
   | Solve (algo, output) -> solve output p algo
-  | Count algo -> count p algo  
+  | Count algo -> count p algo
 
 
 let tiles = function
@@ -159,8 +159,8 @@ let tiles = function
       with Not_found -> failwith ("Error: unbound tile list " ^ id) end
   | Tiles_list l -> tile_list l
 
-let interp_decl decl = 
-  match decl.decl_node with 
+let rec interp_decl decl =
+  match decl.decl_node with
     | Pattern (id, z) ->
         let value = interp_expr z in
         Hashtbl.replace var_env id value
@@ -171,32 +171,37 @@ let interp_decl decl =
         let p = Tiling.create_problem ?name:(Some id) value (tiles el) in
         problems := p :: !problems;
         Hashtbl.add problem_tbl id p
-    | Assert be -> 
+    | Assert be ->
         if not (interp_bool_expr be) then begin
           raise (Error (decl.decl_pos, "Assert failure")) end
-    | Command (c, id)-> 
-        let p = begin try Hashtbl.find problem_tbl id with 
-          | Not_found -> raise 
-              (Error (decl.decl_pos, "Unbound problem " ^ id)) end in
+    | Command (c, id)->
+        let p = begin try Hashtbl.find problem_tbl id with
+          | Not_found ->
+              raise (Error (decl.decl_pos, "Unbound problem " ^ id)) end in
         interp_problem_command p c
-    | Debug st -> begin match st with On -> debug := true 
+    | Debug st -> begin match st with On -> debug := true
         | Off -> debug := false end
-    | Timing st -> begin match st with On -> timing := true 
+    | Timing st -> begin match st with On -> timing := true
         | Off -> timing := false end
-    
+    | Exit -> printf "exit@\n"; exit 0
+    | Include s ->
+        if not (Sys.file_exists s) then
+          raise (Error (decl.decl_pos, "No such file : " ^ s))
+        else
+          let ptree = Lexer.parse_file s in
+          interp ptree
 
-
-let interp dl =
+and interp dl =
   problems := [];
   Hashtbl.clear var_env;
   Hashtbl.clear tiles_env;
   List.iter (fun d -> interp_decl d) dl
 
 
-let interp_problems dl = 
+let interp_problems dl =
   problems := [];
   Hashtbl.clear var_env;
   Hashtbl.clear tiles_env;
   List.iter (fun d -> interp_decl d) dl;
-  List.rev !problems 
+  List.rev !problems
 

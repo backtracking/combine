@@ -1,4 +1,3 @@
-
 pattern chessboard = constant 2x2 true
 
 pattern a = {**}

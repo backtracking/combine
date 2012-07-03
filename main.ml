@@ -26,7 +26,7 @@ let parse_only = ref false
 
 let msg = "usage: project [options] file"
 let spec = [ "--debug", Arg.Set debug, "  Set the debug flag";
-            "--stats", Arg.Set stats, "  Set the stats flag"; 
+            "--stats", Arg.Set stats, "  Set the stats flag";
 	    "--parse-only", Arg.Set parse_only, "  Stop after parsing";]
 
 let file = ref None
@@ -49,19 +49,19 @@ let () = if !parse_only then exit 0
 
 open Lexing
 
-let () = 
-  try 
+let () =
+  try
     Interp.interp ptree
-  with 
-    | Interp.Error (pos, err) -> 
+  with
+    | Interp.Error (pos, err) ->
         let start, stop = pos in
-        printf "File \"%s\", line %d, characters %d-%d : @\n" 
-          start.pos_fname start.pos_lnum 
-          (start.pos_cnum - start.pos_bol) 
+        printf "File \"%s\", line %d, characters %d-%d : @\n"
+          start.pos_fname start.pos_lnum
+          (start.pos_cnum - start.pos_bol)
           (stop.pos_cnum - stop.pos_bol) ;
         printf "Error : %a@\n" Interp.print_error err;
         exit 0
-        
+
 
 
 module N = struct

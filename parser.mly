@@ -26,8 +26,9 @@
 
 %}
 
-%token PATTERN TILES PROBLEM CONSTANT FALSE TRUE ASSERT
+%token PATTERN TILES PROBLEM CONSTANT FALSE TRUE
 %token SET SHIFT CROP RESIZE APPLY
+%token EXIT INCLUDE ASSERT
 %token MINUS AMPAMP BARBAR HAT DIFF UNION XOR INTER ONE MAYBE SYM ROT
 %token EQUAL LSBRA RSBRA RPAR LPAR COMMA
 %token ID ROT90 ROT180 ROT270 VERTREFL HORIZREFL DIAG1REFL DIAG2REFL
@@ -39,7 +40,7 @@
 %token <bool array array> ASCII
 %token EOF
 
-%nonassoc UNION INTER DIFF XOR prec_crop
+%nonassoc UNION INTER DIFF XOR APPLY prec_crop
 %left AMPAMP MINUS BARBAR HAT
 
 %start <Ast.queue> queue
@@ -59,7 +60,7 @@ decl:
 | PROBLEM; id = IDENT; EQUAL; e = expr; tl = tiles
     {{decl_pos = ($startpos, $endpos);
       decl_node = Problem (id, e, tl)}}
-| ASSERT; b = boolean_expr 
+| ASSERT; b = boolean_expr
     {{decl_pos = ($startpos, $endpos);
       decl_node = Assert b}}
 | PRINT; id = IDENT {{decl_pos = ($startpos, $endpos);
@@ -72,6 +73,10 @@ decl:
       decl_node = Debug st}}
 | TIMING; st = state; {{decl_pos = ($startpos, $endpos);
       decl_node = Timing st}}
+| EXIT {{decl_pos = ($startpos, $endpos);
+      decl_node = Exit}}
+| INCLUDE; s = STRING {{decl_pos = ($startpos, $endpos);
+      decl_node = Include s}}
 ;
 
 algo:
@@ -129,7 +134,7 @@ expr:
     {{expr_pos = ($startpos, $endpos);
       expr_node = Var id}}
 | CONSTANT; d = DIM; b = bool
-  { let w,h = d in 
+  { let w,h = d in
       {expr_pos = ($startpos, $endpos);
         expr_node = Constant (Array.make h (Array.make w b))} }
 | UNION; e1 = expr; e2 = expr
@@ -157,22 +162,22 @@ expr:
       {{expr_pos = ($startpos, $endpos);
          expr_node = Binary (Xor, e1, e2)}}
 | SET; e = expr; d = DIM; b = bool
-    {{expr_pos = ($startpos, $endpos); 
+    {{expr_pos = ($startpos, $endpos);
        expr_node = SetOp (SetXY (b), d, e)} }
 | CROP; pos = DIM ;d = DIM; e = expr; %prec prec_crop
-    {{expr_pos = ($startpos, $endpos); 
+    {{expr_pos = ($startpos, $endpos);
     expr_node = SetOp (Crop(pos), d, e)}}
 | SHIFT; e = expr; d = DIM
-    {{expr_pos = ($startpos, $endpos); 
+    {{expr_pos = ($startpos, $endpos);
      expr_node = SetOp (Shift, d, e)}}
 | RESIZE; e = expr; d = DIM
-    {{expr_pos = ($startpos, $endpos); 
+    {{expr_pos = ($startpos, $endpos);
      expr_node = SetOp (Resize, d, e)}}
 | APPLY; iso = isometry; e = expr
-    {{expr_pos = ($startpos, $endpos); 
+    {{expr_pos = ($startpos, $endpos);
        expr_node = Apply (iso, e)}}
 | a = ASCII
-    {{expr_pos = ($startpos, $endpos); 
+    {{expr_pos = ($startpos, $endpos);
        expr_node = Constant a}}
 ;
 

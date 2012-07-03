@@ -34,8 +34,85 @@ Reml is an OCaml library for combinatorics.
 
 * tiling language and interpreter
 
-  <expr> ::= <identifier>
-           | <expr> union <expr>
+<decl> ::=
+			| pattern <identifier> = <expr>
+			| tiles <identifier> = <tile_list>
+			| problem <identifier>  equal <expr> tl = tiles
+			| assert b = boolean_expr
+			| print <identifier>
+			| solve a = algo <identifier>  out = output
+			| count a = algo <identifier>
+			| debug st = state
+			| timing st = state
+			| exit
+			| include <string>
+
+algo ::=
+			| dlx
+			| zdd
+
+state ::=
+			| on
+			| off
+
+option ::=
+			| one
+			| maybe
+			| sym
+			| rot
+
+tiles ::=
+			| <tile_list>
+			| <identifier>
+
+tile_list ::=
+			| <lsbra> l = separated_list(comma, tile) <rsbra>
+
+output ::=
+			| svg_out <string>
+			| ascii_out
+
+isometry ::=
+			| id
+			| rot90
+			| rot180
+			| rot270
+			| vertrefl
+			| horizrefl
+			| diag1refl
+			| diag2refl
+
+tile ::=
+			| <expr> o = list(option)
+
+expr ::=
+			| lpar <expr> rpar
+			| <identifier>
+			| constant <dim> <bool>
+			| union <expr> <expr>
+			| inter <expr> <expr>
+			| diff <expr> <expr>
+			| xor <expr> <expr>
+			| <expr> minus <expr>
+			| <expr> ampamp <expr>
+			| <expr> barbar <expr>
+			| <expr> hat <expr>
+			| set <expr> <dim> <bool>
+			| crop <dim> <dim> <expr>
+			| shift <expr> <dim>
+			| resize <expr> <dim>
+			| apply <isometry> <expr>
+			| <ascii>
+
+bool ::=
+			| false
+			| true
+
+boolean_expr::=
+			| <bool>
+			| <expr> equal <expr>
+
+
 
 
 

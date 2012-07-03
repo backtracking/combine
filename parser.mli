@@ -32,11 +32,13 @@ type token =
   | LSBRA
   | LPAR
   | INTER
+  | INCLUDE
   | IDENT of (string)
   | ID
   | HORIZREFL
   | HAT
   | FALSE
+  | EXIT
   | EQUAL
   | EOF
   | DLX

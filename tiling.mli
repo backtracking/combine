@@ -95,7 +95,7 @@ module Tile : sig
 
   val create: ?name:string -> ?s:symetries -> ?m:multiplicity -> Pattern.t -> t
   (** construct a tile from his name, the usability of its symetries and
-    its quantification*)                                                                              
+    its quantification*)
 
   val apply: D4.t -> t -> t
     (** [apply i t] creates a new tile which is the result of the
@@ -114,7 +114,7 @@ type problem = private {
 
 val create_problem : ?name:string -> Pattern.t -> Tile.t list -> problem
   (** construct a problem from his name, the board pattern and
-      a list of tile *)                                                                              
+      a list of tile *)
 
 val print_problem: Format.formatter -> problem -> unit
   (** print a problem *)
@@ -135,7 +135,7 @@ val print_solution_to_svg : Format.formatter ->
 
 val print_solution_to_svg_file : string ->
   width:int -> height:int -> problem -> emc -> int list -> unit
-  (** print a solution under the svg format on the given file *)
+  (** print a solution to the svg format on the given file *)
 
 val print_solution_ascii :
   Format.formatter -> problem -> emc -> int list -> unit
