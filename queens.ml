@@ -19,6 +19,44 @@
 
 (* Queens Module *)
 
+(*
+
+The encoding of N-Queens problem to EMC is describe in Donald E. Knuth article 
+Dancing Links
+
+set a queen on the board of 8-queens, e.g. : 
+ 
+01010100
+00111000
+111Q1111
+00111000
+01010100
+10010010
+00010001
+00010000
+
+
+a queen uses : 
+- 1 line of 8
+- 1 columns of 8
+- 1 right-left diagonal of 15
+- 1 left-right diagonal of 15
+so, set one queen in a cell is encoded as one line of the EMC matrix
+8 columns for the rows
+8 columns for the columns
+15 columns for the left-right diagonals
+15 columns for the right-left diagonals
+
+Some of the diagonals are not covered even by the 8 queens. So we define 
+them as secondary columns in the EMC matrix :
+those columns could have maximum one 1.
+
+*)
+
+
+
+
+
 open Format
 open Reml
 

@@ -17,6 +17,38 @@
 (*                                                                        *)
 (**************************************************************************)
 
+
+(*
+
+This module encode Sudoku as EMC and solve it.
+
+for exemple :
+
+000206003
+060080000
+071003000
+006000910
+007809600  the begin state.
+024000800
+000100540
+000030080
+200608000         
+
+here is the correspondance between the sudoku and the encoding in EMC
+- 9 rows × 9 values = 81 columns 
+- 9 columns × 9 values = 81 columns 
+- 9 subgrids × 9 values = 81 columns 
+- 81 cells  81 colonnes pour les cases
+
+one row in EMC matrix encode the placement of one value in one cell (which 
+for exemple, set the value of the cell (0, 0) to 4 correspond to
+ - 1 in the 4th column
+ - 1 in the 85th column
+ - 1 in the 166th column
+ - 1 in the 243th column
+
+*)
+
 (* Sudoku Module *)
 open Format
 open Reml
@@ -67,7 +99,7 @@ let file = ref None
 let out = ref ""
 
 let msg = "usage: project [options] file"
-let spec = ["-o", Arg.Set_string out, "  Count solutions using Zdd";
+let spec = ["-o", Arg.Set_string out, "  solution output in SVG format";
 	   ]
 
 let set_file f = match !file with
