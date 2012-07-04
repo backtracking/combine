@@ -165,6 +165,7 @@ install-opt: install-indep
 DOCFILES=zdd.mli dlx.mli emc.mli tiling.mli
 
 doc:
+	mkdir -p doc
 	ocamldoc -d doc -html $(DOCFILES)
 
 # export
