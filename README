@@ -18,21 +18,40 @@
 Reml is an OCaml library for combinatorics.
 
 
-* library
+* Library
 
-  ocamlc -I +reml reml.cma <other files>
+  The Reml library contains four main modules:
+  - Dlx: implements Knuth's dancing links
+  - Zdd: implements Zero-suppressed binary decision diagrams
+  - Emc: a common interface to modules Dlx and Zdd to solve the
+         Exact Matrix Cover problem
+  - Tiling: converts a 2D tiling problem into an EMC problem
+
+  Usage: the Reml library is packed into a single module Reml, installed
+  in the subdirectory reml/ of OCaml's standard library. Thus, it must be
+  used as follows:
+
+    ocamlc -I +reml reml.cma <other files>
 
 
-* examples
+* Examples
 
-  - queens.ml
-
-  - sudoku.ml
-
-  - tests/*.rem
+  The distribution contains two example programs using the library: one to
+  solve the N-queens puzzle (queens.ml) and one to solve the Sudoku puzzle
+  (sudoku.ml).
 
 
-* tiling language and interpreter
+* Tiling language and interpreter
+
+  In addition to the library, Reml provides a language to describe 2D tiling
+  problems and an interpreter (reml) for this language.
+
+  Directory tests/ contains various examples of tiling problems. To execute
+  such a test, just run "reml" on the file.
+
+  The grammar of the tiling language is the following:
+
+<file> ::=              | decl ... decl
 
 <decl> ::=
 			| pattern <identifier> = <expr>
@@ -66,7 +85,7 @@ tiles ::=
 			| <identifier>
 
 tile_list ::=
-			| <lsbra> l = separated_list(comma, tile) <rsbra>
+			| [ tile, ..., tile ]
 
 output ::=
 			| svg_out <string>

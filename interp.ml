@@ -185,11 +185,17 @@ let rec interp_decl decl =
         | Off -> timing := false end
     | Exit -> printf "exit@\n"; exit 0
     | Include s ->
-        if not (Sys.file_exists s) then
-          raise (Error (decl.decl_pos, "No such file : " ^ s))
-        else
-          let ptree = Lexer.parse_file s in
-          interp ptree
+        let file =
+          if Filename.is_relative s then
+            let f = (fst decl.decl_pos).Lexing.pos_fname in
+            Filename.concat (Filename.dirname f) s
+          else
+            s
+        in
+        if not (Sys.file_exists file) then
+          raise (Error (decl.decl_pos, "No such file: " ^ file));
+        let ptree = Lexer.parse_file file in
+        interp ptree
 
 and interp dl =
   problems := [];

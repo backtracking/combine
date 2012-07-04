@@ -173,15 +173,14 @@ doc:
 EXPORTDIR=reml-$(VERSION)
 TAR=$(EXPORTDIR).tar
 
-FTP = $$HOME/ftp/reml
-WWW = $$HOME/WWW/reml
+WWW = /users/demons/filliatr/WWW/reml/
 
 FILES = *.ml* Makefile.in configure configure.in .depend tests/*.rem \
 	README INSTALL LICENSE
 
-export: source binary export-doc
-	cp README COPYING GPL CHANGES $(FTP)
-	cp export/$(TAR).gz $(FTP)
+export: source export-doc
+	cp README COPYING GPL CHANGES $(WWW)
+	cp export/$(TAR).gz $(WWW)
 
 source:
 	mkdir -p export/$(EXPORTDIR)
@@ -189,21 +188,9 @@ source:
 	rm -f export/$(EXPORTDIR)/parser.mly
 	cd export ; tar cf $(TAR) $(EXPORTDIR) ; gzip -f --best $(TAR)
 
-export-doc: $(DOCFILES)
-	gzip -c manual.ps > $(FTP)/manual.ps.gz
-	cp manual.html $(WWW)
-
-BINARY = $(EXPORTDIR)-$(OSTYPE)
-BINARYTAR=$(BINARY).tar
-
-BINARYFILES = README INSTALL COPYING GPL reml.1
-
-binary: reml.$(OCAMLBEST) $(DOCFILES)
-	mkdir -p export/$(BINARY)
-	cp $(BINARYFILES) $(DOCFILES) export/$(BINARY)
-	cp reml.$(OCAMLBEST) export/$(BINARY)/reml
-	(cd export; tar czf $(BINARY).tar.gz $(BINARY))
-	cp export/$(BINARY).tar.gz $(FTP)
+export-doc: doc
+	cp -f -r doc/ $(WWW)
+	cp -f www/*.html $(WWW)
 
 # literate programming
 ######################

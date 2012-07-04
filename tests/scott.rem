@@ -1,0 +1,32 @@
+### Scott's pentaminos problem #############################################
+### we eliminate the symetries of the problem by using only one
+### orientation of pentamino F
+
+include "/home/jcf/ocaml-comb/tests/pentaminos.rem"
+
+pattern scott_board = {
+********
+********
+********
+***..***
+***..***
+********
+********
+********
+}
+
+problem scott_problem = scott_board
+[ L ~one ~sym, T ~one ~sym, V ~one ~sym, N ~one ~sym,
+  Z ~one ~sym, F ~one     , X ~one ~sym, W ~one ~sym,
+  P ~one ~sym, I ~one ~sym, Y ~one ~sym, U ~one ~sym ]
+
+
+#print scott_problem
+
+timing on
+count dlx scott_problem
+
+solve dlx scott_problem svg "test.svg"
+
+exit
+

@@ -25,6 +25,7 @@
   let lines = ref []
 
   let line_buffer = Buffer.create 1024
+  let string_buffer = Buffer.create 1024
 
   let bool_array_of_string s =
     Array.init (String.length s) (fun i -> s.[i] = '*')
@@ -98,7 +99,6 @@ let comment = '#' [^ '\n']* '\n'
 let letter = ['a'-'z' 'A'-'Z']
 let integer = ['0'-'9']+
 let ident = letter (letter | '_' | ['0'-'9'])*
-let string = letter (letter | '_' | '.' | ['0'-'9'] | '/')*
 let options = ("exact" space* ['1'-'9']*)
 
 
@@ -121,8 +121,8 @@ rule token = parse
       { HAT }
   | ident as id
       { ident_of_keyword id }
-  | "\""(string as s)"\""
-      { STRING s}
+  | "\""
+      { let s = string lexbuf in STRING s}
   | "~one"
       { ONE }
   | "~maybe"
@@ -167,6 +167,28 @@ and read_lines = parse
       { Buffer.add_char line_buffer c; read_lines lexbuf }
   | eof
       { raise (Lexical_error "unterminated pattern") }
+
+and string = parse
+  | "\""
+      { let s = Buffer.contents string_buffer in
+        Buffer.clear string_buffer;
+        s }
+  | newline
+      { new_line lexbuf;
+        Buffer.add_char string_buffer '\n';
+        string lexbuf }
+  | "\\" "\""
+      { Buffer.add_char string_buffer '"';
+        string lexbuf }
+  | "\\" "\\"
+      { Buffer.add_char string_buffer '\\';
+        string lexbuf }
+  | _ as c
+      { Buffer.add_char string_buffer c;
+        string lexbuf }
+  | eof
+      { raise (Lexical_error "unterminated string") }
+
 
 {
 
