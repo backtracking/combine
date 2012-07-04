@@ -191,7 +191,7 @@ source:
 
 export-doc: doc
 	cp -f -r doc/ $(WWW)
-	cp -f www/*.html $(WWW)
+	cp -f www/*.html www/*.css www/images/* $(WWW)
 
 # literate programming
 ######################

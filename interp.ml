@@ -129,7 +129,7 @@ let solve output p algo =
   let { primary = primary; matrix = m; tiles = decode_tbl } = emc in
   init_timer ();
   let width, height =
-    p.grid.Pattern.width * 100, p.grid.Pattern.height * 100 in
+    p.grid.Pattern.width * 25, p.grid.Pattern.height * 25 in
   let print = begin match output with
     | Svg f ->
         printf "out : %s@\n" f;

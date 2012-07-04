@@ -2,7 +2,7 @@
 ### we eliminate the symetries of the problem by using only one
 ### orientation of pentamino F
 
-include "/home/jcf/ocaml-comb/tests/pentaminos.rem"
+include "pentaminos.rem"
 
 pattern scott_board = {
 ********
@@ -24,7 +24,7 @@ problem scott_problem = scott_board
 #print scott_problem
 
 timing on
-count dlx scott_problem
+#count dlx scott_problem
 
 solve dlx scott_problem svg "test.svg"
 

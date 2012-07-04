@@ -1,13 +1,96 @@
-<html>
-
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-<title>Reml - an OCaml library for combinatorics</title>
+
+<meta charset="utf-8" />
+
+<title>ReML - an OCaml library for combinatorics</title>
+
+<meta name="description" content="" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<link href="style.css" rel="stylesheet" />
+
 </head>
 
 <body>
-<h1>Reml - an OCaml library for combinatorics</h1>
 
-<a href="doc/index.html">documentation</a>
+<div id="wrapper">
+
+<header id="header" class="clearfix" role="banner">
+
+<hgroup>
+<h1 id="site-title"><a href="index.html">ReML</a></h1>
+<h2 id="site-description">an OCaml library for combinatorics</h2>
+</hgroup>
+
+</header>
+
+<div id="main" class="clearfix">
+
+
+<div id="content" role="main">
+
+<article class="post">
+
+<figure>
+<embed src="images/exemple.svg" height="203px" class="thumbnail alignleft" type="image/svg+xml" />
+</figure>
+
+<div class="entry-content">
+<p>
+ReML is an OCaml library for combinatorics problem solving formed by several
+modules : 
+<ul>
+<li> Dlx: implements Knuth's dancing links</li>
+<li>Zdd: implements Zero-suppressed binary decision diagrams </li>
+<li>Emc: a common interface to modules Dlx and Zdd to solve the
+Exact Matrix Cover problem</li>
+<li>Tiling: converts a 2D tiling problem into an EMC problem</li>
+
+<hr />
+
+<p>
+ReML contains as well an interpreter for a language (reml) allowing you to 
+describe
+tiling problems (like Pentaminoes) and solve them or counting their solutions.
+With this library you could easily solve other problems like Sudoku or N-queens.
+The archive contains some exemples of what ReML can do.
+</p>
+
+</ul>
+</p>
+
+</div> <!-- .entry-content -->
+
+</article> <!-- .post 1 -->
+
+
+</div> <!-- #main -->
+
+<aside id="sidebar" role="complementary">
+        <aside class="widget">
+            <ul>
+                <li><a href="doc/index.html">Documentation</a></li>
+                <li><a href="#">Download</a></li>
+            </ul>
+        </aside> <!-- .widget -->
+    </aside> <!-- #sidebar -->
+</div> <!-- #wrapper -->
+
+
+<footer id="footer">
+<p>
+Copyright &copy; 2012,
+Remy El Sibaie &
+Jean-Christophe Filliâtre
+
+</p>
+</footer> <!-- #footer -->
 
 </body>
 </html>

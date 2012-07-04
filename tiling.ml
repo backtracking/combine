@@ -399,7 +399,7 @@ let print_square_svg x y u color fmt =
 
 let print_tile_svg x y u color fmt t =
   fprintf fmt
-    "<g style=\"stroke:#000000;stroke-width:2;\
+    "<g style=\"stroke:#000000;stroke-width:1;\
 stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;\">@\n";
   for y' = 0 to t.Tile.pattern.height - 1 do
     for x' = 0 to t.Tile.pattern.width - 1 do
@@ -431,7 +431,7 @@ let hsv_to_rgb h s v =
     | _ -> mm, mm, mm
 
 let print_solution_to_svg fmt ~width ~height p {tiles=decoder} s =
-  let u = 100 in
+  let u = width / p.grid.width in
   fprintf fmt
 "<?xml version=\"1.0\" standalone=\"no\"?> @\n\
 @[<hov 2><svg xmlns=\"http://www.w3.org/2000/svg\" \
