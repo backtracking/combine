@@ -1,5 +1,7 @@
 /**************************************************************************/
 /*                                                                        */
+/*  ReML - an OCaml library for combinatorics                             */
+/*                                                                        */
 /*  Copyright (C) 2012                                                    */
 /*    Remy El Sibaie                                                      */
 /*    Jean-Christophe Filliatre                                           */

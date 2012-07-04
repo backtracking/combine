@@ -44,22 +44,25 @@
 <div class="entry-content">
 <p>
 ReML is an OCaml library for combinatorics problem solving formed by several
-modules : 
+modules:
 <ul>
-<li> Dlx: implements Knuth's dancing links</li>
-<li>Zdd: implements Zero-suppressed binary decision diagrams </li>
-<li>Emc: a common interface to modules Dlx and Zdd to solve the
+<li><a href="doc/Dlx.html">Dlx</a>: implements Knuth's dancing links</li>
+<li><a href="doc/Zdd.html">Zdd</a>: implements Zero-suppressed binary decision diagrams </li>
+<li><a href="doc/Emc.html">Emc</a>: a common interface to modules Dlx and Zdd to solve the
 Exact Matrix Cover problem</li>
-<li>Tiling: converts a 2D tiling problem into an EMC problem</li>
+<li><a href="doc/Tiling.html">Tiling</a>: converts a 2D tiling problem into an EMC problem</li>
 
 <hr />
 
 <p>
-ReML contains as well an interpreter for a language (reml) allowing you to 
-describe
-tiling problems (like Pentaminoes) and solve them or counting their solutions.
-With this library you could easily solve other problems like Sudoku or N-queens.
-The archive contains some exemples of what ReML can do.
+Several combinatorics problems can easily be encoded as EMC problems, e.g.
+<a href="sudoku.ml.html">Sudoku</a> or <a href="queens.ml.html">N-queens</a>.
+</p>
+
+<p>
+ReML also contains an interpreter for a language (reml) to describe 2D
+tiling problems (such as Pentominos) and solve them or counting their
+solutions.  The archive contains some examples.
 </p>
 
 </ul>
@@ -76,7 +79,7 @@ The archive contains some exemples of what ReML can do.
         <aside class="widget">
             <ul>
                 <li><a href="doc/index.html">Documentation</a></li>
-                <li><a href="#">Download</a></li>
+                <li><a href="download/">Download</a></li>
             </ul>
         </aside> <!-- .widget -->
     </aside> <!-- #sidebar -->
@@ -87,7 +90,7 @@ The archive contains some exemples of what ReML can do.
 <p>
 Copyright &copy; 2012,
 Remy El Sibaïe &
-Jean-Christophe Filliâtre
+<a href="http://www.lri.fr/~filliatr/">Jean-Christophe Filliâtre</a>
 
 </p>
 </footer> <!-- #footer -->
