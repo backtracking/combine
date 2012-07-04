@@ -182,7 +182,7 @@ FILES = *.ml* Makefile.in configure configure.in .depend tests/*.rem \
 	README INSTALL LICENSE
 
 export: source export-doc
-	cp README COPYING GPL CHANGES $(WWW)
+	cp README LICENSE $(WWW)
 	mkdir -p $(WWW)/download/
 	cp export/$(TAR).gz $(WWW)/download/
 
@@ -195,7 +195,9 @@ source:
 export-doc: doc
 	cp -f -r doc/ $(WWW)
 	caml2html -d $(WWW) queens.ml sudoku.ml
-	cp -f www/*.html www/*.css www/images/* $(WWW)
+	cp -f www/*.html www/*.css $(WWW)
+	mkdir -p $(WWW)/images/
+	cp www/images/* $(WWW)/images/
 
 # literate programming
 ######################
