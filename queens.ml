@@ -17,50 +17,30 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* Queens Module *)
+(* Solving the N-queens using DLX and ZDD.
 
-(*
+The encoding of the N-queens problem to EMC is described in
+Donald E. Knuth's paper "Dancing Links"
 
-The encoding of N-Queens problem to EMC is describe in Donald E. Knuth article 
-Dancing Links
+The EMC matrix has:
+- N columns for the rows
+- N columns for the columns
+- 2N-1 columns for the left-right diagonals
+- 2N-1 columns for the right-left diagonals
 
-set a queen on the board of 8-queens, e.g. : 
- 
-01010100
-00111000
-111Q1111
-00111000
-01010100
-10010010
-00010001
-00010000
+Each row in the EMC matrix corresponds to one way to place a queen.
+Thus it has four ones, one for the column, one for the row, and one for each
+diagonal.
 
-
-a queen uses : 
-- 1 line of 8
-- 1 columns of 8
-- 1 right-left diagonal of 15
-- 1 left-right diagonal of 15
-so, set one queen in a cell is encoded as one line of the EMC matrix
-8 columns for the rows
-8 columns for the columns
-15 columns for the left-right diagonals
-15 columns for the right-left diagonals
-
-Some of the diagonals are not covered even by the 8 queens. So we define 
-them as secondary columns in the EMC matrix :
-those columns could have maximum one 1.
+Since some of the diagonals are not covered, only the first 2N columns
+(rows and columns of the chessboard) are primary columns.
 
 *)
-
-
-
-
 
 open Format
 open Reml
 
-(* emc size : rang * (rang + 1) *)
+(* EMC size is (6N-2) * N^2 *)
 
 let range = ref 0
 let svg_file = ref ""

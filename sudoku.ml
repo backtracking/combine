@@ -20,36 +20,35 @@
 
 (*
 
-This module encode Sudoku as EMC and solve it.
+This module encodes Sudoku as EMC and solves it.
 
-for exemple :
+This program reads a Sudoku problem from a file, in the following format:
 
 000206003
 060080000
 071003000
 006000910
-007809600  the begin state.
+007809600
 024000800
 000100540
 000030080
-200608000         
+200608000
 
-here is the correspondance between the sudoku and the encoding in EMC
-- 9 rows × 9 values = 81 columns 
-- 9 columns × 9 values = 81 columns 
-- 9 subgrids × 9 values = 81 columns 
-- 81 cells  81 colonnes pour les cases
+Here is the correspondance between the Sudoku and its encoding as EMC:
+- 9 rows x 9 values = 81 columns
+- 9 columns x 9 values = 81 columns
+- 9 subgrids x 9 values = 81 columns
+- 81 cells = 81 columns
 
-one row in EMC matrix encode the placement of one value in one cell (which 
-for exemple, set the value of the cell (0, 0) to 4 correspond to
+One row in the EMC matrix encodes the placement of one value in one cell.
+For instance, setting the value of the cell (0, 0) to 4 corresponds to
  - 1 in the 4th column
  - 1 in the 85th column
  - 1 in the 166th column
  - 1 in the 243th column
-
+ - 0 in all other columns
 *)
 
-(* Sudoku Module *)
 open Format
 open Reml
 
@@ -61,35 +60,35 @@ let zdd = ref false
 let dlx = ref false
 
 
-let display_sudoku_line line = 
+let display_sudoku_line line =
   Array.iter (fun e -> printf "%d" e) line;
   printf "@."
 
 
-let display_sudoku sudoku_array = 
+let display_sudoku sudoku_array =
   Array.iter (fun e -> display_sudoku_line e) sudoku_array;
   printf "@."
 
 
 let read_sudoku_line s =
   Array.init size
-    (fun i -> 
-       (int_of_char s.[i]) - (int_of_char '0')) 
+    (fun i ->
+       (int_of_char s.[i]) - (int_of_char '0'))
 
 
-let read s = 
+let read s =
   let lines = Str.split (Str.regexp "\n") s in
-  let sudoku_array = Array.make_matrix size size 0 in 
-  let rec read lines i = 
+  let sudoku_array = Array.make_matrix size size 0 in
+  let rec read lines i =
     match lines with
       | [] -> ()
-      | h::t -> 
-          if h <> "" then begin 
+      | h::t ->
+          if h <> "" then begin
             sudoku_array.(i) <- read_sudoku_line h;
             read t (i + 1)
           end else
             read t i
-  in 
+  in
   read lines 0;
   sudoku_array
 
@@ -110,18 +109,18 @@ let set_file f = match !file with
 let () = Arg.parse spec set_file msg
 
 
-let error_pieces_board () = 
-  eprintf "problem must have board and piece(s) @."; 
-  exit 1 
+let error_pieces_board () =
+  eprintf "problem must have board and piece(s) @.";
+  exit 1
 
 let sudoku =
   let c = match !file with
     | Some f -> open_in f
     | None -> stdin
   in
-  let p = 
+  let p =
     try
-      let s = String.make (in_channel_length c) ' ' in 
+      let s = String.make (in_channel_length c) ' ' in
       really_input c s 0 (in_channel_length c - 1);
       read s
     with Invalid_argument msg ->
@@ -133,25 +132,25 @@ let sudoku =
 
 
 
-let ok_in_cell v celli cellj sudoku = 
+let ok_in_cell v celli cellj sudoku =
   for iteri = celli to celli + 2 do
     for iterj = cellj to cellj + 2 do
-      if sudoku.(iteri).(iterj) = v then raise Exit 
+      if sudoku.(iteri).(iterj) = v then raise Exit
     done
   done
 
 
-let ok v i j sudoku = 
-  try 
+let ok v i j sudoku =
+  try
     if sudoku.(i).(j) <> 0 then raise Exit;
     let celli, cellj = (i / 3) * 3, (j / 3) * 3 in
     ok_in_cell v celli cellj sudoku;
-    let rec iteri_out_cell first last = 
+    let rec iteri_out_cell first last =
       if first > last then ()
       else if sudoku.(first).(j) = v then raise Exit
       else iteri_out_cell (first + 1) last
     in
-    let rec iterj_out_cell first last = 
+    let rec iterj_out_cell first last =
       if first > last then ()
       else if sudoku.(i).(first) = v then raise Exit
       else iterj_out_cell (first + 1) last
@@ -165,7 +164,7 @@ let ok v i j sudoku =
 
 
 
-let set_val v i j line = 
+let set_val v i j line =
   (* Column *)
   line.(9 * j + v - 1) <- true;
   (* Line *)
@@ -177,13 +176,13 @@ let set_val v i j line =
 
 
 
-let get_line v i j = 
+let get_line v i j =
   let line = Array.make emc_size false in
-  set_val v i j line; 
+  set_val v i j line;
   line
 
 
-let const_line sudoku = 
+let const_line sudoku =
   let line = Array.make emc_size false in
   for i = 0 to size - 1 do
     for j = 0 to size - 1 do
@@ -191,19 +190,19 @@ let const_line sudoku =
       if v <> 0 then begin
         set_val v i j line
       end
-    done 
+    done
   done;
   line
 
 
 
-let emc sudoku = 
+let emc sudoku =
   let lr = ref [const_line sudoku] in
   for i = 0 to size - 1 do
     for j = 0 to size - 1 do
       for v = 1 to size do
         if ok v i j sudoku then
-          lr := get_line v i j :: !lr 
+          lr := get_line v i j :: !lr
       done
     done
   done;
@@ -212,7 +211,7 @@ let emc sudoku =
 
 
 
-let print_emc_sudoku () = 
+let print_emc_sudoku () =
   for i = 1 to 9 do printf "%d        " i done;
   for i = 1 to 9 do printf "%d        " i done;
   for i = 1 to 9 do printf "%d        " i done;
@@ -226,12 +225,12 @@ let print_emc_sudoku () =
   printf "@."
 
 
-let decode sudoku emc_array i = 
+let decode sudoku emc_array i =
   if i < Array.length emc_array - 1 then begin
-    let c = ref 0 in 
-    let l = ref 0 in 
-    let v = ref 0 in 
-    for j = 0 to 161 do 
+    let c = ref 0 in
+    let l = ref 0 in
+    let v = ref 0 in
+    for j = 0 to 161 do
       if emc_array.(i).(j) then begin
         if j < 81 then begin
           c := j / 9;
@@ -242,25 +241,25 @@ let decode sudoku emc_array i =
       end
     done;
     assert (!v <> 0);
-    sudoku.(!l).(!c) <- !v 
+    sudoku.(!l).(!c) <- !v
   end
 
-let print_board_svg u fmt = 
-  for i = 0 to 9 do 
-    fprintf fmt "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" \ 
-style=\"stroke:black;stroke-width:1;\" />@\n" 
+let print_board_svg u fmt =
+  for i = 0 to 9 do
+    fprintf fmt "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" \
+style=\"stroke:black;stroke-width:1;\" />@\n"
       0 (i * u) (u * 9) (i * u);
-    fprintf fmt "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" \ 
-style=\"stroke:black;stroke-width:1;\" />@\n" 
+    fprintf fmt "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" \
+style=\"stroke:black;stroke-width:1;\" />@\n"
       (i * u) 0 (i * u) (u * 9);
-    fprintf fmt "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" \ 
-style=\"stroke:black;fill-opacity:0;stroke-width:3;\"/>@\n" 
-      ((i mod 3) * u * 3) ((i / 3) * u * 3) (u * 3) (u * 3) 
+    fprintf fmt "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" \
+style=\"stroke:black;fill-opacity:0;stroke-width:3;\"/>@\n"
+      ((i mod 3) * u * 3) ((i / 3) * u * 3) (u * 3) (u * 3)
   done
 
-let print_solution_to_svg fmt ~width ~height m = 
-  let u = 100 in 
-  fprintf fmt 
+let print_solution_to_svg fmt ~width ~height m =
+  let u = 100 in
+  fprintf fmt
 "<?xml version=\"1.0\" standalone=\"no\"?> @\n\
 @[<hov 2><svg xmlns=\"http://www.w3.org/2000/svg\" \
 width=\"%d\" height=\"%d\">@\n"
@@ -275,7 +274,7 @@ text-anchor:middle;\" >\ %d</text>" (i * u + 50) (j * u + 65) m.(j).(i)
   fprintf fmt "@]@\n</svg>"
 
 
-let print_solution_to_svg_file f ~width ~height m = 
+let print_solution_to_svg_file f ~width ~height m =
   let c = open_out f in
   let fmt = formatter_of_out_channel c in
   print_solution_to_svg fmt ~width ~height m;
@@ -283,21 +282,21 @@ let print_solution_to_svg_file f ~width ~height m =
   close_out c
 
 
-let () = 
-  let emc_array = emc sudoku in 
+let () =
+  let emc_array = emc sudoku in
   display_sudoku sudoku;
-  printf "DLX : emc_size : %dx%d @." 
+  printf "DLX : emc_size : %dx%d @."
     (Array.length emc_array) (Array.length emc_array.(0));
-  try 
+  try
     let p = Emc.D.create emc_array in
     let s = Emc.D.find_solution p in
-    let n = List.length s in 
+    let n = List.length s in
     printf "solution size : %d@." n;
     List.iter (decode sudoku emc_array) s;
     display_sudoku sudoku;
     if not (!out = "") then begin
       print_solution_to_svg_file (!out) ~width:900 ~height:900 sudoku;
-      printf "out : %s@\n" !out     
+      printf "out : %s@\n" !out
     end;
     printf "%d solutions@." (Emc.D.count_solutions p)
   with Not_found -> printf "No solution@."
