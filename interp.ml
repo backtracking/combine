@@ -132,25 +132,36 @@ let solve output p algo =
   init_timer ();
   let width, height =
     p.grid.Pattern.width * 25, p.grid.Pattern.height * 25 in
-  let print = begin match output with
-    | Svg f ->
-        printf "out : %s@\n" f;
-        print_solution_to_svg_file f ~width ~height p emc;
-    | Ascii ->
-        print_solution_ascii Format.std_formatter p emc end in
-  let solution = begin match algo with
-    | Dlx ->
-        Emc.D.find_solution (Emc.D.create ~primary m)
-    | Zdd ->
-        let zdd = Emc.Z.create ~primary m in
-        Emc.Z.find_solution zdd end in
-  if !timing then printf "%s solved in %a@." p.pname finish_timer ();
-  print solution
+  let solution = 
+    begin match algo with
+      | Dlx -> begin
+          try Emc.D.find_solution (Emc.D.create ~primary m) with
+            | Not_found -> [] end
+      | Zdd ->
+          let zdd = Emc.Z.create ~primary m in
+          try Emc.Z.find_solution zdd with
+            | Not_found -> []
+    end in 
+  if solution = [] then 
+    printf "problem %s has no solution@\n" p.pname
+  else 
+    begin 
+      let print = begin match output with
+        | Svg f ->
+            printf "out : %s@\n" f;
+            print_solution_to_svg_file f ~width ~height p emc;
+        | Ascii ->
+            print_solution_ascii Format.std_formatter p emc end in
+      if !timing then printf "%s solved in %a@." p.pname finish_timer ();
+      print solution end
 
 
 
 let interp_problem_command p = function
   | Print -> printf "%a@\n" Tiling.print_problem p
+  | Sat f -> 
+        printf "sat out : %s@\n" f;
+        Sat.print_sat_file f ((Tiling.emc p).matrix);
   | Solve (algo, output) -> solve output p algo
   | Count algo -> count p algo
 

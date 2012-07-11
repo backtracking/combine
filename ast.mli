@@ -32,7 +32,8 @@ type state = On | Off
 type output = Svg of file | Ascii
 
 type setop = Shift | SetXY of bool | Resize | Crop of dim
-type problem_command = Count of algo | Solve of algo * output | Print
+type problem_command = Count of algo | Solve of algo * output | Print 
+                      | Sat of file
 type compop = Equal
 
 type pos = Lexing.position * Lexing.position

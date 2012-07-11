@@ -24,6 +24,7 @@ open Dlx
 open Zdd
 open Tiling
 open Format
+open Emc
 
 
 let r = Lexer.parse_file "tests/non-regression.rem"
@@ -107,6 +108,19 @@ let p2 =
      [|true; true;|];
      [|true; true;|];
     |]
+
+
+(*
+let () =
+  let m = [|[|false; true; false|];
+            [|true; false; true|];
+            [|true; false; false|];
+            [|false; true; true|]|] in 
+
+    printf "%a@." Sat.print_sat m
+    *)
+
+
 
 (*
 

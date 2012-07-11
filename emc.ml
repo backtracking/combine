@@ -21,6 +21,7 @@
 
 open Format
 
+
 type solution = int list
 (** a solution is a set of rows *)
 
@@ -179,8 +180,105 @@ end
 
 
 
+module Sat = struct
+
+  type t =
+    | Not of t
+    | Or of t * t
+    | And of t * t
+    | Lit of int 
+    | True 
+    | False
 
 
+  let tand = function
+    | False, _ -> False
+    | _ , False -> False
+    | p , True -> p
+    | True , p -> p
+    | p1, p2 -> And (p1, p2)
+
+
+  let tor = function
+    | True, _ -> True
+    | _ , True -> True
+    | p , False -> p
+    | False , p -> p
+    | p1, p2 -> Or (p1, p2)
+
+  let rec print fmt = function 
+    | Not p -> fprintf fmt "-%a" print p
+    | Or (p1, p2) -> fprintf fmt "%a %a" print p1 print p2
+    | And (p1, p2) -> fprintf fmt "%a 0@\n%a" print p1 print p2
+    | Lit i -> fprintf fmt "%d" (i + 1)
+    | True -> fprintf fmt "True"
+    | False -> fprintf fmt "Talse"
+
+  let disj_of_column m i = 
+    let disj, _ = Array.fold_left (
+      fun (acc, j) e -> 
+        if e then (tor (acc, Lit j), j + 1)
+        else (acc, j + 1)
+    ) (False, 0) m.(i) in 
+    disj
+
+
+  let conj_of_matrix m =
+    let length, width = Array.length m, Array.length m.(0) in
+    let conj = ref True in 
+    for i = 0 to width - 1 do
+      let disj = ref False in 
+      for j = 0 to length - 1 do
+        if m.(j).(i) then 
+          disj := tor ((!disj), (Lit j))
+      done;
+      conj := tand (!conj, !disj);
+      for j = 0 to length -1 do
+        if m.(j).(i) then begin
+          for j2 = j + 1 to length -1 do
+            if m.(j2).(i) then
+              conj := tand (!conj, Or (Not (Lit j), Not (Lit j2)))
+          done 
+        end
+      done
+    done;
+    !conj
+
+
+  let rec nb_clauses cnf = 
+    match cnf with 
+      | And (p1, p2) -> (nb_clauses p1) + (nb_clauses p2)
+      | _ -> 1
+
+  let print_sat fmt m = 
+    let p = conj_of_matrix m in 
+    fprintf fmt "p cnf %d %d@\n" (Array.length m) (nb_clauses p);
+    fprintf fmt "%a 0@\n" print p
+
+  let print_sat_file f m = 
+    let c = open_out f in
+    let fmt = formatter_of_out_channel c in
+    print_sat fmt m
+
+
+
+(*
+  let () = 
+
+    let m = [|[|false; true; false|];
+              [|true; false; true|];
+              [|true; false; false|];
+             [|false; true; true|]|] in 
+
+    let p = conj_of_matrix m in
+
+    printf "%a@." print p
+*)
+
+
+
+
+end
 
 
 

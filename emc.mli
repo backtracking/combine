@@ -67,3 +67,19 @@ val print_boolean_matrix : Format.formatter -> bool array array -> unit
 val print_boolean_array : Format.formatter -> bool array -> unit
 val print_matrix_size: Format.formatter -> 'a array array -> unit
 
+module Sat : sig
+
+  type t
+  val print : Format.formatter -> t -> unit
+  val print_sat : Format.formatter -> bool array array -> unit
+  val print_sat_file : string -> bool array array -> unit
+
+  val conj_of_matrix : bool array array -> t
+
+end 
+
+
+
+
+
+

@@ -16,5 +16,5 @@ problem modotri = chessboard [a ~sym, b ~sym, c ~sym, d ~sym]
 
 
 timing on
-solve zdd modotri svg "test.svg"
+count zdd modotri
 timing off
