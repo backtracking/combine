@@ -209,6 +209,7 @@ let rec interp_decl decl =
           raise (Error (decl.decl_pos, "No such file: " ^ file));
         let ptree = Lexer.parse_file file in
         interp ptree
+    | H2g2 -> printf "42@\n"
 
 and interp dl =
   problems := [];

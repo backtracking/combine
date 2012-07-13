@@ -40,6 +40,7 @@
 %token <string> STRING
 %token <int * int> DIM
 %token <bool array array> ASCII
+%token H2G2
 %token EOF
 
 %nonassoc UNION INTER DIFF XOR APPLY prec_crop
@@ -81,6 +82,8 @@ decl:
       decl_node = Exit}}
 | INCLUDE; s = STRING {{decl_pos = ($startpos, $endpos);
       decl_node = Include s}}
+| H2G2 {{decl_pos = ($startpos, $endpos);
+      decl_node = H2g2}}
 ;
 
 algo:

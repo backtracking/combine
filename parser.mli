@@ -38,6 +38,7 @@ type token =
   | ID
   | HORIZREFL
   | HAT
+  | H2G2
   | FALSE
   | EXIT
   | EQUAL

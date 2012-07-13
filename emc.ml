@@ -184,8 +184,8 @@ module Sat = struct
 
   type t =
     | Not of t
-    | Or of t * t
-    | And of t * t
+    | Or of t list
+    | And of t list
     | Lit of int 
     | True 
     | False
@@ -196,7 +196,10 @@ module Sat = struct
     | _ , False -> False
     | p , True -> p
     | True , p -> p
-    | p1, p2 -> And (p1, p2)
+    | And l1, And l2-> And (l1@l2)
+    | And l, p -> And (p::l)
+    | p, And l-> And (p::l)
+    | p1, p2 -> And (p1::[p2])
 
 
   let tor = function
@@ -204,12 +207,20 @@ module Sat = struct
     | _ , True -> True
     | p , False -> p
     | False , p -> p
-    | p1, p2 -> Or (p1, p2)
+    | Or l1, Or l2-> Or (l1@l2)
+    | Or l, p -> Or (p::l)
+    | p, Or l-> Or (p::l)
+    | p1, p2 -> Or (p1::[p2])
 
-  let rec print fmt = function 
+  let rec print_list s fmt = function
+    | [] -> ()
+    | h::t -> fprintf fmt "%a" print h;
+              List.iter (fun e -> fprintf fmt "%s%a" s print e) t
+
+  and print fmt = function 
     | Not p -> fprintf fmt "-%a" print p
-    | Or (p1, p2) -> fprintf fmt "%a %a" print p1 print p2
-    | And (p1, p2) -> fprintf fmt "%a 0@\n%a" print p1 print p2
+    | Or l -> print_list " " fmt l
+    | And l -> print_list " 0\n" fmt l
     | Lit i -> fprintf fmt "%d" (i + 1)
     | True -> fprintf fmt "True"
     | False -> fprintf fmt "Talse"
@@ -237,7 +248,7 @@ module Sat = struct
         if m.(j).(i) then begin
           for j2 = j + 1 to length -1 do
             if m.(j2).(i) then
-              conj := tand (!conj, Or (Not (Lit j), Not (Lit j2)))
+              conj := tand (!conj, Or ((Not (Lit j))::[Not (Lit j2)]))
           done 
         end
       done
@@ -247,12 +258,12 @@ module Sat = struct
 
   let rec nb_clauses cnf = 
     match cnf with 
-      | And (p1, p2) -> (nb_clauses p1) + (nb_clauses p2)
+      | And l -> List.length l
       | _ -> 1
 
   let print_sat fmt m = 
     let p = conj_of_matrix m in 
-    fprintf fmt "p cnf %d %d@\n" (Array.length m) (nb_clauses p);
+    fprintf fmt "p cnf %d %d @\n" (Array.length m) (nb_clauses p);
     fprintf fmt "%a 0@\n" print p
 
   let print_sat_file f m = 

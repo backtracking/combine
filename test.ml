@@ -110,7 +110,6 @@ let p2 =
     |]
 
 
-(*
 let () =
   let m = [|[|false; true; false|];
             [|true; false; true|];
@@ -118,7 +117,6 @@ let () =
             [|false; true; true|]|] in 
 
     printf "%a@." Sat.print_sat m
-    *)
 
 
 

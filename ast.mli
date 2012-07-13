@@ -80,6 +80,7 @@ and decl_node =
   | Timing of state
   | Exit
   | Include of string
+  | H2g2
 
 
 type queue = decl list
