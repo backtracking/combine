@@ -34,3 +34,5 @@ doc
 *.vrb
 test.svg
 export
+/www/download/
+/www/*.ml*.html
