@@ -1,0 +1,44 @@
+\documentclass[french,frtypo,twoside,actes,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{actes}
+%% Title page...
+\title{ReML : une bibliothèque OCaml pour la combinatoire}
+\author{Rémy El Sibaïe$^1$
+  \& Jean-Christophe Filliâtre$^{2,1}$}
+%% Headers for other pages...
+\titlehead{ReML : une bibliothèque OCaml pour la combinatoire} % for odd pages
+\authorhead{R.~El Sibaie \& J.-C. Filliâtre}     % for even pages
+\affiliation{\begin{tabular}{rr}        % for institute(s)
+    \\ 1:  LRI, Université Paris Sud,
+    \\     91405 Orsay CEDEX, France
+    \\ 2:  CNRS,
+    \\     {\tt remy.el-sibaie@u-psud.fr}
+    \\     {\tt jean-christophe.filliatre@lri.fr}
+  \end{tabular}}
+
+\begin{document}
+\setcounter{page}{1}
+\maketitle
+
+\begin{abstract}
+  Cet article ...
+\end{abstract}
+
+\cite{taocp4a}
+
+% And do NOT FORGET to include your bibliography for submission
+\bibliographystyle{plain}
+\bibliography{abbrevs,demons,demons2,demons3,team,crossrefs,crossrefs2}
+
+\vfill
+\pagebreak
+\thispagestyle{colloquetitle}
+\cleardoublepage
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% ispell-local-dictionary: "francais"
+%%% TeX-master: t
+%%% End:
