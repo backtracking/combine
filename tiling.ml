@@ -477,17 +477,17 @@ let put_char tile board x y c =
 
 let print_solution_ascii fmt p {tiles=d} s =
   let unique = ref 48 in
-  let board = Array.make_matrix (p.grid.width) (p.grid.height) '.' in
+  let board = Array.make_matrix p.grid.height p.grid.width '.' in
   List.iter (
     fun e ->
       let t, x, y = d.(e) in
       put_char t board x y (chr !unique);
       incr unique
   ) s;
-  for y = 0 to p.grid.height - 1 do
-    if y > 0 then fprintf fmt "@\n";
+  for y = p.grid.height - 1 downto 0 do
     for x = 0 to p.grid.width - 1 do
       fprintf fmt "%c" board.(y).(x)
-    done
+    done;
+    if y > 0 then fprintf fmt "@\n"
   done;
   fprintf fmt "@\n"

@@ -143,16 +143,16 @@ let solve output p algo =
             | Not_found -> []
     end in
   if solution = [] then
-    printf "problem %s has no solution@\n" p.pname
+    printf "problem %S has no solution@\n" p.pname
   else
     begin
       let print = begin match output with
         | Svg f ->
-            printf "out : %s@\n" f;
+            printf "SVG out in file %S@\n" f;
             print_solution_to_svg_file f ~width ~height p emc;
         | Ascii ->
             print_solution_ascii Format.std_formatter p emc end in
-      if !timing then printf "%s solved in %a@." p.pname finish_timer ();
+      if !timing then printf "%S solved in %a@." p.pname finish_timer ();
       print solution end
 
 

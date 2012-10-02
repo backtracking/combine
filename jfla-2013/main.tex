@@ -1,7 +1,7 @@
 \documentclass[french,frtypo,twoside,actes,a4paper]{article}
 \usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{actes,hyperref}
+\usepackage{actes,hyperref,graphicx}
 %% Title page...
 \title{ReML : une bibliothèque OCaml pour la combinatoire}
 \author{Rémy El Sibaïe$^1$
@@ -32,12 +32,33 @@
 
 \section{Introduction}
 
+\begin{center}
+  \includegraphics{caml_problem.mps}
+\end{center}
+\begin{center}
+  \includegraphics{caml_solution.mps}
+\end{center}
+
+caml
+46976 solutions
+(ZDD 0.11s, DLX 0.09s)
+
+\begin{center}
+  \includegraphics{caml2_problem.mps}
+\end{center}
+
+caml2
+32,420,116,341,024,288 solutions
+(ZDD 39.7s, 1.4 Go de RAM)
+
+
 \cite{taocp4a}
 
 \cite{knuth00:dlx}
 
 \cite{ZDD}
 
+Mlpost~\cite{mlpost09jfla}
 
 La bibliothèque \reml\ est un logiciel libre, distribué sous licence
 LGPL à l'adresse \url{http://www.lri.fr/~filliatr/reml/}.

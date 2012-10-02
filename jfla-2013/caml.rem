@@ -1,4 +1,8 @@
 
+timing on
+
+pattern domino = {**}
+
 pattern caml = {
 ..**..........
 .***..........
@@ -15,6 +19,35 @@ pattern caml = {
 ....**....**..
 }
 
+problem caml = caml [domino ~sym]
+print caml
+
+solve dlx caml svg "caml_solution.svg"
+solve dlx caml ascii
+count zdd caml
+count dlx caml
+
+pattern caml2 = {
+....****....................
+..******....................
+********....****..****......
+....****....**********......
+....****..**************....
+....**********************..
+....************************
+......********....******..**
+........****........****....
+........****........****....
+........****........****....
+........****........****....
+........****........****....
+}
+
+problem caml2 = caml2 [domino ~sym]
+print caml2
+
+count zdd caml2
+
 pattern logo = {
 ****..******..**....**..**....
 **....**..**..********..**....
@@ -22,18 +55,6 @@ pattern logo = {
 **....**..**..**....**..**....
 ********..******....**********
 }
-
-pattern domino = {**}
-
-problem caml = caml [domino ~sym]
-
-print caml
-
-timing on
-
-solve zdd caml svg "caml_solution.svg"
-count zdd caml
-count dlx caml
 
 exit
 
