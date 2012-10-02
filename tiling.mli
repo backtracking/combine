@@ -127,6 +127,8 @@ type emc = {
   tiles  : (Tile.t * int * int) array;	(* row -> tile and its position *)
 }
 
+val print_emc: Format.formatter -> emc -> unit
+
 val emc: problem -> emc
   (** Encode the given problem under EMC *)
 

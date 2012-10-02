@@ -127,7 +127,6 @@ module Z = struct
     done;
     !z
 
-
   let inter_middle_balancing cols =
     let width = Array.length cols in
     let min = 0 in
@@ -147,7 +146,7 @@ module Z = struct
 
   let first_row j m =
     let h = Array.length m in
-    let rec lookup i = if m.(i).(j) || i = h then i else lookup (i+1) in
+    let rec lookup i = if i = h || m.(i).(j) then i else lookup (i+1) in
     lookup 0
 
   let tiling ?primary m =
@@ -158,12 +157,10 @@ module Z = struct
     Array.sort compare cols;
     inter_middle_balancing (Array.map snd cols)
 
-
   let create ?primary m = tiling ?primary m
   let find_solution p = choose_list p
   let iter_solution f p = iter_list f p
   let count_solutions p = cardinal p
-
 
   module type ARITH = sig
     type t
@@ -177,17 +174,14 @@ module Z = struct
   end
 end
 
-
-
-
 module Sat = struct
 
   type t =
     | Not of t
     | Or of t list
     | And of t list
-    | Lit of int 
-    | True 
+    | Lit of int
+    | True
     | False
 
 
@@ -217,7 +211,7 @@ module Sat = struct
     | h::t -> fprintf fmt "%a" print h;
               List.iter (fun e -> fprintf fmt "%s%a" s print e) t
 
-  and print fmt = function 
+  and print fmt = function
     | Not p -> fprintf fmt "-%a" print p
     | Or l -> print_list " " fmt l
     | And l -> print_list " 0\n" fmt l
@@ -225,22 +219,22 @@ module Sat = struct
     | True -> fprintf fmt "True"
     | False -> fprintf fmt "Talse"
 
-  let disj_of_column m i = 
+  let disj_of_column m i =
     let disj, _ = Array.fold_left (
-      fun (acc, j) e -> 
+      fun (acc, j) e ->
         if e then (tor (acc, Lit j), j + 1)
         else (acc, j + 1)
-    ) (False, 0) m.(i) in 
+    ) (False, 0) m.(i) in
     disj
 
 
   let conj_of_matrix m =
     let length, width = Array.length m, Array.length m.(0) in
-    let conj = ref True in 
+    let conj = ref True in
     for i = 0 to width - 1 do
-      let disj = ref False in 
+      let disj = ref False in
       for j = 0 to length - 1 do
-        if m.(j).(i) then 
+        if m.(j).(i) then
           disj := tor ((!disj), (Lit j))
       done;
       conj := tand (!conj, !disj);
@@ -249,24 +243,24 @@ module Sat = struct
           for j2 = j + 1 to length -1 do
             if m.(j2).(i) then
               conj := tand (!conj, Or ((Not (Lit j))::[Not (Lit j2)]))
-          done 
+          done
         end
       done
     done;
     !conj
 
 
-  let rec nb_clauses cnf = 
-    match cnf with 
+  let rec nb_clauses cnf =
+    match cnf with
       | And l -> List.length l
       | _ -> 1
 
-  let print_sat fmt m = 
-    let p = conj_of_matrix m in 
+  let print_sat fmt m =
+    let p = conj_of_matrix m in
     fprintf fmt "p cnf %d %d @\n" (Array.length m) (nb_clauses p);
     fprintf fmt "%a 0@\n" print p
 
-  let print_sat_file f m = 
+  let print_sat_file f m =
     let c = open_out f in
     let fmt = formatter_of_out_channel c in
     print_sat fmt m
@@ -274,12 +268,12 @@ module Sat = struct
 
 
 (*
-  let () = 
+  let () =
 
     let m = [|[|false; true; false|];
               [|true; false; true|];
               [|true; false; false|];
-             [|false; true; true|]|] in 
+             [|false; true; true|]|] in
 
     let p = conj_of_matrix m in
 

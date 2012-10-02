@@ -33,6 +33,7 @@ doc
 *.out
 *.vrb
 test.svg
+test.sat
 export
 /www/download/
 /www/*.ml*.html

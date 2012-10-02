@@ -37,8 +37,7 @@ let tiles_env = Hashtbl.create 50
 let problems = ref []
 let problem_tbl = Hashtbl.create 50
 
-let rec interp_expr expr =
-  match expr.expr_node with
+let rec interp_expr expr = match expr.expr_node with
   | Var s -> begin
       try
         let value = Hashtbl.find var_env s in
@@ -128,11 +127,12 @@ let count p algo =
 
 let solve output p algo =
   let emc = Tiling.emc p in
+  if !debug then eprintf "@[<hov 2>EMC is@\n%a@]@." print_emc emc;
   let { primary = primary; matrix = m; tiles = decode_tbl } = emc in
   init_timer ();
   let width, height =
     p.grid.Pattern.width * 25, p.grid.Pattern.height * 25 in
-  let solution = 
+  let solution =
     begin match algo with
       | Dlx -> begin
           try Emc.D.find_solution (Emc.D.create ~primary m) with
@@ -141,11 +141,11 @@ let solve output p algo =
           let zdd = Emc.Z.create ~primary m in
           try Emc.Z.find_solution zdd with
             | Not_found -> []
-    end in 
-  if solution = [] then 
+    end in
+  if solution = [] then
     printf "problem %s has no solution@\n" p.pname
-  else 
-    begin 
+  else
+    begin
       let print = begin match output with
         | Svg f ->
             printf "out : %s@\n" f;
@@ -159,7 +159,7 @@ let solve output p algo =
 
 let interp_problem_command p = function
   | Print -> printf "%a@\n" Tiling.print_problem p
-  | Sat f -> 
+  | Sat f ->
         printf "sat out : %s@\n" f;
         Sat.print_sat_file f ((Tiling.emc p).matrix);
   | Solve (algo, output) -> solve output p algo
@@ -192,11 +192,12 @@ let rec interp_decl decl =
           | Not_found ->
               raise (Error (decl.decl_pos, "Unbound problem " ^ id)) end in
         interp_problem_command p c
-    | Debug st -> begin match st with On -> debug := true
-        | Off -> debug := false end
-    | Timing st -> begin match st with On -> timing := true
-        | Off -> timing := false end
-    | Exit -> printf "exit@\n"; exit 0
+    | Debug st ->
+        debug := (match st with On -> true | Off -> false)
+    | Timing st ->
+        timing := (match st with On -> true | Off -> false)
+    | Exit ->
+        printf "exit@\n"; exit 0
     | Include s ->
         let file =
           if Filename.is_relative s then

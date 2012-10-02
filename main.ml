@@ -61,11 +61,14 @@ let () =
           start.pos_fname start.pos_lnum
           (start.pos_cnum - start.pos_bol)
           (stop.pos_cnum - stop.pos_bol) ;
-        printf "Error : %a@\n" Interp.print_error err;
-        exit 0
+        printf "Error: %a@\n" Interp.print_error err;
+        exit 1
+    | e ->
+        Printexc.print_backtrace stderr; flush stderr;
+        Format.eprintf "Uncaught exception:@.";
+        exit 1
 
-
-
+(***
 module N = struct
   type t = Num.num
   let zero = Num.num_of_int 0
@@ -94,6 +97,7 @@ let handle_problem p =
     let p = Emc.D.create ~primary m in
     printf "  DLX solutions: %a\n@." N.print (DCount.count_solutions p)
   end
+***)
 
 let () =
   if !stats then begin

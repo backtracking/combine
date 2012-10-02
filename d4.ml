@@ -204,8 +204,8 @@ let quotient g1 g2 =
 
 let elements g = g
 
-let compl = function  
-    Id -> D4
+let compl = function
+  | Id -> D4
   | Vert -> Positive
   | Horiz -> Positive
   | Rot180 -> Refl_12

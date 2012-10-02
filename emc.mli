@@ -76,7 +76,7 @@ module Sat : sig
 
   val conj_of_matrix : bool array array -> t
 
-end 
+end
 
 
 

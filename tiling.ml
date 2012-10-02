@@ -19,6 +19,8 @@
 
 (* Tiling Module *)
 
+open Format
+
 (* Misc *)
 
 module Pattern = struct
@@ -171,7 +173,7 @@ module Tile = struct
 
   let print fmt t =
     begin match t.name with Some s ->
-    Format.printf "name : %s@\n"s; | None -> () end;
+    Format.printf "tile %S@\n"s; | None -> () end;
     Format.fprintf fmt "%a@\n" Pattern.print t.pattern;
     Format.fprintf fmt "{ ";
     D4.S.iter (fun iso -> Format.fprintf fmt "%a, " D4.print iso)
@@ -238,7 +240,7 @@ let create_problem ?(name="") g ps = {
 }
 
 let print_problem fmt problem =
-  if problem.pname <> "" then Format.fprintf fmt "name : %s@\n" problem.pname;
+  if problem.pname <> "" then Format.fprintf fmt "problem %S@\n" problem.pname;
   Format.fprintf fmt "%a@\n" Pattern.print problem.grid;
   List.iter (fun t -> Format.fprintf fmt "%a@\n" Tile.print t) problem.pieces
 
@@ -250,7 +252,7 @@ let print_problem fmt problem =
 
 (* return true if position x y is on the board *)
 let existing_position problem x y =
-  x < problem.grid.Pattern.width
+     x < problem.grid.Pattern.width
   && y < problem.grid.Pattern.height
   && problem.grid.Pattern.matrix.(y).(x)
 
@@ -289,7 +291,7 @@ let get_id_col_emc problem x y =
     !id
   with Exit -> !id
 
-let one_line l n tile_id tile problem x y =
+let one_line l n tile_id tile problem ~x ~y =
   let line = Array.make n false in
   for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do
     for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do
@@ -334,6 +336,12 @@ type emc = {
   tiles  : (Tile.t * int * int) array;	(* row -> tile and its position *)
 }
 
+let print_emc fmt emc =
+  let print_bool b = if b then fprintf fmt "1" else fprintf fmt "0" in
+  let print_line _ l = Array.iter print_bool l; fprintf fmt "@\n" in
+  Array.iteri print_line emc.matrix;
+  fprintf fmt "%d primary columns" emc.primary
+
 (* return a boolean matrix representing the set of way to put all pieces
  * on the board
  * *)
@@ -347,7 +355,7 @@ let emc problem =
   let tile_id_sec  = ref (ncc + prim) in
   let lines = ref [] in
   let decodes = ref [] in
-  let add_piece i j tile =
+  let add_piece x y tile =
     let tile_id = match tile.multiplicity with
       | Mone -> let v = !tile_id_prim in incr tile_id_prim; v
       | Mmaybe -> let v = !tile_id_sec in incr tile_id_sec; v
@@ -355,16 +363,16 @@ let emc problem =
     in
     List.iter
       (fun t ->
-         if is_possible_position t problem i j then begin
-           lines := one_line w n tile_id t problem i j :: !lines;
-           decodes :=  (t, i, j) :: !decodes
+        if is_possible_position t problem x y then begin
+           lines := one_line w n tile_id t problem x y :: !lines;
+           decodes :=  (t, x, y) :: !decodes
          end
       )
       (tile :: Tile.create_all_symetries tile)
   in
-  for i = 0 to h - 1 do
-    for j = 0 to w - 1 do
-      List.iter (add_piece i j) problem.pieces;
+  for y = 0 to h - 1 do
+    for x = 0 to w - 1 do
+      List.iter (add_piece x y) problem.pieces;
       tile_id_prim := ncc;
       tile_id_sec := ncc + prim
     done
