@@ -76,7 +76,6 @@ let interp_bool_expr = function
       match op with
         | Equal -> (interp_expr e1) = (interp_expr e2)
 
-
 let tile ~s ~m e =
   let p = (interp_expr e) in
   let name = match e.expr_node with Var id -> Some id | _ -> None in
@@ -95,19 +94,13 @@ end
 module ZCount = Emc.Z.Count(N)
 module DCount = Emc.D.Count(N)
 
-
 let init_timer () =
   timer := Unix.gettimeofday ()
-
-
 
 let finish_timer fmt () =
   let elapsed = Unix.gettimeofday () -. !timer in
   fprintf fmt "%fs" elapsed;
   timer := 0.
-
-
-
 
 let count p algo =
   let { primary = primary; matrix = m; tiles = decode_tbl } = Tiling.emc p in
@@ -123,8 +116,6 @@ let count p algo =
   end;
   if !timing then printf "%s solutions counted in %a@." p.pname finish_timer ()
 
-
-
 let solve output p algo =
   let emc = Tiling.emc p in
   if !debug then eprintf "@[<hov 2>EMC is@\n%a@]@." print_emc emc;
@@ -132,30 +123,27 @@ let solve output p algo =
   init_timer ();
   let width, height =
     p.grid.Pattern.width * 25, p.grid.Pattern.height * 25 in
-  let solution =
-    begin match algo with
-      | Dlx -> begin
-          try Emc.D.find_solution (Emc.D.create ~primary m) with
-            | Not_found -> [] end
-      | Zdd ->
-          let zdd = Emc.Z.create ~primary m in
-          try Emc.Z.find_solution zdd with
-            | Not_found -> []
-    end in
+  let solution = match algo with
+    | Dlx -> begin
+        try Emc.D.find_solution (Emc.D.create ~primary m) with
+          | Not_found -> [] end
+    | Zdd ->
+        let zdd = Emc.Z.create ~primary m in
+        try Emc.Z.find_solution zdd with
+          | Not_found -> []
+  in
   if solution = [] then
     printf "problem %S has no solution@\n" p.pname
-  else
-    begin
-      let print = begin match output with
-        | Svg f ->
-            printf "SVG out in file %S@\n" f;
-            print_solution_to_svg_file f ~width ~height p emc;
-        | Ascii ->
-            print_solution_ascii Format.std_formatter p emc end in
-      if !timing then printf "%S solved in %a@." p.pname finish_timer ();
-      print solution end
-
-
+  else begin
+    let print = begin match output with
+      | Svg f ->
+          printf "SVG written in file %S@\n" f;
+          print_solution_to_svg_file f ~width ~height p emc;
+      | Ascii ->
+          print_solution_ascii Format.std_formatter p emc end in
+    if !timing then printf "%S solved in %a@." p.pname finish_timer ();
+    print solution
+  end
 
 let interp_problem_command p = function
   | Print -> printf "%a@\n" Tiling.print_problem p
@@ -217,7 +205,6 @@ and interp dl =
   Hashtbl.clear var_env;
   Hashtbl.clear tiles_env;
   List.iter (fun d -> interp_decl d) dl
-
 
 let interp_problems dl =
   problems := [];

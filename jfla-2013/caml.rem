@@ -46,6 +46,8 @@ pattern caml2 = {
 problem caml2 = caml2 [domino ~sym]
 print caml2
 
+solve dlx caml2 ascii
+
 count zdd caml2
 
 pattern logo = {

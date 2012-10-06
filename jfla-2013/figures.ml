@@ -101,3 +101,26 @@ let of_char_matrix m =
 
 let () = Metapost.emit "caml_solution" (of_char_matrix caml_solution)
 
+let modbox s =
+  round_rect (tex (Format.sprintf "\\tt %s" s))
+
+let archi =
+  let tiling = modbox "Tiling" in
+  let emc = modbox "Emc" in
+  let zdd = modbox "Zdd" in
+  let dlx = modbox "Dlx" in
+  let b = vbox ~padding:(bp 30.)
+    [tiling;
+     emc;
+     hbox ~padding:(bp 30.) [dlx; zdd]]
+  in
+  let box_label_arrow x y ~pos ~label =
+    let label = Picture.tex label in
+    Helpers.box_label_arrow ~sep:(bp 5.) ~pos label (sub x b) (sub y b) in
+  Box.draw b ++
+  box_label_arrow tiling emc ~label:"r\\'eduction" ~pos:`Right ++
+  box_label_arrow emc    dlx ~label:"solution"     ~pos:`Left  ++
+  box_label_arrow emc    zdd ~label:"solution"     ~pos:`Right ++
+  nop
+
+let () = Metapost.emit "archi" archi

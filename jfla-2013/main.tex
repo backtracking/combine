@@ -2,12 +2,15 @@
 \usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{actes,hyperref,graphicx}
+
+\newcommand{\reml}{\texttt{combine}}
+
 %% Title page...
-\title{ReML : une bibliothèque OCaml pour la combinatoire}
+\title{\reml\ : une bibliothèque OCaml pour la combinatoire}
 \author{Rémy El Sibaïe$^1$
   \& Jean-Christophe Filliâtre$^{2,1}$}
 %% Headers for other pages...
-\titlehead{ReML : une bibliothèque OCaml pour la combinatoire} % for odd pages
+\titlehead{\reml\ : une bibliothèque OCaml pour la combinatoire} % for odd pages
 \authorhead{R.~El Sibaie \& J.-C. Filliâtre}     % for even pages
 \affiliation{\begin{tabular}{rr}        % for institute(s)
     \\ 1:  LRI, Université Paris Sud,
@@ -17,8 +20,6 @@
     \\     {\tt jean-christophe.filliatre@lri.fr}
   \end{tabular}}
 
-\newcommand{\reml}{ReML}
-
 \input{./insbox}
 
 \begin{document}
@@ -27,7 +28,9 @@
 \maketitle
 
 \begin{abstract}
-  Cet article présente \reml, une bibliothèque OCaml pour la
+  Cet article présente \reml\footnote{Le lecteur perspicace notera
+    que \reml\ est à la fois un mot anglais, français et un anagramme
+    de << combien >>.}, une bibliothèque OCaml pour la
   combinatoire\footnote{Il s'agit d'un travail réalisé par le premier
     auteur pendant un stage de L3 au LRI, d'avril à juin 2012, sous la
     direction du second auteur.}.
@@ -35,30 +38,40 @@
 
 \section{Introduction}
 
-% \InsertBoxR{2}{\includegraphics{caml_problem.mps}}
+\InsertBoxR{1}{\includegraphics{caml_problem.mps}}
+Rien n'est plus excitant en informatique que d'écrire un programme
+qui calcule en quelques secondes un résultat qu'on ne pourrait obtenir
+sans l'aide d'un ordinateur. La combinatoire est un domaine
+particulièrement fertile en la matière. Si certains problèmes se
+prêtent volontiers à l'analyse mathématique, comme le nombre total de livres
+dans la bibliothèque de Borgès ou encore le nombre de
+labyrinthes parfaits rectangulaires, beaucoup d'autres exigent de
+recourir à la programmation. Considérons par exemple le
+nombre de façons différentes de paver
+la figure ci-contre avec des dominos $2\times 1$.
+Il est relativement aisé d'écrire un programme qui va explorer toutes
+les solutions possibles. En une fraction de seconde, on déterminera
+alors qu'elles sont au nombre de 46\,976.
+% (ZDD 0.11s, DLX 0.09s)
 
-% \InsertBoxL{0}{\includegraphics{caml_solution.mps}}%
+\InsertBoxL{2}{\includegraphics{caml2_problem.mps}}
+Mais considérons maintenant un problème de pavage légèrement plus
+complexe, avec la figure de gauche qui demande deux fois plus de dominos.
+Le problème est nettement plus complexe. Une approche brutale, qui
+trouve les solutions une à une, n'aboutira pas. Il existe en effet
+32\,420\,116\,341\,024\,288 solutions distinctes. Même à raison d'un
+milliard de solutions trouvées par seconde, il faudrait encore plus
+d'un an pour parvenir à ce chiffre. Et pourtant le chiffre ci-dessus a
+été obtenu par les auteurs en quelques dizaines de secondes seulement,
+à l'aide d'une bibliothèque OCaml, \reml, qui permet notamment de résoudre des
+problèmes de pavage bi-dimensionnels.
+Cet article a pour but de présenter cette bibliothèque.
+% (ZDD 39.7s, 1.4 Go de RAM)
 
-\begin{center}
-  \includegraphics{caml_problem.mps}
-\end{center}
-\begin{center}
-  \includegraphics{caml_solution.mps}
-\end{center}
-
-
-caml
-46976 solutions
-(ZDD 0.11s, DLX 0.09s)
-
-\begin{center}
-  \includegraphics{caml2_problem.mps}
-\end{center}
-
-caml2
-32,420,116,341,024,288 solutions
-(ZDD 39.7s, 1.4 Go de RAM)
-
+\InsertBoxL{5}{\includegraphics{caml_solution.mps}}%
+\footnote{Ce résultat de pavage a été dessiné automatiquement avec la
+  bibliothèque OCaml \texttt{mlpost}~\cite{mlpost09jfla}, à partir
+  de la solution ASCII produite par \reml.}
 
 \cite{taocp4a}
 
@@ -66,30 +79,97 @@ caml2
 
 \cite{ZDD}
 
-Mlpost~\cite{mlpost09jfla}
+\begin{figure}[t]
+  \centering
+  \begin{tabular}{l|l}
+    \begin{minipage}{0.4\linewidth}
+\begin{verbatim}
+pattern caml = {
+....****....................
+..******....................
+********....****..****......
+....****....**********......
+....****..**************....
+....**********************..
+....************************
+......********....******..**
+........****........****....
+........****........****....
+........****........****....
+........****........****....
+........****........****....}
+\end{verbatim}
+    \end{minipage} &
+    \begin{minipage}{0.6\linewidth}
+\begin{verbatim}
+pattern domino = {**}
+
+problem tiling_a_caml = caml [domino ~sym]
+
+timing on
+
+solve dlx tiling_a_caml svg "output.svg"
+
+count zdd tiling_a_caml
+
+
+
+
+
+\end{verbatim}
+    \end{minipage}
+  \end{tabular}
+  \caption{Exemple d'entrée de l'outil \reml\ (sur deux colonnes).}
+\hrulefill
+  \label{fig:chameau}
+\end{figure}
 
 La bibliothèque \reml\ est un logiciel libre, distribué sous licence
 LGPL à l'adresse \url{http://www.lri.fr/~filliatr/reml/}.
 
-\section{Architecture}
+\medskip
+Cet article est organisé de façon très simple. La
+section~\ref{sec:sig} présente l'interface de la bibliothèque \reml\
+et la section~\ref{sec:impl} sa réalisation. La dernière section
+détaille des extensions possibles.
+
+\section{Architecture}\label{sec:sig}
+
+\begin{center}
+  \includegraphics{archi.mps}
+\end{center}
 
 La bibliothèque \reml\ fournit :
 \begin{itemize}
 \item l'algorithme \emph{Dancing Links} de Knuth
 \item la structure de ZDD
 \item
-\item 
+\item
 \end{itemize}
 
-\section{Réalisation} % = détails techniques
+\section{Réalisation}\label{sec:impl} % = détails techniques
+
+- ZDD
+
+   hash-consing, pointeurs faibles, tables de mémoïsation
+
+- DLX
+
+   type OCaml, iter
+
+- EMC
 
 
 \section{Conclusion et perspectives}
 
+- symétries du problème
+
+- pavage en 3D, non rectangulaires
+
 
 % And do NOT FORGET to include your bibliography for submission
 \bibliographystyle{plain}
-\bibliography{abbrevs,demons,demons2,demons3,team,crossrefs,crossrefs2}
+\bibliography{abbrevs,demons,demons2,demons3,team,crossrefs}
 
 \vfill
 \pagebreak
