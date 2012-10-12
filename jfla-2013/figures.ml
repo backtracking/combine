@@ -120,7 +120,7 @@ let archi =
   Box.draw b ++
   box_label_arrow tiling emc ~label:"r\\'eduction" ~pos:`Right ++
   box_label_arrow emc    dlx ~label:"solution"     ~pos:`Left  ++
-  box_label_arrow emc    zdd ~label:"solution"     ~pos:`Right ++
+  box_label_arrow emc    zdd ~label:"r\\'eduction" ~pos:`Right ++
   nop
 
 let () = Metapost.emit "archi" archi

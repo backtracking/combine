@@ -27,6 +27,8 @@ solve dlx caml ascii
 count zdd caml
 count dlx caml
 
+exit
+
 pattern caml2 = {
 ....****....................
 ..******....................

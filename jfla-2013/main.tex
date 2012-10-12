@@ -33,7 +33,13 @@
     de << combien >>.}, une bibliothèque OCaml pour la
   combinatoire\footnote{Il s'agit d'un travail réalisé par le premier
     auteur pendant un stage de L3 au LRI, d'avril à juin 2012, sous la
-    direction du second auteur.}.
+    direction du second auteur.}. Elle fournit deux solutions
+  algorithmiques très différentes au problème de la couverture exacte
+  de matrice (EMC) : les liens dansants de Knuth (DLX) et une variante
+  des diagrammes de décision binaire appelée ZDD. De très nombreux
+  problèmes de combinatoire peuvent être ramenés au problème EMC. La
+  bibliothèque \reml\ l'illustre notamment avec le pavage
+  rectangulaire en dimension 2.
 \end{abstract}
 
 \section{Introduction}
@@ -54,19 +60,73 @@ les solutions possibles. En une fraction de seconde, on déterminera
 alors qu'elles sont au nombre de 46\,976.
 % (ZDD 0.11s, DLX 0.09s)
 
-\InsertBoxL{2}{\includegraphics{caml2_problem.mps}}
+\InsertBoxL{0}{\includegraphics{caml2_problem.mps}}
 Mais considérons maintenant un problème de pavage légèrement plus
 complexe, avec la figure de gauche qui demande deux fois plus de dominos.
-Le problème est nettement plus complexe. Une approche brutale, qui
+Le problème est nettement plus difficile. Une approche brutale, qui
 trouve les solutions une à une, n'aboutira pas. Il existe en effet
 32\,420\,116\,341\,024\,288 solutions distinctes. Même à raison d'un
 milliard de solutions trouvées par seconde, il faudrait encore plus
 d'un an pour parvenir à ce chiffre. Et pourtant le chiffre ci-dessus a
 été obtenu par les auteurs en quelques dizaines de secondes seulement,
 à l'aide d'une bibliothèque OCaml, \reml, qui permet notamment de résoudre des
-problèmes de pavage bi-dimensionnels.
+problèmes de pavage rectangulaires en dimension 2.
 Cet article a pour but de présenter cette bibliothèque.
 % (ZDD 39.7s, 1.4 Go de RAM)
+
+La bibliothèque \reml\ est centrée autour du problème de la
+\emph{couverture exacte de matrice}, désigné par EMC dans ce qui suit. Étant
+donnée une matrice contenant uniquement des 0 et des 1, il s'agit de
+déterminer un sous-ensemble de ses lignes contenant un 1 et un seul
+par colonne. Étant donné un problème EMC, on peut s'intéresser
+uniquement à la question de savoir s'il possède une solution, au
+problème d'en construire une le cas échéant, au problème de dénombrer
+les solutions, ou encore au problème de les construire toutes.
+Ainsi le problème EMC suivant
+\begin{displaymath}
+  % \begin{array}{ c }
+  %  0. \\
+  %  1. \\
+  %  2. \\
+  %  3. \\
+  %  4. \\
+  % \end{array}
+\left(
+  \begin{array}{ c c c c c }
+   1 & 0 & 1 & 1 \\
+   0 & 1 & 1 & 0 \\
+   1 & 1 & 0 & 1 \\
+   1 & 0 & 0 & 1 \\
+   0 & 1 & 0 & 0
+  \end{array} \right)
+\end{displaymath}
+possède exactement deux solutions, à savoir les sous-ensembles de
+lignes $\{0,4\}$ et $\{1,3\}$.
+L'intérêt d'EMC est qu'il est très facile d'y encoder de
+nombreux problèmes de combinatoire. Ainsi un problème de pavage, tel
+que celui présenté en introduction, peut être encodé de la façon
+suivante : chaque colonne représente une case à recouvrir et chaque
+ligne une façon possible de poser une pièce. Ainsi le petit chameau
+donne lieu à une matrice de 80 colonnes et 122 lignes, et le gros
+chameau à une matrice de 160 colonnes et 268 lignes.
+
+Pour résoudre le problème EMC, plusieurs techniques sont à notre
+disposition. Une première consiste à découvrir les solutions une par
+une, en utilisant du \emph{backtracking}.
+Knuth a proposé pour cela un algorithme appelé les \emph{liens
+  dansants} (ou encore DLX)~\cite{knuth00:dlx}. Il consiste à relier
+ensemble tous les
+1 de la matrice EMC dans un réseau de listes circulaires doublement
+chaînées horizontales et verticales, puis à ôter et réinsérer
+successivement les éléments de ces listes au fur et à mesure des choix
+qui sont faits. L'efficacité de cet algorithme est due notamment à la
+possibilité de réinsérer un élément qui vient d'être supprimé d'une
+liste doublement chaînée sans utiliser d'autre information que
+celle qui se trouve déjà dans les deux pointeurs vers ses anciens voisins.
+L'algorithme DLX ne trouve les solutions du problème EMC qu'une à une,
+mais avec une très grande efficacité. Pour le petit chameau, les
+46\,976 solutions sont trouvées en un dixième de seconde.
+
 
 \InsertBoxL{5}{\includegraphics{caml_solution.mps}}%
 \footnote{Ce résultat de pavage a été dessiné automatiquement avec la
@@ -74,8 +134,6 @@ Cet article a pour but de présenter cette bibliothèque.
   de la solution ASCII produite par \reml.}
 
 \cite{taocp4a}
-
-\cite{knuth00:dlx}
 
 \cite{ZDD}
 
@@ -128,10 +186,10 @@ La bibliothèque \reml\ est un logiciel libre, distribué sous licence
 LGPL à l'adresse \url{http://www.lri.fr/~filliatr/reml/}.
 
 \medskip
-Cet article est organisé de façon très simple. La
+Le reste de cet article est organisé de façon très simple. La
 section~\ref{sec:sig} présente l'interface de la bibliothèque \reml\
-et la section~\ref{sec:impl} sa réalisation. La dernière section
-détaille des extensions possibles.
+et la section~\ref{sec:impl} les détails technique de sa
+réalisation. L'article s'achève en détaillant des extensions possibles.
 
 \section{Architecture}\label{sec:sig}
 
@@ -139,19 +197,13 @@ détaille des extensions possibles.
   \includegraphics{archi.mps}
 \end{center}
 
-La bibliothèque \reml\ fournit :
-\begin{itemize}
-\item l'algorithme \emph{Dancing Links} de Knuth
-\item la structure de ZDD
-\item
-\item
-\end{itemize}
 
 \section{Réalisation}\label{sec:impl} % = détails techniques
 
 - ZDD
 
-   hash-consing, pointeurs faibles, tables de mémoïsation
+   hash-consing\cite{ConchonFilliatre06wml}, pointeurs faibles, tables
+   de mémoïsation
 
 - DLX
 
@@ -159,6 +211,7 @@ La bibliothèque \reml\ fournit :
 
 - EMC
 
+  surtout réduction EMC -> ZDD
 
 \section{Conclusion et perspectives}
 
@@ -182,3 +235,5 @@ La bibliothèque \reml\ fournit :
 %%% ispell-local-dictionary: "francais"
 %%% TeX-master: t
 %%% End:
+
+% LocalWords:  encodé d'EMC

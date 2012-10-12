@@ -1,8 +1,8 @@
 %!PS
-%%BoundingBox: -36 -95 67 11 
-%%HiResBoundingBox: -35.10265 -94.6405 66.4846 10.33826 
+%%BoundingBox: -36 -95 74 11 
+%%HiResBoundingBox: -35.10265 -94.6405 73.09871 10.33826 
 %%Creator: MetaPost 1.208
-%%CreationDate: 2012.10.06:1746
+%%CreationDate: 2012.10.12:2201
 %%Pages: 1
 %*Font: cmtt10 9.96265 9.96265 44:c000820194e008
 %*Font: cmr10 9.96265 9.96265 13:80000000000000000000e259e
@@ -87,6 +87,10 @@ newpath 33.3997 -76.2491 moveto
 36.8159 -74.1684 lineto
  closepath fill
 32.1134 -68.76096 moveto
-(solution) cmr10 9.96265 fshow
+(r) cmr10 9.96265 fshow
+35.73871 -68.76096 moveto
+(\023) cmr10 9.96265 fshow
+36.0154 -68.76096 moveto
+(eduction) cmr10 9.96265 fshow
 showpage
 %%EOF
