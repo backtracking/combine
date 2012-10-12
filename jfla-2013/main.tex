@@ -117,9 +117,10 @@ Knuth a proposé pour cela un algorithme appelé les \emph{liens
   dansants} (ou encore DLX)~\cite{knuth00:dlx}. Il consiste à relier
 ensemble tous les
 1 de la matrice EMC dans un réseau de listes circulaires doublement
-chaînées horizontales et verticales, puis à ôter et réinsérer
-successivement les éléments de ces listes au fur et à mesure des choix
-qui sont faits. L'efficacité de cet algorithme est due notamment à la
+chaînées horizontales et verticales, puis à ôter
+successivement les éléments de ces listes, au fur et à mesure des choix
+qui sont faits, et à les réinsérer ensuite.
+L'efficacité de cet algorithme est due notamment à la
 possibilité de réinsérer un élément qui vient d'être supprimé d'une
 liste doublement chaînée sans utiliser d'autre information que
 celle qui se trouve déjà dans les deux pointeurs vers ses anciens voisins.
@@ -127,15 +128,37 @@ L'algorithme DLX ne trouve les solutions du problème EMC qu'une à une,
 mais avec une très grande efficacité. Pour le petit chameau, les
 46\,976 solutions sont trouvées en un dixième de seconde.
 
+Une second approche du problème EMC consiste à utiliser une variante
+des BDD appelée ZDD, pour \emph{Zero-suppressed binary Decision
+  Diagram}, et due à Minato~\cite{ZDD}. Comme les BDD, les ZDD
+permettent de représenter une fonction booléenne de $n$ variables sous
+la forme d'un graphe orienté acyclique. On peut alors effectuer des
+opérations entre ZDD, comme par exemple la conjonction ou les
+disjonction, ou encore calculer très simplement le nombre
+d'assignations distinctes des $n$ variables qui donne la valeur de
+vérité 1. Les ZDD sont décrits en détail dans le volume 4A de
+\emph{The Art of Computer Programming}~\cite{taocp4a}.
+Le problème EMC peut être réduit à un ZDD de la façon
+suivante. Les $n$ variables sont les $n$ lignes de la matrice. On
+commence par convertir chaque colonne de la matrice EMC en un ZDD qui
+correspond aux sous-ensembles de lignes qui contiennent exactement un
+1 dans cette colonne. Puis on fait l'intersection de tous ces ZDD.
+Cette technique a les avantages et inconvénients usuels des BDD. Si on
+parvient à construire le ZDD sans épuiser la mémoire vive, alors le
+problème est résolu. En effet, on peut alors facilement déterminer
+s'il existe une solution, et une construire une le cas échéant, mais
+surtout calculer le nombre total de solutions (en exploitant le
+partage, comme pour un BDD). C'est ainsi qu'on a calculé le nombre
+gigantesque de solutions au problème de pavage du grand chameau.
+
 
 \InsertBoxL{5}{\includegraphics{caml_solution.mps}}%
 \footnote{Ce résultat de pavage a été dessiné automatiquement avec la
   bibliothèque OCaml \texttt{mlpost}~\cite{mlpost09jfla}, à partir
   de la solution ASCII produite par \reml.}
 
-\cite{taocp4a}
 
-\cite{ZDD}
+
 
 \begin{figure}[t]
   \centering
@@ -236,4 +259,5 @@ réalisation. L'article s'achève en détaillant des extensions possibles.
 %%% TeX-master: t
 %%% End:
 
-% LocalWords:  encodé d'EMC
+% LocalWords:  encodé d'EMC acyclique d'assignations booléenne Minato BDD ZDD
+% LocalWords:  EMC
