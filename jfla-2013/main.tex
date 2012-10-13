@@ -3,14 +3,16 @@
 \usepackage[T1]{fontenc}
 \usepackage{actes,hyperref,graphicx}
 
-\newcommand{\reml}{\texttt{combine}}
+\newcommand{\combine}{\texttt{combine}}
+\newcommand{\noeud}{n\oe ud}
+\newcommand{\noeuds}{n\oe uds}
 
 %% Title page...
-\title{\reml\ : une bibliothèque OCaml pour la combinatoire}
+\title{\combine\ : une bibliothèque OCaml pour la combinatoire}
 \author{Rémy El Sibaïe$^1$
   \& Jean-Christophe Filliâtre$^{2,1}$}
 %% Headers for other pages...
-\titlehead{\reml\ : une bibliothèque OCaml pour la combinatoire} % for odd pages
+\titlehead{\combine\ : une bibliothèque OCaml pour la combinatoire} % for odd pages
 \authorhead{R.~El Sibaie \& J.-C. Filliâtre}     % for even pages
 \affiliation{\begin{tabular}{rr}        % for institute(s)
     \\ 1:  LRI, Université Paris Sud,
@@ -29,8 +31,8 @@
 \maketitle
 
 \begin{abstract}
-  Cet article présente \reml\footnote{Le lecteur perspicace notera
-    que \reml\ est à la fois un mot anglais, français et un anagramme
+  Cet article présente \combine\footnote{Le lecteur perspicace notera
+    que \combine\ est à la fois un mot anglais, français et un anagramme
     de << combien >>.}, une bibliothèque OCaml pour la
   combinatoire\footnote{Il s'agit d'un travail réalisé par le premier
     auteur pendant un stage de L3 au LRI, d'avril à juin 2012, sous la
@@ -39,7 +41,7 @@
   de matrice (EMC) : les liens dansants de Knuth et une variante
   des diagrammes de décision binaire appelée ZDD. De très nombreux
   problèmes de combinatoire peuvent être ramenés au problème EMC. La
-  bibliothèque \reml\ l'illustre notamment avec le pavage
+  bibliothèque \combine\ l'illustre notamment avec le pavage
   rectangulaire en dimension 2.
 \end{abstract}
 
@@ -71,12 +73,12 @@ trouve les solutions une à une, n'aboutira pas. Il existe en effet
 milliard de solutions trouvées par seconde, il faudrait encore plus
 d'un an pour parvenir à ce chiffre. Et pourtant le chiffre ci-dessus a
 été obtenu par les auteurs en quelques dizaines de secondes seulement,
-à l'aide d'une bibliothèque OCaml, \reml, qui permet notamment de résoudre des
+à l'aide d'une bibliothèque OCaml, \combine, qui permet notamment de résoudre des
 problèmes de pavage rectangulaires en dimension 2.
 Cet article a pour but de présenter cette bibliothèque.
 % (ZDD 39.7s, 1.4 Go de RAM)
 
-La bibliothèque \reml\ est centrée autour du problème de la
+La bibliothèque \combine\ est centrée autour du problème de la
 \emph{couverture exacte de matrice}, désigné par EMC dans ce qui suit. Étant
 donnée une matrice contenant uniquement des 0 et des 1, il s'agit de
 déterminer un sous-ensemble de ses lignes contenant un 1 et un seul
@@ -156,7 +158,7 @@ partage, comme avec un BDD). C'est ainsi qu'on a calculé le nombre
 gigantesque de solutions au problème de pavage du grand chameau.
 
 \InsertBoxR{0}{\includegraphics{caml_solution.mps}}%
-La bibliothèque \reml\ contient, outre ces deux solutions au problème
+La bibliothèque \combine\ contient, outre ces deux solutions au problème
 EMC, trois exemples d'application. Les deux premiers sont des exemples
 relativement simples. Il s'agit du problème des $N$ reines et du
 Sudoku. Le troisième exemple est celui du pavage rectangulaire en
@@ -167,8 +169,8 @@ C'est ainsi qu'a été obtenue la solution ci-contre au problème de
 pavage donné en introduction\footnote{Ce résultat de pavage a été dessiné
   automatiquement avec la
   bibliothèque OCaml \texttt{mlpost}~\cite{mlpost09jfla}, à partir
-  de la solution produite par \reml.}.
-Enfin, la distribution de \reml\ contient un interprète pour un petit
+  de la solution produite par \combine.}.
+Enfin, la distribution de \combine\ contient un interprète pour un petit
 langage permettant de décrire un problème de pavage dans une syntaxe
 concrète et d'utiliser les différents outils de la bibliothèque
 sans recourir à un programme.
@@ -215,25 +217,25 @@ count zdd tiling_a_caml
 \end{verbatim}
     \end{minipage}
   \end{tabular}
-  \caption{Exemple d'entrée de l'outil \reml\ (sur deux colonnes).}
+  \caption{Exemple d'entrée de l'outil \combine\ (sur deux colonnes).}
 \hrulefill
   \label{fig:chameau}
 \end{figure}
 %
-La bibliothèque \reml\ est un logiciel libre, distribué sous licence
+La bibliothèque \combine\ est un logiciel libre, distribué sous licence
 LGPL à l'adresse \url{http://www.lri.fr/~filliatr/combine/}.
 
 \insboxrestore
 \medskip
 Le reste de cet article est organisé de façon très simple. La
-section~\ref{sec:sig} présente l'interface de la bibliothèque \reml\
+section~\ref{sec:sig} présente l'interface de la bibliothèque \combine\
 et la section~\ref{sec:impl} les détails techniques de sa
 réalisation. L'article s'achève en indiquant des extensions possibles.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Interface}\label{sec:sig}
 
-La bibliothèque \reml\ se compose de quatre modules principaux,
+La bibliothèque \combine\ se compose de quatre modules principaux,
 organisés de la façon suivante :
 \begin{center}
   \includegraphics{archi.mps}
@@ -268,7 +270,8 @@ pour le décoder sous la forme d'une liste d'entiers, représentant les
 lignes de la matrice qui ont été sélectionnées. L'idée est ici de ne
 pas construire cette liste lorsque cela n'est pas nécessaire.
 
-\paragraph{\of{Zdd}.} Comme expliqué dans l'introduction, un ZDD est
+\paragraph{\of{Zdd}.}
+Comme expliqué dans l'introduction, un ZDD est
 une structure de donnée représentant une fonction booléenne sur $n$
 variables. De manière équivalente, on peut l'interpréter comme un
 ensemble de parties de $\{0,1,\dots,n-1\}$, à savoir l'ensemble des
@@ -280,23 +283,82 @@ ensembles d'entiers, c'est-à-dire
   module S: Set.S with type elt = int
   include Set.S with type elt = S.t
 \end{ocaml}
+(Contrairement aux BDD, il n'est pas nécessaire de fixer à l'avance
+le nombre de variables.)
+Parmi les fonctions ensemblistes ci-dessus, on trouve bien évidemment
+une fonction \of{cardinal: t -> int}. Cependant, le cardinal d'un ZDD
+peut atteindre de très grandes valeurs, comme l'a montré notre exemple
+introductif, et il faut donc être également capable de calculer le
+cardinal avec un type autre que \of{int}. Pour cela, on propose en
+supplément un foncteur
+\begin{ocaml}
+  module Cardinal(A: ARITH) : sig val cardinal: t -> A.t end
+\end{ocaml}
+où \of{A} est un module d'arithmétique minimal fournissant un zéro, une unité
+et une addition.
+Une autre différence avec le module \of{Set} d'OCaml vient de
+l'unicité de la représentation d'un ZDD. Elle permet de fournir des
+opérations \of{compare} et \of{equal} de complexité $O(1)$.
 
-- ZDD : ensembles d'ensembles d'entiers / sortie DOT
-
-- différence avec les BDD : pas besoin de fixer $n$
-
-\begin{center}
-  \includegraphics[scale=0.5]{../stage/imports/zdd_construct.pdf}
-\end{center}
+\InsertBoxR{2}{\includegraphics[scale=0.5]{../stage/imports/zdd_construct2.pdf}}
+Par ailleurs, le module \of{Zdd} fournit une interface de plus bas
+niveau, qui expose la représentation interne.
+Un ZDD est un arbre binaire dont les feuilles sont
+\of{Bottom} ou \of{Top} et dont les \noeuds\ internes sont étiquetés
+par des entiers. Plutôt que de parler de sous-arbres gauche et droit,
+on parle ici de sous-arbres négatif et positif.
+L'interprétation ensembliste est alors la suivante~: \of{Bottom} est
+l'ensemble vide $\emptyset$~; \of{Top} est le singleton
+$\{\emptyset\}$~; et un arbre de racine $i$, de sous-arbre négatif
+représentant $S^-$ et de sous-arbre positif représentant $S^+$,
+est l'ensemble $S^-\cup\{\{i\}\cup s\,|\,s\in S^+\}$. Ainsi
+le ZDD ci-contre représente l'ensemble
+$\{\{0\},\{1\},\{2\},\{0,1,2\}\}$, les sous-arbres négatifs étant
+représentés en pointillés.
+Dit autrement, il y a autant d'éléments que de chemins menant de la
+racine à \of{Top}, et chaque descente vers un sous-arbre positif
+correspond à un élément sélectionné.
+L'unicité de représentation est par ailleurs assurée par les invariants
+suivants~: d'une part un sous-arbre positif n'est jamais \of{Bottom}
+et d'autre part les étiquettes vont croissantes lorsqu'on descend dans
+l'arbre.
+Des fonctions d'affichage sont fournies, aux formats ASCII pour la
+forme ensembliste et au format DOT pour la représentation sous forme
+d'arbre. Le dessin ci-contre illustre le résultat de la sortie DOT.
+%
+Enfin,
+pour permettre notamment l'écriture de fonctions opérant directement sur les
+ZDD, le module \of{Dlx} expose le type \of{t} des ZDD :
+\begin{ocaml}
+  type t = private Bottom | Top | Node of unique * int * t * t
+\end{ocaml}
+(Le type \of{unique} représente ici un entier unique, propre à chaque ZDD.)
+Le type étant privé, deux valeurs \of{bottom} et \of{top} de type
+\of{t} et une fonction \of{construct: int -> t -> t -> t} sont
+fournies pour construire des ZDD.
 
 \paragraph{\of{Emc}.}
 Le module \of{Emc} est une interface commune aux deux modules \of{Dlx}
 et \of{Zdd}, permettant d'utiliser indifféremment l'un ou l'autre sur
 un même problème EMC.
+Pour cela, il fournit deux modules \of{Emc.D} et \of{Emc.Z} ayant tous les deux
+la même interface \of{S} suivante :
+\begin{ocaml}
+  module type S = sig
+    type t
+    val create: ?primary:int -> bool array array -> t
+    type solution = int list
+    val find_solution: t -> solution
+    val iter_solution: (solution -> unit) -> t -> unit
+    val count_solutions: t -> int
+    module Count(A: ARITH) : sig val count_solutions: t -> A.t end
+  end
+\end{ocaml}
+Pour DLX, c
 
 \paragraph{\of{Tiling}.}
 
-\paragraph{Langage}
+\paragraph{Langage d'entrée de l'outil \combine.}
 
 figure~\ref{fig:chameau}
 

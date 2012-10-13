@@ -26,7 +26,9 @@ type t = private Bottom | Top | Node of unique * int * t * t
 val bottom: t
 val top: t
 val construct: int -> t -> t -> t
-  (** Primitive constructors for ZDD *)
+  (** Smart constructors for ZDD.
+      [construct i z1 z2] raises [Invalid_argument] if [i] is not
+      smaller than roots of [z1] and [z2]. *)
 
 val unique: t -> int
   (** Each ZDD has a unique integer *)
@@ -87,8 +89,7 @@ val size: t -> int
       is [size z * 5 * Sys.word_size/8] bytes. *)
 
 val print: Format.formatter -> t -> unit
-  (** Prints a ZDD as a set of sets of integers, e.g.
-      { {0}, {1}, {1,2} } *)
+  (** Prints a ZDD as a set of sets of integers, e.g. [{ {0}, {1}, {1,2} }]. *)
 
 val print_to_dot: Format.formatter -> t -> unit
   (** [print_to_dot fmt z] prints a ZDD [z] in DOT format *)

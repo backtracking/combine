@@ -19,7 +19,6 @@
 
 (* ZDD *)
 
-
 open Format
 
 type unique = int
@@ -163,7 +162,12 @@ let hsize = 19997 (* 200323 *)
 
 let global_table = Hashtbl.create 5003
 
+let lt v = function
+  | Bottom | Top -> true
+  | Node (_, i, _, _) -> v < i
+
 let construct v z1 z2 =
+  if not (lt v z1 && lt v z2) then invalid_arg "construct";
   let t =
     try Hashtbl.find global_table v
     with Not_found ->
