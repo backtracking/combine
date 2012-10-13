@@ -289,14 +289,14 @@ let diff = memo_rec2 (
   fun diff -> function
     | Node(_, i, z1, z2), Top -> construct i (diff (z1, Top)) z2
     | Top, Node(_, _, z1, _) -> diff (Top, z1)
-    | Top, Top -> Top
+    | Top, Top
     | Bottom, _ -> Bottom
     | z, Bottom -> z
     | (Node (_, i1, l1, r1) as z1), (Node (_, i2, l2, r2) as z2) ->
         if i1 = i2 then
           construct i1 (diff (l1, l2)) (diff (r1, r2))
         else if i1 > i2 then
-          construct i2 (diff (z1, l2)) r2
+          diff (z1, l2)
         else (* i1 < i2 *)
           construct i1 (diff (l1, z2)) r1
   )
@@ -306,7 +306,16 @@ let diff z1 z2 =
 
 let subset = memo_rec2 (
   fun subset -> function
-    _ -> assert false (*TODO*)
+    | Bottom, _ | Top, Top -> true
+    | _, Bottom | Node _, Top -> false
+    | Top, Node(_, _, z1, _) -> subset (Top, z1)
+    | (Node (_, i1, l1, r1) as z1), Node (_, i2, l2, r2) ->
+        if i1 = i2 then
+          subset (l1, l2) && subset (r1, r2)
+        else if i1 > i2 then
+          subset (z1, l2)
+        else (* i1 < i2 *)
+          false
   )
 
 let subset z1 z2 =
@@ -367,42 +376,6 @@ let size z =
   in
   visit z;
   !s
-
-(* DOT output *)
-
-open Format
-
-let print_to_dot fmt z =
-  let h = H1.create 17 in (* ZDD -> node name *)
-  let name = let r = ref 0 in fun () -> incr r; "N" ^ string_of_int !r in
-  let rec visit = function
-    | Bottom ->
-        let s = name () in
-        fprintf fmt "node [shape = none, label=\"Bot\"]; %s;@\n" s; s
-    | Top ->
-        let s = name () in
-        fprintf fmt "node [shape = none, label=\"Top\"]; %s;@\n" s; s
-    | Node (_, i, l, r) ->
-        let nl = memo l in
-        let nr = memo r in
-        let n = name () in
-        fprintf fmt "node [shape = circle, label=\"%d\"]; %s;@\n" i n;
-        fprintf fmt "%s -> %s [style = dotted];@\n%s -> %s;@\n" n nl n nr;
-        n
-  and memo z = match z with
-    | Bottom | Top -> visit z
-    | _ -> try H1.find h z with Not_found -> let n = visit z in H1.add h z n; n
-  in
-  fprintf fmt "@[<hov 2>digraph ZDD {@\n";
-  ignore (visit z);
-  fprintf fmt "}@]@\n"
-
-let print_to_dot_file f z =
-  let c = open_out f in
-  let fmt = formatter_of_out_channel c in
-  print_to_dot fmt z;
-  fprintf fmt "@.";
-  close_out c
 
 let choose zdd =
   let rec any_element zdd s = match zdd with
@@ -503,6 +476,52 @@ let min_elt zdd =
   let min = ref S.empty in
   iter (fun e -> if S.compare e !min < 0 then min := e ) zdd;
   !min
+
+(* pretty print *)
+
+let print_set fmt s =
+  fprintf fmt "{";
+  S.iter (fun x -> fprintf fmt "%d,@ " x) s; fprintf fmt "}"
+
+let print fmt ss =
+  fprintf fmt "{"; iter (fun s -> fprintf fmt "%a,@ " print_set s) ss;
+  fprintf fmt "}"
+
+(* DOT output *)
+
+open Format
+
+let print_to_dot fmt z =
+  let h = H1.create 17 in (* ZDD -> node name *)
+  let name = let r = ref 0 in fun () -> incr r; "N" ^ string_of_int !r in
+  let rec visit = function
+    | Bottom ->
+        let s = name () in
+        fprintf fmt "node [shape = none, label=\"Bot\"]; %s;@\n" s; s
+    | Top ->
+        let s = name () in
+        fprintf fmt "node [shape = none, label=\"Top\"]; %s;@\n" s; s
+    | Node (_, i, l, r) ->
+        let nl = memo l in
+        let nr = memo r in
+        let n = name () in
+        fprintf fmt "node [shape = circle, label=\"%d\"]; %s;@\n" i n;
+        fprintf fmt "%s -> %s [style = dotted];@\n%s -> %s;@\n" n nl n nr;
+        n
+  and memo z = match z with
+    | Bottom | Top -> visit z
+    | _ -> try H1.find h z with Not_found -> let n = visit z in H1.add h z n; n
+  in
+  fprintf fmt "@[<hov 2>digraph ZDD {@\n";
+  ignore (visit z);
+  fprintf fmt "}@]@\n"
+
+let print_to_dot_file f z =
+  let c = open_out f in
+  let fmt = formatter_of_out_channel c in
+  print_to_dot fmt z;
+  fprintf fmt "@.";
+  close_out c
 
 let stat () = !unique_ref
 

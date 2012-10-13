@@ -55,17 +55,19 @@ module SS = struct
     fprintf fmt "}"
 end
 
-(* union *)
+(* union/inter/diff *)
 let () =
   for n = 0 to 10 do for k = 0 to 10 do
-      let ss1 = SS.random n k 20 in
-      let z1 = SS.to_zdd ss1 in
-      let ss2 = SS.random n k 20 in
-      let z2 = SS.to_zdd ss2 in
-      assert (SS.equal (SS.union ss1 ss2) (SS.of_zdd (Zdd.union z1 z2)));
-      assert (SS.equal (SS.inter ss1 ss2) (SS.of_zdd (Zdd.inter z1 z2)));
-      (*assert (SS.equal (SS.diff  ss1 ss2) (SS.of_zdd (Zdd.diff  z1 z2)));*)
-    done done
+    let ss1 = SS.random n k 20 in
+    let z1 = SS.to_zdd ss1 in
+    let ss2 = SS.random n k 20 in
+    let z2 = SS.to_zdd ss2 in
+    assert (SS.equal (SS.union ss1 ss2) (SS.of_zdd (Zdd.union z1 z2)));
+    assert (SS.equal (SS.inter ss1 ss2) (SS.of_zdd (Zdd.inter z1 z2)));
+    assert (SS.equal (SS.diff  ss1 ss2) (SS.of_zdd (Zdd.diff  z1 z2)));
+    assert (SS.subset  ss1 ss2 = Zdd.subset  z1 z2);
+    (* || (eprintf "s1 = %a / s2 = %a@." SS.print ss1 SS.print ss2; false)); *)
+  done done
 
 let to_set l =
   let s = ref Zdd.S.empty in
@@ -114,7 +116,7 @@ let () =
   let m = [|[|false; true; false|];
             [|true; false; true|];
             [|true; false; false|];
-            [|false; true; true|]|] in 
+            [|false; true; true|]|] in
 
     printf "%a@." Sat.print_sat m
 

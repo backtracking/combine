@@ -86,6 +86,10 @@ val size: t -> int
       Each node occupies 5 words, so the total space used by a ZDD [z]
       is [size z * 5 * Sys.word_size/8] bytes. *)
 
+val print: Format.formatter -> t -> unit
+  (** Prints a ZDD as a set of sets of integers, e.g.
+      { {0}, {1}, {1,2} } *)
+
 val print_to_dot: Format.formatter -> t -> unit
   (** [print_to_dot fmt z] prints a ZDD [z] in DOT format *)
 
