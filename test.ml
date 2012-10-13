@@ -19,7 +19,7 @@
 
 (* Test Module *)
 
-open Reml
+open Combine
 open Dlx
 open Zdd
 open Tiling

@@ -1,4 +1,4 @@
-elsibaie - ~/ocaml-comb% time ./reml.opt --stats --zdd tests/modotri_8_8.rem
+elsibaie - ~/ocaml-comb% time ./combine.opt --stats --zdd tests/modotri_8_8.rem
 ########## Problems #########
 
 problem domino8_8
@@ -27,7 +27,7 @@ free_blocks: 27307
 largest_free: 111043
 fragments: 99857
 compactions: 0
-./reml.opt --stats --zdd tests/modotri_8_8.rem  8.24s user 0.31s system 99% cpu 8.571 total
+./combine.opt --stats --zdd tests/modotri_8_8.rem  8.24s user 0.31s system 99% cpu 8.571 total
 
 
 ------------------------------------------------------------------------------
@@ -61,5 +61,5 @@ free_blocks: 2585186
 largest_free: 1279872
 fragments: 61269
 compactions: 0
-./reml.opt --stats --zdd tests/modotri_8_8.rem  9.82s user 0.38s system 99% cpu 10.239 total
+./combine.opt --stats --zdd tests/modotri_8_8.rem  9.82s user 0.38s system 99% cpu 10.239 total
 

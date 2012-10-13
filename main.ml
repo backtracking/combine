@@ -18,7 +18,7 @@
 (**************************************************************************)
 
 open Format
-open Reml
+open Combine
 
 let zdd = ref false
 let dlx = ref false

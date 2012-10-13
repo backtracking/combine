@@ -119,7 +119,7 @@ let archi =
     Helpers.box_label_arrow ~sep:(bp 5.) ~pos label (sub x b) (sub y b) in
   Box.draw b ++
   box_label_arrow tiling emc ~label:"r\\'eduction" ~pos:`Right ++
-  box_label_arrow emc    dlx ~label:"solution"     ~pos:`Left  ++
+  box_label_arrow emc    dlx ~label:"imm\\'ediat"  ~pos:`Left  ++
   box_label_arrow emc    zdd ~label:"r\\'eduction" ~pos:`Right ++
   nop
 

@@ -134,8 +134,6 @@ module Weaktbl = struct
     in
     loop 0
 
-
-
   let hashconstruct t v z1 z2 =
     if z2 = Bottom then z1 else
     let index = (hash_node v z1 z2) mod (Array.length t.table) in
@@ -194,13 +192,12 @@ let construct i z1 z2 =
 
 (* z1 = z2 iff z1 == z2 iff unique z1 = unique z2 *)
 
-module H1 =
-  Hashtbl.Make
-    (struct
-       type t = zdd
-       let hash = unique
-       let equal = (==)
-     end)
+module H1 = Hashtbl.Make
+  (struct
+     type t = zdd
+     let hash = unique
+     let equal = (==)
+   end)
 
 let memo_rec1 f =
   let h = H1.create 17 in
@@ -210,9 +207,8 @@ let memo_rec1 f =
   in
   g
 
-
-let cardinal =
-  memo_rec1 (fun cardinal -> function
+let cardinal = memo_rec1 (
+  fun cardinal -> function
     | Top -> 1
     | Bottom -> 0
     | Node(_, i, z1, z2) -> cardinal z1 + cardinal z2
@@ -227,22 +223,20 @@ end
 
 module Cardinal(A: ARITH) : sig val cardinal: zdd -> A.t end = struct
 
-  let cardinal =
-    memo_rec1 (
-      fun cardinal -> function
-        | Top -> A.one
-        | Bottom -> A.zero
-        | Node(_, _, z1, z2) -> A.add (cardinal z1) (cardinal z2))
+  let cardinal = memo_rec1 (
+    fun cardinal -> function
+      | Top -> A.one
+      | Bottom -> A.zero
+      | Node(_, _, z1, z2) -> A.add (cardinal z1) (cardinal z2))
 
 end
 
-module H2 =
-  Hashtbl.Make
-    (struct
-       type t = zdd * zdd
-       let hash (z1, z2) = (19 * unique z1 + unique z2) land max_int
-       let equal (z11, z12) (z21, z22) = z11 == z21 && z12 == z22
-     end)
+module H2 = Hashtbl.Make
+  (struct
+     type t = zdd * zdd
+     let hash (z1, z2) = (19 * unique z1 + unique z2) land max_int
+     let equal (z11, z12) (z21, z22) = z11 == z21 && z12 == z22
+   end)
 
 let memo_rec2 f =
   let h = H2.create hsize in
@@ -252,57 +246,74 @@ let memo_rec2 f =
   in
   g
 
-let inter =
-  memo_rec2 (
-    fun inter -> function
-      | Node(_, _, z1, _), Top
-      | Top, Node(_, _, z1, _) -> inter (z1, Top)
-      | Top, Top -> Top
-      | Bottom, _
-      | _, Bottom -> Bottom
-      | (Node (u1, i1, l1, r1) as z1),
+let inter = memo_rec2 (
+  fun inter -> function
+    | Node(_, _, z1, _), Top
+    | Top, Node(_, _, z1, _) -> inter (z1, Top)
+    | Top, Top -> Top
+    | Bottom, _
+    | _, Bottom -> Bottom
+    | (Node (u1, i1, l1, r1) as z1),
         (Node (u2, i2, l2, r2) as z2) ->
-          if i1 = i2 then
-            construct i1 (inter (l1, l2)) (inter (r1, r2))
-          else if i1 > i2 then
-            inter (z1, l2)
-          else
-            inter (z2, l1)
+        if i1 = i2 then
+          construct i1 (inter (l1, l2)) (inter (r1, r2))
+        else if i1 > i2 then
+          inter (z1, l2)
+        else
+          inter (z2, l1)
   )
 
 let inter z1 z2 =
   inter (z1, z2)
 
-
-let union =
-  memo_rec2 (
-    fun union -> function
-      | Node(_, i, z1, z2), Top
-      | Top, Node(_, i, z1, z2) -> construct i (union (z1, Top)) z2
-      | Top, Top -> Top
-      | Bottom, z
-      | z, Bottom -> z
-      | (Node (_, i1, l1, r1) as z1), (Node (_, i2, l2, r2) as z2) ->
-          if i1 = i2 then
-            construct i1 (union (l1, l2)) (union (r1, r2))
-          else if i1 > i2 then
-            construct i2 (union (z1, l2)) r2
-          else (* i1 < i2 *)
-            construct i1 (union (l1, z2)) r1
+let union = memo_rec2 (
+  fun union -> function
+    | Node(_, i, z1, z2), Top
+    | Top, Node(_, i, z1, z2) -> construct i (union (z1, Top)) z2
+    | Top, Top -> Top
+    | Bottom, z
+    | z, Bottom -> z
+    | (Node (_, i1, l1, r1) as z1), (Node (_, i2, l2, r2) as z2) ->
+        if i1 = i2 then
+          construct i1 (union (l1, l2)) (union (r1, r2))
+        else if i1 > i2 then
+          construct i2 (union (z1, l2)) r2
+        else (* i1 < i2 *)
+          construct i1 (union (l1, z2)) r1
   )
 
 let union z1 z2 =
   union (z1, z2)
 
+let diff = memo_rec2 (
+  fun diff -> function
+    | Node(_, i, z1, z2), Top -> construct i (diff (z1, Top)) z2
+    | Top, Node(_, _, z1, _) -> diff (Top, z1)
+    | Top, Top -> Top
+    | Bottom, _ -> Bottom
+    | z, Bottom -> z
+    | (Node (_, i1, l1, r1) as z1), (Node (_, i2, l2, r2) as z2) ->
+        if i1 = i2 then
+          construct i1 (diff (l1, l2)) (diff (r1, r2))
+        else if i1 > i2 then
+          construct i2 (diff (z1, l2)) r2
+        else (* i1 < i2 *)
+          construct i1 (diff (l1, z2)) r1
+  )
 
-let diff z = failwith "not yet implemented"
-let subset z = failwith "not yet implemented"
+let diff z1 z2 =
+  diff (z1, z2)
 
+let subset = memo_rec2 (
+  fun subset -> function
+    _ -> assert false (*TODO*)
+  )
 
+let subset z1 z2 =
+  subset (z1, z2)
 
 let equal = (==)
 let compare z1 z2 = Pervasives.compare (unique z1) (unique z2)
-
 
 let singleton s =
   let elts = S.elements s in
@@ -317,31 +328,31 @@ let add s z = union (singleton s) z
 
 let remove s z =
   let elts = S.elements s in
-  let rec remove elts z =
-    match elts, z with
-      | [], Top -> Bottom
-      | [], Node (_, _ ,z1, _ ) -> remove [] z1
-      | h::t, Node(_, i, z1, z2) ->
-          if i = h then begin
-            construct i z1 (remove t z2) end
-          else if h > i then
-            construct i (remove elts z1) z2
-          else z
-      | _ -> z
-  in remove elts z
+  let rec remove elts z = match elts, z with
+    | [], Top -> Bottom
+    | [], Node (_, _ ,z1, _ ) -> remove [] z1
+    | h::t, Node(_, i, z1, z2) ->
+        if i = h then begin
+          construct i z1 (remove t z2) end
+        else if h > i then
+          construct i (remove elts z1) z2
+        else z
+    | _ -> z
+  in
+  remove elts z
 
 let mem s z =
   let l = S.elements s in
-  let rec mem l z =
-    match l, z with
-      | [], Top -> true
-      | [], Node (_, _ ,z1, _ ) -> mem [] z1
-      | h :: t, Node(_, i, z1, z2) ->
-          if h = i then mem t z2
-          else if h > i then mem l z1
-          else false
-      | _ -> false
-  in mem l z
+  let rec mem l z = match l, z with
+    | [], Top -> true
+    | [], Node (_, _ ,z1, _ ) -> mem [] z1
+    | h :: t, Node(_, i, z1, z2) ->
+        if h = i then mem t z2
+        else if h > i then mem l z1
+        else false
+    | _ -> false
+  in
+  mem l z
 
 let size z =
   let s = ref 0 in
@@ -402,7 +413,6 @@ let choose zdd =
   any_element zdd S.empty
 
 let random_chose zdd =
-  Random.self_init ();
   let rec any_element zdd s = match zdd with
     | Node (_, i, z1, z2) ->
         let z = if Random.bool () && not (equal z1 Bottom) then z1
@@ -413,11 +423,7 @@ let random_chose zdd =
   in
   any_element zdd S.empty
 
-
-
 let choose_list zdd = S.elements (random_chose zdd)
-
-
 
 let iter_list f zdd =
   let rec iter_element f l = function
@@ -437,8 +443,15 @@ let iter f zdd =
   in
   iter_element f S.empty zdd
 
-let split z = failwith "not yet implemented"
-let fold z = failwith "not yet implemented"
+let fold f zdd acc =
+  let rec fold f s acc = function
+    | Top -> f s acc
+    | Bottom -> acc
+    | Node (_, i, z1, z2)->
+        let acc = fold f s acc z1 in
+        fold f (S.add i s) acc z2
+  in
+  fold f S.empty acc zdd
 
 let for_all f zdd =
   try
@@ -462,9 +475,19 @@ let filter p zdd =
 let partition p zdd =
   let z1 = ref Bottom in
   let z2 = ref Bottom in
-  iter (fun e -> if p e then z1 := add e !z1
-  else z2 := add e !z2) zdd;
+  iter (fun e -> if p e then z1 := add e !z1 else z2 := add e !z2) zdd;
   !z1, !z2
+
+let split x z =
+  let z1 = ref Bottom in
+  let z2 = ref Bottom in
+  let present = ref false in
+  iter (fun e ->
+          let c = S.compare e x in
+          if c < 0 then z1 := add e !z1
+          else if c = 0 then present := true
+          else z2 := add e !z2) z;
+  !z1, !present, !z2
 
 let elements zdd =
   let l = ref [] in
@@ -473,15 +496,13 @@ let elements zdd =
 
 let max_elt zdd =
   let max = ref S.empty in
-  iter (fun e -> if (S.compare e !max) > 0 then max := e ) zdd;
+  iter (fun e -> if S.compare e !max > 0 then max := e ) zdd;
   !max
 
 let min_elt zdd =
   let min = ref S.empty in
-  iter (fun e -> if (S.compare e !min) < 0 then min := e ) zdd;
+  iter (fun e -> if S.compare e !min < 0 then min := e ) zdd;
   !min
-
-
 
 let stat () = !unique_ref
 

@@ -17,7 +17,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Reml
+open Combine
 open Ast
 open Tiling
 open Format

@@ -38,7 +38,7 @@ Since some of the diagonals are not covered, only the first 2N columns
 *)
 
 open Format
-open Reml
+open Combine
 
 (* EMC size is (6N-2) * N^2 *)
 

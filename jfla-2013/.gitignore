@@ -3,5 +3,5 @@
 *.blg
 *.log
 *.rel
-main.pdf
 _mlpost.*
+*-pp.*

@@ -65,7 +65,7 @@ end
 module D = struct
   type t = Dlx.t
   let create = Dlx.create
-  let find_solution p = Dlx.get_first_solution p
+  let find_solution p = Dlx.list_of_solution (Dlx.get_first_solution p)
   let iter_solution f p = Dlx.iter_solution (
     fun e -> f (Dlx.list_of_solution e)) p
   let count_solutions p = Dlx.count_solutions p

@@ -22,6 +22,7 @@
 
 \input{./insbox}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
 \setcounter{page}{1}
@@ -35,13 +36,14 @@
     auteur pendant un stage de L3 au LRI, d'avril à juin 2012, sous la
     direction du second auteur.}. Elle fournit deux solutions
   algorithmiques très différentes au problème de la couverture exacte
-  de matrice (EMC) : les liens dansants de Knuth (DLX) et une variante
+  de matrice (EMC) : les liens dansants de Knuth et une variante
   des diagrammes de décision binaire appelée ZDD. De très nombreux
   problèmes de combinatoire peuvent être ramenés au problème EMC. La
   bibliothèque \reml\ l'illustre notamment avec le pavage
   rectangulaire en dimension 2.
 \end{abstract}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
 \InsertBoxR{1}{\includegraphics{caml_problem.mps}}
@@ -132,8 +134,8 @@ Une second approche du problème EMC consiste à utiliser une variante
 des BDD appelée ZDD, pour \emph{Zero-suppressed binary Decision
   Diagram}, et due à Minato~\cite{ZDD}. Comme les BDD, les ZDD
 permettent de représenter une fonction booléenne de $n$ variables sous
-la forme d'un graphe orienté acyclique. On peut alors effectuer des
-opérations entre ZDD, comme par exemple la conjonction ou les
+la forme d'un graphe orienté acyclique. On peut effectuer des
+opérations entre ZDD, comme par exemple la conjonction ou la
 disjonction, ou encore calculer très simplement le nombre
 d'assignations distinctes des $n$ variables qui donne la valeur de
 vérité 1. Les ZDD sont décrits en détail dans le volume 4A de
@@ -142,24 +144,37 @@ Le problème EMC peut être réduit à un ZDD de la façon
 suivante. Les $n$ variables sont les $n$ lignes de la matrice. On
 commence par convertir chaque colonne de la matrice EMC en un ZDD qui
 correspond aux sous-ensembles de lignes qui contiennent exactement un
-1 dans cette colonne. Puis on fait l'intersection de tous ces ZDD.
-Cette technique a les avantages et inconvénients usuels des BDD. Si on
+1 dans cette colonne. Puis on fait l'intersection de tous ces
+ZDD\footnote{Les ZDD étaient au concours X/ENS en 2012 mais ce n'est,
+  bien sûr, que pure coïncidence.}.
+Cette technique a les avantages et les inconvénients usuels des BDD. Si on
 parvient à construire le ZDD sans épuiser la mémoire vive, alors le
 problème est résolu. En effet, on peut alors facilement déterminer
 s'il existe une solution, et une construire une le cas échéant, mais
 surtout calculer le nombre total de solutions (en exploitant le
-partage, comme pour un BDD). C'est ainsi qu'on a calculé le nombre
+partage, comme avec un BDD). C'est ainsi qu'on a calculé le nombre
 gigantesque de solutions au problème de pavage du grand chameau.
 
-
-\InsertBoxL{5}{\includegraphics{caml_solution.mps}}%
-\footnote{Ce résultat de pavage a été dessiné automatiquement avec la
+\InsertBoxR{0}{\includegraphics{caml_solution.mps}}%
+La bibliothèque \reml\ contient, outre ces deux solutions au problème
+EMC, trois exemples d'application. Les deux premiers sont des exemples
+relativement simples. Il s'agit du problème des $N$ reines et du
+Sudoku. Le troisième exemple est celui du pavage rectangulaire en
+dimension 2. Il se présente sous la forme d'une bibliothèque OCaml
+pour décrire un problème de pavage, le réduire à un problème EMC et
+interpréter les solutions.
+C'est ainsi qu'a été obtenue la solution ci-contre au problème de
+pavage donné en introduction\footnote{Ce résultat de pavage a été dessiné
+  automatiquement avec la
   bibliothèque OCaml \texttt{mlpost}~\cite{mlpost09jfla}, à partir
-  de la solution ASCII produite par \reml.}
-
-
-
-
+  de la solution produite par \reml.}.
+Enfin, la distribution de \reml\ contient un interprète pour un petit
+langage permettant de décrire un problème de pavage dans une syntaxe
+concrète et d'utiliser les différents outils de la bibliothèque
+sans recourir à un programme.
+La figure~\ref{fig:chameau} contient un exemple d'entrée pour cet
+interprète.
+%
 \begin{figure}[t]
   \centering
   \begin{tabular}{l|l}
@@ -204,45 +219,116 @@ count zdd tiling_a_caml
 \hrulefill
   \label{fig:chameau}
 \end{figure}
-
+%
 La bibliothèque \reml\ est un logiciel libre, distribué sous licence
-LGPL à l'adresse \url{http://www.lri.fr/~filliatr/reml/}.
+LGPL à l'adresse \url{http://www.lri.fr/~filliatr/combine/}.
 
+\insboxrestore
 \medskip
 Le reste de cet article est organisé de façon très simple. La
 section~\ref{sec:sig} présente l'interface de la bibliothèque \reml\
-et la section~\ref{sec:impl} les détails technique de sa
-réalisation. L'article s'achève en détaillant des extensions possibles.
+et la section~\ref{sec:impl} les détails techniques de sa
+réalisation. L'article s'achève en indiquant des extensions possibles.
 
-\section{Architecture}\label{sec:sig}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Interface}\label{sec:sig}
 
+La bibliothèque \reml\ se compose de quatre modules principaux,
+organisés de la façon suivante :
 \begin{center}
   \includegraphics{archi.mps}
 \end{center}
+Cette section décrit ces quatre modules, de bas en haut.
 
+\paragraph{\of{Dlx}.}
+L'algorithme DLX résout le problème EMC.
+Un tel problème est ici matérialisé par un type abstrait \of{Dlx.t}, que l'on
+construit à partir d'une matrice de booléens.
+\begin{ocaml}
+  val create: ?primary:int -> bool array array -> t
+\end{ocaml}
+On généralise légèrement le problème présenté dans
+l'introduction, en distinguant des colonnes primaires qui doivent être
+couvertes (un 1 et un seul dans ces colonnes-là) et des colonnes
+secondaires qui peuvent ne pas être couvertes (au plus un 1).
+L'argument optionnel \of{primary} permet de spécifier que les
+\of{primary} premières colonnes sont des colonnes primaires, les
+suivantes étant des colonnes secondaires.
+Si cet argument est omis, toutes les colonnes sont primaires.
+Une fois le problème construit, le module \of{Dlx} fournit
+essentiellement trois fonctions pour le résoudre :
+\begin{ocaml}
+  val get_first_solution: t -> solution
+  val iter_solution: (solution -> unit) -> t -> unit
+  val count_solutions: t -> int
+\end{ocaml}
+% en fait, iter_solution est la plus générale ; le dire ?
+Le type \of{solution} est un type abstrait. Une fonction est fournie
+pour le décoder sous la forme d'une liste d'entiers, représentant les
+lignes de la matrice qui ont été sélectionnées. L'idée est ici de ne
+pas construire cette liste lorsque cela n'est pas nécessaire.
 
+\paragraph{\of{Zdd}.} Comme expliqué dans l'introduction, un ZDD est
+une structure de donnée représentant une fonction booléenne sur $n$
+variables. De manière équivalente, on peut l'interpréter comme un
+ensemble de parties de $\{0,1,\dots,n-1\}$, à savoir l'ensemble des
+entrées pour lesquelles la fonction booléenne renvoie 1.
+Le module \of{Zdd} fournit donc en premier lieu toutes les opérations
+de la signature \of{Set.S} pour des éléments étant eux-mêmes des
+ensembles d'entiers, c'est-à-dire
+\begin{ocaml}
+  module S: Set.S with type elt = int
+  include Set.S with type elt = S.t
+\end{ocaml}
+
+- ZDD : ensembles d'ensembles d'entiers / sortie DOT
+
+- différence avec les BDD : pas besoin de fixer $n$
+
+\begin{center}
+  \includegraphics[scale=0.5]{../stage/imports/zdd_construct.pdf}
+\end{center}
+
+\paragraph{\of{Emc}.}
+Le module \of{Emc} est une interface commune aux deux modules \of{Dlx}
+et \of{Zdd}, permettant d'utiliser indifféremment l'un ou l'autre sur
+un même problème EMC.
+
+\paragraph{\of{Tiling}.}
+
+\paragraph{Langage}
+
+figure~\ref{fig:chameau}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Réalisation}\label{sec:impl} % = détails techniques
+
+- DLX
+
+   type OCaml, iter sur les listes circulaires doublement chaînées
+
+   travaille en espace constant
 
 - ZDD
 
    hash-consing\cite{ConchonFilliatre06wml}, pointeurs faibles, tables
    de mémoïsation
 
-- DLX
-
-   type OCaml, iter
-
 - EMC
 
   surtout réduction EMC -> ZDD
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion et perspectives}
 
-- symétries du problème
+- Dlx :  matrice creuse (construction efficace quand il y a peu de 1)
 
-- pavage en 3D, non rectangulaires
+- prise en compte des symétries du problème pour réduire l'espace
+
+- autres pbms de pavage : en 3D, non rectangulaires, etc.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % And do NOT FORGET to include your bibliography for submission
 \bibliographystyle{plain}
 \bibliography{abbrevs,demons,demons2,demons3,team,crossrefs}
@@ -260,4 +346,4 @@ réalisation. L'article s'achève en détaillant des extensions possibles.
 %%% End:
 
 % LocalWords:  encodé d'EMC acyclique d'assignations booléenne Minato BDD ZDD
-% LocalWords:  EMC
+% LocalWords:  EMC booléens

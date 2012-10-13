@@ -19,7 +19,7 @@
 
 %{
   open Ast
-  open Reml
+  open Combine
   open Tiling.Tile
   open D4
   type option =

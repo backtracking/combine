@@ -20,18 +20,18 @@
 
 * Library
 
-  The ReML library contains four main modules:
+  The Combine library contains four main modules:
   - Dlx: implements Knuth's dancing links
   - Zdd: implements Zero-suppressed binary decision diagrams
   - Emc: a common interface to modules Dlx and Zdd to solve the
          Exact Matrix Cover problem
   - Tiling: converts a 2D tiling problem into an EMC problem
 
-  Usage: the ReML library is packed into a single module Reml, installed
-  in the subdirectory reml/ of OCaml's standard library. Thus, it must be
+  Usage: the Combine library is packed into a single module Combine, installed
+  in the subdirectory combine/ of OCaml's standard library. Thus, it must be
   used as follows:
 
-    ocamlc -I +reml reml.cma <other files>
+    ocamlc -I +combine combine.cma <other files>
 
 
 * Examples
@@ -43,11 +43,11 @@
 
 * Tiling language and interpreter
 
-  In addition to the library, ReML provides a language to describe 2D tiling
-  problems and an interpreter (reml) for this language.
+  In addition to the library, Combine provides a language to describe 2D tiling
+  problems and an interpreter (combine) for this language.
 
   Directory tests/ contains various examples of tiling problems. To execute
-  such a test, just run "reml" on the file.
+  such a test, just run "combine" on the file.
 
   The grammar of the tiling language is the following:
 

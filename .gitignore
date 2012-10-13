@@ -7,9 +7,9 @@ config.log
 config.status
 *.o
 *.cm*
-reml.byte
-reml.opt
-reml.a
+combine.byte
+combine.opt
+combine.a
 test.byte
 test.opt
 test.dot

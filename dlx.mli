@@ -33,28 +33,26 @@ val create: ?primary:int -> bool array array -> t
       If [primary] is given, it means that the first [primary] columns are
       primary; otherwise, all columns are primary columns. *)
 
-val get_first_solution: t -> int list
+type solution
+  (** Abstract type of a solution. *)
+
+val list_of_solution: solution -> int list
+  (** Decodes a solution as a list of rows (rows are 0-based) *)
+
+val get_first_solution: t -> solution
   (** Returns the first solution that is found.
       Raises [Not_found] if the problem has no solution. *)
 
 val count_solutions: t -> int
   (** Returns the number of solutions. *)
 
-val get_solution_array: t -> int list array
-  (** Returns all solutions, as an array of lists.
-      Each solution is a list of row indices (rows are 0-based). *)
-
-val get_solution_list: t -> int list list
-  (** Returns all solutions, as a list of lists. *)
-
-type solution
-
 val iter_solution: (solution -> unit) -> t -> unit
   (** [iter_solution f p] applies [f] on each solution of the problem [p],
-      one at a time *)
-
-val list_of_solution: solution -> int list
-  (** Decodes a solution as a list of rows (rows are 0-based) *)
+      one at a time.
+      CAVEAT: a solution is no longer valid as soon as iteration restarts.
+      Therefore solutions must not be stored as they are discovered.
+      If this is necessary, they must be first decoded using
+      [list_of_solution]. *)
 
 val print_solution: Format.formatter -> solution -> unit
   (** Print a solution, as a space-separated list of integers *)

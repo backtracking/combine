@@ -61,6 +61,7 @@ val min_elt : t -> elt
 val max_elt : t -> elt
 val choose : t -> elt
 val split : elt -> t -> t * bool * t
+
 val choose_list: t -> int list
 val iter_list: (int list -> unit) -> t -> unit
 

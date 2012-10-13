@@ -17,7 +17,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Reml
+open Combine
 
 type error
 val print_error : Format.formatter -> error -> unit

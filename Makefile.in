@@ -1,6 +1,6 @@
 ##########################################################################
 #                                                                        #
-#  ReML - an OCaml library for combinatorics                             #
+#  Combine - an OCaml library for combinatorics                          #
 #                                                                        #
 #  Copyright (C) 2012                                                    #
 #    Remy El Sibaie                                                      #
@@ -67,40 +67,40 @@ all: $(OCAMLBEST) test
 LIBCMO = dlx.cmo zdd.cmo emc.cmo d4.cmo tiling.cmo
 LIBCMX = $(LIBCMO:.cmo=.cmx)
 LIBMLI = $(LIBCMO:.cmo=.mli)
-$(LIBCMX): OFLAGS += -for-pack Reml
-CMA = reml.cma
-CMXA = reml.cmxa
+$(LIBCMX): OFLAGS += -for-pack Combine
+CMA = combine.cma
+CMXA = combine.cmxa
 
 GENERATED = parser.ml parser.mli lexer.ml version.ml
 
-byte: $(CMA) reml.byte sudoku.byte queens.byte
-opt: $(CMXA) reml.opt sudoku.opt queens.opt
+byte: $(CMA) combine.byte sudoku.byte queens.byte
+opt: $(CMXA) combine.opt sudoku.opt queens.opt
 
-reml.cma: reml.cmo
+combine.cma: combine.cmo
 	$(OCAMLC) $(INCLUDES) -a -g -o $@ $^
 
-reml.cmxa: reml.cmx
+combine.cmxa: combine.cmx
 	$(OCAMLOPT) $(INCLUDES) -a -o $@ $^
 
-reml.cmi: reml.cmo
-reml.o: reml.cmx
+combine.cmi: combine.cmo
+combine.o: combine.cmx
 
-reml.cmo: $(LIBCMO)
+combine.cmo: $(LIBCMO)
 	$(OCAMLC) $(INCLUDES) -pack -g -o $@ $^
 
-reml.cmx: $(LIBCMX)
+combine.cmx: $(LIBCMX)
 	$(OCAMLOPT) $(INCLUDES) -pack -o $@ $^
 
 CMO = parser.cmo lexer.cmo interp.cmo main.cmo
 CMX = $(CMO:.cmo=.cmx)
 
-ast.cmi $(CMO) queens.cmo sudoku.cmo test.cmo: reml.cmi
-$(CMX) queens.cmx sudoku.cmx test.cmx: reml.cmi
+ast.cmi $(CMO) queens.cmo sudoku.cmo test.cmo: combine.cmi
+$(CMX) queens.cmx sudoku.cmx test.cmx: combine.cmi
 
-reml.byte: $(CMA) $(CMO)
+combine.byte: $(CMA) $(CMO)
 	$(OCAMLC) $(BFLAGS) -o $@ nums.cma unix.cma $^
 
-reml.opt: $(CMXA) $(CMX)
+combine.opt: $(CMXA) $(CMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ nums.cmxa unix.cmxa $^
 
 VERSION=0.42
@@ -112,12 +112,12 @@ version.ml: Makefile
 # test
 ######
 
-test: test.byte reml.byte
+test: test.byte combine.byte
 	./test.byte
-	for f in tests/*.rem; do ./reml.byte --parse-only $$f ; done
+	for f in tests/*.rem; do ./combine.byte --parse-only $$f ; done
 
-check: reml.opt
-	for f in tests/*.rem; do ./reml.opt $$f ; done
+check: combine.opt
+	for f in tests/*.rem; do ./combine.opt $$f ; done
 
 test.byte: $(CMA) parser.cmo lexer.cmo interp.cmo test.cmo
 	$(OCAMLC) -o $@ $(BFLAGS) nums.cma unix.cma $^
@@ -141,23 +141,23 @@ queens.opt: $(CMXA) queens.cmx
 # installation
 ##############
 
-INSTALL_LIBDIR=$(OCAMLLIB)/reml
+INSTALL_LIBDIR=$(OCAMLLIB)/combine
 
 install-indep:
 	mkdir -p $(BINDIR)
 	mkdir -p $(INSTALL_LIBDIR)
 	# mkdir -p $(MANDIR)/man1
-	# cp -f reml.1 $(MANDIR)/man1
+	# cp -f combine.1 $(MANDIR)/man1
 
 install: install-indep install-$(OCAMLBEST) install-byte
-	cp -f reml.$(OCAMLBEST) $(BINDIR)/reml$(EXE)
+	cp -f combine.$(OCAMLBEST) $(BINDIR)/combine$(EXE)
 
 install-byte: install-indep
-	cp -f reml.cmi $(CMA) $(INSTALL_LIBDIR)
+	cp -f combine.cmi $(CMA) $(INSTALL_LIBDIR)
 	cp -f $(LIBMLI) $(INSTALL_LIBDIR)
 
 install-opt: install-indep
-	cp -f reml.a $(CMXA) $(INSTALL_LIBDIR)
+	cp -f combine.a $(CMXA) $(INSTALL_LIBDIR)
 
 # documentation
 ###############
@@ -173,10 +173,10 @@ doc:
 # export
 ########
 
-EXPORTDIR=reml-$(VERSION)
+EXPORTDIR=combine-$(VERSION)
 TAR=$(EXPORTDIR).tar
 
-WWW = /users/demons/filliatr/WWW/reml/
+WWW = /users/demons/filliatr/WWW/combine/
 
 FILES = *.ml* Makefile.in configure configure.in .depend tests/*.rem \
 	README INSTALL LICENSE
@@ -204,7 +204,7 @@ export-doc: doc
 
 SOURCES =
 
-reml.tex: $(SOURCES)
+combine.tex: $(SOURCES)
 	$(OCAMLWEB) -o $@ $^
 
 # generic rules
@@ -282,8 +282,8 @@ configure: configure.in
 clean::
 	rm -f *.cm[iox] *.o *~
 	rm -f $(GENERATED) parser.output
-	rm -f reml.byte reml.opt
-	rm -f *.aux *.log reml.tex reml.dvi reml.ps
+	rm -f combine.byte combine.opt
+	rm -f *.aux *.log combine.tex combine.dvi combine.ps
 
 dist-clean distclean:: clean
 	rm -f Makefile config.cache config.log config.status

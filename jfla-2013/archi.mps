@@ -1,11 +1,11 @@
 %!PS
-%%BoundingBox: -36 -95 74 11 
-%%HiResBoundingBox: -35.10265 -94.6405 73.09871 10.33826 
+%%BoundingBox: -42 -95 74 11 
+%%HiResBoundingBox: -41.68904 -94.6405 73.09871 10.33826 
 %%Creator: MetaPost 1.208
-%%CreationDate: 2012.10.12:2201
+%%CreationDate: 2012.10.13:1643
 %%Pages: 1
 %*Font: cmtt10 9.96265 9.96265 44:c000820194e008
-%*Font: cmr10 9.96265 9.96265 13:80000000000000000000e259e
+%*Font: cmr10 9.96265 9.96265 13:80000000000000000002e2396
 %%BeginProlog
 %%EndProlog
 %%Page: 1 1
@@ -78,8 +78,12 @@ newpath -5.4339 -74.1684 moveto
 -5.52774 -78.1673 lineto
 -2.01767 -76.2491 lineto
  closepath fill
--35.10265 -68.76096 moveto
-(solution) cmr10 9.96265 fshow
+-41.68904 -68.76096 moveto
+(imm) cmr10 9.96265 fshow
+-22.59395 -68.76096 moveto
+(\023) cmr10 9.96265 fshow
+-22.31714 -68.76096 moveto
+(ediat) cmr10 9.96265 fshow
 newpath 21.28944 -52.4524 moveto
 35.1357 -75.19203 lineto stroke
 newpath 33.3997 -76.2491 moveto

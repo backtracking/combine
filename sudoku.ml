@@ -50,7 +50,7 @@ For instance, setting the value of the cell (0, 0) to 4 corresponds to
 *)
 
 open Format
-open Reml
+open Combine
 
 let size = 9
 

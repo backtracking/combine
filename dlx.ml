@@ -17,12 +17,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* Dlx Module *)
-
-(* DLM : doubly linked matrix *)
-
 type node = {
-  mutable c : node;
+  mutable c: node;
   mutable s: int;
   mutable up: node;
   mutable down: node;
@@ -30,8 +26,6 @@ type node = {
   mutable right: node;
   mutable name : string;
 }
-
-exception Solution of node array * int
 
 type t = {
   header: node;
@@ -62,18 +56,18 @@ let add_below n1 n2 =
 let add_row headers row i =
   let rec addi_rec n previous =
     if n < Array.length row then
-      if row.(n) then begin 
+      if row.(n) then begin
         let element = one_node () in
-        element.s <- i; 
+        element.s <- i;
         element.c <- headers.(n);
         element.name <- "";
         headers.(n).s <- headers.(n).s + 1;
-        if n != 0 then 
+        if n != 0 then
           add_right previous element;
-        add_below headers.(n) element; 
-        addi_rec (n + 1) element 
+        add_below headers.(n) element;
+        addi_rec (n + 1) element
       end else
-        addi_rec (n + 1) previous 
+        addi_rec (n + 1) previous
   in
   addi_rec 0 (one_node ())
 
@@ -87,7 +81,7 @@ let generate_headers ?primary m h =
   in
     headers.(0).s <- 0;
     headers.(0).name <- "C0";
-    add_right h headers.(0); 
+    add_right h headers.(0);
     for n = 1 to primary - 1 do
       headers.(n).s <- 0;
       headers.(n).name <- String.concat "" ["C";string_of_int n];
@@ -180,22 +174,12 @@ let uncover column_header =
     column_header.right.left <- column_header;
     column_header.left.right <- column_header
 
-
 (* Print the given solution *)
 let print_solution fmt (o, k) =
   for i = 0 to k - 1  do
     Format.fprintf fmt "%d" o.(i).s;
     if i < k-1 then Format.fprintf fmt "@ "
   done
-
-(* Returns a solution as an int list *)
-let list_of_solution (o, k) =
-  let rec rec_stl l i =
-    if i = k then l
-    else rec_stl (o.(i).s::l) (i + 1)
-  in
-    rec_stl [] 0
-
 
 (* Returns the min column *)
 let choose_min h =
@@ -208,8 +192,7 @@ let choose_min h =
   in
   rec_chose h.right h.right.right
 
-(* Search the solution set of matrix covering problem and apply f on it
-* *)
+(* Searches for all solutions, applying [f] on each *)
 let rec search f k h o =
   if h == h.right then f (o, k)
   else
@@ -226,44 +209,41 @@ let rec search f k h o =
 
 type solution = node array * int
 
-(* Applies f to all solutions returned by search
-   function from a boolean matrix*)
+(* Returns a solution as an int list *)
+let list_of_solution (o, k) =
+  let rec rec_stl l i =
+    if i = k then l else rec_stl (o.(i).s :: l) (i + 1)
+  in
+  rec_stl [] 0
+
+
+(* Applies f to all solutions returned by function search *)
 let iter_solution f dlm =
   let o = Array.init dlm.nc (fun _ -> one_node ()) in
   search f 0 dlm.header o
 
-(* Visible functions *)
-
 let count_solutions m =
   let r = ref 0 in
-    iter_solution (fun (_, _) -> r:= !r + 1) m;
-    !r
-
-(* Return a solution (int list) array *)
-let get_solution_array m =
-  let n = count_solutions m in
-  let s_array = Array.make n [] in
-  let i = ref 0 in
-    iter_solution (
-      fun (o, k) -> s_array.(!i) <- list_of_solution (o, k); incr i
-    ) m;
-    s_array
+  iter_solution (fun (_, _) -> r:= !r + 1) m;
+  !r
 
 let get_solution_list m =
   let list_ref = ref [] in
-    iter_solution (
-      fun (o, k) -> list_ref := list_of_solution (o, k)::!list_ref
-    ) m;
-    !list_ref
-
+  iter_solution (
+    fun (o, k) -> list_ref := list_of_solution (o, k) :: !list_ref
+  ) m;
+  !list_ref
 
 (* Print the given solution as an int list *)
 let print_list_solution l =
   List.iter (fun e -> Format.printf "%d " e) l; Format.printf "@."
 
+exception Solution of (node array * int)
+
 let get_first_solution m =
   try
-    iter_solution (fun (o, k) -> ignore(raise (Solution (o, k)))) m;
+    iter_solution (fun s -> raise (Solution s)) m;
     raise Not_found
   with
-    | Solution (o, k) -> list_of_solution (o, k)
+    | Solution s -> s
+
