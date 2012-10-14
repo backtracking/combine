@@ -67,6 +67,14 @@ val split : elt -> t -> t * bool * t
 val choose_list: t -> int list
 val iter_list: (int list -> unit) -> t -> unit
 
+(** {2 Memoization}
+    The following functions are fixpoint operators to build recursive
+    functions over ZDDs using memoization. *)
+
+val memo_rec1: ((t -> 'a) -> t -> 'a) -> t -> 'a
+
+val memo_rec2: ((t * t -> 'a) -> t * t -> 'a) -> t * t -> 'a
+
 (** {2 Cardinal using big integers}
     Function [cardinal] above may easily overflow. Therefore, we also
     provide a functor to compute the cardinal of a ZDD using any arithmetic

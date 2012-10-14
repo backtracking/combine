@@ -324,7 +324,7 @@ et d'autre part les étiquettes vont croissantes lorsqu'on descend dans
 l'arbre.
 Des fonctions d'affichage sont fournies, aux formats ASCII pour la
 forme ensembliste et au format DOT pour la représentation sous forme
-d'arbre. Le dessin ci-contre illustre le résultat de la sortie DOT.
+d'arbre. Le dessin ci-dessus illustre le résultat de la sortie DOT.
 %
 Enfin,
 pour permettre notamment l'écriture de fonctions opérant directement sur les
@@ -351,34 +351,51 @@ la même interface \of{S} suivante :
     val find_solution: t -> solution
     val iter_solution: (solution -> unit) -> t -> unit
     val count_solutions: t -> int
-    module Count(A: ARITH) : sig val count_solutions: t -> A.t end
+    module Count(A: ARITH): sig val count_solutions: t -> A.t end
   end
 \end{ocaml}
-Pour DLX, c
+Pour DLX, il s'agit d'une simple interface, les fonctionnalités étant
+exactement les mêmes. Pour ZDD, en revanche, il faut effectuer une
+réduction du problème EMC vers un ZDD, tel que les éléments du ZDD
+correspondent exactement aux solutions du problème EMC, c'est-à-dire
+aux sous-ensembles de lignes sélectionnées dans la matrice.
+On procède comme expliqué dans l'introduction.
 
 \paragraph{\of{Tiling}.}
+
+ sous-module \of{D4} = groupe diédral $D_4$ des 8 isométries du plan
+ qui laissent un carré invariant
 
 \paragraph{Langage d'entrée de l'outil \combine.}
 
 figure~\ref{fig:chameau}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Réalisation}\label{sec:impl} % = détails techniques
+\section{Réalisation}\label{sec:impl}
 
-- DLX
+Cette section détaille la réalisation des différents modules de la
+bibliothèque \combine.
+
+\paragraph{\of{Dlx}.}
 
    type OCaml, iter sur les listes circulaires doublement chaînées
 
    travaille en espace constant
 
-- ZDD
+\paragraph{\of{Zdd}.}
 
    hash-consing\cite{ConchonFilliatre06wml}, pointeurs faibles, tables
    de mémoïsation
 
-- EMC
+\paragraph{\of{Emc}.}
 
   surtout réduction EMC -> ZDD
+
+  suit Knuth~\cite{taocp4a} organ-pipe (exercice ?)
+
+\paragraph{\of{Tiling}.}
+
+ 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion et perspectives}
@@ -388,6 +405,8 @@ figure~\ref{fig:chameau}
 - prise en compte des symétries du problème pour réduire l'espace
 
 - autres pbms de pavage : en 3D, non rectangulaires, etc.
+
+- réduction EMC vers SAT (format Dimacs)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

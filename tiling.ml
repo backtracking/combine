@@ -146,12 +146,16 @@ module Pattern = struct
     let new_h, new_w = D4.trans_size iso (h, w) in
     new_w = p.width && new_h = p.height &&
     let trans = D4.apply iso in
-    try for y = 0 to p.height - 1 do
-      for x = 0 to p.width -1 do
-        let new_x, new_y = trans ~w ~h (x, y) in
-        if p.matrix.(new_y).(new_x) <> p.matrix.(y).(x) then raise Exit
-      done
-    done;true with Exit -> false
+    try
+      for y = 0 to p.height - 1 do
+        for x = 0 to p.width -1 do
+          let new_x, new_y = trans ~w ~h (x, y) in
+          if p.matrix.(new_y).(new_x) <> p.matrix.(y).(x) then raise Exit
+        done
+      done;
+      true
+    with Exit ->
+      false
 
   let get_isos p =
     D4.S.filter (fun iso -> has_iso iso p) D4.all
@@ -181,10 +185,11 @@ module Tile = struct
     Format.fprintf fmt "}"
 
   let create ?name ?(s=Snone) ?(m=Minf) p =
-    { name = name; pattern = p;
+    { name = name;
+      pattern = p;
       multiplicity = m;
       symetries = s;
-      isos    = D4.generated_by (Pattern.get_isos p); }
+      isos = D4.subgroup (Pattern.get_isos p); }
 
   let apply iso t =
     if D4.S.mem iso (D4.elements t.isos) then t

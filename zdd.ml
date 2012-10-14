@@ -516,7 +516,7 @@ let print_to_dot fmt z =
     | Bottom | Top -> visit z
     | _ -> try H1.find h z with Not_found -> let n = visit z in H1.add h z n; n
   in
-  fprintf fmt "@[<hov 2>digraph ZDD {@\n";
+  fprintf fmt "@[<hov 2>digraph ZDD {@\nmargin = 0;@\n";
   ignore (visit z);
   fprintf fmt "}@]@\n"
 
