@@ -1,6 +1,6 @@
 (**************************************************************************)
 (*                                                                        *)
-(*  ReML - an OCaml library for combinatorics                             *)
+(*  Combine - an OCaml library for combinatorics                          *)
 (*                                                                        *)
 (*  Copyright (C) 2012                                                    *)
 (*    Remy El Sibaie                                                      *)
@@ -32,7 +32,7 @@ module Pattern : sig
   *)
 
   type t = private {
-    matrix   : bool array array;
+    matrix : bool array array;
     height : int;
     width  : int;
   }
@@ -45,17 +45,15 @@ module Pattern : sig
        transformation of [p] by [i] *)
 
   val resize: t -> w:int -> h:int -> t
-    (** [resize p w h] change the size of [p] to [w] (width) [h] (height)
-      elements which are over [w] and [h] will not appears *)
-
+    (** [resize p w h] change the size of [p] to [w] (width) and [h] (height).
+      Points which are over [w] and [h] will not appear. *)
 
   val crop  : t -> x:int -> y:int -> w:int -> h:int -> t
-    (** [crop p x y w h] creates a pattern from [p] with a rectangle of size
-       [w, h] drawned in position [x, y] on [p] *)
+    (** [crop p x y w h] creates a pattern from [p] with the rectangle of size
+       [w, h] at position [x, y] in [p] *)
 
   val shift: t -> ofsx:int -> ofsy:int -> t
-    (** [shift p ofsx ofsy] creates a pattern from the shifting [osfx, osfy]
-      of [p] *)
+    (** [shift p ofsx ofsy] shift pattern [p] by [osfx, osfy] *)
 
   val union: t -> t -> t
     (** [union p1 p2] creates a pattern from the logical union beetween [p1] and
@@ -81,7 +79,6 @@ module Pattern : sig
 
 end
 
-
 module Tile : sig
 
   type symetries = Snone | Srotations | Sall
@@ -90,18 +87,17 @@ module Tile : sig
   type t = private {
     name: string option;
     pattern: Pattern.t;
-    multiplicity : multiplicity;
-    symetries : symetries;
-    isos   : D4.subgroup;   (* the pattern is invariant by these isometries *)
+    multiplicity: multiplicity;
+    symetries: symetries;
+    isos: D4.subgroup;   (* the pattern is invariant by these isometries *)
   }
 
   val create: ?name:string -> ?s:symetries -> ?m:multiplicity -> Pattern.t -> t
-  (** construct a tile from his name, the usability of its symetries and
-    its quantification*)
+    (** construct a tile from his name, its symetries and
+        its multiplicity *)
 
   val apply: D4.t -> t -> t
-    (** [apply i t] creates a new tile which is the result of the
-       transformation of [t] by [i] *)
+    (** [apply i t] creates a new tile by applying transformation [i] to [t] *)
 
   val print: Format.formatter -> t -> unit
     (** print a tile *)

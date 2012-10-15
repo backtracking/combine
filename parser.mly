@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*                                                                        */
-/*  ReML - an OCaml library for combinatorics                             */
+/*  Combine - an OCaml library for combinatorics                          */
 /*                                                                        */
 /*  Copyright (C) 2012                                                    */
 /*    Remy El Sibaie                                                      */
@@ -91,7 +91,7 @@ algo:
 | ZDD { Zdd }
 
 state:
-| ON { On }
+| ON  { On }
 | OFF { Off }
 
 option:
@@ -128,12 +128,10 @@ tile:
 | e = expr; o = list(option)
     { let option (s, m) = function
         | M m' -> s, m' (* FIXME: fail on ambiguity *)
-	      | S s' -> s', m (* idem *)
-        in
-        let s,m = List.fold_left option (Snone, Minf) o in e,s,m }
+	| S s' -> s', m (* idem *)
+      in
+      let s,m = List.fold_left option (Snone, Minf) o in e,s,m }
 ;
-
-
 
 expr:
 | LPAR; e = expr; RPAR { e }

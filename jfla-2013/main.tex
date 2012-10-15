@@ -7,6 +7,14 @@
 \newcommand{\noeud}{n\oe ud}
 \newcommand{\noeuds}{n\oe uds}
 
+\newcommand{\te}[1]{\texttt{#1}}
+\newcommand{\nt}[1]{$\langle$\textsl{#1}$\rangle$}
+\newcommand{\etoile}{$^{\star}$}
+\newcommand{\etoilesep}[1]{$^{\star}_#1$}
+\newcommand{\plus}{$^+$}
+\newcommand{\plussep}[1]{$^+_#1$}
+\newcommand{\OU}{\ensuremath{\mid}}
+
 %% Title page...
 \title{\combine\ : une bibliothèque OCaml pour la combinatoire}
 \author{Rémy El Sibaïe$^1$
@@ -361,14 +369,75 @@ correspondent exactement aux solutions du problème EMC, c'est-à-dire
 aux sous-ensembles de lignes sélectionnées dans la matrice.
 On procède comme expliqué dans l'introduction.
 
-\paragraph{\of{Tiling}.}
+\paragraph{\of{Tiling}.} Ce dernier module permet de construire des
+problèmes de pavage et de les réduire vers le problème EMC. Pour cela,
+il fournit tout d'abord un module \of{Tiling.Pattern} pour décrire des
+motifs rectangulaires. Il ne s'agit ni plus ni moins que de matrices
+de booléens, munies d'opérations de transformation (redimensionnement,
+fusion, isométrie, etc.). Vient ensuite un module \of{Tiling.Tile}
+pour décrire les pièces destinées au pavage. Un pièce est la donnée
+d'un motif, de sa multiplicité (zéro ou un exemplaire, exactement un
+exemplaire, ou une infinité d'exemplaires) et des isométries que l'on
+peut appliquer à cette pièce (rotations et/ou réflexions).
+Enfin le module \of{Tiling} définit un problème de pavage comme un
+motif à paver et une liste de pièces. La fonction \of{Tiling.emc}
+réduit un tel problème vers un problème EMC. En particulier, son
+résultat permet de décoder toute solution du problème EMC comme une
+liste de pièces, avec leurs positions et leurs orientations.
 
- sous-module \of{D4} = groupe diédral $D_4$ des 8 isométries du plan
- qui laissent un carré invariant
+Le module \of{Tiling} utilise un module auxiliaire \of{D4} décrivant
+le groupe diédral $D_4$ des 8 isométries du plan qui laissent un carré
+invariant. On y trouve la structure de groupe de $D_4$ mais aussi tous ses
+sous-groupes. Ce module est d'intérêt général.
 
 \paragraph{Langage d'entrée de l'outil \combine.}
+On décrit ici brièvement la syntaxe du petit interprète qui vient avec
+la bibliothèque \combine, et dont une illustration est donnée
+figure~\ref{fig:chameau}.
 
-figure~\ref{fig:chameau}
+\begin{figure}
+\begin{center}
+\begin{tabular}{lrl}
+  \nt{decl} & $::=$ &
+            \te{pattern} \nt{ident} \te{=} \nt{expr} \\
+  &   $|$ & \te{problem} \nt{ident} \te{=} \nt{tiles} \\
+  &   $|$ & \te{tiles} \nt{ident} \te{=} \te{[} tile\etoilesep{\te{,}}
+            \te{]} \\
+  &   $|$ & \te{print} \nt{ident} \\
+  &   $|$ & \te{solve} \nt{algo} \nt{ident}
+            (\te{ascii} ~\OU~ \te{svg} \nt{string}) \\
+  &   $|$ & \te{count} \nt{algo} \nt{ident} \\
+  &   $|$ & \te{debug} (\te{on} ~\OU~ \te{off}) \\
+  &   $|$ & \te{timing} (\te{on} ~\OU~ \te{off}) \\
+  &   $|$ & \te{include} \nt{string}
+  \\[0.5em]
+  \nt{algo}  & $::=$ & \te{dlx} ~\OU~ \te{zdd} \\
+  \nt{tiles} & $::=$ & \nt{ident} ~\OU~ \te{[} tile\etoilesep{\te{,}} \te{]} \\
+  \nt{tile}  & $::=$ & \nt{expr} \nt{option}\etoile \\
+  \nt{expr}  & $::=$ & \nt{ident} \\
+  &   $|$ & \te{\{} \nt{ascii-art} \te{\}} \\
+  &   $|$ & \te{constant} \nt{xy} \nt{bool} \\
+  &   $|$ & \nt{expr} (\te{\&\&} ~\OU~ \te{||} ~\OU~ \te{\^{}} ~\OU~
+            \te{-}) \nt{expr} \\
+  &   $|$ & \te{set} \nt{expr} \nt{xy} \nt{bool} \\
+  &   $|$ & \te{crop} \nt{xy} \nt{xy} \nt{expr} \\
+  &   $|$ & \te{shift} \nt{expr} \nt{xy} \\
+  &   $|$ & \te{resize} \nt{expr} \nt{xy} \\
+  &   $|$ & \te{apply} \nt{isometry} \nt{expr} \\
+  &   $|$ & \te{(} \nt{expr} \te{)} \\
+\\
+  \nt{xy}  & $::=$ & \nt{integer} \te{x} \nt{integer} \\
+  \nt{option}  & $::=$ & \te{\~{}one} ~\OU~ \te{\~{}maybe} ~\OU~
+     \te{\~{}sym} ~\OU~ \te{\~{}rot} \\
+  \nt{isometry}  & $::=$ & \te{Id} ~\OU~ \te{Rot90} ~\OU~ \te{Rot180}
+  ~\OU~ \te{Rot270} \\
+  & $|$ & \te{VertRefl} ~\OU~ \te{HorizRefl} ~\OU~
+          \te{Diag1Refl} ~\OU~ \te{Diag2Refl}
+\end{tabular}
+\end{center}
+  \caption{Grammaire des problèmes de pavage.}
+  \label{fig:grammaire}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Réalisation}\label{sec:impl}
@@ -395,7 +464,8 @@ bibliothèque \combine.
 
 \paragraph{\of{Tiling}.}
 
- 
+ types abstraits
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion et perspectives}
