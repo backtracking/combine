@@ -57,6 +57,64 @@ let of_bool_matrix m =
 let () = Metapost.emit "caml_problem" (of_bool_matrix caml)
 let () = Metapost.emit "caml2_problem" (of_bool_matrix caml2)
 
+let scott = Array.init 8 (fun i -> Array.init 8 (fun j ->
+            not (3 <= i && i <= 4 && 3 <= j && j <= 4)))
+let () = Metapost.emit "scott_problem" (of_bool_matrix scott)
+
+let pentaminos = [
+[|
+"*****";
+|]; [|
+"***";
+"*..";
+"*..";
+|]; [|
+".**";
+".*.";
+"**.";
+|]; [|
+"***";
+"**.";
+|]; [|
+"***.";
+"..**";
+|]; [|
+".**";
+"**.";
+"*..";
+|]; [|
+"****";
+".*..";
+|]; [|
+"***";
+".*.";
+".*.";
+|]; [|
+".**";
+"**.";
+".*.";
+|]; [|
+"***";
+"*.*";
+|]; [|
+"****";
+"*...";
+|]; [|
+".*.";
+"***";
+".*.";
+|]
+]
+
+let () =
+  let c = ref 0 in
+  let emit_penta p = incr c;
+    let m = Array.map bool_array_of_string p in
+    Metapost.emit (Format.sprintf "penta%d" !c) (of_bool_matrix m);
+  in
+  List.iter emit_penta pentaminos
+
+
 let caml_solution = [|
 "..TT..........";
 ".UUS..........";

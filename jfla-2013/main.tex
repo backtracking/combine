@@ -238,7 +238,7 @@ LGPL à l'adresse \url{http://www.lri.fr/~filliatr/combine/}.
 Le reste de cet article est organisé de façon très simple. La
 section~\ref{sec:sig} présente l'interface de la bibliothèque \combine\
 et la section~\ref{sec:impl} les détails techniques de sa
-réalisation. L'article s'achève en indiquant des extensions possibles.
+réalisation. L'article s'achève sur quelques extensions possibles.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Interface}\label{sec:sig}
@@ -391,11 +391,10 @@ invariant. On y trouve la structure de groupe de $D_4$ mais aussi tous ses
 sous-groupes. Ce module est d'intérêt général.
 
 \paragraph{Langage d'entrée de l'outil \combine.}
-On décrit ici brièvement la syntaxe du petit interprète qui vient avec
-la bibliothèque \combine, et dont une illustration est donnée
-figure~\ref{fig:chameau}.
-
-\begin{figure}
+La syntaxe du petit interprète qui vient avec
+la bibliothèque \combine\ est résumée figure~\ref{fig:grammaire}.
+Un exemple a été donné plus haut, dans la figure~\ref{fig:chameau}.
+\begin{figure}[p]
 \begin{center}
 \begin{tabular}{lrl}
   \nt{decl} & $::=$ &
@@ -409,8 +408,7 @@ figure~\ref{fig:chameau}.
   &   $|$ & \te{count} \nt{algo} \nt{ident} \\
   &   $|$ & \te{debug} (\te{on} ~\OU~ \te{off}) \\
   &   $|$ & \te{timing} (\te{on} ~\OU~ \te{off}) \\
-  &   $|$ & \te{include} \nt{string}
-  \\[0.5em]
+  &   $|$ & \te{include} \nt{string} \\
   \nt{algo}  & $::=$ & \te{dlx} ~\OU~ \te{zdd} \\
   \nt{tiles} & $::=$ & \nt{ident} ~\OU~ \te{[} tile\etoilesep{\te{,}} \te{]} \\
   \nt{tile}  & $::=$ & \nt{expr} \nt{option}\etoile \\
@@ -425,7 +423,6 @@ figure~\ref{fig:chameau}.
   &   $|$ & \te{resize} \nt{expr} \nt{xy} \\
   &   $|$ & \te{apply} \nt{isometry} \nt{expr} \\
   &   $|$ & \te{(} \nt{expr} \te{)} \\
-\\
   \nt{xy}  & $::=$ & \nt{integer} \te{x} \nt{integer} \\
   \nt{option}  & $::=$ & \te{\~{}one} ~\OU~ \te{\~{}maybe} ~\OU~
      \te{\~{}sym} ~\OU~ \te{\~{}rot} \\
@@ -438,6 +435,71 @@ figure~\ref{fig:chameau}.
   \caption{Grammaire des problèmes de pavage.}
   \label{fig:grammaire}
 \end{figure}
+Donnons un autre exemple avec le problème de
+Scott~\cite{scott-pentaminos}. Il s'agit de
+dénombrer le nombre de façons de paver la figure suivante
+\begin{center}
+    \includegraphics{scott_problem.mps}
+\end{center}
+avec les douze pentaminos, c'est-à-dire les douze pièces suivantes :
+\begin{center}
+  \includegraphics{penta1.mps}
+  \includegraphics{penta2.mps}
+  \includegraphics{penta3.mps}
+  \includegraphics{penta4.mps}
+  \includegraphics{penta5.mps}
+  \includegraphics{penta6.mps}
+  \includegraphics{penta7.mps}
+  \includegraphics{penta8.mps}
+  \includegraphics{penta9.mps}
+  \includegraphics{penta10.mps}
+  \includegraphics{penta11.mps}
+  \includegraphics{penta12.mps}
+\end{center}
+Chaque pièce doit être utilisée une et une seule fois, mais peut être
+tournée ou retournée à volonté.
+On commence par décrire les douze pièces.
+\begin{verbatim}
+  pattern I = {*****}
+
+  pattern V = {
+  ***
+  *
+  *
+  }
+\end{verbatim}
+etc. On définit ensuite la liste des douze pentaminos avec, pour
+chacun, l'option \verb+~one+ pour indiquer qu'il doit être utilisé une
+et une seule fois et l'option \verb+~sym+ pour indiquer qu'il peut
+être orienté arbitrairement :
+\begin{verbatim}
+  tiles pentaminos =
+    [ L ~one ~sym, T ~one ~sym, V ~one ~sym, N ~one ~sym,
+      Z ~one ~sym, F ~one ~sym, X ~one ~sym, W ~one ~sym,
+      P ~one ~sym, I ~one ~sym, Y ~one ~sym, U ~one ~sym ]
+\end{verbatim}
+Nommer cette liste permettra notamment de réutiliser facilement les
+pentaminos dans d'autres problèmes de pavage.
+(On notera la présence d'une commande \te{include} dans la grammaire.)
+Le motif à paver peut être dessiner en ASCII ou encore défini en
+effaçant les quatre points centraux d'un carré $8\times 8$ :
+\begin{verbatim}
+  pattern scott_board =
+    set set set set (constant 8x8 true) 3x3 false 3x4 false 4x3 false 4x4 false
+\end{verbatim}
+Il ne reste plus qu'à définir le problème de Scott et à dénombrer ses
+solutions, par exemple avec l'algorithme DLX :
+\begin{verbatim}
+  problem scott_problem = scott_board pentaminos
+  count dlx scott_problem
+\end{verbatim}
+On trouve 520 solutions en 5,2 secondes.  Plus subtilement, on peut
+éliminer les symétries du problème en ne considérant qu'une
+orientation possible pour l'une des pièces n'ayant aucune symétrie
+(par exemple \includegraphics[scale=0.5]{penta9.mps}). Il suffit pour
+cela de lui retirer l'option \verb+~sym+ dans la définition de la
+liste \texttt{pentaminos} ci-dessus. On obtient alors 65 solutions
+uniques, en 2,6 secondes.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Réalisation}\label{sec:impl}
@@ -497,4 +559,4 @@ bibliothèque \combine.
 %%% End:
 
 % LocalWords:  encodé d'EMC acyclique d'assignations booléenne Minato BDD ZDD
-% LocalWords:  EMC booléens
+% LocalWords:  EMC booléens pentaminos

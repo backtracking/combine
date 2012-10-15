@@ -62,13 +62,15 @@ and interp_setop d e = function
   | SetXY b->
       let p = interp_expr e in
       let x, y = d in
-      p.Pattern.matrix.(y).(x) <- b; p
+      let m = Array.map Array.copy p.Pattern.matrix in
+      m.(y).(x) <- b;
+      Pattern.create m
   | Resize ->
-    let w, h = d in
-    Pattern.resize (interp_expr e) ?w ?h
+      let w, h = d in
+      Pattern.resize (interp_expr e) ?w ?h
   | Crop pos ->
-    let (x, y), (w, h) = pos, d in
-    Pattern.crop (interp_expr e) ?x ?y ?w ?h
+      let (x, y), (w, h) = pos, d in
+      Pattern.crop (interp_expr e) ?x ?y ?w ?h
 
 let interp_bool_expr = function
   | Boolean b -> b

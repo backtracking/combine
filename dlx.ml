@@ -39,18 +39,18 @@ let one_node () =
 (* Adds n2 to the right of n1 in the DLM *)
 let add_right n1 n2 =
   let tmp = n1.right in
-    n1.right <- n2;
-    n2.right <- tmp;
-    n2.left <- n1;
-    n2.right.left <- n2
+  n1.right <- n2;
+  n2.right <- tmp;
+  n2.left <- n1;
+  n2.right.left <- n2
 
 (* Adds n2 under n1 in the DLM *)
 let add_below n1 n2 =
   let tmp = n1.down in
-    n1.down <- n2;
-    n2.down <- tmp;
-    n2.up <- n1;
-    n2.down.up <- n2
+  n1.down <- n2;
+  n2.down <- tmp;
+  n2.up <- n1;
+  n2.down.up <- n2
 
 (* Adds row after the headers in the DLM *)
 let add_row headers row i =
@@ -79,26 +79,26 @@ let generate_headers ?primary m h =
     | None -> size
     | Some p -> if p < 0 || p > size then invalid_arg "create"; p
   in
-    headers.(0).s <- 0;
-    headers.(0).name <- "C0";
-    add_right h headers.(0);
-    for n = 1 to primary - 1 do
-      headers.(n).s <- 0;
-      headers.(n).name <- String.concat "" ["C";string_of_int n];
-      add_right headers.(n - 1) headers.(n);
-    done;
+  headers.(0).s <- 0;
+  headers.(0).name <- "C0";
+  add_right h headers.(0);
+  for n = 1 to primary - 1 do
+    headers.(n).s <- 0;
+    headers.(n).name <- String.concat "" ["C";string_of_int n];
+    add_right headers.(n - 1) headers.(n);
+  done;
   headers (* on retourne le node array *)
 
 (* Applies f to elements of the DLM, from left to right*)
 let iter_right ?(self = true) f n =
   if self then f n;
-    let rec rec_iter_right node =
-      if node != n then begin
-        f node;
-        rec_iter_right node.right
-      end
-    in
-      rec_iter_right n.right
+  let rec rec_iter_right node =
+    if node != n then begin
+      f node;
+      rec_iter_right node.right
+    end
+  in
+  rec_iter_right n.right
 
 (* Creates a DLM from a boolean matrix *)
 let create ?primary m =
@@ -114,35 +114,35 @@ let create ?primary m =
 (* Applies f to elements of the DLM, from up to down*)
 let iter_down ?(self = true) f n =
   if self then f n;
-    let rec rec_iter_down node =
-      if node != n then begin
-        f node;
-        rec_iter_down node.down
-      end
-    in
-      rec_iter_down n.down
+  let rec rec_iter_down node =
+    if node != n then begin
+      f node;
+      rec_iter_down node.down
+    end
+  in
+  rec_iter_down n.down
 
 (* Applies f to elements of the DLM, from right to left *)
 let iter_left ?(self = true) f n =
   if self then f n;
-    let rec rec_iter_left node =
-      if node != n then begin
-        f node;
-        rec_iter_left node.left
-      end
-    in
-      rec_iter_left n.left
+  let rec rec_iter_left node =
+    if node != n then begin
+      f node;
+      rec_iter_left node.left
+    end
+  in
+  rec_iter_left n.left
 
 (* Applies f to elements of the DLM, from down to up *)
 let iter_up ?(self = true) f n =
   if self then f n;
-    let rec rec_iter_up node =
-      if node != n then begin
-        f node;
-        rec_iter_up node.up
-      end
-    in
-      rec_iter_up n.up
+  let rec rec_iter_up node =
+    if node != n then begin
+      f node;
+      rec_iter_up node.up
+    end
+  in
+  rec_iter_up n.up
 
 (* Removes the given column and all rows in column own list from
  the DLM*)
@@ -157,7 +157,7 @@ let cover column_header =
   let cover_row n =
     iter_right ~self:false cover_node n
   in
-    iter_down ~self:false cover_row column_header
+  iter_down ~self:false cover_row column_header
 
 (* Un-removes the given column and all rows in column own list from
  the DLM*)
@@ -170,9 +170,9 @@ let uncover column_header =
   let uncover_row n =
     iter_left ~self:false uncover_node n
   in
-    iter_up ~self:false uncover_row column_header;
-    column_header.right.left <- column_header;
-    column_header.left.right <- column_header
+  iter_up ~self:false uncover_row column_header;
+  column_header.right.left <- column_header;
+  column_header.left.right <- column_header
 
 (* Print the given solution *)
 let print_solution fmt (o, k) =

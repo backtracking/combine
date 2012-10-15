@@ -126,7 +126,7 @@ module Pattern = struct
 
   let binary_op op p1 p2 =
     if p1.height <> p2.height || p1.width <> p2.width then
-      invalid_arg "union";
+      invalid_arg "binary_op";
     let w, h = p1.height, p1.width in
     let m = Array.make_matrix h w false in
     for y = 0 to h - 1 do

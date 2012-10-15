@@ -15,13 +15,15 @@ pattern scott_board = {
 ********
 }
 
-problem scott_problem = scott_board
+pattern scott_board3 =
+  set set set set (constant 8x8 true) 3x3 false 3x4 false 4x3 false 4x4 false
+
+problem scott_problem = scott_board3
 [ L ~one ~sym, T ~one ~sym, V ~one ~sym, N ~one ~sym,
   Z ~one ~sym, F ~one     , X ~one ~sym, W ~one ~sym,
   P ~one ~sym, I ~one ~sym, Y ~one ~sym, U ~one ~sym ]
 
-
-#print scott_problem
+print scott_problem
 
 timing on
 count dlx scott_problem
