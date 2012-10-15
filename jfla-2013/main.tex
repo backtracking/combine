@@ -436,7 +436,7 @@ Un exemple a été donné plus haut, dans la figure~\ref{fig:chameau}.
   \label{fig:grammaire}
 \end{figure}
 Donnons un autre exemple avec le problème de
-Scott~\cite{scott-pentaminos}. Il s'agit de
+Scott~\cite{scott-pentaminos}.\label{pbm:Scott} Il s'agit de
 dénombrer le nombre de façons de paver la figure suivante
 \begin{center}
     \includegraphics{scott_problem.mps}
@@ -528,18 +528,67 @@ bibliothèque \combine.
 
  types abstraits
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion et perspectives}
 
-- Dlx :  matrice creuse (construction efficace quand il y a peu de 1)
+Nous avons présenté \combine, une bibliothèque OCaml pour la
+combinatoire. Elle combine --- c'est le cas de le dire ---
+l'algorithme DLX et la structure de ZDD autour du problème unique de la
+couverture exacte, et réduit le problème du pavage rectangulaire en
+deux dimensions vers ce dernier.
 
-- prise en compte des symétries du problème pour réduire l'espace
+Ce n'est qu'un début. Il est évident que cette bibliothèque pourrait
+fournir de nombreuses autres réductions vers le problème EMC, à
+commencer par d'autres types de pavage, tels que des pavages en trois
+dimensions ou non rectangulaires par exemple.
 
-- autres pbms de pavage : en 3D, non rectangulaires, etc.
+Concernant le code déjà existant,
+une amélioration substantielle du module de pavage consisterait à
+prendre en compte les symétries du problème pour réduire l'espace de
+recherche.
+Dans le problème de Scott décrit plus haut page~\pageref{pbm:Scott},
+il était facile de prendre en compte les symétries du problème car
+d'une part il existait une pièce ne possédant aucune symétrie et
+d'autre part le motif à paver possédait, lui, toutes les
+symétries. L'espace de recherche était donc très simplement divisé par
+huit.
+De manière générale, le problème est plus complexe : on ne dispose pas
+nécessairement d'une pièce sans aucune symétrie, elle n'est pas
+nécessairement utilisée une fois et une seule, le motif à paver peut
+posséder certaines symétries mais pas toutes, etc.
 
-- réduction EMC vers SAT (format Dimacs)
+L'interface actuelle du module \of{Dlx} est relativement simpliste, car
+elle n'accepte en entrée qu'une matrice de booléens. Or
+une matrice EMC est le plus souvent creuse. Par exemple, le pavage par
+des dominos conduit à des lignes ne contenant que deux 1.
+Il serait donc souhaitable que le module \of{Dlx} accepte également
+une description de matrice creuse ou, de façon équivalente, propose une
+construction incrémentale du problème EMC.
 
+Dans le module \of{Zdd}, un certain nombre de constantes ont été
+choisies de manière arbitraire, notamment les tailles initiales des
+différentes tables de hachage, et l'utilisateur n'a pas de contrôle
+sur ces valeurs. De même, chaque opération sur les ZDD pourrait, au
+choix, utiliser une table globale, partagée entre tous les appels à
+cette opération, ou bien au contraire une table locale à chaque
+appel. Pour l'instant, le choix de tables globales a été fait mais il
+serait souhaitable que l'utilisateur puisse choisir au cas par cas.
+Toujours dans ce module, les tables de mémoïsation des différentes
+opérations n'utilisent pas de pointeurs faibles (au contraire de la
+table de \emph{hash-consing}). Par conséquent, elles maintiennent en
+vie des ZDD qui pourraient être récupérés par le GC. Pour y remédier,
+il faut utiliser des
+\emph{éphémérons}~\cite{Hayes:1997:Ephemerons}. Cette technologie est
+déjà à l'\oe uvre en OCaml dans l'outil Why3~\cite{why3manual072} et
+pourrait donc être mise en place facilement.
+
+Enfin, une perspective intéressante consiste à réduire le problème EMC
+vers le problème SAT, pour se servir ensuite d'un solveur SAT existant,
+à supposer qu'il sache donner une solution ou dénombrer les solutions.
+Cette idée a été abordée sur la toute fin du stage, en étendant le
+module \of{Emc} d'une sortie au format DIMACS. Il reste cependant à
+mener des expériences avec des solveurs SAT pour comparer notamment les
+performances avec DLX et ZDD.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % And do NOT FORGET to include your bibliography for submission
@@ -559,4 +608,4 @@ bibliothèque \combine.
 %%% End:
 
 % LocalWords:  encodé d'EMC acyclique d'assignations booléenne Minato BDD ZDD
-% LocalWords:  EMC booléens pentaminos
+% LocalWords:  EMC booléens pentaminos Scott solveur
