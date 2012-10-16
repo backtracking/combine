@@ -2,12 +2,22 @@
 %%BoundingBox: 10 -270 190 -10 
 %%HiResBoundingBox: 10 -270 190 -10 
 %%Creator: MetaPost 1.208
-%%CreationDate: 2012.10.16:1124
+%%CreationDate: 2012.10.16:1359
 %%Pages: 1
 %%BeginProlog
 %%EndProlog
 %%Page: 1 1
- 1 0 0 setrgbcolor 0 0.5 dtransform truncate idtransform setlinewidth pop
+ 1 0.5 0.5 setrgbcolor
+newpath 32 -30 moveto
+48 -30 lineto
+49.10457 -30 50 -30.89543 50 -32 curveto
+50 -48 lineto
+50 -49.10457 49.10457 -50 48 -50 curveto
+32 -50 lineto
+30.89543 -50 30 -49.10457 30 -48 curveto
+30 -32 lineto
+30 -30.89543 30.89543 -30 32 -30 curveto closepath fill
+ 0 0 0 setrgbcolor 0 0.5 dtransform truncate idtransform setlinewidth pop
  [] 0 setdash 1 setlinejoin 10 setmiterlimit
 newpath 32 -30 moveto
 48 -30 lineto
@@ -18,6 +28,17 @@ newpath 32 -30 moveto
 30.89543 -50 30 -49.10457 30 -48 curveto
 30 -32 lineto
 30 -30.89543 30.89543 -30 32 -30 curveto closepath stroke
+ 1 0.5 0.5 setrgbcolor
+newpath 72 -30 moveto
+88 -30 lineto
+89.10457 -30 90 -30.89543 90 -32 curveto
+90 -48 lineto
+90 -49.10457 89.10457 -50 88 -50 curveto
+72 -50 lineto
+70.89543 -50 70 -49.10457 70 -48 curveto
+70 -32 lineto
+70 -30.89543 70.89543 -30 72 -30 curveto closepath fill
+ 0 0 0 setrgbcolor
 newpath 72 -30 moveto
 88 -30 lineto
 89.10457 -30 90 -30.89543 90 -32 curveto
@@ -27,6 +48,17 @@ newpath 72 -30 moveto
 70.89543 -50 70 -49.10457 70 -48 curveto
 70 -32 lineto
 70 -30.89543 70.89543 -30 72 -30 curveto closepath stroke
+ 1 0.5 0.5 setrgbcolor
+newpath 112 -30 moveto
+128 -30 lineto
+129.10457 -30 130 -30.89543 130 -32 curveto
+130 -48 lineto
+130 -49.10457 129.10457 -50 128 -50 curveto
+112 -50 lineto
+110.89543 -50 110 -49.10457 110 -48 curveto
+110 -32 lineto
+110 -30.89543 110.89543 -30 112 -30 curveto closepath fill
+ 0 0 0 setrgbcolor
 newpath 112 -30 moveto
 128 -30 lineto
 129.10457 -30 130 -30.89543 130 -32 curveto
@@ -36,6 +68,17 @@ newpath 112 -30 moveto
 110.89543 -50 110 -49.10457 110 -48 curveto
 110 -32 lineto
 110 -30.89543 110.89543 -30 112 -30 curveto closepath stroke
+ 1 0.5 0.5 setrgbcolor
+newpath 152 -30 moveto
+168 -30 lineto
+169.10457 -30 170 -30.89543 170 -32 curveto
+170 -48 lineto
+170 -49.10457 169.10457 -50 168 -50 curveto
+152 -50 lineto
+150.89543 -50 150 -49.10457 150 -48 curveto
+150 -32 lineto
+150 -30.89543 150.89543 -30 152 -30 curveto closepath fill
+ 0 0 0 setrgbcolor
 newpath 152 -30 moveto
 168 -30 lineto
 169.10457 -30 170 -30.89543 170 -32 curveto
@@ -45,7 +88,6 @@ newpath 152 -30 moveto
 150.89543 -50 150 -49.10457 150 -48 curveto
 150 -32 lineto
 150 -30.89543 150.89543 -30 152 -30 curveto closepath stroke
- 0 0 0 setrgbcolor
 newpath 32 -70 moveto
 48 -70 lineto
 49.10457 -70 50 -70.89543 50 -72 curveto

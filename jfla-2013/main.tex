@@ -126,7 +126,7 @@ Pour résoudre le problème EMC, plusieurs techniques sont à notre
 disposition. Une première consiste à découvrir les solutions une par
 une, en utilisant du \emph{backtracking}.
 Knuth a proposé pour cela un algorithme appelé les \emph{liens
-  dansants} (ou encore DLX)~\cite{knuth00:dlx}. Il consiste à relier
+  dansants} ou encore DLX~\cite{knuth00:dlx}. Il consiste à relier
 ensemble tous les
 1 de la matrice EMC dans un réseau de listes circulaires doublement
 chaînées horizontales et verticales, puis à ôter
@@ -305,7 +305,7 @@ supplément un foncteur
 où \of{A} est un module d'arithmétique minimal fournissant un zéro, une unité
 et une addition.
 Une autre différence avec le module \of{Set} d'OCaml vient de
-l'unicité de la représentation d'un ZDD. Elle permet de fournir des
+l'unicité de la représentation d'un ZDD. Elle permet notamment de fournir des
 opérations \of{compare} et \of{equal} de complexité $O(1)$.
 
 \InsertBoxR{2}{\includegraphics[scale=0.5]{../stage/imports/zdd_construct2.pdf}}
@@ -481,7 +481,7 @@ et une seule fois et l'option \verb+~sym+ pour indiquer qu'il peut
 Nommer cette liste permettra notamment de réutiliser facilement les
 pentaminos dans d'autres problèmes de pavage.
 (On notera la présence d'une commande \te{include} dans la grammaire.)
-Le motif à paver peut être dessiner en ASCII ou encore défini en
+Le motif à paver peut être dessiné en ASCII ou encore défini en
 effaçant les quatre points centraux d'un carré $8\times 8$ :
 \begin{verbatim}
   pattern scott_board =
@@ -525,10 +525,10 @@ Voici un exemple de matrice et la structure DLX correspondante :
    0 & 1 & 0 & 0
   \end{array} \right)$}
 \qquad\qquad\qquad
-  \includegraphics[scale=0.5]{dlx.mps}
+  \includegraphics[scale=0.45]{dlx.mps}
 \end{center}
 Les pointeurs s'étendent jusqu'aux \noeuds\ suivants,
-circulairement. Les entêtes sont représentés en rouge.
+circulairement. Les entêtes apparaissent en haut.
 Chaque \noeud\ est représenté par le type OCaml suivant :
 \begin{ocaml}
 type node = {
@@ -540,19 +540,20 @@ Les quatre champs \of{up}, \of{down}, \of{left} et \of{right}
 matérialisent les deux listes doublement chaînées dont fait partie
 chaque \noeud. Le champ \of{c} contient un pointeur vers l'entête de
 la colonne (ces pointeurs ne sont pas dessinés dans la figure
-ci-dessus, par soucis de clarté). Le champ \of{s} contient le nom de
+ci-dessus, par soucis de clarté). Le champ \of{name} contient le nom de
 chaque colonne, à des fins d'affichage.
 Enfin, l'entier contenu dans le champ \of{s} est interprété ainsi :
 pour un entête, il contient le nombre de \noeuds\ dans la colonne
-correspondante et est utilisé pour choisir une colonne minimisant ce
-nombre ; pour tout autre \noeud, il contient le numéro de la ligne de
+correspondante et est utilisé pour choisir une colonne minimisant cette
+valeur ; pour tout autre \noeud, il contient le numéro de la ligne de
 la matrice et est utilisé pour décoder la solution, le cas échéant.
 
 Il est important de préciser une fois encore que l'algorithme DLX
 travaille en espace constant : une fois les \noeuds\ créés à partir de
 la matrice, tout la recherche se fait en place, en modifiant seulement
 les champs \of{s}, \of{up}, \of{down}, \of{left} et \of{right}. C'est
-la danse des liens.
+la danse des liens. Pour plus de détails, on consultera l'article
+de Knuth introduisant cet algorithme~\cite{knuth00:dlx}.
 
 \paragraph{\of{Zdd}.}
 Le module \of{Zdd} est en tous points analogue à un module de BDD.
@@ -567,16 +568,15 @@ Le type OCaml des ZDD est celui qui a déjà été donné plus haut, à savoir
   type t = Bottom | Top | Node of unique * int * t * t
 \end{ocaml}
 En particulier, chaque \noeud\ de ZDD occupe exactement 5 mots
-mémoire, auxquels s'ajoutent son entrée dans la table de
+mémoire, auxquels s'ajoute son entrée dans la table de
 \emph{hash-consing}, c'est-à-dire environ deux mots.
 
 Les différentes opérations sur les ZDD sont mémoïzées. Comme pour les
 BDD, c'est là la clé de l'efficacité. Chaque ZDD contenant un
 entier unique, il est extrêmement simple de mettre en \oe uvre cette
-mémoïzation et elle de fait des plus efficace.
+mémoïzation et elle de fait très efficace.
 Le code effectuant la mémoïzation est factorisé dans des opérateurs de
-point fixes effectuant. Ainsi le cardinal d'un ZDD s'écrit aussi
-simplement que
+point fixes. Ainsi le cardinal d'un ZDD s'écrit aussi simplement que
 \begin{ocaml}
 let cardinal = memo_rec1 (
   fun cardinal -> function
@@ -651,7 +651,7 @@ choix, utiliser une table globale, partagée entre tous les appels à
 cette opération, ou bien au contraire une table locale à chaque
 appel. Pour l'instant, le choix de tables globales a été fait mais il
 serait souhaitable que l'utilisateur puisse choisir au cas par cas.
-Toujours dans ce module, les tables de mémoïsation des différentes
+Toujours dans ce module, les tables de mémoïzation des différentes
 opérations n'utilisent pas de pointeurs faibles (au contraire de la
 table de \emph{hash-consing}). Par conséquent, elles maintiennent en
 vie des ZDD qui pourraient être récupérés par le GC. Pour y remédier,

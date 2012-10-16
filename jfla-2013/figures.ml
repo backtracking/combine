@@ -184,20 +184,19 @@ let archi =
 let () = Metapost.emit "archi" archi
 
 let u = bp 20.
-let node ~stroke () =
-  round_rect ~stroke ~dx:zero ~dy:zero (empty ~width:u ~height:u ())
+let node ?fill () =
+  round_rect ?fill ~dx:zero ~dy:zero (empty ~width:u ~height:u ())
 
 let dlx m0 =
   let h = Array.length m0 in
   let w = Array.length m0.(0) in
-  let row ?(stroke=Color.black) r =
-    let stroke = Some stroke in
+  let row ?fill r =
     Array.init (w+2)
       (fun i ->
          if i = 0 || i = w+1 || not r.(i-1)
-         then empty ~width:u ~height:u () else node ~stroke ())
+         then empty ~width:u ~height:u () else node ?fill ())
   in
-  let headers = row ~stroke:Color.red (Array.make w true) in
+  let headers = row ~fill:Color.lightred (Array.make w true) in
   let m = Array.init (h+3)
     (fun i ->
        if i = 0 || i = h+2 then row (Array.make w false)

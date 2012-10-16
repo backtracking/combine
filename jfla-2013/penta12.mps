@@ -2,7 +2,7 @@
 %%BoundingBox: -1 -16 16 1 
 %%HiResBoundingBox: -0.25 -15.25 15.25 0.25 
 %%Creator: MetaPost 1.208
-%%CreationDate: 2012.10.16:1124
+%%CreationDate: 2012.10.16:1359
 %%Pages: 1
 %%BeginProlog
 %%EndProlog
