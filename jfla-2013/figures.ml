@@ -182,3 +182,53 @@ let archi =
   nop
 
 let () = Metapost.emit "archi" archi
+
+let u = bp 20.
+let node ~stroke () =
+  round_rect ~stroke ~dx:zero ~dy:zero (empty ~width:u ~height:u ())
+
+let dlx m0 =
+  let h = Array.length m0 in
+  let w = Array.length m0.(0) in
+  let row ?(stroke=Color.black) r =
+    let stroke = Some stroke in
+    Array.init (w+2)
+      (fun i ->
+         if i = 0 || i = w+1 || not r.(i-1)
+         then empty ~width:u ~height:u () else node ~stroke ())
+  in
+  let headers = row ~stroke:Color.red (Array.make w true) in
+  let m = Array.init (h+3)
+    (fun i ->
+       if i = 0 || i = h+2 then row (Array.make w false)
+       else if i = 1 then headers else row m0.(i-2)) in
+  let b = tabular ~hpadding:u ~vpadding:u m in
+  let box i j = sub m.(i+1).(j) b in
+  let arrow ~ofs p1 p2 =
+    Helpers.draw_simple_arrow (Point.shift ofs p1) (Point.shift ofs p2) in
+  let right i j =
+    let x = box i j in let y = box i (j+1) in
+    arrow ~ofs:(Point.pt (0., 2.)) (east x) (west y) in
+  let left i j =
+    let x = box i j in let y = box i (j-1) in
+    arrow ~ofs:(Point.pt (0., -2.)) (west x) (east y) in
+  let up i j =
+    let x = box i j in let y = box (i-1) j in
+    arrow ~ofs:(Point.pt (2., 0.)) (north x) (south y) in
+  let down i j =
+    let x = box i j in let y = box (i+1) j in
+    arrow ~ofs:(Point.pt (-2., 0.)) (south x) (north y) in
+  Box.draw b ++
+  iter 0 h (fun i ->
+  iter 1 w (fun j ->
+              if i = 0 || m0.(i-1).(j-1) then
+                right i j ++ left i j ++ up i j ++ down i j else nop
+           )) ++
+  nop
+
+let () = Metapost.emit "dlx" (dlx
+                                [| [| true; false; true; true;  |];
+                                   [| false; true; true; false; |];
+                                   [| true; true; false; true; |];
+                                   [| true; false; false; true; |];
+                                   [| false; true; false; false |] |])

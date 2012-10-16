@@ -496,7 +496,8 @@ solutions, par exemple avec l'algorithme DLX :
 On trouve 520 solutions en 5,2 secondes.  Plus subtilement, on peut
 éliminer les symétries du problème en ne considérant qu'une
 orientation possible pour l'une des pièces n'ayant aucune symétrie
-(par exemple \includegraphics[scale=0.5]{penta9.mps}). Il suffit pour
+(par exemple la pièce \includegraphics[scale=0.5]{penta9.mps} dite
+F). Il suffit pour
 cela de lui retirer l'option \verb+~sym+ dans la définition de la
 liste \texttt{pentaminos} ci-dessus. On obtient alors 65 solutions
 uniques, en 2,6 secondes.
@@ -508,10 +509,52 @@ Cette section détaille la réalisation des différents modules de la
 bibliothèque \combine.
 
 \paragraph{\of{Dlx}.}
+L'algorithme DLX opère sur un ensemble de listes doublement chaînées
+circulaires, qui relient tous les 1 de la matrice EMC horizontalement
+et verticalement.
+Par ailleurs, chaque colonne de la matrice contient un \noeud\
+supplémentaire, appelé entête. Les entêtes sont également liés entre
+eux dans une liste chaînée circulaire.
+Voici un exemple de matrice et la structure DLX correspondante :
+\begin{center}
+  \raisebox{7em}{$\left(  \begin{array}{ c c c c c }
+   1 & 0 & 1 & 1 \\
+   0 & 1 & 1 & 0 \\
+   1 & 1 & 0 & 1 \\
+   1 & 0 & 0 & 1 \\
+   0 & 1 & 0 & 0
+  \end{array} \right)$}
+\qquad\qquad\qquad
+  \includegraphics[scale=0.5]{dlx.mps}
+\end{center}
+Les pointeurs s'étendent jusqu'aux \noeuds\ suivants,
+circulairement. Les entêtes sont représentés en rouge.
+Chaque \noeud\ est représenté par le type OCaml suivant :
+\begin{ocaml}
+type node = {
+  mutable c:    node;
+  mutable s:    int;
+  mutable name: string;
+  mutable up:   node; mutable down:  node;
+  mutable left: node; mutable right: node; }
+\end{ocaml}
+Les quatre champs \of{up}, \of{down}, \of{left} et \of{right}
+matérialisent les deux listes doublement chaînées dont fait partie
+chaque \noeud. Le champ \of{c} contient un pointeur vers l'entête de
+la colonne (ces pointeurs ne sont pas dessinés dans la figure
+ci-dessus, par soucis de clarté). Le champ \of{s} contient le nom de
+chaque colonne, à des fins d'affichage.
+Enfin, l'entier contenu dans le champ \of{s} est interprété ainsi :
+pour un entête, il contient le nombre de \noeuds\ dans la colonne
+correspondante et est utilisé pour choisir une colonne minimisant ce
+nombre ; pour tout autre \noeud, il contient le numéro de la ligne de
+la matrice et est utilisé pour décoder la solution, le cas échéant.
 
-   type OCaml, iter sur les listes circulaires doublement chaînées
-
-   travaille en espace constant
+Il est important de préciser une fois encore que l'algorithme DLX
+travaille en espace constant : une fois les \noeuds\ créés à partir de
+la matrice, tout la recherche se fait en place, en modifiant seulement
+les champs \of{s}, \of{up}, \of{down}, \of{left} et \of{right}. C'est la
+danse des liens.
 
 \paragraph{\of{Zdd}.}
 
@@ -563,7 +606,7 @@ une matrice EMC est le plus souvent creuse. Par exemple, le pavage par
 des dominos conduit à des lignes ne contenant que deux 1.
 Il serait donc souhaitable que le module \of{Dlx} accepte également
 une description de matrice creuse ou, de façon équivalente, propose une
-construction incrémentale du problème EMC.
+construction incrémentale de la matrice.
 
 Dans le module \of{Zdd}, un certain nombre de constantes ont été
 choisies de manière arbitraire, notamment les tailles initiales des
@@ -580,14 +623,14 @@ vie des ZDD qui pourraient être récupérés par le GC. Pour y remédier,
 il faut utiliser des
 \emph{éphémérons}~\cite{Hayes:1997:Ephemerons}. Cette technologie est
 déjà à l'\oe uvre en OCaml dans l'outil Why3~\cite{why3manual072} et
-pourrait donc être mise en place facilement.
+pourrait donc être mise en place facilement dans \combine.
 
 Enfin, une perspective intéressante consiste à réduire le problème EMC
 vers le problème SAT, pour se servir ensuite d'un solveur SAT existant,
 à supposer qu'il sache donner une solution ou dénombrer les solutions.
 Cette idée a été abordée sur la toute fin du stage, en étendant le
 module \of{Emc} d'une sortie au format DIMACS. Il reste cependant à
-mener des expériences avec des solveurs SAT pour comparer notamment les
+mener des expériences avec des solveurs SAT pour comparer les
 performances avec DLX et ZDD.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
