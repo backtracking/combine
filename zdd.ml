@@ -59,13 +59,12 @@ module HashedZdd = struct
     | Bottom -> 0
     | Top -> 1
     | Node (_, i, z1, z2) -> hash_node i z2 z2
-  let equal k1 k2 =
-    match k1, k2 with
-      | Top, Top
-      | Bottom, Bottom -> true
-      | Node (_, i1, l1, r1), Node (_, i2, l2, r2) ->
+  let equal k1 k2 = match k1, k2 with
+    | Top, Top
+    | Bottom, Bottom -> true
+    | Node (_, i1, l1, r1), Node (_, i2, l2, r2) ->
         i1 = i2 && unique l1 = unique l2 && unique r1 = unique r2
-      | _ -> false
+    | _ -> false
 end
 
 module Weaktbl = struct

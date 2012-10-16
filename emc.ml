@@ -136,7 +136,8 @@ module Z = struct
       if min = max then ()
       else begin
         for j = min to mid - 1 do
-          cols.(mid + (j - min)) <- inter cols.(mid + (j - min)) cols.(j)
+          printf "%d <- %d/\\%d@." (mid + j - min) (mid + j - min) j;
+        cols.(mid + (j - min)) <- inter cols.(mid + (j - min)) cols.(j)
         done;
         balancing mid max
       end

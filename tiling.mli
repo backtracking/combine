@@ -93,8 +93,9 @@ module Tile : sig
   }
 
   val create: ?name:string -> ?s:symetries -> ?m:multiplicity -> Pattern.t -> t
-    (** construct a tile from his name, its symetries and
-        its multiplicity *)
+    (** construct a tile from his name, its symetries [s] and
+        its multiplicity [m]. [s] defaults to [Snone] and [m] defaults
+        to [Minf] *)
 
   val apply: D4.t -> t -> t
     (** [apply i t] creates a new tile by applying transformation [i] to [t] *)

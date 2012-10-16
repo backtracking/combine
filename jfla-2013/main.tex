@@ -532,11 +532,9 @@ circulairement. Les entêtes sont représentés en rouge.
 Chaque \noeud\ est représenté par le type OCaml suivant :
 \begin{ocaml}
 type node = {
-  mutable c:    node;
-  mutable s:    int;
-  mutable name: string;
   mutable up:   node; mutable down:  node;
-  mutable left: node; mutable right: node; }
+  mutable left: node; mutable right: node;
+  mutable c:    node; mutable s:     int;  mutable name: string; }
 \end{ocaml}
 Les quatre champs \of{up}, \of{down}, \of{left} et \of{right}
 matérialisent les deux listes doublement chaînées dont fait partie
@@ -553,23 +551,60 @@ la matrice et est utilisé pour décoder la solution, le cas échéant.
 Il est important de préciser une fois encore que l'algorithme DLX
 travaille en espace constant : une fois les \noeuds\ créés à partir de
 la matrice, tout la recherche se fait en place, en modifiant seulement
-les champs \of{s}, \of{up}, \of{down}, \of{left} et \of{right}. C'est la
-danse des liens.
+les champs \of{s}, \of{up}, \of{down}, \of{left} et \of{right}. C'est
+la danse des liens.
 
 \paragraph{\of{Zdd}.}
+Le module \of{Zdd} est en tous points analogue à un module de BDD.
+Le partage maximal est obtenu par la technique du
+\emph{hash-consing}, dont la mise en \oe uvre dans un langage comme
+OCaml est établie depuis longtemps~\cite{ConchonFilliatre06wml}.
+En particulier, les ZDD déjà construits sont stockés dans une table de
+hachage utilisant des pointeurs faibles, ce qui permet au système de
+détruire les ZDD qui ne sont plus utilisés nulle part.
+Le type OCaml des ZDD est celui qui a déjà été donné plus haut, à savoir
+\begin{ocaml}
+  type t = Bottom | Top | Node of unique * int * t * t
+\end{ocaml}
+En particulier, chaque \noeud\ de ZDD occupe exactement 5 mots
+mémoire, auxquels s'ajoutent son entrée dans la table de
+\emph{hash-consing}, c'est-à-dire environ deux mots.
 
-   hash-consing\cite{ConchonFilliatre06wml}, pointeurs faibles, tables
-   de mémoïsation
+Les différentes opérations sur les ZDD sont mémoïzées. Comme pour les
+BDD, c'est là la clé de l'efficacité. Chaque ZDD contenant un
+entier unique, il est extrêmement simple de mettre en \oe uvre cette
+mémoïzation et elle de fait des plus efficace.
+Le code effectuant la mémoïzation est factorisé dans des opérateurs de
+point fixes effectuant. Ainsi le cardinal d'un ZDD s'écrit aussi
+simplement que
+\begin{ocaml}
+let cardinal = memo_rec1 (
+  fun cardinal -> function
+    | Top -> 1
+    | Bottom -> 0
+    | Node(_, i, z1, z2) -> cardinal z1 + cardinal z2)
+\end{ocaml}
+et son coût est proportionnel au nombre de \noeuds\ \emph{distincts}
+dans le ZDD.
 
 \paragraph{\of{Emc}.}
-
-  surtout réduction EMC -> ZDD
-
-  suit Knuth~\cite{taocp4a} organ-pipe (exercice ?)
+La seule difficulté du module \of{Emc} est la réduction du problème
+EMC en un ZDD. En effet, s'il est facile de construire le ZDD
+correspondant à une colonne de la matrice (en temps linéaire, en
+procédant de bas en haut), il reste de multiples possibilités pour
+effectuer l'intersection de tous ces ZDD et elles ne sont pas toutes
+de même coût. Nous avons testé plusieurs solutions et
+finalement retenu la solution consistant à trier les colonnes de la
+matrice selon la ligne du premier 1 qu'elles contiennent puis
+à les fusionner selon la méthode dite \emph{balanced}
+proposée par Knuth~\cite[exercice 212 page 274]{taocp4a}.
 
 \paragraph{\of{Tiling}.}
-
- types abstraits
+Il n'y a pas grand à dire concernant le module \of{Tiling}, si ce
+n'est que son interface est relativement défensive. La plupart des
+types y sont privés, afin de garantir la validité d'un certain
+nombre de champs d'enregistrements, comme les dimensions d'un motif ou
+encore l'ensemble des symétries d'une pièce.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion et perspectives}

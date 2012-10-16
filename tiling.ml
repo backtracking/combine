@@ -249,10 +249,6 @@ let print_problem fmt problem =
   Format.fprintf fmt "%a@\n" Pattern.print problem.grid;
   List.iter (fun t -> Format.fprintf fmt "%a@\n" Tile.print t) problem.pieces
 
-
-
-
-
 (* Board position testing *)
 
 (* return true if position x y is on the board *)
