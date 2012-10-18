@@ -140,6 +140,8 @@ let print_solution_to_svg_file f ~width ~height n board =
 let width = 100 * range + 1
 let height = width
 
+let time () = (Unix.times()).Unix.tms_utime
+
 let () =
   printf "Solving the %d-queens@." range;
   let emc_array = emc range in
@@ -152,7 +154,18 @@ let () =
     printf "%a@." Emc.print_boolean_matrix board;
     print_solution_to_svg_file svg_file ~width ~height range board
   end else begin
-    printf "DLX: %d solutions@." (Emc.D.count_solutions p);
+    let t = time () in
+    let s =  Emc.D.count_solutions p in
+    printf "DLX: %d solutions, in %2.2fs@." s (time () -. t);
+    let t = time () in
     let p = Emc.Z.create ~primary:(2 * range) emc_array in
-    printf "ZDD: %d solutions@." (Emc.Z.count_solutions p)
+    printf "ZDD of size %d@." (Zdd.size p);
+    let s = Emc.Z.count_solutions p in
+    printf "ZDD: %d solutions, in %2.2fs@." s (time () -. t)
   end
+
+let () =
+  let mi, pr, ma = Gc.counters () in
+  let m = float (Sys.word_size / 8) *. (mi +. ma -. pr) in
+  let m = m /. 1024. /. 1024. in
+  printf "Memory used: %.2f Mb@." m

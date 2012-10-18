@@ -132,10 +132,10 @@ sudoku.opt: $(CMXA) sudoku.cmx
 	$(OCAMLOPT) -o $@ $(OFLAGS) str.cmxa $^
 
 queens.byte: $(CMA) queens.cmo
-	$(OCAMLC) -o $@ $(BFLAGS) $^
+	$(OCAMLC) -o $@ unix.cma $(BFLAGS) $^
 
 queens.opt: $(CMXA) queens.cmx
-	$(OCAMLOPT) -o $@ $(OFLAGS) $^
+	$(OCAMLOPT) -o $@ unix.cmxa $(OFLAGS) $^
 
 
 # installation
