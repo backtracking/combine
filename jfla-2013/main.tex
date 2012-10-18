@@ -45,11 +45,11 @@
   combinatoire\footnote{Il s'agit d'un travail réalisé par le premier
     auteur pendant un stage de L3 au LRI, d'avril à juin 2012, sous la
     direction du second auteur.}. Elle fournit deux solutions
-  algorithmiques très différentes au problème de la couverture exacte
-  de matrice (EMC) : les liens dansants de Knuth et une variante
+  algorithmiquement très différentes au problème de la couverture exacte
+  d'une matrice (EMC) : les liens dansants de Knuth et une variante
   des diagrammes de décision binaire appelée ZDD. De très nombreux
   problèmes de combinatoire peuvent être ramenés au problème EMC. La
-  bibliothèque \combine\ l'illustre notamment avec le pavage
+  bibliothèque \combine\ l'illustre notamment sur l'exemple du pavage
   rectangulaire en dimension 2.
 \end{abstract}
 
@@ -140,11 +140,14 @@ L'algorithme DLX ne trouve les solutions du problème EMC qu'une à une,
 mais avec une très grande efficacité. Pour le petit chameau, les
 46\,976 solutions sont trouvées en un dixième de seconde.
 
-Une second approche du problème EMC consiste à utiliser une variante
+Une seconde approche du problème EMC consiste à utiliser une variante
 des BDD appelée ZDD, pour \emph{Zero-suppressed binary Decision
   Diagram}, et due à Minato~\cite{ZDD}. Comme les BDD, les ZDD
 permettent de représenter une fonction booléenne de $n$ variables sous
-la forme d'un graphe orienté acyclique. On peut effectuer des
+la forme d'un graphe orienté acyclique. Leur particularité est
+d'offrir une représentation plus compacte que les BDD dans certains
+cas, et notamment ceux qui nous intéressent ici.
+On peut effectuer des
 opérations entre ZDD, comme par exemple la conjonction ou la
 disjonction, ou encore calculer très simplement le nombre
 d'assignations distinctes des $n$ variables qui donne la valeur de
@@ -163,9 +166,10 @@ problème est résolu. En effet, on peut alors facilement déterminer
 s'il existe une solution, et une construire une le cas échéant, mais
 surtout calculer le nombre total de solutions (en exploitant le
 partage, comme avec un BDD). C'est ainsi qu'on a calculé le nombre
-gigantesque de solutions au problème de pavage du grand chameau.
+gigantesque de solutions au problème de pavage du grand chameau, avec
+un ZDD de 784\,132 \noeuds.
 
-\InsertBoxR{0}{\includegraphics{caml_solution.mps}}%
+\InsertBoxR{0}{\includegraphics[scale=0.8]{caml_solution.mps}}%
 La bibliothèque \combine\ contient, outre ces deux solutions au problème
 EMC, trois exemples d'application. Les deux premiers sont des exemples
 relativement simples. Il s'agit du problème des $N$ reines et du
@@ -173,11 +177,12 @@ Sudoku. Le troisième exemple est celui du pavage rectangulaire en
 dimension 2. Il se présente sous la forme d'une bibliothèque OCaml
 pour décrire un problème de pavage, le réduire à un problème EMC et
 interpréter les solutions.
-C'est ainsi qu'a été obtenue la solution ci-contre au problème de
-pavage donné en introduction\footnote{Ce résultat de pavage a été dessiné
+C'est ainsi qu'a été obtenue la solution ci-contre\footnote{Ce
+  résultat de pavage a été dessiné
   automatiquement avec la
   bibliothèque OCaml \texttt{mlpost}~\cite{mlpost09jfla}, à partir
-  de la solution produite par \combine.}.
+  de la solution produite par \combine.} au problème de
+pavage donné en introduction.
 Enfin, la distribution de \combine\ contient un interprète pour un petit
 langage permettant de décrire un problème de pavage dans une syntaxe
 concrète et d'utiliser les différents outils de la bibliothèque
@@ -230,6 +235,7 @@ count zdd tiling_a_caml
   \label{fig:chameau}
 \end{figure}
 %
+On y définit deux motifs \of{caml} et \of{domino} ...
 La bibliothèque \combine\ est un logiciel libre, distribué sous licence
 LGPL à l'adresse \url{http://www.lri.fr/~filliatr/combine/}.
 

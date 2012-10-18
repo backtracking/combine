@@ -114,6 +114,7 @@ let count p algo =
         printf "(DLX) %a solutions@." N.print (DCount.count_solutions p)
     | Zdd ->
         let p = Emc.Z.create ~primary m in
+        if !debug then eprintf "ZDD has size %d@." (Zdd.size p);
         printf "(ZDD) %a solutions@." N.print (ZCount.count_solutions p)
   end;
   if !timing then printf "%s solutions counted in %a@." p.pname finish_timer ()
