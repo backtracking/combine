@@ -248,22 +248,25 @@ solutions avec un ZDD (\of{count zdd}).
 
 \insboxrestore
 \medskip
-Le reste de cet article est organisé de façon très simple. La
-section~\ref{sec:sig} présente l'interface de la bibliothèque \combine\
-et la section~\ref{sec:impl} les détails techniques de sa
-réalisation. L'article s'achève sur quelques extensions possibles.
-La bibliothèque \combine\ est un logiciel libre, distribué sous licence
-LGPL à l'adresse \url{http://www.lri.fr/~filliatr/combine/}.
+Le reste de cet article est organisé de la façon suivante.
+% La
+% section~\ref{sec:sig} présente l'interface de la bibliothèque \combine\
+% et la section~\ref{sec:impl} les détails techniques de sa
+% réalisation. L'article s'achève sur quelques extensions possibles.
+% La bibliothèque \combine\ est un logiciel libre, distribué sous licence
+% LGPL à l'adresse \url{http://www.lri.fr/~filliatr/combine/}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Interface}\label{sec:sig}
 
-La bibliothèque \combine\ se compose de quatre modules principaux,
-organisés de la façon suivante :
-\begin{center}
-  \includegraphics{archi.mps}
-\end{center}
-Cette section décrit ces quatre modules, de bas en haut.
+Cette section décrit l'interface des trois modules principaux de \combine, à
+savoir \of{Dlx}, \of{Zdd} et \of{Emc}.
+% La bibliothèque \combine\ se compose de quatre modules principaux,
+% organisés de la façon suivante :
+% \begin{center}
+%   \includegraphics{archi.mps}
+% \end{center}
+% Cette section décrit ces quatre modules, de bas en haut.
 
 \paragraph{\of{Dlx}.}
 L'algorithme DLX résout le problème EMC.
@@ -384,9 +387,216 @@ correspondent exactement aux solutions du problème EMC, c'est-à-dire
 aux sous-ensembles de lignes sélectionnées dans la matrice.
 On procède comme expliqué dans l'introduction.
 
-\paragraph{\of{Tiling}.} Ce dernier module permet de construire des
-problèmes de pavage et de les réduire vers le problème EMC. Pour cela,
-il fournit tout d'abord un module \of{Tiling.Pattern} pour décrire des
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Exemple d'utilisation : les $N$ reines}\label{sec:reines}
+
+
+\begin{center}
+  \begin{tabular}{|c|r|r|r|r|r|r|r|}
+    \hline
+        & nombre de & matrice & temps & taille & temps & mémoire \\
+    $N$ & solutions & EMC     & DLX   & ZDD    & ZDD   & max. \\
+    \hline\hline
+4 &
+2 &
+16x22 &
+0,00 s &
+8 &
+0,00 s &
+3.88 Mo
+\\\hline
+
+5 &
+10 &
+25x28 &
+0,00 s &
+40 &
+0,00 s &
+5,81 Mo
+\\\hline
+
+6 &
+4 &
+ 36x34 &
+ 0,00 s &
+ 24 &
+ 0,02 s &
+ 7,75 Mo
+\\\hline
+
+7 &
+40 &
+ 49x40 &
+ 0,00 s &
+ 186 &
+ 0,03 s &
+ 13,56 Mo
+\\\hline
+
+8 &
+92 &
+ 64x46 &
+ 0,00 s &
+ 373 &
+ 0,45 s &
+ 45,48 Mo
+\\\hline
+
+9 &
+352 &
+ 81x52 &
+ 0,00 s &
+ 1309 &
+ 0,76 s &
+ 64,85 Mo
+\\\hline
+
+10 &
+724 &
+ 100x58 &
+ 0,02 s &
+ 3120 &
+ 3,56 s &
+ 221,03 Mo
+\\\hline
+
+11 &
+2680 &
+ 121x64 &
+ 0,07 s &
+ 10503 &
+ 14,57 s &
+ 697,39 Mo
+\\\hline
+
+12 &
+14200 &
+ 144x70 &
+ 0,35 s &
+--- & --- & > 2Go
+\\\hline
+
+  \end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Réalisation}\label{sec:impl}
+
+Cette section détaille la réalisation technique des trois modules
+\of{Dlx}, \of{Zdd} et \of{Emc}.
+
+\paragraph{\of{Dlx}.}
+L'algorithme DLX opère sur un ensemble de listes doublement chaînées
+circulaires, qui relient tous les 1 de la matrice EMC horizontalement
+et verticalement.
+Par ailleurs, chaque colonne de la matrice contient un \noeud\
+supplémentaire, appelé entête. Les entêtes sont également liés entre
+eux dans une liste chaînée circulaire.
+Voici un exemple de matrice et la structure DLX correspondante :
+\begin{center}
+  \raisebox{7em}{$\left(  \begin{array}{ c c c c c }
+   1 & 0 & 1 & 1 \\
+   0 & 1 & 1 & 0 \\
+   1 & 1 & 0 & 1 \\
+   1 & 0 & 0 & 1 \\
+   0 & 1 & 0 & 0
+  \end{array} \right)$}
+\qquad\qquad\qquad
+  \includegraphics[scale=0.45]{dlx.mps}
+\end{center}
+Les pointeurs s'étendent jusqu'aux \noeuds\ suivants,
+circulairement. Les entêtes apparaissent en haut.
+Chaque \noeud\ est représenté par le type OCaml suivant :
+\begin{ocaml}
+type node = {
+  mutable up:   node; mutable down:  node;
+  mutable left: node; mutable right: node;
+  mutable c:    node; mutable s:     int;  mutable name: string; }
+\end{ocaml}
+Les quatre champs \of{up}, \of{down}, \of{left} et \of{right}
+matérialisent les deux listes doublement chaînées dont fait partie
+chaque \noeud. Le champ \of{c} contient un pointeur vers l'entête de
+la colonne (ces pointeurs ne sont pas dessinés dans la figure
+ci-dessus, par soucis de clarté). Le champ \of{name} contient le nom de
+chaque colonne, à des fins d'affichage.
+Enfin, l'entier contenu dans le champ \of{s} est interprété ainsi :
+pour un entête, il contient le nombre de \noeuds\ dans la colonne
+correspondante et est utilisé pour choisir une colonne minimisant cette
+valeur ; pour tout autre \noeud, il contient le numéro de la ligne de
+la matrice et est utilisé pour décoder la solution, le cas échéant.
+
+Il est important de préciser une fois encore que l'algorithme DLX
+travaille en espace constant : une fois les \noeuds\ créés à partir de
+la matrice, tout la recherche se fait en place, en modifiant seulement
+les champs \of{s}, \of{up}, \of{down}, \of{left} et \of{right}. C'est
+la danse des liens. Pour plus de détails, on consultera l'article
+de Knuth introduisant cet algorithme~\cite{knuth00:dlx}.
+
+\paragraph{\of{Zdd}.}
+Le module \of{Zdd} est en tous points analogue à un module de BDD.
+Le partage maximal est obtenu par la technique du
+\emph{hash-consing}, dont la mise en \oe uvre dans un langage comme
+OCaml est établie depuis longtemps~\cite{ConchonFilliatre06wml}.
+En particulier, les ZDD déjà construits sont stockés dans une table de
+hachage utilisant des pointeurs faibles, ce qui permet au système de
+détruire les ZDD qui ne sont plus utilisés nulle part.
+Le type OCaml des ZDD est celui qui a déjà été donné plus haut, à savoir
+\begin{ocaml}
+  type t = Bottom | Top | Node of unique * int * t * t
+\end{ocaml}
+En particulier, chaque \noeud\ de ZDD occupe exactement 5 mots
+mémoire, auxquels s'ajoute son entrée dans la table de
+\emph{hash-consing}, c'est-à-dire environ deux mots.
+
+Les différentes opérations sur les ZDD sont mémoïzées. Comme pour les
+BDD, c'est là la clé de l'efficacité. Chaque ZDD contenant un
+entier unique, il est extrêmement simple de mettre en \oe uvre cette
+mémoïzation et elle de fait très efficace.
+Le code effectuant la mémoïzation est factorisé dans des opérateurs de
+point fixes. Ainsi le cardinal d'un ZDD s'écrit aussi simplement que
+\begin{ocaml}
+let cardinal = memo_rec1 (
+  fun cardinal -> function
+    | Top -> 1
+    | Bottom -> 0
+    | Node(_, i, z1, z2) -> cardinal z1 + cardinal z2)
+\end{ocaml}
+et son coût est proportionnel au nombre de \noeuds\ \emph{distincts}
+dans le ZDD.
+
+\paragraph{\of{Emc}.}
+La seule difficulté du module \of{Emc} est la réduction du problème
+EMC en un ZDD. En effet, s'il est facile de construire le ZDD
+correspondant à une colonne de la matrice (en temps linéaire, en
+procédant de bas en haut), il reste de multiples possibilités pour
+effectuer l'intersection de tous ces ZDD et elles ne sont pas toutes
+de même coût. Nous avons testé plusieurs solutions et
+finalement retenu la solution consistant à trier les colonnes de la
+matrice selon la ligne du premier 1 qu'elles contiennent puis
+à les fusionner selon la méthode dite \emph{balanced}
+proposée par Knuth~\cite[exercice 212 page 274]{taocp4a}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Application au pavage}\label{sec:pavage}
+
+La bibliothèque \combine\ fournit par ailleurs un module \of{Tiling}
+pour résoudre des problèmes de pavage rectangulaires en dimension 2,
+en les réduisant vers le problème EMC. On a donc l'agencement suivant
+des différents modules de \combine\ :
+\begin{center}
+  \includegraphics{archi.mps}
+\end{center}
+
+% \paragraph{\of{Tiling}.}
+% Il n'y a pas grand chose à dire concernant le module \of{Tiling}, si ce
+% n'est que son interface est relativement défensive. La plupart des
+% types y sont privés, afin de garantir la validité d'un certain
+% nombre de champs d'enregistrements, comme les dimensions d'un motif ou
+% encore l'ensemble des symétries d'une pièce.
+
+\paragraph{Interface.}
+Le module \of{Tiling}
+fournit tout d'abord un sous-module \of{Tiling.Pattern} pour décrire des
 motifs rectangulaires. Il ne s'agit ni plus ni moins que de matrices
 de booléens, munies d'opérations de transformation (redimensionnement,
 fusion, isométrie, etc.). Vient ensuite un module \of{Tiling.Tile}
@@ -517,109 +727,6 @@ cela de lui retirer l'option \verb+~sym+ dans la définition de la
 liste \texttt{pentaminos} ci-dessus. On obtient alors 65 solutions
 uniques, en 2,6 secondes.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Réalisation}\label{sec:impl}
-
-Cette section détaille la réalisation des différents modules de la
-bibliothèque \combine.
-
-\paragraph{\of{Dlx}.}
-L'algorithme DLX opère sur un ensemble de listes doublement chaînées
-circulaires, qui relient tous les 1 de la matrice EMC horizontalement
-et verticalement.
-Par ailleurs, chaque colonne de la matrice contient un \noeud\
-supplémentaire, appelé entête. Les entêtes sont également liés entre
-eux dans une liste chaînée circulaire.
-Voici un exemple de matrice et la structure DLX correspondante :
-\begin{center}
-  \raisebox{7em}{$\left(  \begin{array}{ c c c c c }
-   1 & 0 & 1 & 1 \\
-   0 & 1 & 1 & 0 \\
-   1 & 1 & 0 & 1 \\
-   1 & 0 & 0 & 1 \\
-   0 & 1 & 0 & 0
-  \end{array} \right)$}
-\qquad\qquad\qquad
-  \includegraphics[scale=0.45]{dlx.mps}
-\end{center}
-Les pointeurs s'étendent jusqu'aux \noeuds\ suivants,
-circulairement. Les entêtes apparaissent en haut.
-Chaque \noeud\ est représenté par le type OCaml suivant :
-\begin{ocaml}
-type node = {
-  mutable up:   node; mutable down:  node;
-  mutable left: node; mutable right: node;
-  mutable c:    node; mutable s:     int;  mutable name: string; }
-\end{ocaml}
-Les quatre champs \of{up}, \of{down}, \of{left} et \of{right}
-matérialisent les deux listes doublement chaînées dont fait partie
-chaque \noeud. Le champ \of{c} contient un pointeur vers l'entête de
-la colonne (ces pointeurs ne sont pas dessinés dans la figure
-ci-dessus, par soucis de clarté). Le champ \of{name} contient le nom de
-chaque colonne, à des fins d'affichage.
-Enfin, l'entier contenu dans le champ \of{s} est interprété ainsi :
-pour un entête, il contient le nombre de \noeuds\ dans la colonne
-correspondante et est utilisé pour choisir une colonne minimisant cette
-valeur ; pour tout autre \noeud, il contient le numéro de la ligne de
-la matrice et est utilisé pour décoder la solution, le cas échéant.
-
-Il est important de préciser une fois encore que l'algorithme DLX
-travaille en espace constant : une fois les \noeuds\ créés à partir de
-la matrice, tout la recherche se fait en place, en modifiant seulement
-les champs \of{s}, \of{up}, \of{down}, \of{left} et \of{right}. C'est
-la danse des liens. Pour plus de détails, on consultera l'article
-de Knuth introduisant cet algorithme~\cite{knuth00:dlx}.
-
-\paragraph{\of{Zdd}.}
-Le module \of{Zdd} est en tous points analogue à un module de BDD.
-Le partage maximal est obtenu par la technique du
-\emph{hash-consing}, dont la mise en \oe uvre dans un langage comme
-OCaml est établie depuis longtemps~\cite{ConchonFilliatre06wml}.
-En particulier, les ZDD déjà construits sont stockés dans une table de
-hachage utilisant des pointeurs faibles, ce qui permet au système de
-détruire les ZDD qui ne sont plus utilisés nulle part.
-Le type OCaml des ZDD est celui qui a déjà été donné plus haut, à savoir
-\begin{ocaml}
-  type t = Bottom | Top | Node of unique * int * t * t
-\end{ocaml}
-En particulier, chaque \noeud\ de ZDD occupe exactement 5 mots
-mémoire, auxquels s'ajoute son entrée dans la table de
-\emph{hash-consing}, c'est-à-dire environ deux mots.
-
-Les différentes opérations sur les ZDD sont mémoïzées. Comme pour les
-BDD, c'est là la clé de l'efficacité. Chaque ZDD contenant un
-entier unique, il est extrêmement simple de mettre en \oe uvre cette
-mémoïzation et elle de fait très efficace.
-Le code effectuant la mémoïzation est factorisé dans des opérateurs de
-point fixes. Ainsi le cardinal d'un ZDD s'écrit aussi simplement que
-\begin{ocaml}
-let cardinal = memo_rec1 (
-  fun cardinal -> function
-    | Top -> 1
-    | Bottom -> 0
-    | Node(_, i, z1, z2) -> cardinal z1 + cardinal z2)
-\end{ocaml}
-et son coût est proportionnel au nombre de \noeuds\ \emph{distincts}
-dans le ZDD.
-
-\paragraph{\of{Emc}.}
-La seule difficulté du module \of{Emc} est la réduction du problème
-EMC en un ZDD. En effet, s'il est facile de construire le ZDD
-correspondant à une colonne de la matrice (en temps linéaire, en
-procédant de bas en haut), il reste de multiples possibilités pour
-effectuer l'intersection de tous ces ZDD et elles ne sont pas toutes
-de même coût. Nous avons testé plusieurs solutions et
-finalement retenu la solution consistant à trier les colonnes de la
-matrice selon la ligne du premier 1 qu'elles contiennent puis
-à les fusionner selon la méthode dite \emph{balanced}
-proposée par Knuth~\cite[exercice 212 page 274]{taocp4a}.
-
-\paragraph{\of{Tiling}.}
-Il n'y a pas grand chose à dire concernant le module \of{Tiling}, si ce
-n'est que son interface est relativement défensive. La plupart des
-types y sont privés, afin de garantir la validité d'un certain
-nombre de champs d'enregistrements, comme les dimensions d'un motif ou
-encore l'ensemble des symétries d'une pièce.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion et perspectives}
@@ -684,6 +791,10 @@ mener des expériences avec des solveurs SAT pour comparer les
 performances avec DLX et ZDD.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Remerciements.} Les auteurs remercient chaleureusement
+Claude Marché pour avoir relu une première version de cet article et
+pour avoir suggéré de nombreuses améliorations.
+
 % And do NOT FORGET to include your bibliography for submission
 \bibliographystyle{plain}
 \bibliography{abbrevs,demons,demons2,demons3,team,crossrefs}
