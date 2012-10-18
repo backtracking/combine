@@ -235,9 +235,16 @@ count zdd tiling_a_caml
   \label{fig:chameau}
 \end{figure}
 %
-On y définit deux motifs \of{caml} et \of{domino} ...
-La bibliothèque \combine\ est un logiciel libre, distribué sous licence
-LGPL à l'adresse \url{http://www.lri.fr/~filliatr/combine/}.
+On y définit deux motifs \of{caml} et \of{domino} en les dessinant en
+ASCII. Puis on définit le problème de pavage \of{tiling_a_caml} en
+donnant le motif à paver (\of{caml}) et la liste des pièces pour le
+paver. Ici cette liste est réduite à \of{domino}. L'option \of{~sym}
+indique que la pièce peut être tournée et retournée à volonté, ce qui
+ici se réduit à deux façons distinctes de la poser (horizontalement et
+verticalement). On demande la résolution du
+problème avec l'algorithme DLX (\of{solve dlx}), la solution étant
+exportée au format SVG dans un fichier. Enfin, on dénombre les
+solutions avec un ZDD (\of{count zdd}).
 
 \insboxrestore
 \medskip
@@ -245,6 +252,8 @@ Le reste de cet article est organisé de façon très simple. La
 section~\ref{sec:sig} présente l'interface de la bibliothèque \combine\
 et la section~\ref{sec:impl} les détails techniques de sa
 réalisation. L'article s'achève sur quelques extensions possibles.
+La bibliothèque \combine\ est un logiciel libre, distribué sous licence
+LGPL à l'adresse \url{http://www.lri.fr/~filliatr/combine/}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Interface}\label{sec:sig}
@@ -342,7 +351,7 @@ d'arbre. Le dessin ci-dessus illustre le résultat de la sortie DOT.
 %
 Enfin,
 pour permettre notamment l'écriture de fonctions opérant directement sur les
-ZDD, le module \of{Dlx} expose le type \of{t} des ZDD :
+ZDD, le module \of{Zdd} expose le type \of{t} des ZDD :
 \begin{ocaml}
   type t = private Bottom | Top | Node of unique * int * t * t
 \end{ocaml}
@@ -606,7 +615,7 @@ matrice selon la ligne du premier 1 qu'elles contiennent puis
 proposée par Knuth~\cite[exercice 212 page 274]{taocp4a}.
 
 \paragraph{\of{Tiling}.}
-Il n'y a pas grand à dire concernant le module \of{Tiling}, si ce
+Il n'y a pas grand chose à dire concernant le module \of{Tiling}, si ce
 n'est que son interface est relativement défensive. La plupart des
 types y sont privés, afin de garantir la validité d'un certain
 nombre de champs d'enregistrements, comme les dimensions d'un motif ou
@@ -663,7 +672,7 @@ table de \emph{hash-consing}). Par conséquent, elles maintiennent en
 vie des ZDD qui pourraient être récupérés par le GC. Pour y remédier,
 il faut utiliser des
 \emph{éphémérons}~\cite{Hayes:1997:Ephemerons}. Cette technologie est
-déjà à l'\oe uvre en OCaml dans l'outil Why3~\cite{why3manual072} et
+déjà à l'\oe uvre en OCaml dans l'outil Why3~\cite{why3manual073} et
 pourrait donc être mise en place facilement dans \combine.
 
 Enfin, une perspective intéressante consiste à réduire le problème EMC
