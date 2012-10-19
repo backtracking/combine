@@ -287,13 +287,16 @@ L'argument optionnel \of{primary} permet de spécifier que les
 suivantes étant des colonnes secondaires.
 Si cet argument est omis, toutes les colonnes sont primaires.
 Une fois le problème construit, le module \of{Dlx} fournit
-essentiellement trois fonctions pour le résoudre :
+une fonction pour parcourir toutes ses solutions
+\begin{ocaml}
+  val iter_solution: (solution -> unit) -> t -> unit
+\end{ocaml}
+et en dérive immédiatement deux fonctions pour obtenir une seule
+solution (s'il en existe une) et dénombrer les solutions :
 \begin{ocaml}
   val get_first_solution: t -> solution
-  val iter_solution: (solution -> unit) -> t -> unit
   val count_solutions: t -> int
 \end{ocaml}
-% en fait, iter_solution est la plus générale ; le dire ?
 Le type \of{solution} est un type abstrait. Une fonction est fournie
 pour le décoder sous la forme d'une liste d'entiers, représentant les
 lignes de la matrice qui ont été sélectionnées. L'idée est ici de ne
