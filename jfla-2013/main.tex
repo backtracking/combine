@@ -249,12 +249,15 @@ solutions avec un ZDD (\of{count zdd}).
 \insboxrestore
 \medskip
 Le reste de cet article est organisé de la façon suivante.
-% La
-% section~\ref{sec:sig} présente l'interface de la bibliothèque \combine\
-% et la section~\ref{sec:impl} les détails techniques de sa
-% réalisation. L'article s'achève sur quelques extensions possibles.
-% La bibliothèque \combine\ est un logiciel libre, distribué sous licence
-% LGPL à l'adresse \url{http://www.lri.fr/~filliatr/combine/}.
+La section~\ref{sec:sig} présente l'interface de la bibliothèque \combine\
+et la section~\ref{sec:reines} illustre son utilisation sur le
+problème des $N$ reines.
+La section~\ref{sec:impl} donne ensuite des détails techniques sur la
+réalisation des algorithmes DLX et ZDD. La
+section~\ref{sec:pavage} décrit l'application au pavage.
+L'article s'achève sur quelques extensions possibles.
+La bibliothèque \combine\ est un logiciel libre, distribué sous licence
+LGPL à l'adresse \url{http://www.lri.fr/~filliatr/combine/}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Interface}\label{sec:sig}
@@ -390,7 +393,81 @@ On procède comme expliqué dans l'introduction.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Exemple d'utilisation : les $N$ reines}\label{sec:reines}
 
-
+L'article sur les liens dansants~\cite{knuth00:dlx} contient notamment
+une application au problème des $N$ reines. On reprend ici cet exemple
+pour illustrer l'utilisation de la bibliothèque \combine.
+On rappelle que ce problème consiste à déterminer le nombre de façons
+de placer $N$ reines sur un échiquier $N\times N$ sans que deux
+d'entre elles soient en prise. Voici par exemple l'une des 92
+solutions pour $N=8$ :
+\begin{center}
+  \includegraphics[scale=0.5]{solution8.mps}
+\end{center}
+On construit une matrice EMC dont les colonnes primaires représentent
+les $N$ abscisses et les $N$ ordonnées sur l'échiquier, et
+les colonnes secondaires les $2N-1$ diagonales montantes et les $2N-1$
+diagonales descendantes. On a donc au total $6N-2$ colonnes, que l'on peut
+numéroter de 0 à $6N-3$ de la façon suivante :
+\begin{center}
+  \begin{tabular}{ccc|ccc|ccc|ccc}
+    \multicolumn{6}{c|}{colonnes primaires} &
+    \multicolumn{6}{c}{colonnes secondaires} \\
+    \multicolumn{3}{c|}{abscisse} &
+    \multicolumn{3}{c|}{ordonnée} &
+    \multicolumn{3}{c|}{diagonale 1} &
+    \multicolumn{3}{c}{diagonale 2} \\
+    0 & \dots & $N-1$ & $N$ & \dots & $2N-1$ &
+    $2N$ & \dots & $4N-2$ & $4N-1$ & \dots & $6N-3$ \\
+    \hline
+  \end{tabular}
+\end{center}
+La matrice EMC contient autant de lignes qu'il y a de cases sur
+l'échiquier, soit $N^2$. Pour chaque case $(i,j)$, avec $0\le i,j< N$,
+la ligne correspondante de la matrice EMC contient exactement quatre
+1, indiquant respectivement l'abscisse, l'ordonnée et les deux
+diagonales de la case $(i,j)$. Avec la numérotation ci-dessus, il
+s'agit donc des colonnes $i$, $N+j$, $2N+i+j$ et $4N-1+(N-1-i)+j$.
+On suppose que la variable OCaml \of{n} contient le nombre $N$.
+On commence par écrire une fonction \of{row} qui construit une ligne
+de la matrice EMC, comme un tableau de booléens :
+\begin{ocaml}
+let row i j =
+  let f k = k = i || k = n + j || k = 2*n + i + j || k = 4*n-1 + n-1-i + j in
+  Array.init (6 * n - 2) f
+\end{ocaml}
+Puis on construit la matrice EMC en accumulant toutes les lignes
+renvoyées par \of{row} dans une liste, puis en transformant au final
+la liste en tableau :
+\begin{ocaml}
+let emc =
+  let lr = ref [] in
+  for i = 0 to n - 1 do for j = 0 to n - 1 do lr := row i j :: !lr done done;
+  Array.of_list !lr
+\end{ocaml}
+Enfin on définit le nombre de colonnes primaires :
+\begin{ocaml}
+let primary = 2 * n
+\end{ocaml}
+Pour dénombrer les solutions avec l'algorithme DLX, on utilise le
+module \of{Emc.D}. On crée la structure interne de DLX avec
+\of{create} puis on appelle la fonction \of{count_solutions} :
+\begin{ocaml}
+  let p = Emc.D.create ~primary emc in
+  Emc.D.count_solutions p
+\end{ocaml}
+Si on préfère utiliser les ZDD, on procède exactement de la même
+façon, en utilisant le module \of{Emc.Z} au lieu du module \of{Emc.D} :
+\begin{ocaml}
+  let p = Emc.Z.create ~primary emc in
+  Emc.Z.count_solutions p
+\end{ocaml}
+Les résultats sont données figure~\ref{fig:reines}. On indique
+notamment le temps passé dans chaque algorithme et la quantité de
+mémoire utilisée. Cette dernière est exclusivement due aux ZDD,
+l'algorithme DLX n'utilisant quasiment pas de mémoire sur cet exemple
+(pour $N=12$, l'algorithme DLX n'utilise pas plus de 40 ko sur une
+machine 64 bits).
+\begin{figure}
 \begin{center}
   \begin{tabular}{|c|r|r|r|r|r|r|r|}
     \hline
@@ -478,6 +555,16 @@ On procède comme expliqué dans l'introduction.
 
   \end{tabular}
 \end{center}
+  \caption{Résoudre les $N$ reines avec \combine.}
+  \label{fig:reines}
+\end{figure}
+%
+L'article de Knuth va un peu plus loin, en considérant notamment
+plusieurs heuristiques pour l'ordre dans lequel les colonnes sont
+sélectionnées par l'algorithme DLX.
+On peut alors aller assez loin avec l'algorithme DLX (jusqu'à $N=18$).
+En revanche, comme on le voit sur la figure, le coût en mémoire des
+ZDD est rapidement prohibitif.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Réalisation}\label{sec:impl}
