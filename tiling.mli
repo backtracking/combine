@@ -125,6 +125,7 @@ type emc = {
 }
 
 val print_emc: Format.formatter -> emc -> unit
+val print_emc_size: Format.formatter -> emc -> unit
 
 val emc: problem -> emc
   (** Encode the given problem under EMC *)

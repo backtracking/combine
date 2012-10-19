@@ -343,6 +343,11 @@ let print_emc fmt emc =
   Array.iteri print_line emc.matrix;
   fprintf fmt "%d primary columns" emc.primary
 
+let print_emc_size fmt emc =
+  let h = Array.length emc.matrix in
+  fprintf fmt "%d rows x %d columns, with %d primary columns"
+    h (if h = 0 then 0 else Array.length emc.matrix.(0)) emc.primary
+
 (* return a boolean matrix representing the set of way to put all pieces
  * on the board
  * *)

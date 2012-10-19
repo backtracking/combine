@@ -105,7 +105,9 @@ let finish_timer fmt () =
   timer := 0.
 
 let count p algo =
-  let { primary = primary; matrix = m; tiles = decode_tbl } = Tiling.emc p in
+  let { primary = primary; matrix = m; tiles = decode_tbl } as emc =
+    Tiling.emc p in
+  if !debug then printf "@[<hov 2>EMC size is %a@]@." print_emc_size emc;
   printf "%s : @?" p.pname;
   init_timer ();
   begin match algo with
@@ -121,7 +123,7 @@ let count p algo =
 
 let solve output p algo =
   let emc = Tiling.emc p in
-  if !debug then eprintf "@[<hov 2>EMC is@\n%a@]@." print_emc emc;
+  if !debug then printf "@[<hov 2>EMC size is@\n%a@]@." print_emc_size emc;
   let { primary = primary; matrix = m; tiles = decode_tbl } = emc in
   init_timer ();
   let width, height =
