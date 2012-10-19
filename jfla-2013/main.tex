@@ -604,17 +604,17 @@ Les quatre champs \of{up}, \of{down}, \of{left} et \of{right}
 matérialisent les deux listes doublement chaînées dont fait partie
 chaque \noeud. Le champ \of{c} contient un pointeur vers l'entête de
 la colonne (ces pointeurs ne sont pas dessinés dans la figure
-ci-dessus, par soucis de clarté). Le champ \of{name} contient le nom de
+ci-dessus, par souci de clarté). Le champ \of{name} contient le nom de
 chaque colonne, à des fins d'affichage.
-Enfin, l'entier contenu dans le champ \of{s} est interprété ainsi :
+Enfin, l'entier contenu dans le champ \of{s} est interprété ainsi~:
 pour un entête, il contient le nombre de \noeuds\ dans la colonne
 correspondante et est utilisé pour choisir une colonne minimisant cette
 valeur ; pour tout autre \noeud, il contient le numéro de la ligne de
 la matrice et est utilisé pour décoder la solution, le cas échéant.
 
 Il est important de préciser une fois encore que l'algorithme DLX
-travaille en espace constant : une fois les \noeuds\ créés à partir de
-la matrice, tout la recherche se fait en place, en modifiant seulement
+travaille en espace constant~: une fois les \noeuds\ créés à partir de
+la matrice, toute la recherche se fait en place, en modifiant seulement
 les champs \of{s}, \of{up}, \of{down}, \of{left} et \of{right}. C'est
 la danse des liens. Pour plus de détails, on consultera l'article
 de Knuth introduisant cet algorithme~\cite{knuth00:dlx}.
@@ -638,7 +638,7 @@ mémoire, auxquels s'ajoute son entrée dans la table de
 Les différentes opérations sur les ZDD sont mémoïzées. Comme pour les
 BDD, c'est là la clé de l'efficacité. Chaque ZDD contenant un
 entier unique, il est extrêmement simple de mettre en \oe uvre cette
-mémoïzation et elle de fait très efficace.
+mémoïzation et elle est de fait très efficace.
 Le code effectuant la mémoïzation est factorisé dans des opérateurs de
 point fixes. Ainsi le cardinal d'un ZDD s'écrit aussi simplement que
 \begin{ocaml}
@@ -669,7 +669,7 @@ proposée par Knuth~\cite[exercice 212 page 274]{taocp4a}.
 La bibliothèque \combine\ fournit par ailleurs un module \of{Tiling}
 pour résoudre des problèmes de pavage rectangulaires en dimension 2,
 en les réduisant vers le problème EMC. On a donc l'agencement suivant
-des différents modules de \combine\ :
+des différents modules de \combine~:
 \begin{center}
   \includegraphics{archi.mps}
 \end{center}
@@ -805,7 +805,8 @@ solutions, par exemple avec l'algorithme DLX :
   problem scott_problem = scott_board pentaminos
   count dlx scott_problem
 \end{verbatim}
-On trouve 520 solutions en 5,2 secondes.  Plus subtilement, on peut
+On trouve 520 solutions en 5,2 secondes, avec une matrice de 1400 lignes
+et 72 colonnes, toutes primaires.  Plus subtilement, on peut
 éliminer les symétries du problème en ne considérant qu'une
 orientation possible pour l'une des pièces n'ayant aucune symétrie
 (par exemple la pièce \includegraphics[scale=0.5]{penta9.mps} dite
