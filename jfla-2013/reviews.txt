@@ -1,0 +1,88 @@
+----------------------- REVIEW 1 ---------------------
+PAPER: 9
+TITLE: combine : une bibliothèque OCaml pour la combinatoire
+AUTHORS: Jean-Christophe Filliatre and Rémy El Sibaïe
+
+OVERALL EVALUATION: 2 (accept)
+REVIEWER'S CONFIDENCE: 4 (high)
+
+----------- REVIEW -----------
+** Résumé
+
+Cet article décrit une petite librairie OCaml contenant:
+- deux algorithmes pour le problème de la couverture exacte de
+  matrices (EMC): les liens dansants de Knuth, et un encodage dans les
+  ZDD - une variante des binary decision diagrams (BDD).
+- une réduction de problèmes de pavages planaires à EMC, ainsi qu'une
+  réduction du problème des huits reines, illustrant comment résoudre 
+  des problèmes de combinatoire avec cette librairie.
+
+
+** Jugement
+
+L'article est très bien écrit, et très agréable à lire ; le problème
+traité est non-trivial, et la solution proposée est très élégante.
+Je recommande donc d'accepter le papier.
+
+Un seul bémol: le problème étant standard, j'imagine qu'il existe
+d'autres implémentations de EMC, voire des algorithmes de pavage
+spécifiques (n'étant pas expert, je ne sais pas en citer). Une section
+"travaux connexes" serait donc la bienvenue.
+
+
+** Commentaires
+
+Il est dommage que l'algorithme des liens dansants ne soit pas
+décrit/rappelé : il y a la place, et cela rendrait l'article
+auto-suffisant.
+
+Le choix d'utiliser des ZDD plutôt que des BDD est expliqué en une
+phrase dans l'introduction : dans le cas considéré, les ZDD sont plus
+compactes. Il serait intéressant d'avoir une intuition, ou un petit
+exemple illustratif.
+
+
+** Typos
+
+p11. référence à Why3 mal liée  ([?] au lieu de [2])
+
+
+----------------------- REVIEW 2 ---------------------
+PAPER: 9
+TITLE: combine : une bibliothèque OCaml pour la combinatoire
+AUTHORS: Jean-Christophe Filliatre and Rémy El Sibaïe
+
+OVERALL EVALUATION: 2 (accept)
+REVIEWER'S CONFIDENCE: 3 (medium)
+
+----------- REVIEW -----------
+Cet article décrit une bibliothèque OCaml pour la combinatoire, autour
+du problème de la couverture exacte d'une matrice booléenne (EMC). Les
+auteurs implémentent deux structures existantes pour raisoudre ce
+problème, l'une permettant d'énumérer une à une les solutions du
+problème efficacement (Knuth) et une autre basée sur une variante des
+BDD due Minato. Les auteurs présentes ces deux implémentations assez
+succintement puis démontrent leur utilité sur plusieurs exemples. 
+Il introduisent finalement un langage de description des problèmes de
+pavages et leur réduction dans EMC, avec une application au problème de
+Scott.
+
+Les exemples sont bien illustrés, mais je suis un peu resté sur ma faim
+quant au fonctionnement des deux algorithmes: la danse des liens reste
+bien obscure et la procédure de réduction d'EMC vers les Zdd mériterait
+une petite explication, qu'est-ce que réalise l'intersection,
+sémantiquement ? Une petite présentation du groupe diédral D4 auraient
+aussi été bien utile.
+
+C'est un article agréable à lire sur un problème intéressant, et
+l'implémentation est élégante, mettant en jeu la mémoïzation, le partage
+et les effets de bords avec des listes circulaires doublement chaînées.
+Le tout est encapsulé dans une architecture modulaire et bénéficie d'une
+interface assez complète de description des pavages. Pourriez-vous
+mentionner des problèmes pratiques se réduisant vers le pavage / EMC ?
+Cela motiverait un peu plus le développement d'une telle librairie.
+
+Avez-vous tenté de spécifier et vérifier ce code à l'aide de why 3 ? Je
+serais curieux de connaitre l'invariant (et le code complet) de Dlx. 
+Peut-être pourriez-vous présenter son pseudo-code en appendice ?
+

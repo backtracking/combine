@@ -619,7 +619,10 @@ Il est important de préciser une fois encore que l'algorithme DLX
 travaille en espace constant~: une fois les \noeuds\ créés à partir de
 la matrice, toute la recherche se fait en place, en modifiant seulement
 les champs \of{s}, \of{up}, \of{down}, \of{left} et \of{right}. C'est
-la danse des liens. Pour plus de détails, on consultera l'article
+la danse des liens.
+Le pseudo-code de l'algorithme DLX est donné à la fin de cet article
+(annexe~\ref{dlx:code}).
+Pour plus de détails, on consultera l'article
 de Knuth introduisant cet algorithme~\cite{knuth00:dlx}.
 
 \paragraph{\of{Zdd}.}
@@ -890,6 +893,63 @@ pour avoir suggéré de nombreuses améliorations.
 \bibliographystyle{plain}
 \bibliography{abbrevs,demons,demons2,demons3,team,crossrefs}
 
+\newpage
+\appendix
+\section{Pseudo-code de l'algorithme DLX (liens dansants)}
+\label{dlx:code}
+
+\newcommand{\leftl}{\texttt{.left}}
+\newcommand{\rightl}{\texttt{.right}}
+\newcommand{\upl}{\texttt{.up}}
+\newcommand{\downl}{\texttt{.down}}
+
+L'algorithme DLX est réalisé par une fonction récursive
+\textit{search}. Elle prend en argument un indice $k$ qui permet de
+remplir un tableau global $S$ avec la solution. Initialement, on
+appelle $\textit{search}(0)$.
+
+\begin{flushleft}
+  \textit{search}($k$) $\equiv$ \\
+  \quad si $h\rightl$ \texttt{==} $h$ on a trouvé une solution \\
+  \quad sinon, choisir une colonne $c$ \\
+  \quad \textit{cover}($c$) \\
+  \quad pour chaque $r$ dans $c\downl$, $c\downl\downl$, \dots \\
+  \quad \quad $S_k \leftarrow r$ \\
+  \quad \quad pour chaque $j$ dans $r\rightl$, $r\rightl\rightl$, \dots \\
+  \quad \quad \quad \textit{cover}($j$) \\
+  \quad \quad \textit{search}($k+1$) \\
+  \quad \quad pour chaque $j$ dans $r\leftl$, $r\leftl\leftl$, \dots \\
+  \quad \quad \quad \textit{uncover}($j$) \\
+  \quad \textit{uncover}($c$) 
+\end{flushleft}
+
+\noindent La fonction \textit{cover} exprime le fait que la colonne
+$c$ est maintenant couverte.
+
+\begin{flushleft}
+  \textit{cover}($c$) $\equiv$ \\
+  \quad $c\rightl\leftl$ $\leftarrow$ $c\leftl$ \\
+  \quad $c\leftl\rightl$ $\leftarrow$ $c\rightl$ \\
+  \quad pour chaque $i$ dans $c\downl$, $c\downl\downl$, \dots \\
+  \quad \quad pour chaque $j$ dans $i\rightl$, $i\rightl\rightl$, \dots \\
+  \quad \quad \quad $j\downl\upl$ $\leftarrow$ $j\upl$ \\
+  \quad \quad \quad $j\upl\downl$ $\leftarrow$ $j\downl$
+\end{flushleft}
+
+\noindent La fonction \textit{uncover} annule l'effet de la fonction
+\textit{cover}. On note que les opérations y sont effectuées dans
+l'ordre inverse de la fonction \textit{cover}.
+
+\begin{flushleft}
+  \textit{uncover}($c$) $\equiv$ \\
+  \quad pour chaque $i$ dans $c\upl$, $c\upl\upl$, \dots \\
+  \quad \quad pour chaque $j$ dans $i\leftl$, $i\leftl\leftl$, \dots \\
+  \quad \quad \quad $j\downl\upl$ $\leftarrow$ $j$ \\
+  \quad \quad \quad $j\upl\downl$ $\leftarrow$ $j$ \\
+  \quad $c\rightl\leftl$ $\leftarrow$ $c$ \\
+  \quad $c\leftl\rightl$ $\leftarrow$ $c$
+\end{flushleft}
+
 \vfill
 \pagebreak
 \thispagestyle{colloquetitle}
@@ -903,4 +963,4 @@ pour avoir suggéré de nombreuses améliorations.
 %%% End:
 
 % LocalWords:  encodé d'EMC acyclique d'assignations booléenne Minato BDD ZDD
-% LocalWords:  EMC booléens pentaminos Scott solveur
+% LocalWords:  EMC booléens pentaminos Scott solveur pseudo-code
