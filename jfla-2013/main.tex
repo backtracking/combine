@@ -332,7 +332,7 @@ Une autre différence avec le module \of{Set} d'OCaml vient de
 l'unicité de la représentation d'un ZDD. Elle permet notamment de fournir des
 opérations \of{compare} et \of{equal} de complexité $O(1)$.
 
-\InsertBoxR{2}{\includegraphics[scale=0.5]{../stage/imports/zdd_construct2.pdf}}
+\InsertBoxR{2}{\includegraphics[scale=0.5]{zdd_construct2.pdf}}
 Par ailleurs, le module \of{Zdd} fournit une interface de plus bas
 niveau, qui expose la représentation interne.
 Un ZDD est un arbre binaire dont les feuilles sont
@@ -890,8 +890,60 @@ Claude Marché pour avoir relu une première version de cet article et
 pour avoir suggéré de nombreuses améliorations.
 
 % And do NOT FORGET to include your bibliography for submission
-\bibliographystyle{plain}
-\bibliography{abbrevs,demons,demons2,demons3,team,crossrefs}
+% \bibliographystyle{plain}
+% \bibliography{abbrevs,demons,demons2,demons3,team,crossrefs}
+\begin{thebibliography}{1}
+
+\bibitem{mlpost09jfla}
+Romain Bardou, Jean-Christophe Filli\^atre, Johannes Kanig, and St\'ephane
+  Lescuyer.
+\newblock {Faire bonne figure avec Mlpost}.
+\newblock In {\em Vingti\`emes Journ\'ees Francophones des Langages
+  Applicatifs}, Saint-Quentin sur Is\`ere, January 2009. INRIA.
+
+\bibitem{why3manual073}
+Fran\c{c}ois Bobot, Jean-Christophe Filli\^atre, Claude March\'e, Guillaume
+  Melquiond, and Andrei Paskevich.
+\newblock {\em The Why3 platform, version 0.73}.
+\newblock LRI, CNRS \& Univ. Paris-Sud \& INRIA Saclay, version 0.73 edition,
+  July 2012.
+
+\bibitem{ConchonFilliatre06wml}
+Sylvain Conchon and Jean-Christophe Filli\^atre.
+\newblock {Type-Safe Modular Hash-Consing}.
+\newblock In {\em ACM SIGPLAN Workshop on ML}, Portland, Oregon, September
+  2006.
+
+\bibitem{Hayes:1997:Ephemerons}
+Barry Hayes.
+\newblock Ephemerons: a new finalization mechanism.
+\newblock {\em SIGPLAN Not.}, 32(10):176--183, October 1997.
+
+\bibitem{ZDD}
+Shin ichi Minato.
+\newblock Zero-suppressed {BDDs} for set manipulation in combinatorial
+  problems.
+\newblock In {\em DAC}, pages 272--277, 1993.
+
+\bibitem{knuth00:dlx}
+Donald~E. Knuth.
+\newblock Dancing links, 2000.
+\newblock \url{http://arxiv.org/abs/cs/0011047}.
+
+\bibitem{taocp4a}
+Donald~E. Knuth.
+\newblock {\em The Art of Computer Programming, volume 4A: Combinatorial
+  Algorithms, Part 1}.
+\newblock Addison-Wesley Professional, 1st edition, 2011.
+
+\bibitem{scott-pentaminos}
+Dana~S. Scott.
+\newblock Programming a combinatorial puzzle.
+\newblock Technical Report~1, Department of Electrical Engineering, Princeton
+  University, 1958.
+
+\end{thebibliography}
+
 
 \newpage
 \appendix
@@ -907,6 +959,7 @@ L'algorithme DLX est réalisé par une fonction récursive
 \textit{search}. Elle prend en argument un indice $k$ qui permet de
 remplir un tableau global $S$ avec la solution. Initialement, on
 appelle $\textit{search}(0)$.
+Le \noeud\ $h$ est l'entête de la liste des (entêtes des) colonnes.
 
 \begin{flushleft}
   \textit{search}($k$) $\equiv$ \\
@@ -914,7 +967,7 @@ appelle $\textit{search}(0)$.
   \quad sinon, choisir une colonne $c$ \\
   \quad \textit{cover}($c$) \\
   \quad pour chaque $r$ dans $c\downl$, $c\downl\downl$, \dots \\
-  \quad \quad $S_k \leftarrow r$ \\
+  \quad \quad $S_k \leftarrow r$ g\\
   \quad \quad pour chaque $j$ dans $r\rightl$, $r\rightl\rightl$, \dots \\
   \quad \quad \quad \textit{cover}($j$) \\
   \quad \quad \textit{search}($k+1$) \\
