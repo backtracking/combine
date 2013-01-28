@@ -222,8 +222,7 @@ let compl = function
   | D4 -> Id
 
 let generated_by s =
-  s
-    (* TODO *)
+  failwith "to be implemented"
 
 
 
