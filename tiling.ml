@@ -413,14 +413,14 @@ let print_square_svg x y u color fmt =
     style=\"fill:rgb(%d, %d, %d);\" />@\n"
     (x * u) (y * u) u u r g b
 
-let print_tile_svg x y u color fmt t =
+let print_tile_svg height x y u color fmt t =
   fprintf fmt
     "<g style=\"stroke:#000000;stroke-width:1;\
 stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;\">@\n";
   for y' = 0 to t.Tile.pattern.height - 1 do
     for x' = 0 to t.Tile.pattern.width - 1 do
       if t.Tile.pattern.matrix.(y').(x') then
-        print_square_svg (x + x') (y + y') u color fmt
+        print_square_svg (x + x') (height - 1 - (y + y')) u color fmt
     done
   done;
   fprintf fmt "</g>@\n"
@@ -462,7 +462,7 @@ width=\"%d\" height=\"%d\">@\n"
       let color = hsv_to_rgb !h 0.7 0.95 in
       h := !h +. inc;
       let t, x, y = decoder.(e) in
-      print_tile_svg x y u color fmt t;
+      print_tile_svg p.grid.height x y u color fmt t;
   ) s;
   fprintf fmt "@]@\n</svg>"
 
