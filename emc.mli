@@ -32,6 +32,8 @@ module type S = sig
     (** construct the algorithm corresponding structure
        doubly linked matrix for dlx and a zdd for zdd*)
 
+  val create_sparse: ?primary:int -> columns:int -> int list array -> t
+
   val find_solution: t -> solution
     (** raises [Not_found] if the problem has no solution *)
 

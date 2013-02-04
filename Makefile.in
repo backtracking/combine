@@ -137,6 +137,12 @@ queens.byte: $(CMA) queens.cmo
 queens.opt: $(CMXA) queens.cmx
 	$(OCAMLOPT) -o $@ unix.cmxa $(OFLAGS) $^
 
+color.byte: $(CMA) color.ml
+	$(OCAMLC) -o $@ $(BFLAGS) -I +ocamlgraph unix.cma graphics.cma graph.cma $^
+
+color.opt: $(CMXA) color.ml
+	$(OCAMLOPT) -o $@ $(OFLAGS) -I +ocamlgraph unix.cmxa graphics.cmxa graph.cmxa $^
+
 
 # installation
 ##############

@@ -47,6 +47,7 @@ let print_matrix_size fmt p =
 module type S = sig
   type t
   val create: ?primary:int -> bool array array -> t
+  val create_sparse: ?primary:int -> columns:int -> int list array -> t
   val find_solution: t -> solution
   val iter_solution: (solution -> unit) -> t -> unit
   val count_solutions: t -> int
@@ -65,6 +66,7 @@ end
 module D = struct
   type t = Dlx.t
   let create = Dlx.create
+  let create_sparse = Dlx.create_sparse
   let find_solution p = Dlx.list_of_solution (Dlx.get_first_solution p)
   let iter_solution f p = Dlx.iter_solution (
     fun e -> f (Dlx.list_of_solution e)) p
@@ -91,14 +93,13 @@ module Z = struct
 
   type t = Zdd.t
 
-  let column ?primary j m =
-    let n = Array.length m in
+  let column ?primary j n colj =
     (* we build the solution from bottom up, i.e. i = n-1,...,1,0 *)
     let rec build z zf i =
      (* z  = exactly one i such that m[i][j]=true
-      zf = only i such that m[i][j]=false *)
+        zf = only i such that m[i][j]=false *)
       if i < 0 then z
-      else if m.(i).(j) then build (construct i z zf) zf (i-1)
+      else if colj i then build (construct i z zf) zf (i-1)
       else build (construct i z z) (construct i zf zf) (i-1)
     in
     let primary = match primary with
@@ -145,20 +146,38 @@ module Z = struct
     balancing min max;
     cols.(max)
 
-  let first_row j m =
-    let h = Array.length m in
-    let rec lookup i = if i = h || m.(i).(j) then i else lookup (i+1) in
+  let first_row j h colj =
+    let rec lookup i = if i = h || colj i then i else lookup (i+1) in
     lookup 0
 
-  let tiling ?primary m =
+  let create ?primary m =
+    let height = Array.length m in
     let width = Array.length m.(0) in
-    let cols =
-      Array.init width (fun j -> first_row j m, column ?primary j m) in
+    let make_col j =
+      let colj i = m.(i).(j) in
+      first_row j height colj, column ?primary j height colj in
+    let cols = Array.init width make_col in
     let compare (i1, _) (i2, _) = Pervasives.compare i2 i1 in
     Array.sort compare cols;
     inter_middle_balancing (Array.map snd cols)
 
-  let create ?primary m = tiling ?primary m
+  let create_sparse ?primary ~columns a =
+    let height = Array.length a in
+    let width = columns in
+    let cols = Hashtbl.create 17 in
+    Array.iteri
+      (fun i rowi -> List.iter (fun j -> Hashtbl.add cols j i) rowi) a;
+    let col = Array.make height false in
+    let make_col j =
+      Array.fill col 0 height false;
+      List.iter (fun i -> col.(i) <- true) (Hashtbl.find_all cols j);
+      let colj i = col.(i) in
+      first_row j height colj, column ?primary j height colj in
+    let cols = Array.init width make_col in
+    let compare (i1, _) (i2, _) = Pervasives.compare i2 i1 in
+    Array.sort compare cols;
+    inter_middle_balancing (Array.map snd cols)
+
   let find_solution p = choose_list p
   let iter_solution f p = iter_list f p
   let count_solutions p = cardinal p

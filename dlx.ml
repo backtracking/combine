@@ -72,8 +72,7 @@ let add_row headers row i =
   addi_rec 0 (one_node ())
 
 (* Returns a DLM only with the headers *)
-let generate_headers ?primary m h =
-  let size = Array.length m.(0) in
+let generate_headers ?primary size h =
   let headers = Array.init size (fun _ -> one_node ()) in
   let primary = match primary with
     | None -> size
@@ -103,13 +102,34 @@ let iter_right ?(self = true) f n =
 (* Creates a DLM from a boolean matrix *)
 let create ?primary m =
   let h = one_node () in
-  let headers = generate_headers ?primary m h in
+  let nc = Array.length m.(0) in
+  let headers = generate_headers ?primary nc h in
   for i = Array.length m - 1 downto 0 do
     add_row headers m.(i) i
   done;
+  { header = h; nc = nc; }
+
+let create_sparse ?primary ~columns:nc a =
+  let h = one_node () in
+  let headers = generate_headers ?primary nc h in
+  let row = Array.make nc false in
+  for i = Array.length a - 1 downto 0 do
+    Array.fill row 0 nc false;
+    List.iter (fun c -> row.(c) <- true) a.(i);
+    add_row headers row i
+  done;
+  { header = h; nc = nc; }
+
+(* test create_sparse using create
+let create ?primary m =
   let nc = Array.length m.(0) in
-  { header = h;
-    nc     = nc; }
+  let row a =
+    let r = ref [] in
+    Array.iteri (fun i b -> if b then r := i :: !r) a;
+    !r
+  in
+  create_sparse ?primary ~columns:nc (Array.map row m)
+*)
 
 (* Applies f to elements of the DLM, from up to down*)
 let iter_down ?(self = true) f n =

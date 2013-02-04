@@ -33,6 +33,12 @@ val create: ?primary:int -> bool array array -> t
       If [primary] is given, it means that the first [primary] columns are
       primary; otherwise, all columns are primary columns. *)
 
+val create_sparse: ?primary:int -> columns:int -> int list array -> t
+  (** To be used when the matrix is sparse.
+      [columns] is the total number of columns.
+      The array contains the rows, each row being the list of the columns
+      containing the value [true]. *)
+
 type solution
   (** Abstract type of a solution. *)
 
