@@ -17,32 +17,44 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(** {2 Exact Matrix Cover problem interface for ZDD and DLX} *)
+(** {2 Exact Matrix Cover problem}
 
+    Given a matrix of Booleans values (say 0 and 1), the exact matrix problem
+    (EMC) is to find a subset of rows such that each column contains exactly
+    one 1.
+    This module provides a common interface to solve this problem using
+    two different techniques: Dancing Links (module D, see also
+    {!Dlx}) and Zero-Suppressed Binary Decision Diagrams (module Z, see also
+    {!Zdd}).
+
+    The EMC problem is slightly generalized as follows: the [primary] first
+    columns must be covered exactly once, and the remaining columns (called
+    secondary columns) must be covered at most one.
+*)
 
 type solution = int list
-    (** a solution is a set of rows *)
+    (** A solution is a set of rows *)
 
-(** a common interface for ZDD and DLX *)
+(** A common interface for ZDD and DLX *)
 module type S = sig
 
   type t
 
   val create: ?primary:int -> bool array array -> t
-    (** construct the algorithm corresponding structure
-       doubly linked matrix for dlx and a zdd for zdd*)
+    (** Creates an EMC problem. *)
 
   val create_sparse: ?primary:int -> columns:int -> int list array -> t
+    (** To be used instead of [create] when the matrix is large but sparse. *)
 
   val find_solution: t -> solution
-    (** raises [Not_found] if the problem has no solution *)
+    (** Returns the first solution that is found.
+        Raises [Not_found] if the problem has no solution. *)
 
   val iter_solution: (solution -> unit) -> t -> unit
-    (** [Emc.iter_solution f p] applies [f] in turn to each problem [p]
-      solutions *)
+    (** [Emc.iter_solution f p] applies [f] in turn to each solution. *)
 
   val count_solutions: t -> int
-    (** Return the number of solutions to this problem *)
+    (** The total number of solutions. *)
 
   module type ARITH = sig
     type t
@@ -50,10 +62,10 @@ module type S = sig
     val one: t
     val add: t -> t -> t
   end
-    (** simple arithmetic module with big integers *)
+    (** Minimal arithmetic module to count solutions *)
 
   module Count(A: ARITH) : sig val count_solutions: t -> A.t end
-    (** Functor usage of arithmetics *)
+    (** To count solutions using any arithmetic implementation *)
 
 end
 
