@@ -103,7 +103,7 @@ combine.byte: $(CMA) $(CMO)
 combine.opt: $(CMXA) $(CMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ nums.cmxa unix.cmxa $^
 
-VERSION=0.5
+VERSION=0.51
 
 version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > version.ml

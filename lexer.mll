@@ -63,7 +63,6 @@
   "print",      PRINT;
   "svg",        SVG_OUT;
   "ascii",      ASCII_OUT;
-  "sat",        SAT;
   "solve",      SOLVE;
   "count",      COUNT;
   "dimacs",     DIMACS;

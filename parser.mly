@@ -34,7 +34,7 @@
 %token MINUS AMPAMP BARBAR HAT DIFF UNION XOR INTER ONE MAYBE SYM ROT
 %token EQUAL LSBRA RSBRA RPAR LPAR COMMA
 %token ID ROT90 ROT180 ROT270 VERTREFL HORIZREFL DIAG1REFL DIAG2REFL
-%token ASCII_OUT SVG_OUT SAT PRINT
+%token ASCII_OUT SVG_OUT PRINT
 %token SOLVE COUNT DIMACS DEBUG TIMING ON OFF DLX ZDD
 %token <string> IDENT
 %token <string> STRING
@@ -68,8 +68,6 @@ decl:
       decl_node = Assert b}}
 | PRINT; id = IDENT {{decl_pos = ($startpos, $endpos);
       decl_node = Command (Print, id)}}
-| PRINT; SAT; s = STRING; id = IDENT {{decl_pos = ($startpos, $endpos);
-      decl_node = Command (Sat s, id)}}
 | SOLVE; a = algo; id = IDENT; out = output {{decl_pos = ($startpos, $endpos);
       decl_node = Command (Solve (a, out), id)}}
 | COUNT; a = algo; id = IDENT

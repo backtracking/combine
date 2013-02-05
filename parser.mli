@@ -14,7 +14,6 @@ type token =
   | SOLVE
   | SHIFT
   | SET
-  | SAT
   | RSBRA
   | RPAR
   | ROT90
