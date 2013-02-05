@@ -35,7 +35,7 @@
 %token EQUAL LSBRA RSBRA RPAR LPAR COMMA
 %token ID ROT90 ROT180 ROT270 VERTREFL HORIZREFL DIAG1REFL DIAG2REFL
 %token ASCII_OUT SVG_OUT SAT PRINT
-%token SOLVE COUNT DEBUG TIMING ON OFF DLX ZDD
+%token SOLVE COUNT DIMACS DEBUG TIMING ON OFF DLX ZDD
 %token <string> IDENT
 %token <string> STRING
 %token <int * int> DIM
@@ -72,8 +72,10 @@ decl:
       decl_node = Command (Sat s, id)}}
 | SOLVE; a = algo; id = IDENT; out = output {{decl_pos = ($startpos, $endpos);
       decl_node = Command (Solve (a, out), id)}}
-| COUNT; a = algo; id = IDENT{{decl_pos = ($startpos, $endpos);
-      decl_node = Command (Count a, id)}}
+| COUNT; a = algo; id = IDENT
+    {{decl_pos = ($startpos, $endpos); decl_node = Command (Count a, id)}}
+| DIMACS; id = IDENT; file = STRING
+    {{decl_pos = ($startpos, $endpos); decl_node = Dimacs (id, file) }}
 | DEBUG; st = state; {{decl_pos = ($startpos, $endpos);
       decl_node = Debug st}}
 | TIMING; st = state; {{decl_pos = ($startpos, $endpos);

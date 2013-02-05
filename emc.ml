@@ -196,14 +196,13 @@ end
 
 module Sat = struct
 
-  type t =
-    | Not of t
-    | Or of t list
-    | And of t list
+  type fmla =
+    | Not of fmla
+    | Or of fmla list
+    | And of fmla list
     | Lit of int
     | True
     | False
-
 
   let tand = function
     | False, _ -> False
@@ -247,8 +246,13 @@ module Sat = struct
     ) (False, 0) m.(i) in
     disj
 
+  type t = {
+    fmla: fmla;
+    nbvars: int;
+  }
 
-  let conj_of_matrix m =
+  let fmla_of_emc ~primary m =
+    assert (primary = Array.length m.(0));
     let length, width = Array.length m, Array.length m.(0) in
     let conj = ref True in
     for i = 0 to width - 1 do
@@ -269,53 +273,25 @@ module Sat = struct
     done;
     !conj
 
+  let create ~primary m =
+    { nbvars = Array.length m;
+      fmla = fmla_of_emc ~primary m; }
 
-  let rec nb_clauses cnf =
-    match cnf with
-      | And l -> List.length l
-      | _ -> 1
+  let create_sparse ~primary a =
+    assert false (*TODO*)
 
-  let print_sat fmt m =
-    let p = conj_of_matrix m in
-    fprintf fmt "p cnf %d %d @\n" (Array.length m) (nb_clauses p);
-    fprintf fmt "%a 0@\n" print p
+  let rec nb_clauses = function
+    | And l -> List.length l
+    | _ -> 1
 
-  let print_sat_file f m =
+  let print fmt t =
+    fprintf fmt "p cnf %d %d @\n" t.nbvars (nb_clauses t.fmla);
+    fprintf fmt "%a 0@\n" print t.fmla
+
+  let print_in_file f m =
     let c = open_out f in
     let fmt = formatter_of_out_channel c in
-    print_sat fmt m
-
-
-
-(*
-  let () =
-
-    let m = [|[|false; true; false|];
-              [|true; false; true|];
-              [|true; false; false|];
-             [|false; true; true|]|] in
-
-    let p = conj_of_matrix m in
-
-    printf "%a@." print p
-*)
-
-
-
+    print fmt m;
+    fprintf fmt "@."
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

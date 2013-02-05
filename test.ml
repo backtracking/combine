@@ -117,8 +117,8 @@ let () =
             [|true; false; true|];
             [|true; false; false|];
             [|false; true; true|]|] in
-
-    printf "%a@." Sat.print_sat m
+  let sat = Sat.create ~primary:3 m in
+  printf "%a@." Sat.print sat
 
 
 

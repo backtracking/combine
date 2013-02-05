@@ -153,8 +153,10 @@ let solve output p algo =
 let interp_problem_command p = function
   | Print -> printf "%a@\n" Tiling.print_problem p
   | Sat f ->
-        printf "sat out : %s@\n" f;
-        Sat.print_sat_file f ((Tiling.emc p).matrix);
+      printf "sat out : %s@\n" f;
+      let emc = Tiling.emc p in
+      let sat = Sat.create ~primary:emc.primary emc.matrix in
+      Sat.print_in_file f sat
   | Solve (algo, output) -> solve output p algo
   | Count algo -> count p algo
 
@@ -177,6 +179,13 @@ let rec interp_decl decl =
         let p = Tiling.create_problem ?name:(Some id) value (tiles el) in
         problems := p :: !problems;
         Hashtbl.add problem_tbl id p
+    | Dimacs (id, file) ->
+        let p = begin try Hashtbl.find problem_tbl id with
+          | Not_found ->
+              raise (Error (decl.decl_pos, "Unbound problem " ^ id)) end in
+        let emc = Tiling.emc p in
+        let sat = Sat.create ~primary:emc.primary emc.matrix in
+        Emc.Sat.print_in_file file sat
     | Assert be ->
         if not (interp_bool_expr be) then begin
           raise (Error (decl.decl_pos, "Assert failure")) end

@@ -151,6 +151,8 @@ let print_utime f x =
 let () =
   draw_graph ();
   let primary, columns, emc = emc_coloring () in
+  let sat = Emc.Sat.create_sparse ~primary emc in
+  Emc.Sat.print_in_file "color.dimacs" sat;
   print_utime
     (fun () ->
        let dlx = Emc.D.create_sparse ~primary ~columns emc in

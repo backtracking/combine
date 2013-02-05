@@ -44,6 +44,7 @@ type token =
   | EQUAL
   | EOF
   | DLX
+  | DIMACS
   | DIM of (int * int)
   | DIFF
   | DIAG2REFL

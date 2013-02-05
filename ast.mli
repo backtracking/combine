@@ -76,6 +76,7 @@ and decl_node =
   | Problem of problem
   | Assert of bool_expr
   | Command of problem_command * string
+  | Dimacs of string * string
   | Debug of state
   | Timing of state
   | Exit

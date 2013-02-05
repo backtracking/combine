@@ -1,0 +1,36 @@
+
+timing on
+# debug on
+
+pattern domino = {**}
+
+pattern caml2 = {
+....****....................
+..******....................
+********....****..****......
+....****....**********......
+....****..**************....
+....**********************..
+....************************
+......********....******..**
+........****........****....
+........****........****....
+........****........****....
+........****........****....
+........****........****....
+}
+
+problem caml2 = caml2 [domino ~sym]
+print caml2
+
+dimacs caml2 "chameau.dimacs"
+
+solve dlx caml2 ascii
+solve dlx caml2 svg "chameau.svg"
+
+count zdd caml2
+
+
+# Local Variables:
+# compile-command: "./combine.opt chameau.cmb"
+# End:

@@ -66,6 +66,7 @@
   "sat",        SAT;
   "solve",      SOLVE;
   "count",      COUNT;
+  "dimacs",     DIMACS;
   "include",    INCLUDE;
   "exit",       EXIT;
   "dlx",        DLX;
