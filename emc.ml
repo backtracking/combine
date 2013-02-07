@@ -196,88 +196,63 @@ end
 
 module Sat = struct
 
-  type fmla =
-    | Not of fmla
-    | Or of fmla list
-    | And of fmla list
-    | Lit of int
-    | True
-    | False
+  type lit = Pos of int | Neg of int
 
-  let tand = function
-    | False, _ -> False
-    | _ , False -> False
-    | p , True -> p
-    | True , p -> p
-    | And l1, And l2-> And (l1@l2)
-    | And l, p -> And (p::l)
-    | p, And l-> And (p::l)
-    | p1, p2 -> And (p1::[p2])
-
-
-  let tor = function
-    | True, _ -> True
-    | _ , True -> True
-    | p , False -> p
-    | False , p -> p
-    | Or l1, Or l2-> Or (l1@l2)
-    | Or l, p -> Or (p::l)
-    | p, Or l-> Or (p::l)
-    | p1, p2 -> Or (p1::[p2])
-
-  let rec print_list s fmt = function
-    | [] -> ()
-    | h::t -> fprintf fmt "%a" print h;
-              List.iter (fun e -> fprintf fmt "%s%a" s print e) t
-
-  and print fmt = function
-    | Not p -> fprintf fmt "-%a" print p
-    | Or l -> print_list " " fmt l
-    | And l -> print_list " 0\n" fmt l
-    | Lit i -> fprintf fmt "%d" (i + 1)
-    | True -> fprintf fmt "True"
-    | False -> fprintf fmt "Talse"
-
-  let disj_of_column m i =
-    let disj, _ = Array.fold_left (
-      fun (acc, j) e ->
-        if e then (tor (acc, Lit j), j + 1)
-        else (acc, j + 1)
-    ) (False, 0) m.(i) in
-    disj
+  type cnf = lit list list
 
   type t = {
-    fmla: fmla;
+    fmla: cnf;
     nbvars: int;
   }
 
-(*
-  10
-  01
+  let print_lit fmt = function
+    | Pos i -> fprintf fmt "%d " (i+1)
+    | Neg i -> fprintf fmt "-%d " (i+1)
 
-  1 -2
-  1  2
-*)
+  let print_clause fmt l =
+    List.iter (print_lit fmt) l;
+    fprintf fmt "0@\n"
+
+  let print fmt t =
+    fprintf fmt "p cnf %d %d @\n" t.nbvars (List.length t.fmla);
+    List.iter (print_clause fmt) t.fmla
+
+  let print_in_file f m =
+    let c = open_out f in
+    let fmt = formatter_of_out_channel c in
+    print fmt m;
+    fprintf fmt "@.";
+    close_out c
+
+  (* Idea: one variable vi for each row (true iff the row is selected)
+     and thus the formula is
+
+       forall primary column i.
+         exists row j st m[j,i]=1. vj
+
+     and
+
+       forall secondary column i.
+       forall row j st m[j,i]=1.
+       forall row j' st m[j',i]=1 and j'<> i. not(vj) or not(vj')
+
+  *)
 
   let fmla_of_emc ~primary m =
     let length, width = Array.length m, Array.length m.(0) in
-    let conj = ref True in
+    let conj = ref [] in
     for i = 0 to width - 1 do
-      if primary = width || i < primary then begin
-	let disj = ref False in
+      if i < primary then begin
+	let disj = ref [] in
 	for j = 0 to length - 1 do
-          if m.(j).(i) then
-            disj := tor ((!disj), (Lit j))
+          if m.(j).(i) then disj := Pos j :: !disj
 	done;
-	conj := tand (!conj, !disj);
+	conj := !disj :: !conj;
       end;
-      for j = 0 to length -1 do
-        if m.(j).(i) then begin
-          for j2 = j + 1 to length -1 do
-            if m.(j2).(i) then
-	      conj := tand (!conj, Or ((Not (Lit j))::[Not (Lit j2)]))
-          done
-        end
+      for j = 0 to length -1 do if m.(j).(i) then
+        for j2 = j + 1 to length -1 do if m.(j2).(i) then
+          conj := [Neg j; Neg j2] :: !conj
+        done
       done
     done;
     !conj
@@ -288,7 +263,7 @@ module Sat = struct
 
   let create_sparse ~primary ~columns a =
     let length = Array.length a in
-    let conj = ref True in
+    let conj = ref [] in
     let a' = Array.make columns [] in
     (* change the columns list array to row list array *)
     for i = 0 to length - 1 do
@@ -300,37 +275,21 @@ module Sat = struct
     (* create all the disjunction to limit the choice of a column in the fmla *)
     let rec disj_of row = function
       | [] -> ()
-      | h::t ->
-	conj := tand (!conj, Or ((Not (Lit row))::[Not (Lit h)])); disj_of row t
+      | h::t -> conj := [Neg row; Neg h] :: !conj; disj_of row t
     in
     let rec limit_col = function [] -> () | h::t -> disj_of h t; limit_col t in
     for i = 0 to length' - 1 do
       (* create the disjunction to force the choice of at least a 1 which
 	 is on a primary column *)
       if primary = length' || i < primary then begin
-	let disj = ref False in
-	List.iter (fun e -> disj := tor ((!disj), (Lit e))) a'.(i);
-	conj := tand (!conj, !disj);
+	let disj = ref [] in
+	List.iter (fun e -> disj := Pos e :: !disj) a'.(i);
+	conj := !disj :: !conj;
       end;
       limit_col a'.(i);
     done;
     { nbvars = length;
       fmla = !conj; }
-
-  let rec nb_clauses = function
-    | And l -> List.length l
-    | _ -> 1
-
-  let print fmt t =
-    fprintf fmt "p cnf %d %d @\n" t.nbvars (nb_clauses t.fmla);
-    fprintf fmt "%a 0@\n" print t.fmla
-
-  let print_in_file f m =
-    let c = open_out f in
-    let fmt = formatter_of_out_channel c in
-    print fmt m;
-    fprintf fmt "@.";
-    close_out c
 
   type sat_solver = input:string -> output:string -> string
 
@@ -352,7 +311,7 @@ module Sat = struct
       let rec read s =
         let i, s = Scanf.sscanf s "%d %s@\n" (fun i s -> i, s) in
         if i = 0 then !sol
-        else begin if i > 0 then sol := i :: !sol; read s end
+        else begin if i > 0 then sol := i-1 :: !sol; read s end
       in
       read s
     with End_of_file ->
