@@ -251,22 +251,31 @@ module Sat = struct
     nbvars: int;
   }
 
+(*
+  10
+  01
+
+  1 -2
+  1  2
+*)
+
   let fmla_of_emc ~primary m =
-    assert (primary = Array.length m.(0));
     let length, width = Array.length m, Array.length m.(0) in
     let conj = ref True in
     for i = 0 to width - 1 do
-      let disj = ref False in
-      for j = 0 to length - 1 do
-        if m.(j).(i) then
-          disj := tor ((!disj), (Lit j))
-      done;
-      conj := tand (!conj, !disj);
+      if primary = width || i < primary then begin
+	let disj = ref False in
+	for j = 0 to length - 1 do
+          if m.(j).(i) then
+            disj := tor ((!disj), (Lit j))
+	done;
+	conj := tand (!conj, !disj);
+      end;
       for j = 0 to length -1 do
         if m.(j).(i) then begin
           for j2 = j + 1 to length -1 do
             if m.(j2).(i) then
-              conj := tand (!conj, Or ((Not (Lit j))::[Not (Lit j2)]))
+	      conj := tand (!conj, Or ((Not (Lit j))::[Not (Lit j2)]))
           done
         end
       done
@@ -277,8 +286,36 @@ module Sat = struct
     { nbvars = Array.length m;
       fmla = fmla_of_emc ~primary m; }
 
-  let create_sparse ~primary a =
-    assert false (*TODO*)
+  let create_sparse ~primary ~columns a =
+    let length = Array.length a in
+    let conj = ref True in
+    let a' = Array.make columns [] in
+    (* change the columns list array to row list array *)
+    for i = 0 to length - 1 do
+      List.iter (fun e ->
+	a'.(e) <- i::a'.(e)
+      ) a.(i);
+    done;
+    let length' = Array.length a' in
+    (* create all the disjunction to limit the choice of a column in the fmla *)
+    let rec disj_of row = function
+      | [] -> ()
+      | h::t ->
+	conj := tand (!conj, Or ((Not (Lit row))::[Not (Lit h)])); disj_of row t
+    in
+    let rec limit_col = function [] -> () | h::t -> disj_of h t; limit_col t in
+    for i = 0 to length' - 1 do
+      (* create the disjunction to force the choice of at least a 1 which
+	 is on a primary column *)
+      if primary = length' || i < primary then begin
+	let disj = ref False in
+	List.iter (fun e -> disj := tor ((!disj), (Lit e))) a'.(i);
+	conj := tand (!conj, !disj);
+      end;
+      limit_col a'.(i);
+    done;
+    { nbvars = length;
+      fmla = !conj; }
 
   let rec nb_clauses = function
     | And l -> List.length l
@@ -292,6 +329,34 @@ module Sat = struct
     let c = open_out f in
     let fmt = formatter_of_out_channel c in
     print fmt m;
-    fprintf fmt "@."
+    fprintf fmt "@.";
+    close_out c
+
+  type sat_solver = input:string -> output:string -> string
+
+  let find_solution (sat_solver: sat_solver) t =
+    let input = Filename.temp_file "combine" ".dimacs" in
+    print_in_file input t;
+    let output = "color.output" (* Filename.temp_file "combine" ".out" *) in
+    let sat_command = sat_solver input output in
+    ignore (Sys.command sat_command);
+    let c = open_in output in
+    let sol = ref [] in
+    try
+      let s = input_line c in
+      if s = "UNSAT" then raise Not_found;
+      if s <> "SAT" then
+        failwith (sprintf "Sat.find_solution: got '%s' from SAt solver" s);
+      let s = input_line c in
+      close_in c;
+      let rec read s =
+        let i, s = Scanf.sscanf s "%d %s@\n" (fun i s -> i, s) in
+        if i = 0 then !sol
+        else begin if i > 0 then sol := i :: !sol; read s end
+      in
+      read s
+    with End_of_file ->
+      close_in c;
+      failwith "Sat.find_solution: unexpected end of file"
 
 end

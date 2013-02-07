@@ -3,7 +3,7 @@
 
    requires OCamlgraph *)
 
-open Printf
+open Format
 open Graph
 open Combine
 
@@ -148,22 +148,24 @@ let print_utime f x =
   Format.printf "user time: %2.2f@." ut;
   y
 
+let print_solution fmt s = List.iter (fun i -> fprintf fmt "%d " i) s
+
 let () =
   draw_graph ();
   let primary, columns, emc = emc_coloring () in
-  let sat = Emc.Sat.create_sparse ~primary emc in
-  Emc.Sat.print_in_file "color.dimacs" sat;
   print_utime
     (fun () ->
-       let dlx = Emc.D.create_sparse ~primary ~columns emc in
-       let s = Emc.D.find_solution dlx in
-       let show j =
-         let v = Hashtbl.find vertexi (j / 4) in
-         let c = 1 + j mod 4 in
-         color_vertex v cols.(c)
-       in
-       List.iter show s;
-       Format.printf "DLX: found!@.")
+      printf "DLX@.";
+      let dlx = Emc.D.create_sparse ~primary ~columns emc in
+      let s = Emc.D.find_solution dlx in
+      printf "  => %a@." print_solution s;
+      let show j =
+        let v = Hashtbl.find vertexi (j / 4) in
+        let c = 1 + j mod 4 in
+        color_vertex v cols.(c)
+      in
+      List.iter show s;
+      Format.printf "  DLX: found!@.")
     ();
   ignore (
     let st = Graphics.wait_next_event [ Key_pressed ] in
@@ -171,8 +173,29 @@ let () =
   );
   print_utime
     (fun () ->
-       let zdd = Emc.Z.create_sparse ~primary ~columns emc in
-       Format.eprintf "ZDD => %d@." (Emc.Z.count_solutions zdd))
+      printf "SAT (with minisat2)@.";
+      let sat = Emc.Sat.create_sparse ~primary ~columns emc in
+      Emc.Sat.print_in_file "color.dimacs" sat;
+      let minisat2 ~input ~output = sprintf "minisat2 %s %s" input output in
+      let s = Emc.Sat.find_solution minisat2 sat in
+      printf "  => %a@." print_solution s;
+      let show j =
+        let v = Hashtbl.find vertexi (j / 4) in
+        let c = 1 + j mod 4 in
+        color_vertex v cols.(c)
+      in
+      List.iter show s;
+      Format.printf "  SAT: found!@.")
+    ();
+  ignore (
+    let st = Graphics.wait_next_event [ Key_pressed ] in
+    if st.key = 'q' then exit 0
+  );
+  print_utime
+    (fun () ->
+      printf "ZDD@.";
+      let zdd = Emc.Z.create_sparse ~primary ~columns emc in
+      Format.eprintf "  ZDD => %d@." (Emc.Z.count_solutions zdd))
     ();
   ignore (Graphics.wait_next_event [ Key_pressed ]);
   close_graph ()

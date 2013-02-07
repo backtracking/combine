@@ -75,24 +75,37 @@ module D: S
 (** ZDD-based implementation *)
 module Z: S with type t = Zdd.t
 
-(** {2 Misc. functions for debugging purposes} *)
-
-val print_boolean_matrix : Format.formatter -> bool array array -> unit
-val print_boolean_array : Format.formatter -> bool array -> unit
-val print_matrix_size: Format.formatter -> 'a array array -> unit
+(** SAT-based implementation *)
 
 module Sat : sig
 
   type t
 
   val create: primary:int -> bool array array -> t
-  val create_sparse: primary:int -> int list array -> t
+  val create_sparse: primary:int -> columns:int -> int list array -> t
 
+  (** print SAT problem in DIMACS syntax *)
   val print : Format.formatter -> t -> unit
   val print_in_file: string -> t -> unit
 
+  type sat_solver = input:string -> output:string -> string
+      (** the command line to call a SAT solver built from two filenames,
+          [input] for the input in DIMACS format, and
+          [output] for the output of the SAT solver.
+          E.g. the function for minisat2 is simply
+          (fun ~input ~output -> sprintf "minisat2 %s %s" input output) *)
+
+  val find_solution: sat_solver -> t -> solution
+    (** Finds a solution using a SAT solver.
+        Raises [Not_found] is there is no solution *)
+
 end
 
+(** {2 Misc. functions for debugging purposes} *)
+
+val print_boolean_matrix : Format.formatter -> bool array array -> unit
+val print_boolean_array : Format.formatter -> bool array -> unit
+val print_matrix_size: Format.formatter -> 'a array array -> unit
 
 
 
