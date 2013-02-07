@@ -27,7 +27,7 @@ open Format
 open Emc
 
 
-let r = Lexer.parse_file "tests/non-regression.rem"
+let r = Lexer.parse_file "tests/non-regression.cmb"
 let problems = Interp.interp_problems r
 let p = List.hd problems
 
