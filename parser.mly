@@ -35,7 +35,7 @@
 %token EQUAL LSBRA RSBRA RPAR LPAR COMMA
 %token ID ROT90 ROT180 ROT270 VERTREFL HORIZREFL DIAG1REFL DIAG2REFL
 %token ASCII_OUT SVG_OUT PRINT
-%token SOLVE COUNT DIMACS DEBUG TIMING ON OFF DLX ZDD
+%token SOLVE COUNT DIMACS DEBUG TIMING ON OFF DLX ZDD SAT
 %token <string> IDENT
 %token <string> STRING
 %token <int * int> DIM
@@ -87,8 +87,9 @@ decl:
 ;
 
 algo:
-| DLX { Dlx }
-| ZDD { Zdd }
+| DLX             { Dlx }
+| ZDD             { Zdd }
+| SAT; s = STRING { Sat s }
 
 state:
 | ON  { On }

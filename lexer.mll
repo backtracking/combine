@@ -68,6 +68,7 @@
   "dimacs",     DIMACS;
   "include",    INCLUDE;
   "exit",       EXIT;
+  "sat",        SAT;
   "dlx",        DLX;
   "answer_to_the_question_of_life_the_universe_and_everything", H2G2;
   "zdd",        ZDD;

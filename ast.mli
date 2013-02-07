@@ -23,7 +23,7 @@ type dim = int * int
 
 type binop = Union | Inter | Diff | Xor
 
-type algo = Dlx | Zdd
+type algo = Dlx | Zdd | Sat of string
 
 type file = string
 
@@ -32,8 +32,8 @@ type state = On | Off
 type output = Svg of file | Ascii
 
 type setop = Shift | SetXY of bool | Resize | Crop of dim
-type problem_command = Count of algo | Solve of algo * output | Print 
-                      | Sat of file
+type problem_command = Count of algo | Solve of algo * output | Print
+
 type compop = Equal
 
 type pos = Lexing.position * Lexing.position

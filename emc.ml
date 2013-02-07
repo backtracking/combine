@@ -296,7 +296,7 @@ module Sat = struct
   let find_solution (sat_solver: sat_solver) t =
     let input = Filename.temp_file "combine" ".dimacs" in
     print_in_file input t;
-    let output = "color.output" (* Filename.temp_file "combine" ".out" *) in
+    let output = Filename.temp_file "combine" ".out" in
     let sat_command = sat_solver input output in
     ignore (Sys.command sat_command);
     let c = open_in output in

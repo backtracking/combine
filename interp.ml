@@ -118,6 +118,9 @@ let count p algo =
         let p = Emc.Z.create ~primary m in
         if !debug then eprintf "ZDD has size %d@." (Zdd.size p);
         printf "(ZDD) %a solutions@." N.print (ZCount.count_solutions p)
+    | Sat _ ->
+        eprintf "cannot count solutions with a SAT solver@.";
+        exit 1
   end;
   if !timing then printf "%s solutions counted in %a@." p.pname finish_timer ()
 
@@ -129,13 +132,19 @@ let solve output p algo =
   let width, height =
     p.grid.Pattern.width * 25, p.grid.Pattern.height * 25 in
   let solution = match algo with
-    | Dlx -> begin
-        try Emc.D.find_solution (Emc.D.create ~primary m) with
-          | Not_found -> [] end
+    | Dlx ->
+        let p = Emc.D.create ~primary m in
+        begin try Emc.D.find_solution p with Not_found -> [] end
     | Zdd ->
         let zdd = Emc.Z.create ~primary m in
-        try Emc.Z.find_solution zdd with
-          | Not_found -> []
+        begin try Emc.Z.find_solution zdd with Not_found -> [] end
+    | Sat sat ->
+        let p = Emc.Sat.create ~primary m in
+        let cmd ~input ~output =
+          if !debug then eprintf "DIMACS input in %s@." input;
+          sprintf "%s %s %s" sat input output
+        in
+        begin try Emc.Sat.find_solution cmd p with Not_found -> [] end
   in
   if solution = [] then
     printf "problem %S has no solution@\n" p.pname
@@ -152,11 +161,6 @@ let solve output p algo =
 
 let interp_problem_command p = function
   | Print -> printf "%a@\n" Tiling.print_problem p
-  | Sat f ->
-      printf "sat out : %s@\n" f;
-      let emc = Tiling.emc p in
-      let sat = Sat.create ~primary:emc.primary emc.matrix in
-      Sat.print_in_file f sat
   | Solve (algo, output) -> solve output p algo
   | Count algo -> count p algo
 

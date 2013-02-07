@@ -28,9 +28,11 @@ dimacs caml2 "chameau.dimacs"
 solve dlx caml2 ascii
 solve dlx caml2 svg "chameau.svg"
 
+solve sat "minisat2" caml2 svg "chameau2.svg"
+
 count zdd caml2
 
 
 # Local Variables:
-# compile-command: "./combine.opt chameau.cmb"
+# compile-command: "../combine.opt chameau.cmb"
 # End:
