@@ -23,8 +23,8 @@
   The Combine library contains four main modules:
   - Dlx: implements Knuth's dancing links
   - Zdd: implements Zero-suppressed binary decision diagrams
-  - Emc: a common interface to modules Dlx and Zdd to solve the
-         Exact Matrix Cover problem
+  - Emc: a common interface to modules Dlx and Zdd to solve EMC +
+         reduction of EMC to SAT
   - Tiling: converts a 2D tiling problem into an EMC problem
 
   Usage: the Combine library is packed into a single module Combine, installed
@@ -36,9 +36,11 @@
 
 * Examples
 
-  The distribution contains two example programs using the library: one to
-  solve the N-queens puzzle (queens.ml) and one to solve the Sudoku puzzle
-  (sudoku.ml).
+  The distribution contains several example programs:
+  - queens.ml: solve the N-queens puzzle
+  - sudoku.ml: well, you haved guessed already
+  - color.ml: 4-color planar graphs using DLX and SAT (requires OCamlgraph
+    and an explicit 'make color.opt')
 
 
 * Tiling language and interpreter
@@ -46,8 +48,8 @@
   In addition to the library, Combine provides a language to describe 2D tiling
   problems and an interpreter (combine) for this language.
 
-  Directory tests/ contains various examples of tiling problems. To execute
-  such a test, just run "combine" on the file.
+  Directory tests/ contains various examples of tiling problems (.cmb files).
+  To execute such a test, just run "combine" on the file.
 
   The grammar of the tiling language is the following:
 
@@ -61,6 +63,7 @@
 			| print <identifier>
 			| solve a = algo <identifier>  out = output
 			| count a = algo <identifier>
+                        | dimacs <identifier> <string>
 			| debug st = state
 			| timing st = state
 			| exit
@@ -69,6 +72,7 @@
 algo ::=
 			| dlx
 			| zdd
+                        | sat <string>
 
 state ::=
 			| on
