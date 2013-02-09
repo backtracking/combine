@@ -6,7 +6,11 @@ autom4te.cache/
 config.log
 config.status
 *.o
-*.cm*
+*.cmi
+*.cmo
+*.cmx
+*.cma
+*.cmxa
 combine.byte
 combine.opt
 combine.a
