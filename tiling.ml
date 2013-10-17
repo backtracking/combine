@@ -392,7 +392,6 @@ let emc problem =
 open Format
 open Pattern
 open Char
-open Graphics
 
 let print_board_svg width height u fmt =
   for i = 0 to height do

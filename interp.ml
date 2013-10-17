@@ -58,7 +58,7 @@ and interp_binary e1 e2 = function
 and interp_setop d e = function
   | Shift ->
       let ofsx, ofsy = d in
-      Pattern.shift (interp_expr e) ?ofsx ?ofsy
+      Pattern.shift (interp_expr e) ~ofsx ~ofsy
   | SetXY b->
       let p = interp_expr e in
       let x, y = d in
@@ -67,10 +67,10 @@ and interp_setop d e = function
       Pattern.create m
   | Resize ->
       let w, h = d in
-      Pattern.resize (interp_expr e) ?w ?h
+      Pattern.resize (interp_expr e) ~w ~h
   | Crop pos ->
       let (x, y), (w, h) = pos, d in
-      Pattern.crop (interp_expr e) ?x ?y ?w ?h
+      Pattern.crop (interp_expr e) ~x ~y ~w ~h
 
 let interp_bool_expr = function
   | Boolean b -> b

@@ -58,7 +58,7 @@ module HashedZdd = struct
   let hash = function
     | Bottom -> 0
     | Top -> 1
-    | Node (_, i, z1, z2) -> hash_node i z2 z2
+    | Node (_, i, z1, z2) -> hash_node i z1 z2
   let equal k1 k2 = match k1, k2 with
     | Top, Top
     | Bottom, Bottom -> true
