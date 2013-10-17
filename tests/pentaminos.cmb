@@ -1,6 +1,9 @@
 
-### the 12 pentaminos #########################################################
-### see for instance http://fr.wikipedia.org/wiki/Pentamino
+# The 12 pentaminos
+#
+# See for instance http://fr.wikipedia.org/wiki/Pentamino
+# Tiling problems involving the pentaminos can be found in penta.cmb
+
 
 pattern I = {
 *****
@@ -66,34 +69,18 @@ pattern X = {
 .*.
 }
 
-tiles pentaminos =
+tiles all_pentaminos =
 [ L ~one ~sym, T ~one ~sym, V ~one ~sym, N ~one ~sym,
   Z ~one ~sym, F ~one ~sym, X ~one ~sym, W ~one ~sym,
   P ~one ~sym, I ~one ~sym, Y ~one ~sym, U ~one ~sym ]
 
-problem problem_23 = {
-********
-********
-***..***
-***..***
-********
-********
-********
-********
-} pentaminos
+tiles all_pentaminos_nosym =
+[ L ~one ~sym, T ~one ~sym, V ~one ~sym, N ~one ~sym,
+  Z ~one ~sym, F ~one     , X ~one ~sym, W ~one ~sym,
+  P ~one ~sym, I ~one ~sym, Y ~one ~sym, U ~one ~sym ]
 
-problem problem_00 = {
-..******
-..******
-********
-********
-********
-********
-********
-********
-} pentaminos
-
-
-
-
+tiles some_pentaminos =
+[ L ~maybe ~sym, T ~maybe ~sym, V ~maybe ~sym, N ~maybe ~sym,
+  Z ~maybe ~sym, F ~maybe ~sym, X ~maybe ~sym, W ~maybe ~sym,
+  P ~maybe ~sym, I ~maybe ~sym, Y ~maybe ~sym, U ~maybe ~sym ]
 
