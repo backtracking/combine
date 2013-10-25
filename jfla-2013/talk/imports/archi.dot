@@ -1,0 +1,16 @@
+digraph G {
+  size="7.5,10" ;
+  rankdir = TB ;
+  "Sudoku" -> "Emc" ;
+  "Queens" -> "Emc" ;
+  "Parser" -> "Ast" ;
+  "Parser" -> "Tiling" ;
+  "Main" -> "Emc" ;
+  "Main" -> "Interp" ;
+  "Main" -> "Lexer" ;
+  "Lexer" -> "Parser" ;
+  "Interp" -> "Ast" ;
+  "Interp" -> "Tiling" ;
+  "Emc" -> "Dlx" ;
+  "Emc" -> "Zdd" ;
+}

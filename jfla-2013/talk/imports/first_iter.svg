@@ -1,0 +1,3020 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="60cm"
+   height="33cm"
+   viewBox="-242 -199 1195 641"
+   id="svg4189"
+   version="1.1"
+   inkscape:version="0.48.2 r9819"
+   sodipodi:docname="first_iter.pdf">
+  <metadata
+     id="metadata5353">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs5351">
+    <linearGradient
+       id="linearGradient6131"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1;"
+         offset="0"
+         id="stop6133" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6131"
+       id="linearGradient6135"
+       x1="745.04617"
+       y1="689.76312"
+       x2="821.21934"
+       y2="689.76312"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1181"
+     inkscape:window-height="813"
+     id="namedview5349"
+     showgrid="false"
+     inkscape:zoom="0.48735144"
+     inkscape:cx="1128.6682"
+     inkscape:cy="597.68858"
+     inkscape:window-x="292"
+     inkscape:window-y="177"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg4189" />
+  <g
+     id="g4191">
+    <rect
+       style="fill: #ffffff"
+       x="-84"
+       y="-112"
+       width="50"
+       height="44"
+       id="rect4193" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="-84"
+       y="-112"
+       width="50"
+       height="44"
+       id="rect4195" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="-59"
+       y="-86.1"
+       id="text4197">
+      <tspan
+         x="-59"
+         y="-86.1"
+         id="tspan4199">A</tspan>
+    </text>
+  </g>
+  <g
+     id="g4201">
+    <rect
+       style="fill: #ffffff"
+       x="-5.3"
+       y="-112.3"
+       width="50"
+       height="44"
+       id="rect4203" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="-5.3"
+       y="-112.3"
+       width="50"
+       height="44"
+       id="rect4205" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="19.7"
+       y="-86.4"
+       id="text4207">
+      <tspan
+         x="19.7"
+         y="-86.4"
+         id="tspan4209">B</tspan>
+    </text>
+  </g>
+  <g
+     id="g4211">
+    <rect
+       style="fill: #ffffff"
+       x="-144.7"
+       y="-111.6"
+       width="30.1"
+       height="44"
+       id="rect4213" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="-144.7"
+       y="-111.6"
+       width="30.1"
+       height="44"
+       id="rect4215" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="-129.65"
+       y="-85.7"
+       id="text4217">
+      <tspan
+         x="-129.65"
+         y="-85.7"
+         id="tspan4219">h</tspan>
+    </text>
+  </g>
+  <g
+     id="g4221">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-34"
+       y1="-112"
+       x2="-9.77189"
+       y2="-112.253"
+       id="line4223" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-17.4831,-107.172 -7.53595,-112.277 -17.5877,-117.172 "
+       id="polyline4225" />
+  </g>
+  <g
+     id="g4227">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-5.3"
+       y1="-68.3"
+       x2="-29.5281"
+       y2="-68.0467"
+       id="line4229" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-21.8169,-73.1276 -31.7641,-68.0234 -21.7123,-63.1282 "
+       id="polyline4231" />
+  </g>
+  <g
+     id="g4233">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-84"
+       y1="-68"
+       x2="-110.128"
+       y2="-67.6585"
+       id="line4235" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-102.43,-72.7595 -112.364,-67.6292 -102.3,-62.7604 "
+       id="polyline4237" />
+  </g>
+  <g
+     id="g4239">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-144.7"
+       y1="-67.6"
+       x2="-172.532"
+       y2="-68.8063"
+       id="line4241" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-164.559,-73.4655 -174.766,-68.9032 -164.992,-63.4748 "
+       id="polyline4243" />
+  </g>
+  <g
+     id="g4245">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-178"
+       y1="-113"
+       x2="-149.168"
+       y2="-111.788"
+       id="line4247" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-157.135,-107.118 -146.934,-111.694 -156.715,-117.11 "
+       id="polyline4249" />
+  </g>
+  <g
+     id="g4251">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-114.6"
+       y1="-111.6"
+       x2="-114.943"
+       y2="-138.528"
+       id="line4253" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-109.845,-130.829 -114.972,-140.764 -119.844,-130.701 "
+       id="polyline4255" />
+  </g>
+  <g
+     id="g4257">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-143"
+       y1="-141"
+       x2="-144.442"
+       y2="-116.065"
+       id="line4259" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-148.985,-124.104 -144.571,-113.832 -139.002,-123.527 "
+       id="polyline4261" />
+  </g>
+  <g
+     id="g4263">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-116.228"
+       y1="-37.6641"
+       x2="-114.843"
+       y2="-63.1345"
+       id="line4265" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-110.272,-55.1105 -114.721,-65.3672 -120.257,-55.6535 "
+       id="polyline4267" />
+  </g>
+  <g
+     id="g4269">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-144.7"
+       y1="-67.6"
+       x2="-146.085"
+       y2="-42.1297"
+       id="line4271" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-150.656,-50.1536 -146.207,-39.8969 -140.671,-49.6106 "
+       id="polyline4273" />
+  </g>
+  <g
+     id="g4275">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="44.7"
+       y1="-112.3"
+       x2="75.528"
+       y2="-112.038"
+       id="line4277" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="67.7219,-107.104 77.764,-112.019 67.8069,-117.104 "
+       id="polyline4279" />
+  </g>
+  <g
+     id="g4281">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="77.935"
+       y1="-69.4973"
+       x2="49.1692"
+       y2="-68.461"
+       id="line4283" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="56.7481,-73.7373 46.9346,-68.3805 57.1081,-63.7438 "
+       id="polyline4285" />
+  </g>
+  <g
+     id="g4287">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-4"
+       y1="-136"
+       x2="-5.05506"
+       y2="-116.765"
+       id="line4289" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-9.62233,-124.792 -5.17753,-114.533 0.362664,-124.244 "
+       id="polyline4291" />
+  </g>
+  <g
+     id="g4293">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="44.7"
+       y1="-112.3"
+       x2="44.9457"
+       y2="-132.528"
+       id="line4295" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="49.851,-124.704 44.9728,-134.764 39.8518,-124.826 "
+       id="polyline4297" />
+  </g>
+  <g
+     id="g4299">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-5.3"
+       y1="-68.3"
+       x2="-5.3"
+       y2="-50.7721"
+       id="line4301" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-10.3,-58.5361 -5.3,-48.5361 -0.3,-58.5361 "
+       id="polyline4303" />
+  </g>
+  <g
+     id="g4305">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="44.7"
+       y1="-46.3"
+       x2="44.7"
+       y2="-63.8279"
+       id="line4307" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="49.7,-56.0639 44.7,-66.0639 39.7,-56.0639 "
+       id="polyline4309" />
+  </g>
+  <g
+     id="g4311">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-84"
+       y1="-68"
+       x2="-84.2319"
+       y2="-52.7716"
+       id="line4313" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-89.1131,-60.6108 -84.266,-50.5358 -79.1143,-60.4585 "
+       id="polyline4315" />
+  </g>
+  <g
+     id="g4317">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-34.3"
+       y1="-48.3"
+       x2="-34.0681"
+       y2="-63.5284"
+       id="line4319" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-29.1869,-55.6892 -34.034,-65.7642 -39.1857,-55.8415 "
+       id="polyline4321" />
+  </g>
+  <g
+     id="g4323">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-82.9846"
+       y1="-135.364"
+       x2="-83.8058"
+       y2="-116.468"
+       id="line4325" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-88.464,-124.442 -83.9029,-114.234 -78.4735,-124.007 "
+       id="polyline4327" />
+  </g>
+  <g
+     id="g4329">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-34"
+       y1="-112"
+       x2="-33.1788"
+       y2="-130.896"
+       id="line4331" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-28.5206,-122.922 -33.0817,-133.13 -38.5112,-123.356 "
+       id="polyline4333" />
+  </g>
+  <g
+     id="g4335">
+    <rect
+       style="fill: #ffffff"
+       x="-84.3"
+       y="-48.3"
+       width="50"
+       height="44"
+       id="rect4337" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="-84.3"
+       y="-48.3"
+       width="50"
+       height="44"
+       id="rect4339" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="-59.3"
+       y="-22.4"
+       id="text4341">
+      <tspan
+         x="-59.3"
+         y="-22.4"
+         id="tspan4343">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g4345">
+    <rect
+       style="fill: #ffffff"
+       x="-5.3"
+       y="-46.3"
+       width="50"
+       height="44"
+       id="rect4347" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="-5.3"
+       y="-46.3"
+       width="50"
+       height="44"
+       id="rect4349" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="19.7"
+       y="-20.4"
+       id="text4351">
+      <tspan
+         x="19.7"
+         y="-20.4"
+         id="tspan4353">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g4355">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-5.3"
+       y1="-2.3"
+       x2="-29.8385"
+       y2="-3.99231"
+       id="line4357" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-21.7489,-8.44628 -32.0692,-4.14615 -22.4369,1.53002 "
+       id="polyline4359" />
+  </g>
+  <g
+     id="g4361">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="78.87"
+       y1="-5.4973"
+       x2="49.1527"
+       y2="-2.71664"
+       id="line4363" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="56.417,-8.41821 46.9263,-2.50832 57.3487,1.5383 "
+       id="polyline4365" />
+  </g>
+  <g
+     id="g4367">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-5.3"
+       y1="-2.3"
+       x2="-4.57386"
+       y2="13.2327"
+       id="line4369" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-9.93097,5.71077 -4.46944,15.4664 0.0581242,5.24379 "
+       id="polyline4371" />
+  </g>
+  <g
+     id="g4373">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="45.635"
+       y1="17.7"
+       x2="44.9088"
+       y2="2.16726"
+       id="line4375" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="50.2659,9.68923 44.8044,-0.0663714 40.2769,10.1562 "
+       id="polyline4377" />
+  </g>
+  <g
+     id="g4379">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-84.3"
+       y1="-4.3"
+       x2="-84.3"
+       y2="13.2279"
+       id="line4381" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-89.3,5.46393 -84.3,15.4639 -79.3,5.46393 "
+       id="polyline4383" />
+  </g>
+  <g
+     id="g4385">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-34.3"
+       y1="17.7"
+       x2="-34.3"
+       y2="0.172136"
+       id="line4387" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-29.3,7.93607 -34.3,-2.06393 -39.3,7.93607 "
+       id="polyline4389" />
+  </g>
+  <g
+     id="g4391">
+    <rect
+       style="fill: #ffffff"
+       x="-84.3"
+       y="17.7"
+       width="50"
+       height="44"
+       id="rect4393" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="-84.3"
+       y="17.7"
+       width="50"
+       height="44"
+       id="rect4395" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="-59.3"
+       y="43.6"
+       id="text4397">
+      <tspan
+         x="-59.3"
+         y="43.6"
+         id="tspan4399">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g4401">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="44.7"
+       y1="-46.3"
+       x2="70.5281"
+       y2="-46.0443"
+       id="line4403" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="62.715,-41.1214 72.764,-46.0221 62.814,-51.1209 "
+       id="polyline4405" />
+  </g>
+  <g
+     id="g4407">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-34.3"
+       y1="17.7"
+       x2="-8.83716"
+       y2="17.7"
+       id="line4409" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-16.6011,22.7 -6.60109,17.7 -16.6011,12.7 "
+       id="polyline4411" />
+  </g>
+  <g
+     id="g4413">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-34.3"
+       y1="-48.3"
+       x2="-9.76154"
+       y2="-46.6077"
+       id="line4415" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-17.8511,-42.1537 -7.53077,-46.4538 -17.1631,-52.13 "
+       id="polyline4417" />
+  </g>
+  <g
+     id="g4419">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-4.36502"
+       y1="61.7"
+       x2="-29.8279"
+       y2="61.7"
+       id="line4421" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-22.0639,56.7 -32.0639,61.7 -22.0639,66.7 "
+       id="polyline4423" />
+  </g>
+  <g
+     id="g4425">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-114.6"
+       y1="-111.6"
+       x2="-88.4718"
+       y2="-111.942"
+       id="line4427" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-96.1697,-106.84 -86.2359,-111.971 -96.3004,-116.84 "
+       id="polyline4429" />
+  </g>
+  <g
+     id="g4431">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-37"
+       y1="95"
+       x2="-34.6614"
+       y2="66.1575"
+       id="line4433" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-30.3052,74.3001 -34.4807,63.9288 -40.2725,73.492 "
+       id="polyline4435" />
+  </g>
+  <g
+     id="g4437">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-84.3"
+       y1="61.7"
+       x2="-83.1694"
+       y2="91.5311"
+       id="line4439" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-88.4598,83.9621 -83.0847,93.7655 -78.467,83.5833 "
+       id="polyline4441" />
+  </g>
+  <g
+     id="g4443">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-116"
+       y1="17"
+       x2="-88.771"
+       y2="17.6013"
+       id="line4445" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-96.6435,22.4287 -86.5355,17.6506 -96.4227,12.4311 "
+       id="polyline4447" />
+  </g>
+  <g
+     id="g4449">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="-84.3"
+       y1="61.7"
+       x2="-107.529"
+       y2="61.113"
+       id="line4451" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="-99.6415,56.3107 -109.765,61.0565 -99.8942,66.3075 "
+       id="polyline4453" />
+  </g>
+  <g
+     id="g4455">
+    <rect
+       style="fill: #ffffff"
+       x="313.934"
+       y="-114.064"
+       width="50"
+       height="44"
+       id="rect4457" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="313.934"
+       y="-114.064"
+       width="50"
+       height="44"
+       id="rect4459" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="338.934"
+       y="-88.1641"
+       id="text4461">
+      <tspan
+         x="338.934"
+         y="-88.1641"
+         id="tspan4463">A</tspan>
+    </text>
+  </g>
+  <g
+     id="g4465">
+    <rect
+       style="fill: #ffffff"
+       x="453.634"
+       y="-117.364"
+       width="50"
+       height="44"
+       id="rect4467" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="453.634"
+       y="-117.364"
+       width="50"
+       height="44"
+       id="rect4469" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="478.634"
+       y="-91.4641"
+       id="text4471">
+      <tspan
+         x="478.634"
+         y="-91.4641"
+         id="tspan4473">B</tspan>
+    </text>
+  </g>
+  <g
+     id="g4475">
+    <rect
+       style="fill: #ffffff"
+       x="196.234"
+       y="-116.664"
+       width="30.1"
+       height="44"
+       id="rect4477" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="196.234"
+       y="-116.664"
+       width="30.1"
+       height="44"
+       id="rect4479" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="211.284"
+       y="-90.7641"
+       id="text4481">
+      <tspan
+         x="211.284"
+         y="-90.7641"
+         id="tspan4483">h</tspan>
+    </text>
+  </g>
+  <g
+     id="g4485">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="363.934"
+       y1="-114.064"
+       x2="449.165"
+       y2="-117.2"
+       id="line4487" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="441.59,-111.918 451.399,-117.282 441.222,-121.911 "
+       id="polyline4489" />
+  </g>
+  <g
+     id="g4491">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="313.934"
+       y1="-70.0641"
+       x2="230.804"
+       y2="-72.5314"
+       id="line4493" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="238.713,-77.2989 228.569,-72.5978 238.416,-67.3033 "
+       id="polyline4495" />
+  </g>
+  <g
+     id="g4497">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="196.234"
+       y1="-72.6641"
+       x2="170.36"
+       y2="-76.4214"
+       id="line4499" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="178.762,-80.2538 168.147,-76.7428 177.324,-70.3576 "
+       id="polyline4501" />
+  </g>
+  <g
+     id="g4503">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="164.934"
+       y1="-121.064"
+       x2="191.805"
+       y2="-117.287"
+       id="line4505" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="183.421,-113.416 194.02,-116.975 184.813,-123.319 "
+       id="polyline4507" />
+  </g>
+  <g
+     id="g4509">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="226.334"
+       y1="-116.664"
+       x2="227.726"
+       y2="-146.597"
+       id="line4511" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="232.36,-138.609 227.83,-148.83 222.371,-139.074 "
+       id="polyline4513" />
+  </g>
+  <g
+     id="g4515">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="199.934"
+       y1="-149.064"
+       x2="196.741"
+       y2="-121.107"
+       id="line4517" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="192.655,-129.388 196.488,-118.886 202.59,-128.254 "
+       id="polyline4519" />
+  </g>
+  <g
+     id="g4521">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="226.706"
+       y1="-45.7282"
+       x2="226.396"
+       y2="-68.1924"
+       id="line4523" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="231.502,-60.4983 226.365,-70.4283 221.503,-60.3602 "
+       id="polyline4525" />
+  </g>
+  <g
+     id="g4527">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="196.234"
+       y1="-72.6641"
+       x2="196.544"
+       y2="-50.1999"
+       id="line4529" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="191.437,-57.8941 196.575,-47.9641 201.437,-58.0322 "
+       id="polyline4531" />
+  </g>
+  <g
+     id="g4533">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="503.634"
+       y1="-117.364"
+       x2="534.462"
+       y2="-117.102"
+       id="line4535" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="526.656,-112.168 536.698,-117.083 526.741,-122.168 "
+       id="polyline4537" />
+  </g>
+  <g
+     id="g4539">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="536.869"
+       y1="-74.5614"
+       x2="508.103"
+       y2="-73.5251"
+       id="line4541" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="515.682,-78.8014 505.869,-73.4446 516.042,-68.8079 "
+       id="polyline4543" />
+  </g>
+  <g
+     id="g4545">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="456.934"
+       y1="-142.064"
+       x2="454.226"
+       y2="-121.797"
+       id="line4547" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="450.298,-130.155 453.93,-119.58 460.21,-128.83 "
+       id="polyline4549" />
+  </g>
+  <g
+     id="g4551">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="503.634"
+       y1="-117.364"
+       x2="503.88"
+       y2="-137.592"
+       id="line4553" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="508.785,-129.768 503.907,-139.828 498.786,-129.89 "
+       id="polyline4555" />
+  </g>
+  <g
+     id="g4557">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="453.634"
+       y1="-73.3641"
+       x2="453.634"
+       y2="-55.8362"
+       id="line4559" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="448.634,-63.6002 453.634,-53.6002 458.634,-63.6002 "
+       id="polyline4561" />
+  </g>
+  <g
+     id="g4563">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="503.634"
+       y1="-51.3641"
+       x2="503.634"
+       y2="-68.892"
+       id="line4565" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="508.634,-61.128 503.634,-71.128 498.634,-61.128 "
+       id="polyline4567" />
+  </g>
+  <g
+     id="g4569">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="313.934"
+       y1="-70.0641"
+       x2="313.702"
+       y2="-54.8357"
+       id="line4571" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="308.821,-62.6749 313.668,-52.5999 318.82,-62.5226 "
+       id="polyline4573" />
+  </g>
+  <g
+     id="g4575">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="363.634"
+       y1="-50.3641"
+       x2="363.866"
+       y2="-65.5925"
+       id="line4577" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="368.747,-57.7533 363.9,-67.8283 358.748,-57.9056 "
+       id="polyline4579" />
+  </g>
+  <g
+     id="g4581">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="314.949"
+       y1="-137.428"
+       x2="314.128"
+       y2="-118.532"
+       id="line4583" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="309.47,-126.506 314.031,-116.298 319.461,-126.072 "
+       id="polyline4585" />
+  </g>
+  <g
+     id="g4587">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="363.934"
+       y1="-114.064"
+       x2="363.987"
+       y2="-132.528"
+       id="line4589" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="368.965,-124.75 363.994,-134.764 358.965,-124.778 "
+       id="polyline4591" />
+  </g>
+  <g
+     id="g4593">
+    <rect
+       style="fill: #ffffff"
+       x="313.634"
+       y="-50.3641"
+       width="50"
+       height="44"
+       id="rect4595" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="313.634"
+       y="-50.3641"
+       width="50"
+       height="44"
+       id="rect4597" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="338.634"
+       y="-24.4641"
+       id="text4599">
+      <tspan
+         x="338.634"
+         y="-24.4641"
+         id="tspan4601">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g4603">
+    <rect
+       style="fill: #ffffff"
+       x="453.634"
+       y="-51.3641"
+       width="50"
+       height="44"
+       id="rect4605" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="453.634"
+       y="-51.3641"
+       width="50"
+       height="44"
+       id="rect4607" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="478.634"
+       y="-25.4641"
+       id="text4609">
+      <tspan
+         x="478.634"
+         y="-25.4641"
+         id="tspan4611">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g4613">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="537.804"
+       y1="-10.5614"
+       x2="508.087"
+       y2="-7.78075"
+       id="line4615" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="515.351,-13.4823 505.86,-7.57243 516.283,-3.52582 "
+       id="polyline4617" />
+  </g>
+  <g
+     id="g4619">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="453.634"
+       y1="-7.36411"
+       x2="455.116"
+       y2="7.18676"
+       id="line4621" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="449.355,-0.030633 455.342,9.41132 459.303,-1.0438 "
+       id="polyline4623" />
+  </g>
+  <g
+     id="g4625">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="504.569"
+       y1="12.6359"
+       x2="503.843"
+       y2="-2.89686"
+       id="line4627" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="509.2,4.62512 503.738,-5.13048 499.211,5.09209 "
+       id="polyline4629" />
+  </g>
+  <g
+     id="g4631">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="313.634"
+       y1="-6.36411"
+       x2="313.634"
+       y2="11.1638"
+       id="line4633" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="308.634,3.39982 313.634,13.3998 318.634,3.39982 "
+       id="polyline4635" />
+  </g>
+  <g
+     id="g4637">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="363.634"
+       y1="15.6359"
+       x2="363.634"
+       y2="-1.89198"
+       id="line4639" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="368.634,5.87195 363.634,-4.12805 358.634,5.87195 "
+       id="polyline4641" />
+  </g>
+  <g
+     id="g4643">
+    <rect
+       style="fill: #ffffff"
+       x="313.634"
+       y="15.6359"
+       width="50"
+       height="44"
+       id="rect4645" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="313.634"
+       y="15.6359"
+       width="50"
+       height="44"
+       id="rect4647" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="338.634"
+       y="41.5359"
+       id="text4649">
+      <tspan
+         x="338.634"
+         y="41.5359"
+         id="tspan4651">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g4653">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="503.634"
+       y1="-51.3641"
+       x2="529.462"
+       y2="-51.1084"
+       id="line4655" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="521.649,-46.1855 531.698,-51.0863 521.748,-56.185 "
+       id="polyline4657" />
+  </g>
+  <g
+     id="g4659">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="363.634"
+       y1="15.6359"
+       x2="389.097"
+       y2="15.6359"
+       id="line4661" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="381.333,20.6359 391.333,15.6359 381.333,10.6359 "
+       id="polyline4663" />
+  </g>
+  <g
+     id="g4665">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="363.634"
+       y1="-50.3641"
+       x2="449.162"
+       y2="-51.3144"
+       id="line4667" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="441.454,-46.2285 451.398,-51.3393 441.343,-56.2279 "
+       id="polyline4669" />
+  </g>
+  <g
+     id="g4671">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="364"
+       y1="96"
+       x2="363.679"
+       y2="64.1078"
+       id="line4673" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="368.757,71.821 363.656,61.8718 358.757,71.9217 "
+       id="polyline4675" />
+  </g>
+  <g
+     id="g4677">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="313.634"
+       y1="59.6359"
+       x2="314.832"
+       y2="91.531"
+       id="line4679" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="309.544,83.9603 314.916,93.7655 319.537,83.5849 "
+       id="polyline4681" />
+  </g>
+  <g
+     id="g4683">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="313.634"
+       y1="59.6359"
+       x2="279.472"
+       y2="59.0736"
+       id="line4685" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="287.317,54.202 277.236,59.0368 287.152,64.2007 "
+       id="polyline4687" />
+  </g>
+  <g
+     id="g4689">
+    <path
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #0000ff"
+       d="M 451.798,-121.44 A 123.498,123.498 0 0 0 226.334,-116.664"
+       id="path4691" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #0000ff"
+       points="444.216,-126.639 452.753,-119.419 453.407,-130.58 "
+       id="polyline4693" />
+  </g>
+  <g
+     id="g4695">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="313.634"
+       y1="-6.36411"
+       x2="280.472"
+       y2="-6.04327"
+       id="line4697" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="288.187,-11.1181 278.236,-6.02163 288.284,-1.11861 "
+       id="polyline4699" />
+  </g>
+  <g
+     id="g4701">
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #ff0000"
+       x="-98"
+       y="-142"
+       width="80"
+       height="249"
+       id="rect4703" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="-58"
+       y="-13.6"
+       id="text4705">
+      <tspan
+         x="-58"
+         y="-13.6"
+         id="tspan4707" />
+    </text>
+  </g>
+  <g
+     id="g4709">
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #ff0000"
+       x="301"
+       y="-59"
+       width="220"
+       height="62.7"
+       id="rect4711" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="411"
+       y="-23.75"
+       id="text4713">
+      <tspan
+         x="411"
+         y="-23.75"
+         id="tspan4715" />
+    </text>
+  </g>
+  <g
+     id="g4717">
+    <rect
+       style="fill: #ffffff"
+       x="725.913"
+       y="-119.176"
+       width="50"
+       height="44"
+       id="rect4719" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="725.913"
+       y="-119.176"
+       width="50"
+       height="44"
+       id="rect4721" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="750.913"
+       y="-93.2764"
+       id="text4723">
+      <tspan
+         x="750.913"
+         y="-93.2764"
+         id="tspan4725">A</tspan>
+    </text>
+  </g>
+  <g
+     id="g4727">
+    <rect
+       style="fill: #ffffff"
+       x="865.613"
+       y="-122.476"
+       width="50"
+       height="44"
+       id="rect4729" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="865.613"
+       y="-122.476"
+       width="50"
+       height="44"
+       id="rect4731" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="890.613"
+       y="-96.5764"
+       id="text4733">
+      <tspan
+         x="890.613"
+         y="-96.5764"
+         id="tspan4735">B</tspan>
+    </text>
+  </g>
+  <g
+     id="g4737">
+    <rect
+       style="fill: #ffffff"
+       x="608.213"
+       y="-121.776"
+       width="30.1"
+       height="44"
+       id="rect4739" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="608.213"
+       y="-121.776"
+       width="30.1"
+       height="44"
+       id="rect4741" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="623.263"
+       y="-95.8764"
+       id="text4743">
+      <tspan
+         x="623.263"
+         y="-95.8764"
+         id="tspan4745">h</tspan>
+    </text>
+  </g>
+  <g
+     id="g4747">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="775.913"
+       y1="-119.176"
+       x2="861.144"
+       y2="-122.312"
+       id="line4749" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="853.569,-117.03 863.378,-122.394 853.201,-127.023 "
+       id="polyline4751" />
+  </g>
+  <g
+     id="g4753">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="725.913"
+       y1="-75.1764"
+       x2="642.783"
+       y2="-77.6438"
+       id="line4755" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="650.692,-82.4112 640.548,-77.7101 650.395,-72.4156 "
+       id="polyline4757" />
+  </g>
+  <g
+     id="g4759">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="608.213"
+       y1="-77.7764"
+       x2="580.472"
+       y2="-77.3782"
+       id="line4761" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="588.163,-82.4891 578.236,-77.3461 588.307,-72.4901 "
+       id="polyline4763" />
+  </g>
+  <g
+     id="g4765">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="573"
+       y1="-120.314"
+       x2="603.745"
+       y2="-121.591"
+       id="line4767" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="596.195,-116.273 605.979,-121.684 595.78,-126.264 "
+       id="polyline4769" />
+  </g>
+  <g
+     id="g4771">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="638.313"
+       y1="-121.776"
+       x2="639.705"
+       y2="-151.709"
+       id="line4773" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="644.339,-143.721 639.809,-153.943 634.35,-144.186 "
+       id="polyline4775" />
+  </g>
+  <g
+     id="g4777">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="611.913"
+       y1="-154.176"
+       x2="608.72"
+       y2="-126.22"
+       id="line4779" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="604.633,-134.501 608.467,-123.998 614.569,-133.366 "
+       id="polyline4781" />
+  </g>
+  <g
+     id="g4783">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="638.685"
+       y1="-50.8405"
+       x2="638.375"
+       y2="-73.3047"
+       id="line4785" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="643.481,-65.6106 638.344,-75.5406 633.482,-65.4725 "
+       id="polyline4787" />
+  </g>
+  <g
+     id="g4789">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="608.213"
+       y1="-77.7764"
+       x2="608.523"
+       y2="-55.3123"
+       id="line4791" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="603.416,-63.0064 608.554,-53.0764 613.415,-63.1445 "
+       id="polyline4793" />
+  </g>
+  <g
+     id="g4795">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="915.613"
+       y1="-122.476"
+       x2="946.441"
+       y2="-122.214"
+       id="line4797" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="938.635,-117.281 948.677,-122.195 938.72,-127.28 "
+       id="polyline4799" />
+  </g>
+  <g
+     id="g4801">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="948.848"
+       y1="-79.6737"
+       x2="920.082"
+       y2="-78.6374"
+       id="line4803" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="927.661,-83.9137 917.847,-78.5569 928.021,-73.9202 "
+       id="polyline4805" />
+  </g>
+  <g
+     id="g4807">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="868.913"
+       y1="-147.176"
+       x2="866.205"
+       y2="-126.909"
+       id="line4809" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="862.277,-135.267 865.909,-124.693 872.189,-133.943 "
+       id="polyline4811" />
+  </g>
+  <g
+     id="g4813">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="915.613"
+       y1="-122.476"
+       x2="915.859"
+       y2="-142.705"
+       id="line4815" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="920.764,-134.881 915.886,-144.941 910.765,-135.002 "
+       id="polyline4817" />
+  </g>
+  <g
+     id="g4819">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="915.613"
+       y1="-31.4764"
+       x2="915.613"
+       y2="-74.0043"
+       id="line4821" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="920.613,-66.2404 915.613,-76.2404 910.613,-66.2404 "
+       id="polyline4823" />
+  </g>
+  <g
+     id="g4825">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="725.913"
+       y1="-75.1764"
+       x2="725.681"
+       y2="-59.9481"
+       id="line4827" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="720.8,-67.7872 725.647,-57.7122 730.799,-67.6349 "
+       id="polyline4829" />
+  </g>
+  <g
+     id="g4831">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="775.613"
+       y1="-55.4764"
+       x2="775.845"
+       y2="-70.7048"
+       id="line4833" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="780.726,-62.8656 775.879,-72.9406 770.727,-63.0179 "
+       id="polyline4835" />
+  </g>
+  <g
+     id="g4837">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="726.928"
+       y1="-142.54"
+       x2="726.107"
+       y2="-123.644"
+       id="line4839" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="721.449,-131.618 726.01,-121.41 731.439,-131.184 "
+       id="polyline4841" />
+  </g>
+  <g
+     id="g4843">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="775.913"
+       y1="-119.176"
+       x2="775.966"
+       y2="-137.64"
+       id="line4845" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="780.944,-129.862 775.972,-139.876 770.944,-129.891 "
+       id="polyline4847" />
+  </g>
+  <g
+     id="g4849">
+    <rect
+       style="fill: #ffffff"
+       x="725.613"
+       y="-55.4764"
+       width="50"
+       height="44"
+       id="rect4851" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="725.613"
+       y="-55.4764"
+       width="50"
+       height="44"
+       id="rect4853" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="750.613"
+       y="-29.5764"
+       id="text4855">
+      <tspan
+         x="750.613"
+         y="-29.5764"
+         id="tspan4857">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g4859">
+    <rect
+       style="fill: #ffffff"
+       x="865.613"
+       y="-31.4764"
+       width="50"
+       height="44"
+       id="rect4861" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="865.613"
+       y="-31.4764"
+       width="50"
+       height="44"
+       id="rect4863" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="890.613"
+       y="-5.57643"
+       id="text4865">
+      <tspan
+         x="890.613"
+         y="-5.57643"
+         id="tspan4867">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g4869">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="865.613"
+       y1="12.5236"
+       x2="865.932"
+       y2="33.4644"
+       id="line4871" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="860.814,25.7776 865.966,35.7002 870.813,25.6252 "
+       id="polyline4873" />
+  </g>
+  <g
+     id="g4875">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="725.613"
+       y1="-11.4764"
+       x2="725.613"
+       y2="6.05143"
+       id="line4877" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="720.613,-1.7125 725.613,8.2875 730.613,-1.7125 "
+       id="polyline4879" />
+  </g>
+  <g
+     id="g4881">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="775.613"
+       y1="10.5236"
+       x2="775.613"
+       y2="-7.0043"
+       id="line4883" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="780.613,0.759635 775.613,-9.24036 770.613,0.759635 "
+       id="polyline4885" />
+  </g>
+  <g
+     id="g4887">
+    <rect
+       style="fill: #ffffff"
+       x="725.613"
+       y="10.5236"
+       width="50"
+       height="44"
+       id="rect4889" />
+    <rect
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x="725.613"
+       y="10.5236"
+       width="50"
+       height="44"
+       id="rect4891" />
+    <text
+       style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal"
+       x="750.613"
+       y="36.4236"
+       id="text4893">
+      <tspan
+         x="750.613"
+         y="36.4236"
+         id="tspan4895">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g4897">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="915.613"
+       y1="-31.4764"
+       x2="941.441"
+       y2="-31.2207"
+       id="line4899" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="933.628,-26.2978 943.677,-31.1986 933.727,-36.2973 "
+       id="polyline4901" />
+  </g>
+  <g
+     id="g4903">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="775.613"
+       y1="10.5236"
+       x2="801.076"
+       y2="10.5236"
+       id="line4905" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="793.312,15.5236 803.312,10.5236 793.312,5.52357 "
+       id="polyline4907" />
+  </g>
+  <g
+     id="g4909">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="775.613"
+       y1="-55.4764"
+       x2="861.292"
+       y2="-32.6287"
+       id="line4911" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="852.502,-29.798 863.452,-32.0526 855.078,-39.4604 "
+       id="polyline4913" />
+  </g>
+  <g
+     id="g4915">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="725.613"
+       y1="54.5236"
+       x2="691.45"
+       y2="53.9613"
+       id="line4917" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="699.296,49.0897 689.215,53.9245 699.131,59.0884 "
+       id="polyline4919" />
+  </g>
+  <g
+     id="g4921">
+    <path
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #0000ff"
+       d="M 863.777,-126.552 A 123.498,123.498 0 0 0 638.313,-121.776"
+       id="path4923" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #0000ff"
+       points="856.195,-131.751 864.732,-124.532 865.386,-135.693 "
+       id="polyline4925" />
+  </g>
+  <g
+     id="g4927">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="725.613"
+       y1="-11.4764"
+       x2="692.451"
+       y2="-11.1556"
+       id="line4929" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="700.166,-16.2305 690.215,-11.134 700.263,-6.23093 "
+       id="polyline4931" />
+  </g>
+  <g
+     id="g4933">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="725.613"
+       y1="54.5236"
+       x2="724.161"
+       y2="74.3478"
+       id="line4935" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="719.741,66.2394 723.998,76.5779 729.715,66.9698 "
+       id="polyline4937" />
+  </g>
+  <g
+     id="g4939">
+    <line
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       x1="773.834"
+       y1="78.808"
+       x2="775.286"
+       y2="58.9838"
+       id="line4941" />
+    <polyline
+       style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000"
+       points="779.706,67.0922 775.45,56.7537 769.732,66.3617 "
+       id="polyline4943" />
+  </g>
+  <g
+     id="g4945"
+     transform="translate(0,-36.907584)">
+    <rect
+       style="fill:#ffffff"
+       x="-87.421303"
+       y="242.47301"
+       width="50"
+       height="44"
+       id="rect4947" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x="-87.421303"
+       y="242.47301"
+       width="50"
+       height="44"
+       id="rect4949" />
+    <text
+       style="font-size:12.79979992px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;font-family:sanserif"
+       x="-62.421299"
+       y="268.37299"
+       id="text4951">
+      <tspan
+         x="-62.421299"
+         y="268.37299"
+         id="tspan4953">A</tspan>
+    </text>
+  </g>
+  <g
+     id="g4955"
+     transform="translate(0,-36.907584)">
+    <rect
+       style="fill:#ffffff"
+       x="52.278702"
+       y="239.173"
+       width="50"
+       height="44"
+       id="rect4957" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x="52.278702"
+       y="239.173"
+       width="50"
+       height="44"
+       id="rect4959" />
+    <text
+       style="font-size:12.79979992px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;font-family:sanserif"
+       x="77.278702"
+       y="265.073"
+       id="text4961">
+      <tspan
+         x="77.278702"
+         y="265.073"
+         id="tspan4963">B</tspan>
+    </text>
+  </g>
+  <g
+     id="g4965"
+     transform="translate(0,-36.907584)">
+    <rect
+       style="fill:#ffffff"
+       x="-205.121"
+       y="239.873"
+       width="30.1"
+       height="44"
+       id="rect4967" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x="-205.121"
+       y="239.873"
+       width="30.1"
+       height="44"
+       id="rect4969" />
+    <text
+       style="font-size:12.79979992px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;font-family:sanserif"
+       x="-190.071"
+       y="265.77301"
+       id="text4971">
+      <tspan
+         x="-190.071"
+         y="265.77301"
+         id="tspan4973">h</tspan>
+    </text>
+  </g>
+  <g
+     id="g4975"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-37.421299"
+       y1="242.47301"
+       x2="47.809601"
+       y2="239.33701"
+       id="line4977" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="40.2347,244.619 50.0441,239.255 39.8671,234.626 "
+       id="polyline4979" />
+  </g>
+  <g
+     id="g4981"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-87.421303"
+       y1="286.47299"
+       x2="-170.55099"
+       y2="284.005"
+       id="line4983" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-162.642,279.238 -172.786,283.939 -162.939,289.234 "
+       id="polyline4985" />
+  </g>
+  <g
+     id="g4987"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-205.121"
+       y1="283.87299"
+       x2="-232.86301"
+       y2="284.271"
+       id="line4989" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-225.171,279.16 -235.098,284.303 -225.028,289.159 "
+       id="polyline4991" />
+  </g>
+  <g
+     id="g4993"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-240.334"
+       y1="241.33501"
+       x2="-209.59"
+       y2="240.058"
+       id="line4995" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-217.139,245.376 -207.355,239.966 -217.554,235.385 "
+       id="polyline4997" />
+  </g>
+  <g
+     id="g4999"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-175.021"
+       y1="239.873"
+       x2="-173.629"
+       y2="209.94"
+       id="line5001" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-168.995,217.928 -173.525,207.706 -178.984,217.463 "
+       id="polyline5003" />
+  </g>
+  <g
+     id="g5005"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-201.42101"
+       y1="207.47301"
+       x2="-204.614"
+       y2="235.429"
+       id="line5007" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-208.701,227.148 -204.868,237.651 -198.765,228.283 "
+       id="polyline5009" />
+  </g>
+  <g
+     id="g5011"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-174.649"
+       y1="310.80899"
+       x2="-174.96001"
+       y2="288.34399"
+       id="line5013" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-169.853,296.039 -174.99,286.109 -179.852,296.177 "
+       id="polyline5015" />
+  </g>
+  <g
+     id="g5017"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-205.121"
+       y1="283.87299"
+       x2="-204.811"
+       y2="306.33701"
+       id="line5019" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-209.918,298.643 -204.78,308.573 -199.919,298.505 "
+       id="polyline5021" />
+  </g>
+  <g
+     id="g5023"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="102.279"
+       y1="239.173"
+       x2="133.10699"
+       y2="239.435"
+       id="line5025" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="125.301,244.369 135.343,239.454 125.386,234.369 "
+       id="polyline5027" />
+  </g>
+  <g
+     id="g5029"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="135.51401"
+       y1="281.97501"
+       x2="106.748"
+       y2="283.01199"
+       id="line5031" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="114.327,277.735 104.513,283.092 114.687,287.729 "
+       id="polyline5033" />
+  </g>
+  <g
+     id="g5035"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="55.578701"
+       y1="214.47301"
+       x2="52.870899"
+       y2="234.74001"
+       id="line5037" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="48.9431,226.382 52.5748,236.956 58.855,227.707 "
+       id="polyline5039" />
+  </g>
+  <g
+     id="g5041"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="102.279"
+       y1="239.173"
+       x2="102.524"
+       y2="218.94501"
+       id="line5043" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="107.43,226.769 102.552,216.709 97.4304,226.647 "
+       id="polyline5045" />
+  </g>
+  <g
+     id="g5047"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="102.279"
+       y1="330.173"
+       x2="102.279"
+       y2="287.64499"
+       id="line5049" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="107.279,295.409 102.279,285.409 97.2787,295.409 "
+       id="polyline5051" />
+  </g>
+  <g
+     id="g5053"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-87.421303"
+       y1="286.47299"
+       x2="-87.653198"
+       y2="301.70099"
+       id="line5055" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-92.5344,293.862 -87.6873,303.937 -82.5356,294.014 "
+       id="polyline5057" />
+  </g>
+  <g
+     id="g5059"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-37.721298"
+       y1="306.173"
+       x2="-37.489399"
+       y2="290.944"
+       id="line5061" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-32.6082,298.784 -37.4554,288.709 -42.6071,298.631 "
+       id="polyline5063" />
+  </g>
+  <g
+     id="g5065"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-86.405998"
+       y1="219.10899"
+       x2="-87.227203"
+       y2="238.005"
+       id="line5067" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-91.8853,230.031 -87.3242,240.239 -81.8948,230.465 "
+       id="polyline5069" />
+  </g>
+  <g
+     id="g5071"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-37.421299"
+       y1="242.47301"
+       x2="-37.368198"
+       y2="224.009"
+       id="line5073" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-32.3905,231.787 -37.3617,221.773 -42.3905,231.758 "
+       id="polyline5075" />
+  </g>
+  <g
+     id="g5077"
+     transform="translate(0,-36.907584)">
+    <rect
+       style="fill:#ffffff"
+       x="-87.721298"
+       y="306.173"
+       width="50"
+       height="44"
+       id="rect5079" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x="-87.721298"
+       y="306.173"
+       width="50"
+       height="44"
+       id="rect5081" />
+    <text
+       style="font-size:12.79979992px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;font-family:sanserif"
+       x="-62.721298"
+       y="332.073"
+       id="text5083">
+      <tspan
+         x="-62.721298"
+         y="332.073"
+         id="tspan5085">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g5087"
+     transform="translate(0,-36.907584)">
+    <rect
+       style="fill:#ffffff"
+       x="52.278702"
+       y="330.173"
+       width="50"
+       height="44"
+       id="rect5089" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x="52.278702"
+       y="330.173"
+       width="50"
+       height="44"
+       id="rect5091" />
+    <text
+       style="font-size:12.79979992px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;font-family:sanserif"
+       x="77.278702"
+       y="356.073"
+       id="text5093">
+      <tspan
+         x="77.278702"
+         y="356.073"
+         id="tspan5095">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g5097"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="52.278702"
+       y1="374.173"
+       x2="52.597698"
+       y2="395.11401"
+       id="line5099" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="47.48,387.427 52.6318,397.349 57.4789,387.274 "
+       id="polyline5101" />
+  </g>
+  <g
+     id="g5103"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-87.721298"
+       y1="350.173"
+       x2="-87.721298"
+       y2="367.70099"
+       id="line5105" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-92.7213,359.937 -87.7213,369.937 -82.7213,359.937 "
+       id="polyline5107" />
+  </g>
+  <g
+     id="g5109"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-37.721298"
+       y1="372.173"
+       x2="-37.721298"
+       y2="354.64499"
+       id="line5111" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-32.7213,362.409 -37.7213,352.409 -42.7213,362.409 "
+       id="polyline5113" />
+  </g>
+  <g
+     id="g5115"
+     transform="translate(0,-36.907584)">
+    <rect
+       style="fill:#ffffff"
+       x="-87.721298"
+       y="372.173"
+       width="50"
+       height="44"
+       id="rect5117" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x="-87.721298"
+       y="372.173"
+       width="50"
+       height="44"
+       id="rect5119" />
+    <text
+       style="font-size:12.79979992px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;font-family:sanserif"
+       x="-62.721298"
+       y="398.073"
+       id="text5121">
+      <tspan
+         x="-62.721298"
+         y="398.073"
+         id="tspan5123">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g5125"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="102.279"
+       y1="330.173"
+       x2="128.10699"
+       y2="330.42801"
+       id="line5127" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="120.294,335.351 130.343,330.451 120.393,325.352 "
+       id="polyline5129" />
+  </g>
+  <g
+     id="g5131"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-37.721298"
+       y1="372.173"
+       x2="-12.2585"
+       y2="372.173"
+       id="line5133" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-20.0224,377.173 -10.0224,372.173 -20.0224,367.173 "
+       id="polyline5135" />
+  </g>
+  <g
+     id="g5137"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-37.721298"
+       y1="306.173"
+       x2="47.9575"
+       y2="329.01999"
+       id="line5139" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="39.1674,331.851 50.1181,329.597 41.7441,322.189 "
+       id="polyline5141" />
+  </g>
+  <g
+     id="g5143"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-87.721298"
+       y1="416.173"
+       x2="-121.884"
+       y2="415.60999"
+       id="line5145" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-114.039,410.739 -124.12,415.574 -114.203,420.738 "
+       id="polyline5147" />
+  </g>
+  <g
+     id="g5149"
+     transform="translate(0,-36.907584)">
+    <path
+       style="fill:none;stroke:#0000ff;stroke-width:2"
+       d="m 50.4429,235.097 a 123.498,123.498 0 0 0 -225.4639,4.776"
+       id="path5151"
+       inkscape:connector-curvature="0" />
+    <polyline
+       style="fill:none;stroke:#0000ff;stroke-width:2"
+       points="42.8608,229.898 51.3974,237.118 52.0513,225.956 "
+       id="polyline5153" />
+  </g>
+  <g
+     id="g5155"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-87.721298"
+       y1="350.173"
+       x2="-120.883"
+       y2="350.49399"
+       id="line5157" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-113.168,345.419 -123.119,350.515 -113.071,355.418 "
+       id="polyline5159" />
+  </g>
+  <g
+     id="g5161"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-87.721298"
+       y1="416.173"
+       x2="-89.173302"
+       y2="435.99701"
+       id="line5163" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-93.5928,427.889 -89.3366,438.227 -83.6195,428.619 "
+       id="polyline5165" />
+  </g>
+  <g
+     id="g5167"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="-39.5"
+       y1="440.457"
+       x2="-38.048"
+       y2="420.633"
+       id="line5169" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="-33.6285,428.741 -37.8847,418.403 -43.6018,428.011 "
+       id="polyline5171" />
+  </g>
+  <g
+     id="g5173"
+     transform="translate(0,-36.907584)">
+    <rect
+       style="fill:none;stroke:#ff0000;stroke-width:2"
+       x="41.625198"
+       y="195.94901"
+       width="75.599998"
+       height="222"
+       id="rect5175" />
+    <text
+       style="font-size:12.79979992px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;font-family:sanserif"
+       x="79.425201"
+       y="310.849"
+       id="text5177">
+      <tspan
+         x="79.425201"
+         y="310.849"
+         id="tspan5179" />
+    </text>
+  </g>
+  <g
+     id="g5181"
+     transform="translate(0,-36.907584)">
+    <rect
+       style="fill:#ffffff"
+       x="322.57901"
+       y="242.47301"
+       width="50"
+       height="44"
+       id="rect5183" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x="322.57901"
+       y="242.47301"
+       width="50"
+       height="44"
+       id="rect5185" />
+    <text
+       style="font-size:12.79979992px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;font-family:sanserif"
+       x="347.57901"
+       y="268.37299"
+       id="text5187">
+      <tspan
+         x="347.57901"
+         y="268.37299"
+         id="tspan5189">A</tspan>
+    </text>
+  </g>
+  <g
+     id="g5191"
+     transform="translate(0,-36.907584)">
+    <rect
+       style="fill:#ffffff"
+       x="462.27899"
+       y="239.173"
+       width="50"
+       height="44"
+       id="rect5193" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x="462.27899"
+       y="239.173"
+       width="50"
+       height="44"
+       id="rect5195" />
+    <text
+       style="font-size:12.79979992px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;font-family:sanserif"
+       x="487.27899"
+       y="265.073"
+       id="text5197">
+      <tspan
+         x="487.27899"
+         y="265.073"
+         id="tspan5199">B</tspan>
+    </text>
+  </g>
+  <g
+     id="g5201"
+     transform="translate(0,-36.907584)">
+    <rect
+       style="fill:#ffffff"
+       x="204.879"
+       y="239.873"
+       width="30.1"
+       height="44"
+       id="rect5203" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x="204.879"
+       y="239.873"
+       width="30.1"
+       height="44"
+       id="rect5205" />
+    <text
+       style="font-size:12.79979992px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;font-family:sanserif"
+       x="219.929"
+       y="265.77301"
+       id="text5207">
+      <tspan
+         x="219.929"
+         y="265.77301"
+         id="tspan5209">h</tspan>
+    </text>
+  </g>
+  <g
+     id="g5211"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="322.57901"
+       y1="286.47299"
+       x2="239.44901"
+       y2="284.005"
+       id="line5213" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="247.358,279.238 237.214,283.939 247.061,289.234 "
+       id="polyline5215" />
+  </g>
+  <g
+     id="g5229"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="322.57901"
+       y1="286.47299"
+       x2="322.34698"
+       y2="301.70099"
+       id="line5231" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="317.466,293.862 322.313,303.937 327.464,294.014 "
+       id="polyline5233" />
+  </g>
+  <g
+     id="g5235"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="372.27899"
+       y1="306.173"
+       x2="372.51099"
+       y2="290.944"
+       id="line5237" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="377.392,298.784 372.545,288.709 367.393,298.631 "
+       id="polyline5239" />
+  </g>
+  <g
+     id="g5241"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="323.59399"
+       y1="219.10899"
+       x2="322.77301"
+       y2="238.005"
+       id="line5243" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="318.115,230.031 322.676,240.239 328.105,230.465 "
+       id="polyline5245" />
+  </g>
+  <g
+     id="g5247"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="372.57901"
+       y1="242.47301"
+       x2="372.63199"
+       y2="224.009"
+       id="line5249" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="377.609,231.787 372.638,221.773 367.61,231.758 "
+       id="polyline5251" />
+  </g>
+  <g
+     id="g5253"
+     transform="translate(0,-36.907584)">
+    <rect
+       style="fill:#ffffff"
+       x="322.27899"
+       y="306.173"
+       width="50"
+       height="44"
+       id="rect5255" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x="322.27899"
+       y="306.173"
+       width="50"
+       height="44"
+       id="rect5257" />
+    <text
+       style="font-size:12.79979992px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;font-family:sanserif"
+       x="347.27899"
+       y="332.073"
+       id="text5259">
+      <tspan
+         x="347.27899"
+         y="332.073"
+         id="tspan5261">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g5263"
+     transform="translate(0,-36.907584)">
+    <rect
+       style="fill:#ffffff"
+       x="463.27899"
+       y="306.173"
+       width="50"
+       height="44"
+       id="rect5265" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x="463.27899"
+       y="306.173"
+       width="50"
+       height="44"
+       id="rect5267" />
+    <text
+       style="font-size:12.79979992px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;font-family:sanserif"
+       x="488.27899"
+       y="332.073"
+       id="text5269">
+      <tspan
+         x="488.27899"
+         y="332.073"
+         id="tspan5271">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g5273"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="322.27899"
+       y1="350.173"
+       x2="322.27899"
+       y2="367.70099"
+       id="line5275" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="317.279,359.937 322.279,369.937 327.279,359.937 "
+       id="polyline5277" />
+  </g>
+  <g
+     id="g5279"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="372.27899"
+       y1="372.173"
+       x2="372.27899"
+       y2="354.64499"
+       id="line5281" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="377.279,362.409 372.279,352.409 367.279,362.409 "
+       id="polyline5283" />
+  </g>
+  <g
+     id="g5285"
+     transform="translate(0,-36.907584)">
+    <rect
+       style="fill:#ffffff"
+       x="322.27899"
+       y="372.173"
+       width="50"
+       height="44"
+       id="rect5287" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x="322.27899"
+       y="372.173"
+       width="50"
+       height="44"
+       id="rect5289" />
+    <text
+       style="font-size:12.79979992px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;font-family:sanserif"
+       x="347.27899"
+       y="398.073"
+       id="text5291">
+      <tspan
+         x="347.27899"
+         y="398.073"
+         id="tspan5293">1</tspan>
+    </text>
+  </g>
+  <g
+     id="g5301"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="372.27899"
+       y1="372.173"
+       x2="397.742"
+       y2="372.173"
+       id="line5303" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="389.978,377.173 399.978,372.173 389.978,367.173 "
+       id="polyline5305" />
+  </g>
+  <g
+     id="g5307"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="322.27899"
+       y1="416.173"
+       x2="288.116"
+       y2="415.60999"
+       id="line5309" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="295.961,410.739 285.88,415.574 295.797,420.738 "
+       id="polyline5311" />
+  </g>
+  <g
+     id="g5313"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="322.27899"
+       y1="350.173"
+       x2="289.117"
+       y2="350.49399"
+       id="line5315" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="296.832,345.419 286.881,350.515 296.929,355.418 "
+       id="polyline5317" />
+  </g>
+  <g
+     id="g5319"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="322.27899"
+       y1="416.173"
+       x2="320.827"
+       y2="435.99701"
+       id="line5321" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="316.407,427.889 320.663,438.227 326.38,428.619 "
+       id="polyline5323" />
+  </g>
+  <g
+     id="g5325"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="370.5"
+       y1="440.457"
+       x2="371.952"
+       y2="420.633"
+       id="line5327" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="376.372,428.741 372.115,418.403 366.398,428.011 "
+       id="polyline5329" />
+  </g>
+  <g
+     id="g5331"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="372.27899"
+       y1="306.173"
+       x2="458.80701"
+       y2="306.173"
+       id="line5333" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="451.043,311.173 461.043,306.173 451.043,301.173 "
+       id="polyline5335" />
+  </g>
+  <g
+     id="g5337"
+     transform="translate(0,-36.907584)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="512.27899"
+       y1="239.173"
+       x2="538.26801"
+       y2="240.41299"
+       id="line5339" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="530.275,245.037 540.502,240.519 530.751,235.048 "
+       id="polyline5341" />
+  </g>
+  <g
+     id="g5343"
+     transform="translate(0,-36.907584)">
+    <path
+       style="fill:none;stroke:#ff0000;stroke-width:2"
+       d="m 237.725,242.199 a 32.7892,32.7892 0 0 0 -5.758,-5.59"
+       id="path5345"
+       inkscape:connector-curvature="0" />
+    <polyline
+       style="fill:none;stroke:#ff0000;stroke-width:2"
+       points="222.654,235.096 233.354,238.336 229.526,227.831 "
+       id="polyline5347" />
+  </g>
+  <path
+     sodipodi:type="arc"
+     style="fill:none;stroke:url(#linearGradient6135)"
+     id="path5361"
+     sodipodi:cx="783.13275"
+     sodipodi:cy="689.76312"
+     sodipodi:rx="38.086586"
+     sodipodi:ry="36.272942"
+     d="m 821.21934,689.76312 a 38.086586,36.272942 0 1 1 -76.17317,0 38.086586,36.272942 0 1 1 76.17317,0 z"
+     transform="matrix(0.531773,0.18211423,-0.18211423,0.531773,-43.707028,-322.92249)" />
+  <g
+     transform="matrix(-0.97964067,0.06416454,0.06460429,0.98361695,-139.53275,-31.862798)"
+     id="g5149-7">
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#0000ff;stroke-width:2"
+       d="m 50.4429,235.097 a 123.498,123.498 0 0 0 -225.4639,4.776"
+       id="path5151-8" />
+    <polyline
+       style="fill:none;stroke:#0000ff;stroke-width:2"
+       points="42.8608,229.898 51.3974,237.118 52.0513,225.956 "
+       id="polyline5153-4" />
+  </g>
+  <flowRoot
+     xml:space="preserve"
+     id="flowRoot6767"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     transform="matrix(0.37768054,0,0,0.37768054,-216.58417,-325.93498)"><flowRegion
+       id="flowRegion6769"><rect
+         id="rect6771"
+         width="800.02191"
+         height="55.16888"
+         x="20.312847"
+         y="403.20688" /></flowRegion><flowPara
+       id="flowPara6773">Choix de la colonne puis recouvrement</flowPara></flowRoot>  <flowRoot
+     xml:space="preserve"
+     id="flowRoot6775"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     transform="matrix(0.33955492,0,0,0.33955492,-70.58046,-90.842775)"><flowRegion
+       id="flowRegion6777"><rect
+         id="rect6779"
+         width="877.80652"
+         height="53.969543"
+         x="774.7887"
+         y="584.28607" /></flowRegion><flowPara
+       id="flowPara6781">On choisit le premier élément de la colonne</flowPara></flowRoot>  <flowRoot
+     xml:space="preserve"
+     id="flowRoot6783"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     transform="matrix(0.30021356,0,0,0.30021356,173.0897,-72.888146)"><flowRegion
+       id="flowRegion6785"><rect
+         id="rect6787"
+         width="821.21948"
+         height="113.17159"
+         x="1542.3254"
+         y="548.29865" /></flowRegion><flowPara
+       id="flowPara6791">On retire les éléments de cette ligne de leur colonne respective</flowPara></flowRoot>  <flowRoot
+     xml:space="preserve"
+     id="flowRoot6795"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     transform="matrix(0.45671429,0,0,0.45671429,-219.13393,-118.69488)"><flowRegion
+       id="flowRegion6797"><rect
+         id="rect6799"
+         width="1041.7588"
+         height="147.99359"
+         x="75.447716"
+         y="1195.408" /></flowRegion><flowPara
+       id="flowPara6801">On recouvre leur colonne</flowPara></flowRoot>  <flowRoot
+     xml:space="preserve"
+     id="flowRoot6803"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     transform="matrix(0.52163122,0,0,0.52163122,-215.84139,-201.63527)"><flowRegion
+       id="flowRegion6805"><rect
+         id="rect6807"
+         width="481.70465"
+         height="60.938538"
+         x="844.43402"
+         y="1201.2115" /></flowRegion><flowPara
+       id="flowPara6809">h pointe vers lui même</flowPara></flowRoot>  <g
+     transform="matrix(0.35577979,0,0,1.0356526,744.37597,16.26267)"
+     id="g4709-0">
+    <rect
+       style="fill:none;stroke:#ff0000;stroke-width:2"
+       x="301"
+       y="-59"
+       width="220"
+       height="62.700001"
+       id="rect4711-9" />
+    <text
+       style="font-size:12.79979992px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#000000;font-family:sanserif"
+       x="411"
+       y="-23.75"
+       id="text4713-6">
+      <tspan
+         x="411"
+         y="-23.75"
+         id="tspan4715-6" />
+    </text>
+  </g>
+  <g
+     id="g5047-9"
+     transform="matrix(1,0,0,0.52092597,411.17325,95.681516)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="102.279"
+       y1="330.173"
+       x2="102.279"
+       y2="287.64499"
+       id="line5049-7" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="107.279,295.409 102.279,285.409 97.2787,295.409 "
+       id="polyline5051-1" />
+  </g>
+  <g
+     id="g5097-6"
+     transform="translate(411.37808,-61.352427)">
+    <line
+       style="fill:none;stroke:#000000;stroke-width:2"
+       x1="52.278702"
+       y1="374.173"
+       x2="52.597698"
+       y2="395.11401"
+       id="line5099-2" />
+    <polyline
+       style="fill:none;stroke:#000000;stroke-width:2"
+       points="47.48,387.427 52.6318,397.349 57.4789,387.274 "
+       id="polyline5101-3" />
+  </g>
+</svg>

@@ -1,0 +1,24 @@
+digraph ZDD {
+  node [shape = none, label="Bot"]; N1;
+  node [shape = none, label="Top"]; N2;
+  node [shape = none, label="Top"]; N3;
+  node [shape = circle, label="4"]; N4;
+  N4 -> N2 [style = dotted];
+  N4 -> N3;
+  node [shape = circle, label="3"]; N5;
+  N5 -> N1 [style = dotted];
+  N5 -> N4;
+  node [shape = circle, label="2"]; N6;
+  N6 -> N5 [style = dotted];
+  N6 -> N4;
+  node [shape = circle, label="1"]; N7;
+  N7 -> N6 [style = dotted];
+  N7 -> N6;
+  node [shape = circle, label="1"]; N8;
+  N8 -> N4 [style = dotted];
+  N8 -> N4;
+  node [shape = circle, label="0"]; N9;
+  N9 -> N7 [style = dotted];
+  N9 -> N8;
+  }
+
