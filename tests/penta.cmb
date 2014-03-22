@@ -226,27 +226,27 @@ problem penta_t = {
 ...***...
 } some_pentaminos
 
-solve dlx penta_t svg "penta_t.svg"
+solve dlx penta_t svg "solutions/penta_t.svg"
 # count dlx penta_t  # => 764
 
 ##############################################################################
 problem penta_12_5 = constant 12x5 true all_pentaminos
-solve dlx penta_12_5 svg "penta_12_5.svg"
+solve dlx penta_12_5 svg "solutions/penta_12_5.svg"
 # count dlx penta_12_5  # => 4040
 
 ##############################################################################
 problem penta_10_6 = constant 10x6 true all_pentaminos
-solve dlx penta_10_6 svg "penta_10_6.svg"
+solve dlx penta_10_6 svg "solutions/penta_10_6.svg"
 # count dlx penta_10_6 # => 9356
 
 ##############################################################################
 problem penta_15_4 = constant 15x4 true all_pentaminos
-solve dlx penta_15_4 svg "penta_15_4.svg"
+solve dlx penta_15_4 svg "solutions/penta_15_4.svg"
 # count dlx penta_15_4 # => 1472
 
 ##############################################################################
 problem penta_5_5 = constant 5x5 true some_pentaminos
-solve dlx penta_5_5 svg "penta_5_5.svg"
+solve dlx penta_5_5 svg "solutions/penta_5_5.svg"
 # count zdd penta_5_5 # => 856
 
 

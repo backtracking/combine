@@ -1,0 +1,283 @@
+
+# The 35 hexaminos
+#
+# See for instance http://fr.wikipedia.org/wiki/Hexamino
+# Tiling problems involving the hexaminos can be found in hexa.cmb
+
+pattern h1 = {
+******
+}
+pattern h2 = {
+....*
+*****
+}
+pattern h3 = {
+...*.
+*****
+}
+pattern h4 = {
+..*..
+*****
+}
+pattern h5 = {
+..**
+****
+}
+pattern h6 = {
+.*.*
+****
+}
+pattern h7 = {
+*..*
+****
+}
+pattern h8 = {
+...*
+...*
+****
+}
+pattern h9 = {
+.**.
+****
+}
+pattern h10 = {
+..*.
+..*.
+****
+}
+pattern h11 = {
+...*
+****
+...*
+}
+pattern h12 = {
+..*.
+****
+...*
+}
+pattern h13 = {
+.*..
+****
+...*
+}
+pattern h14 = {
+*...
+****
+...*
+}
+pattern h15 = {
+.*..
+****
+..*.
+}
+pattern h16 = {
+..*.
+****
+..*.
+}
+pattern h17 = {
+...**
+****.
+}
+pattern h18 = {
+.*..
+**..
+.***
+}
+pattern h19 = {
+**.*
+.***
+}
+pattern h20 = {
+***..
+..***
+}
+pattern h21 = {
+***.
+.***
+}
+pattern h22 = {
+..*.
+***.
+..**
+}
+pattern h23 = {
+.*..
+***.
+..**
+}
+pattern h24 = {
+**..
+.*..
+.***
+}
+pattern h25 = {
+*...
+**..
+.***
+}
+pattern h26 = {
+***
+***
+}
+pattern h27 = {
+..*
+.**
+***
+}
+pattern h28 = {
+.**
+..*
+***
+}
+pattern h29 = {
+**..
+.***
+...*
+}
+pattern h30 = {
+..*
+***
+.**
+}
+pattern h31 = {
+.*.
+***
+.**
+}
+pattern h32 = {
+**.
+.**
+.**
+}
+pattern h33 = {
+.*.
+***
+*.*
+}
+pattern h34 = {
+..*
+***
+*.*
+}
+pattern h35 = {
+**..
+.**.
+..**
+}
+
+
+tiles all_hexaminos = [
+  h1 ~one ~sym,
+  h2 ~one ~sym,
+  h3 ~one ~sym,
+  h4 ~one ~sym,
+  h5 ~one ~sym,
+  h6 ~one ~sym,
+  h7 ~one ~sym,
+  h8 ~one ~sym,
+  h9 ~one ~sym,
+  h10 ~one ~sym,
+  h11 ~one ~sym,
+  h12 ~one ~sym,
+  h13 ~one ~sym,
+  h14 ~one ~sym,
+  h15 ~one ~sym,
+  h16 ~one ~sym,
+  h17 ~one ~sym,
+  h18 ~one ~sym,
+  h19 ~one ~sym,
+  h20 ~one ~sym,
+  h21 ~one ~sym,
+  h22 ~one ~sym,
+  h23 ~one ~sym,
+  h24 ~one ~sym,
+  h25 ~one ~sym,
+  h26 ~one ~sym,
+  h27 ~one ~sym,
+  h28 ~one ~sym,
+  h29 ~one ~sym,
+  h30 ~one ~sym,
+  h31 ~one ~sym,
+  h32 ~one ~sym,
+  h33 ~one ~sym,
+  h34 ~one ~sym,
+  h35 ~one ~sym
+]
+
+tiles all_hexaminos_nosym = [
+  h1 ~one ~sym,
+  h2 ~one ~sym,
+  h3 ~one ~sym,
+  h4 ~one ~sym,
+  h5 ~one ~sym,
+  h6 ~one ~sym,
+  h7 ~one ~sym,
+  h8 ~one ~sym,
+  h9 ~one ~sym,
+  h10 ~one ~sym,
+  h11 ~one ~sym,
+  h12 ~one ~sym,
+  h13 ~one ~sym,
+  h14 ~one ~sym,
+  h15 ~one ~sym,
+  h16 ~one ~sym,
+  h17 ~one ~sym,
+  h18 ~one ~sym,
+  h19 ~one ~sym,
+  h20 ~one ~sym,
+  h21 ~one ~sym,
+  h22 ~one ~sym,
+  h23 ~one ~sym,
+  h24 ~one ~sym,
+  h25 ~one ~sym,
+  h26 ~one ~sym,
+  h27 ~one ~sym,
+  h28 ~one ~sym,
+  h29 ~one ~sym,
+  h30 ~one ~sym,
+  h31 ~one ~sym,
+  h32 ~one ~sym,
+  h33 ~one ~sym,
+  h34 ~one,
+  h35 ~one ~sym
+]
+
+tiles some_hexaminos = [
+  h1 ~maybe ~sym,
+  h2 ~maybe ~sym,
+  h3 ~maybe ~sym,
+  h4 ~maybe ~sym,
+  h5 ~maybe ~sym,
+  h6 ~maybe ~sym,
+  h7 ~maybe ~sym,
+  h8 ~maybe ~sym,
+  h9 ~maybe ~sym,
+  h10 ~maybe ~sym,
+  h11 ~maybe ~sym,
+  h12 ~maybe ~sym,
+  h13 ~maybe ~sym,
+  h14 ~maybe ~sym,
+  h15 ~maybe ~sym,
+  h16 ~maybe ~sym,
+  h17 ~maybe ~sym,
+  h18 ~maybe ~sym,
+  h19 ~maybe ~sym,
+  h20 ~maybe ~sym,
+  h21 ~maybe ~sym,
+  h22 ~maybe ~sym,
+  h23 ~maybe ~sym,
+  h24 ~maybe ~sym,
+  h25 ~maybe ~sym,
+  h26 ~maybe ~sym,
+  h27 ~maybe ~sym,
+  h28 ~maybe ~sym,
+  h29 ~maybe ~sym,
+  h30 ~maybe ~sym,
+  h31 ~maybe ~sym,
+  h32 ~maybe ~sym,
+  h33 ~maybe ~sym,
+  h34 ~maybe ~sym,
+  h35 ~maybe ~sym
+]
+
