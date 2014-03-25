@@ -46,3 +46,4 @@ jfla-2013/talk/slides.pdf
 color.opt
 /tests/*.svg
 *.dimacs
+/solutions/

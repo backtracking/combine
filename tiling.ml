@@ -232,6 +232,9 @@ module Tile = struct
 
 end
 
+
+(** Problem *)
+
 type problem = {
   grid : Pattern.t;
   pname : string;
@@ -249,149 +252,36 @@ let print_problem fmt problem =
   Format.fprintf fmt "%a@\n" Pattern.print problem.grid;
   List.iter (fun t -> Format.fprintf fmt "%a@\n" Tile.print t) problem.pieces
 
-(* Board position testing *)
 
-(* return true if position x y is on the board *)
-let existing_position problem x y =
-     x < problem.grid.Pattern.width
-  && y < problem.grid.Pattern.height
-  && problem.grid.Pattern.matrix.(y).(x)
+(** Solution *)
 
-(* return true if piece could be put at position x y*)
-let is_possible_position tile board x y =
-  try
-    for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do
-      for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do
-        if tile.Tile.pattern.Pattern.matrix.(y').(x')
-        && not (existing_position board (x + x') (y + y'))
-        then raise Exit
-      done
-    done;
-    true
-  with
-    | Exit ->  false
-
-(* Placing piece on board *)
-
-(* return an array of size n representing the way to put piece p at
- position x y on the board of size l*n
- *)
-
-open Tile
-
-let get_id_col_emc problem x y =
-  let id = ref 0 in
-  try
-    for y' = 0 to problem.grid.Pattern.height -1 do
-      for x' = 0 to problem.grid.Pattern.width - 1 do
-        if y' = y && x' = x then raise Exit;
-        if problem.grid.Pattern.matrix.(y').(x') then
-          incr id
-      done
-    done;
-    !id
-  with Exit -> !id
-
-let one_line l n tile_id tile problem ~x ~y =
-  let line = Array.make n false in
-  for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do
-    for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do
-      if tile.Tile.pattern.Pattern.matrix.(y').(x') then begin
-        line.(get_id_col_emc problem (x + x') (y + y')) <- true;
-        if tile.Tile.multiplicity <> Minf then
-          line.(tile_id) <- true
-      end
-    done
-  done;
-  line
-
-let one_line_piece_only n piece_id piece =
-  let line = Array.make n false in
-    line.(piece_id) <- true;
-    line
-
-let number_of_cell_columns problem =
-  let h = problem.grid.Pattern.height in
-  let w = problem.grid.Pattern.width in
-  let realn = ref 0 in
-  for y = 0 to h - 1 do
-    for x = 0 to w - 1 do
-      if problem.grid.Pattern.matrix.(y).(x) then
-        incr realn
-    done
-  done;
-  !realn
-
-let number_of_tile_columns problem =
-  List.fold_left (
-    fun (prim, sec as acc) e ->
-      match e.Tile.multiplicity with
-        | Mone -> (prim + 1, sec)
-	| Mmaybe -> (prim, sec + 1)
-        | Minf -> acc
-  ) (0, 0) problem.pieces
-
-type emc = {
-  primary: int;			        (* number of primary columns *)
-  matrix : bool array array;
-  tiles  : (Tile.t * int * int) array;	(* row -> tile and its position *)
-}
-
-let print_emc fmt emc =
-  let print_bool b = if b then fprintf fmt "1" else fprintf fmt "0" in
-  let print_line _ l = Array.iter print_bool l; fprintf fmt "@\n" in
-  Array.iteri print_line emc.matrix;
-  fprintf fmt "%d primary columns" emc.primary
-
-let print_emc_size fmt emc =
-  let h = Array.length emc.matrix in
-  fprintf fmt "%d rows x %d columns, with %d primary columns"
-    h (if h = 0 then 0 else Array.length emc.matrix.(0)) emc.primary
-
-(* return a boolean matrix representing the set of way to put all pieces
- * on the board
- * *)
-let emc problem =
-  let h = problem.grid.Pattern.height in
-  let w = problem.grid.Pattern.width in
-  let ncc = number_of_cell_columns problem in
-  let prim, sec = number_of_tile_columns problem in
-  let n = ncc + prim + sec in
-  let tile_id_prim = ref ncc in
-  let tile_id_sec  = ref (ncc + prim) in
-  let lines = ref [] in
-  let decodes = ref [] in
-  let add_piece x y tile =
-    let tile_id = match tile.multiplicity with
-      | Mone -> let v = !tile_id_prim in incr tile_id_prim; v
-      | Mmaybe -> let v = !tile_id_sec in incr tile_id_sec; v
-      | Minf -> -1 (* useless *)
-    in
-    List.iter
-      (fun t ->
-        if is_possible_position t problem x y then begin
-           lines := one_line w n tile_id t problem x y :: !lines;
-           decodes :=  (t, x, y) :: !decodes
-         end
-      )
-      (tile :: Tile.create_all_symetries tile)
-  in
-  for y = 0 to h - 1 do
-    for x = 0 to w - 1 do
-      List.iter (add_piece x y) problem.pieces;
-      tile_id_prim := ncc;
-      tile_id_sec := ncc + prim
-    done
-  done;
-  let matrix = Array.of_list !lines in
-  let decode_tbl = Array.of_list !decodes in
-  { primary = ncc + prim;
-    matrix = matrix;
-    tiles = decode_tbl }
-
-open Format
 open Pattern
-open Char
+
+type solution = (Tile.t * int * int) list
+
+let put_char tile board x y c =
+  for y' = 0 to tile.Tile.pattern.height - 1 do
+    for x' = 0 to tile.Tile.pattern.width - 1 do
+      if tile.Tile.pattern.matrix.(y').(x') then
+        board.(y + y').(x' + x) <- c
+    done
+  done
+
+let print_solution_ascii fmt p s =
+  let unique = ref 48 in
+  let board = Array.make_matrix p.grid.height p.grid.width '.' in
+  List.iter (
+    fun (t, x, y) ->
+      put_char t board x y (Char.chr !unique);
+      incr unique
+  ) s;
+  for y = p.grid.height - 1 downto 0 do
+    for x = 0 to p.grid.width - 1 do
+      fprintf fmt "%c" board.(y).(x)
+    done;
+    if y > 0 then fprintf fmt "@\n"
+  done;
+  fprintf fmt "@\n"
 
 let print_board_svg width height u fmt =
   for i = 0 to height do
@@ -445,7 +335,7 @@ let hsv_to_rgb h s v =
     | 5 -> cc, mm, xx
     | _ -> mm, mm, mm
 
-let print_solution_to_svg fmt ~width ~height p {tiles=decoder} s =
+let print_solution_to_svg fmt ~width ~height p s =
   let u = width / p.grid.width in
   fprintf fmt
 "<?xml version=\"1.0\" standalone=\"no\"?> @\n\
@@ -457,42 +347,175 @@ width=\"%d\" height=\"%d\">@\n"
   Random.self_init ();
   let h = ref (Random.float 360.)  in
   List.iter (
-    fun e ->
+    fun (t, x, y) ->
       let color = hsv_to_rgb !h 0.7 0.95 in
       h := !h +. inc;
-      let t, x, y = decoder.(e) in
       print_tile_svg p.grid.height x y u color fmt t;
   ) s;
   fprintf fmt "@]@\n</svg>"
 
-let print_solution_to_svg_file f ~width ~height p emc s =
+let print_solution_to_svg_file f ~width ~height p s =
   let c = open_out f in
   let fmt = formatter_of_out_channel c in
-  print_solution_to_svg fmt ~width ~height p emc s ;
+  print_solution_to_svg fmt ~width ~height p s ;
   fprintf fmt "@.";
   close_out c
 
-let put_char tile board x y c =
-  for y' = 0 to tile.Tile.pattern.height - 1 do
-    for x' = 0 to tile.Tile.pattern.width - 1 do
-      if tile.Tile.pattern.matrix.(y').(x') then
-        board.(y + y').(x' + x) <- c
-    done
-  done
 
-let print_solution_ascii fmt p {tiles=d} s =
-  let unique = ref 48 in
-  let board = Array.make_matrix p.grid.height p.grid.width '.' in
-  List.iter (
-    fun e ->
-      let t, x, y = d.(e) in
-      put_char t board x y (chr !unique);
-      incr unique
-  ) s;
-  for y = p.grid.height - 1 downto 0 do
-    for x = 0 to p.grid.width - 1 do
-      fprintf fmt "%c" board.(y).(x)
+(** Reduction to EMC *)
+
+module ToEMC = struct
+
+  (* return true if position x y is on the board *)
+  let existing_position problem x y =
+       x < problem.grid.Pattern.width
+    && y < problem.grid.Pattern.height
+    && problem.grid.Pattern.matrix.(y).(x)
+
+  (* return true if piece could be put at position x y*)
+  let is_possible_position tile board x y =
+    try
+      for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do
+        for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do
+          if tile.Tile.pattern.Pattern.matrix.(y').(x')
+            && not (existing_position board (x + x') (y + y'))
+        then raise Exit
+        done
+      done;
+      true
+    with
+      | Exit ->  false
+
+  (* Placing piece on board *)
+
+  (* return an array of size n representing the way to put piece p at
+     position x y on the board of size l*n
+  *)
+
+  open Tile
+
+  let get_id_col_emc problem x y =
+    let id = ref 0 in
+    try
+      for y' = 0 to problem.grid.Pattern.height -1 do
+        for x' = 0 to problem.grid.Pattern.width - 1 do
+          if y' = y && x' = x then raise Exit;
+          if problem.grid.Pattern.matrix.(y').(x') then
+            incr id
+        done
+      done;
+      !id
+    with Exit -> !id
+
+  let one_line l n tile_id tile problem ~x ~y =
+    let line = Array.make n false in
+    for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do
+      for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do
+        if tile.Tile.pattern.Pattern.matrix.(y').(x') then begin
+          line.(get_id_col_emc problem (x + x') (y + y')) <- true;
+          if tile.Tile.multiplicity <> Minf then
+            line.(tile_id) <- true
+        end
+      done
     done;
-    if y > 0 then fprintf fmt "@\n"
-  done;
-  fprintf fmt "@\n"
+    line
+
+  let one_line_piece_only n piece_id piece =
+    let line = Array.make n false in
+    line.(piece_id) <- true;
+    line
+
+  let number_of_cell_columns problem =
+    let h = problem.grid.Pattern.height in
+    let w = problem.grid.Pattern.width in
+    let realn = ref 0 in
+    for y = 0 to h - 1 do
+      for x = 0 to w - 1 do
+        if problem.grid.Pattern.matrix.(y).(x) then
+          incr realn
+      done
+    done;
+    !realn
+
+  let number_of_tile_columns problem =
+    List.fold_left (
+      fun (prim, sec as acc) e ->
+        match e.Tile.multiplicity with
+          | Mone -> (prim + 1, sec)
+	  | Mmaybe -> (prim, sec + 1)
+          | Minf -> acc
+    ) (0, 0) problem.pieces
+
+  type emc = {
+    primary: int;			      (* number of primary columns *)
+    matrix : bool array array;
+    tiles  : (Tile.t * int * int) array;      (* row -> tile and its position *)
+  }
+
+  let print_emc fmt emc =
+    let print_bool b = if b then fprintf fmt "1" else fprintf fmt "0" in
+    let print_line _ l = Array.iter print_bool l; fprintf fmt "@\n" in
+    Array.iteri print_line emc.matrix;
+    fprintf fmt "%d primary columns" emc.primary
+
+  let print_emc_size fmt emc =
+    let h = Array.length emc.matrix in
+    fprintf fmt "%d rows x %d columns, with %d primary columns"
+      h (if h = 0 then 0 else Array.length emc.matrix.(0)) emc.primary
+
+  (* return a boolean matrix representing the set of way to put all pieces
+   * on the board
+   * *)
+  let make problem =
+    let h = problem.grid.Pattern.height in
+    let w = problem.grid.Pattern.width in
+    let ncc = number_of_cell_columns problem in
+    let prim, sec = number_of_tile_columns problem in
+    let n = ncc + prim + sec in
+    let tile_id_prim = ref ncc in
+    let tile_id_sec  = ref (ncc + prim) in
+    let lines = ref [] in
+    let decodes = ref [] in
+    let add_piece x y tile =
+      let tile_id = match tile.multiplicity with
+        | Mone -> let v = !tile_id_prim in incr tile_id_prim; v
+        | Mmaybe -> let v = !tile_id_sec in incr tile_id_sec; v
+        | Minf -> -1 (* useless *)
+      in
+      List.iter
+        (fun t ->
+          if is_possible_position t problem x y then begin
+            lines := one_line w n tile_id t problem x y :: !lines;
+            decodes :=  (t, x, y) :: !decodes
+          end
+        )
+        (tile :: Tile.create_all_symetries tile)
+    in
+    for y = 0 to h - 1 do
+      for x = 0 to w - 1 do
+        List.iter (add_piece x y) problem.pieces;
+        tile_id_prim := ncc;
+        tile_id_sec := ncc + prim
+      done
+    done;
+    let matrix = Array.of_list !lines in
+    let decode_tbl = Array.of_list !decodes in
+    { primary = ncc + prim;
+      matrix = matrix;
+      tiles = decode_tbl }
+
+  open Format
+  open Pattern
+
+  let decode_solution d s = List.map (fun r -> d.(r)) s
+
+  let print_solution_to_svg fmt ~width ~height p {tiles=d} s =
+    print_solution_to_svg fmt ~width ~height p (decode_solution d s)
+
+  let print_solution_to_svg_file f ~width ~height p {tiles=d} s =
+    print_solution_to_svg_file f ~width ~height p (decode_solution d s)
+
+  let print_solution_ascii fmt p {tiles=d} s =
+    print_solution_ascii fmt p (decode_solution d s)
+
+end

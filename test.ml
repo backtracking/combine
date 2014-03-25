@@ -23,11 +23,12 @@ open Combine
 open Dlx
 open Zdd
 open Tiling
+open Tiling.ToEMC
 open Format
 open Emc
 
 
-let r = Lexer.parse_file "tests/non-regression.cmb"
+let r = Lexer.parse_file "examples/non-regression.cmb"
 let problems = Interp.interp_problems r
 let p = List.hd problems
 
@@ -94,7 +95,8 @@ let () =
   assert (Zdd.mem s2 z3)
 
 let () =
-  let { primary = primary; matrix = m; tiles = uncode_tbl } = Tiling.emc p in
+  let { primary = primary; matrix = m; tiles = uncode_tbl } =
+    Tiling.ToEMC.make p in
   assert (Emc.Z.count_solutions (Emc.Z.create ~primary m) = 12988816)
 
 let p =

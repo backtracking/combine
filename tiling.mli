@@ -113,35 +113,53 @@ type problem = private {
 
 val create_problem : ?name:string -> Pattern.t -> Tile.t list -> problem
   (** construct a problem from his name, the board pattern and
-      a list of tile *)
+      a list of tiles *)
 
 val print_problem: Format.formatter -> problem -> unit
   (** print a problem *)
 
-type emc = {
-  primary: int;			        (* number of primary columns *)
-  matrix : bool array array;
-  tiles  : (Tile.t * int * int) array;	(* row -> tile and its position *)
-}
-
-val print_emc: Format.formatter -> emc -> unit
-val print_emc_size: Format.formatter -> emc -> unit
-
-val emc: problem -> emc
-  (** Encode the given problem under EMC *)
+type solution = (Tile.t * int * int) list
 
 val print_solution_to_svg : Format.formatter ->
-  width:int -> height:int -> problem -> emc -> int list -> unit
+  width:int -> height:int -> problem -> solution -> unit
   (** print a solution under the svg format *)
 
-
 val print_solution_to_svg_file : string ->
-  width:int -> height:int -> problem -> emc -> int list -> unit
+  width:int -> height:int -> problem -> solution -> unit
   (** print a solution to the svg format on the given file *)
 
 val print_solution_ascii :
-  Format.formatter -> problem -> emc -> int list -> unit
+  Format.formatter -> problem -> solution -> unit
   (** print a solution with ascii symboles to draw tiles*)
+
+
+module ToEMC: sig
+
+  type emc = {
+    primary: int;			      (* number of primary columns *)
+    matrix : bool array array;
+    tiles  : (Tile.t * int * int) array;      (* row -> tile and its position *)
+  }
+
+  val print_emc: Format.formatter -> emc -> unit
+  val print_emc_size: Format.formatter -> emc -> unit
+
+  val make: problem -> emc
+    (** Encode the given problem under EMC *)
+
+  val print_solution_to_svg : Format.formatter ->
+    width:int -> height:int -> problem -> emc -> int list -> unit
+    (** print a solution under the svg format *)
+
+  val print_solution_to_svg_file : string ->
+    width:int -> height:int -> problem -> emc -> int list -> unit
+    (** print a solution to the svg format on the given file *)
+
+  val print_solution_ascii :
+    Format.formatter -> problem -> emc -> int list -> unit
+    (** print a solution with ascii symboles to draw tiles*)
+
+end
 
 
 

@@ -114,10 +114,10 @@ version.ml: Makefile
 
 test: test.byte combine.byte
 	./test.byte
-	for f in tests/*.cmb; do ./combine.byte --parse-only $$f ; done
+	for f in examples/*.cmb; do ./combine.byte --parse-only $$f ; done
 
 check: combine.opt
-	for f in tests/*.cmb; do ./combine.opt $$f ; done
+	for f in examples/*.cmb; do ./combine.opt $$f ; done
 
 test.byte: $(CMA) parser.cmo lexer.cmo interp.cmo test.cmo
 	$(OCAMLC) -o $@ $(BFLAGS) nums.cma unix.cma $^
@@ -184,7 +184,7 @@ TAR=$(EXPORTDIR).tar
 
 WWW = /users/demons/filliatr/WWW/combine/
 
-FILES = *.ml* Makefile.in configure configure.in .depend tests/*.cmb \
+FILES = *.ml* Makefile.in configure configure.in .depend examples/*.cmb \
 	README INSTALL LICENSE
 
 export: source export-doc

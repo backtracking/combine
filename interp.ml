@@ -20,6 +20,7 @@
 open Combine
 open Ast
 open Tiling
+open Tiling.ToEMC
 open Format
 open Emc
 
@@ -106,7 +107,7 @@ let finish_timer fmt () =
 
 let count p algo =
   let { primary = primary; matrix = m; tiles = decode_tbl } as emc =
-    Tiling.emc p in
+    Tiling.ToEMC.make p in
   if !debug then printf "@[<hov 2>EMC size is %a@]@." print_emc_size emc;
   printf "%s : @?" p.pname;
   init_timer ();
@@ -125,7 +126,7 @@ let count p algo =
   if !timing then printf "%s solutions counted in %a@." p.pname finish_timer ()
 
 let solve output p algo =
-  let emc = Tiling.emc p in
+  let emc = Tiling.ToEMC.make p in
   if !debug then printf "@[<hov 2>EMC size is@\n%a@]@." print_emc_size emc;
   let { primary = primary; matrix = m; tiles = decode_tbl } = emc in
   init_timer ();
@@ -187,7 +188,7 @@ let rec interp_decl decl =
         let p = begin try Hashtbl.find problem_tbl id with
           | Not_found ->
               raise (Error (decl.decl_pos, "Unbound problem " ^ id)) end in
-        let emc = Tiling.emc p in
+        let emc = Tiling.ToEMC.make p in
         let sat = Sat.create ~primary:emc.primary emc.matrix in
         Emc.Sat.print_in_file file sat
     | Assert be ->
