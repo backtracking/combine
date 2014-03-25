@@ -21,11 +21,11 @@ print scott_problem
 
 timing on
 
-solve dlx scott_problem svg "scott.svg"
+solve dlx scott_problem svg "solutions/scott.svg"
 
 count dlx scott_problem
 
-# solve sat "minisat2" scott_problem svg "scott2.svg"
+# solve sat "minisat2" scott_problem svg "solutions/scott2.svg"
 
 
 # Local Variables:

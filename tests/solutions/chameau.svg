@@ -1,0 +1,324 @@
+<?xml version="1.0" standalone="no"?> 
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="325">
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="175" y="25" width="25" height="25" style="fill:rgb(72, 242, 140);" />
+  <rect x="175" y="0" width="25" height="25" style="fill:rgb(72, 242, 140);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="150" y="25" width="25" height="25" style="fill:rgb(242, 92, 72);" />
+  <rect x="150" y="0" width="25" height="25" style="fill:rgb(242, 92, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="100" y="0" width="25" height="25" style="fill:rgb(72, 103, 242);" />
+  <rect x="125" y="0" width="25" height="25" style="fill:rgb(72, 103, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="125" y="50" width="25" height="25" style="fill:rgb(151, 242, 72);" />
+  <rect x="125" y="25" width="25" height="25" style="fill:rgb(151, 242, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="100" y="50" width="25" height="25" style="fill:rgb(242, 72, 202);" />
+  <rect x="100" y="25" width="25" height="25" style="fill:rgb(242, 72, 202);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="75" y="50" width="25" height="25" style="fill:rgb(72, 242, 233);" />
+  <rect x="75" y="25" width="25" height="25" style="fill:rgb(72, 242, 233);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="50" y="50" width="25" height="25" style="fill:rgb(242, 182, 72);" />
+  <rect x="50" y="25" width="25" height="25" style="fill:rgb(242, 182, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="475" y="75" width="25" height="25" style="fill:rgb(134, 72, 242);" />
+  <rect x="475" y="50" width="25" height="25" style="fill:rgb(134, 72, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="450" y="75" width="25" height="25" style="fill:rgb(72, 242, 83);" />
+  <rect x="450" y="50" width="25" height="25" style="fill:rgb(72, 242, 83);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="325" y="75" width="25" height="25" style="fill:rgb(242, 72, 109);" />
+  <rect x="325" y="50" width="25" height="25" style="fill:rgb(242, 72, 109);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="300" y="75" width="25" height="25" style="fill:rgb(72, 160, 242);" />
+  <rect x="300" y="50" width="25" height="25" style="fill:rgb(72, 160, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="175" y="75" width="25" height="25" style="fill:rgb(208, 242, 72);" />
+  <rect x="175" y="50" width="25" height="25" style="fill:rgb(208, 242, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="150" y="75" width="25" height="25" style="fill:rgb(225, 72, 242);" />
+  <rect x="150" y="50" width="25" height="25" style="fill:rgb(225, 72, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="500" y="50" width="25" height="25" style="fill:rgb(72, 242, 177);" />
+  <rect x="525" y="50" width="25" height="25" style="fill:rgb(72, 242, 177);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="525" y="100" width="25" height="25" style="fill:rgb(242, 126, 72);" />
+  <rect x="525" y="75" width="25" height="25" style="fill:rgb(242, 126, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="500" y="100" width="25" height="25" style="fill:rgb(78, 72, 242);" />
+  <rect x="500" y="75" width="25" height="25" style="fill:rgb(78, 72, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="425" y="100" width="25" height="25" style="fill:rgb(117, 242, 72);" />
+  <rect x="425" y="75" width="25" height="25" style="fill:rgb(117, 242, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="400" y="100" width="25" height="25" style="fill:rgb(242, 72, 165);" />
+  <rect x="400" y="75" width="25" height="25" style="fill:rgb(242, 72, 165);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="350" y="50" width="25" height="25" style="fill:rgb(72, 216, 242);" />
+  <rect x="375" y="50" width="25" height="25" style="fill:rgb(72, 216, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="375" y="100" width="25" height="25" style="fill:rgb(242, 219, 72);" />
+  <rect x="375" y="75" width="25" height="25" style="fill:rgb(242, 219, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="350" y="100" width="25" height="25" style="fill:rgb(168, 72, 242);" />
+  <rect x="350" y="75" width="25" height="25" style="fill:rgb(168, 72, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="125" y="100" width="25" height="25" style="fill:rgb(72, 242, 120);" />
+  <rect x="125" y="75" width="25" height="25" style="fill:rgb(72, 242, 120);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="100" y="100" width="25" height="25" style="fill:rgb(242, 72, 75);" />
+  <rect x="100" y="75" width="25" height="25" style="fill:rgb(242, 72, 75);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="475" y="125" width="25" height="25" style="fill:rgb(72, 123, 242);" />
+  <rect x="475" y="100" width="25" height="25" style="fill:rgb(72, 123, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="450" y="125" width="25" height="25" style="fill:rgb(174, 242, 72);" />
+  <rect x="450" y="100" width="25" height="25" style="fill:rgb(174, 242, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="325" y="125" width="25" height="25" style="fill:rgb(242, 72, 222);" />
+  <rect x="325" y="100" width="25" height="25" style="fill:rgb(242, 72, 222);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="300" y="125" width="25" height="25" style="fill:rgb(72, 242, 211);" />
+  <rect x="300" y="100" width="25" height="25" style="fill:rgb(72, 242, 211);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="175" y="125" width="25" height="25" style="fill:rgb(242, 163, 72);" />
+  <rect x="175" y="100" width="25" height="25" style="fill:rgb(242, 163, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="150" y="125" width="25" height="25" style="fill:rgb(112, 72, 242);" />
+  <rect x="150" y="100" width="25" height="25" style="fill:rgb(112, 72, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="625" y="150" width="25" height="25" style="fill:rgb(83, 242, 72);" />
+  <rect x="625" y="125" width="25" height="25" style="fill:rgb(83, 242, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="600" y="150" width="25" height="25" style="fill:rgb(242, 72, 132);" />
+  <rect x="600" y="125" width="25" height="25" style="fill:rgb(242, 72, 132);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="550" y="100" width="25" height="25" style="fill:rgb(72, 182, 242);" />
+  <rect x="575" y="100" width="25" height="25" style="fill:rgb(72, 182, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="575" y="150" width="25" height="25" style="fill:rgb(230, 242, 72);" />
+  <rect x="575" y="125" width="25" height="25" style="fill:rgb(230, 242, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="550" y="150" width="25" height="25" style="fill:rgb(202, 72, 242);" />
+  <rect x="550" y="125" width="25" height="25" style="fill:rgb(202, 72, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="525" y="150" width="25" height="25" style="fill:rgb(72, 242, 154);" />
+  <rect x="525" y="125" width="25" height="25" style="fill:rgb(72, 242, 154);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="500" y="150" width="25" height="25" style="fill:rgb(242, 103, 72);" />
+  <rect x="500" y="125" width="25" height="25" style="fill:rgb(242, 103, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="425" y="150" width="25" height="25" style="fill:rgb(72, 89, 242);" />
+  <rect x="425" y="125" width="25" height="25" style="fill:rgb(72, 89, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="400" y="150" width="25" height="25" style="fill:rgb(140, 242, 72);" />
+  <rect x="400" y="125" width="25" height="25" style="fill:rgb(140, 242, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="375" y="150" width="25" height="25" style="fill:rgb(242, 72, 188);" />
+  <rect x="375" y="125" width="25" height="25" style="fill:rgb(242, 72, 188);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="350" y="150" width="25" height="25" style="fill:rgb(72, 239, 242);" />
+  <rect x="350" y="125" width="25" height="25" style="fill:rgb(72, 239, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="250" y="100" width="25" height="25" style="fill:rgb(242, 197, 72);" />
+  <rect x="275" y="100" width="25" height="25" style="fill:rgb(242, 197, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="275" y="150" width="25" height="25" style="fill:rgb(146, 72, 242);" />
+  <rect x="275" y="125" width="25" height="25" style="fill:rgb(146, 72, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="250" y="150" width="25" height="25" style="fill:rgb(72, 242, 98);" />
+  <rect x="250" y="125" width="25" height="25" style="fill:rgb(72, 242, 98);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="225" y="150" width="25" height="25" style="fill:rgb(242, 72, 98);" />
+  <rect x="225" y="125" width="25" height="25" style="fill:rgb(242, 72, 98);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="200" y="150" width="25" height="25" style="fill:rgb(72, 146, 242);" />
+  <rect x="200" y="125" width="25" height="25" style="fill:rgb(72, 146, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="125" y="150" width="25" height="25" style="fill:rgb(197, 242, 72);" />
+  <rect x="125" y="125" width="25" height="25" style="fill:rgb(197, 242, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="100" y="150" width="25" height="25" style="fill:rgb(239, 72, 242);" />
+  <rect x="100" y="125" width="25" height="25" style="fill:rgb(239, 72, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="675" y="175" width="25" height="25" style="fill:rgb(72, 242, 188);" />
+  <rect x="675" y="150" width="25" height="25" style="fill:rgb(72, 242, 188);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="650" y="175" width="25" height="25" style="fill:rgb(242, 140, 72);" />
+  <rect x="650" y="150" width="25" height="25" style="fill:rgb(242, 140, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="475" y="175" width="25" height="25" style="fill:rgb(89, 72, 242);" />
+  <rect x="475" y="150" width="25" height="25" style="fill:rgb(89, 72, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="450" y="175" width="25" height="25" style="fill:rgb(103, 242, 72);" />
+  <rect x="450" y="150" width="25" height="25" style="fill:rgb(103, 242, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="325" y="175" width="25" height="25" style="fill:rgb(242, 72, 154);" />
+  <rect x="325" y="150" width="25" height="25" style="fill:rgb(242, 72, 154);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="300" y="175" width="25" height="25" style="fill:rgb(72, 202, 242);" />
+  <rect x="300" y="150" width="25" height="25" style="fill:rgb(72, 202, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="175" y="175" width="25" height="25" style="fill:rgb(242, 230, 72);" />
+  <rect x="175" y="150" width="25" height="25" style="fill:rgb(242, 230, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="150" y="175" width="25" height="25" style="fill:rgb(182, 72, 242);" />
+  <rect x="150" y="150" width="25" height="25" style="fill:rgb(182, 72, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="575" y="200" width="25" height="25" style="fill:rgb(72, 242, 132);" />
+  <rect x="575" y="175" width="25" height="25" style="fill:rgb(72, 242, 132);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="550" y="200" width="25" height="25" style="fill:rgb(242, 83, 72);" />
+  <rect x="550" y="175" width="25" height="25" style="fill:rgb(242, 83, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="525" y="200" width="25" height="25" style="fill:rgb(72, 112, 242);" />
+  <rect x="525" y="175" width="25" height="25" style="fill:rgb(72, 112, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="500" y="200" width="25" height="25" style="fill:rgb(160, 242, 72);" />
+  <rect x="500" y="175" width="25" height="25" style="fill:rgb(160, 242, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="275" y="200" width="25" height="25" style="fill:rgb(242, 72, 211);" />
+  <rect x="275" y="175" width="25" height="25" style="fill:rgb(242, 72, 211);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="250" y="200" width="25" height="25" style="fill:rgb(72, 242, 225);" />
+  <rect x="250" y="175" width="25" height="25" style="fill:rgb(72, 242, 225);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="225" y="200" width="25" height="25" style="fill:rgb(242, 174, 72);" />
+  <rect x="225" y="175" width="25" height="25" style="fill:rgb(242, 174, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="200" y="200" width="25" height="25" style="fill:rgb(126, 72, 242);" />
+  <rect x="200" y="175" width="25" height="25" style="fill:rgb(126, 72, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="575" y="250" width="25" height="25" style="fill:rgb(72, 242, 75);" />
+  <rect x="575" y="225" width="25" height="25" style="fill:rgb(72, 242, 75);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="550" y="250" width="25" height="25" style="fill:rgb(242, 72, 117);" />
+  <rect x="550" y="225" width="25" height="25" style="fill:rgb(242, 72, 117);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="525" y="250" width="25" height="25" style="fill:rgb(72, 168, 242);" />
+  <rect x="525" y="225" width="25" height="25" style="fill:rgb(72, 168, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="500" y="250" width="25" height="25" style="fill:rgb(216, 242, 72);" />
+  <rect x="500" y="225" width="25" height="25" style="fill:rgb(216, 242, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="275" y="250" width="25" height="25" style="fill:rgb(216, 72, 242);" />
+  <rect x="275" y="225" width="25" height="25" style="fill:rgb(216, 72, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="250" y="250" width="25" height="25" style="fill:rgb(72, 242, 168);" />
+  <rect x="250" y="225" width="25" height="25" style="fill:rgb(72, 242, 168);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="225" y="250" width="25" height="25" style="fill:rgb(242, 117, 72);" />
+  <rect x="225" y="225" width="25" height="25" style="fill:rgb(242, 117, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="200" y="250" width="25" height="25" style="fill:rgb(72, 75, 242);" />
+  <rect x="200" y="225" width="25" height="25" style="fill:rgb(72, 75, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="575" y="300" width="25" height="25" style="fill:rgb(126, 242, 72);" />
+  <rect x="575" y="275" width="25" height="25" style="fill:rgb(126, 242, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="550" y="300" width="25" height="25" style="fill:rgb(242, 72, 174);" />
+  <rect x="550" y="275" width="25" height="25" style="fill:rgb(242, 72, 174);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="525" y="300" width="25" height="25" style="fill:rgb(72, 225, 242);" />
+  <rect x="525" y="275" width="25" height="25" style="fill:rgb(72, 225, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="500" y="300" width="25" height="25" style="fill:rgb(242, 211, 72);" />
+  <rect x="500" y="275" width="25" height="25" style="fill:rgb(242, 211, 72);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="275" y="300" width="25" height="25" style="fill:rgb(160, 72, 242);" />
+  <rect x="275" y="275" width="25" height="25" style="fill:rgb(160, 72, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="250" y="300" width="25" height="25" style="fill:rgb(72, 242, 112);" />
+  <rect x="250" y="275" width="25" height="25" style="fill:rgb(72, 242, 112);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="225" y="300" width="25" height="25" style="fill:rgb(242, 72, 83);" />
+  <rect x="225" y="275" width="25" height="25" style="fill:rgb(242, 72, 83);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="200" y="300" width="25" height="25" style="fill:rgb(72, 132, 242);" />
+  <rect x="200" y="275" width="25" height="25" style="fill:rgb(72, 132, 242);" />
+  </g>
+  <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
+  <rect x="0" y="50" width="25" height="25" style="fill:rgb(182, 242, 72);" />
+  <rect x="25" y="50" width="25" height="25" style="fill:rgb(182, 242, 72);" />
+  </g>
+  
+</svg>
