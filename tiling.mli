@@ -22,7 +22,6 @@
 (** Pattern representation as boolean matrix *)
 module Pattern : sig
 
-
   (*
     y ^
       |
@@ -35,6 +34,7 @@ module Pattern : sig
     matrix : bool array array;
     height : int;
     width  : int;
+    size   : int;
   }
 
   val create: bool array array -> t

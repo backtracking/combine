@@ -2,7 +2,7 @@
 #                                                                        #
 #  Combine - an OCaml library for combinatorics                          #
 #                                                                        #
-#  Copyright (C) 2012                                                    #
+#  Copyright (C) 2012-2014                                               #
 #    Remy El Sibaie                                                      #
 #    Jean-Christophe Filliatre                                           #
 #                                                                        #
@@ -64,7 +64,7 @@ all: $(OCAMLBEST) test
 # bytecode and native-code compilation
 ######################################
 
-LIBCMO = dlx.cmo zdd.cmo emc.cmo d4.cmo tiling.cmo
+LIBCMO = dlx.cmo zdd.cmo emc.cmo d4.cmo tiling.cmo backtracking.cmo
 LIBCMX = $(LIBCMO:.cmo=.cmx)
 LIBMLI = $(LIBCMO:.cmo=.mli)
 $(LIBCMX): OFLAGS += -for-pack Combine

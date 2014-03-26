@@ -1,88 +1,88 @@
 <?xml version="1.0" standalone="no"?> 
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
   <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
-  <rect x="150" y="175" width="25" height="25" style="fill:rgb(72, 242, 134);" />
-  <rect x="175" y="175" width="25" height="25" style="fill:rgb(72, 242, 134);" />
-  <rect x="175" y="150" width="25" height="25" style="fill:rgb(72, 242, 134);" />
-  <rect x="150" y="125" width="25" height="25" style="fill:rgb(72, 242, 134);" />
-  <rect x="175" y="125" width="25" height="25" style="fill:rgb(72, 242, 134);" />
+  <rect x="150" y="175" width="25" height="25" style="fill:rgb(242, 72, 225);" />
+  <rect x="175" y="175" width="25" height="25" style="fill:rgb(242, 72, 225);" />
+  <rect x="175" y="150" width="25" height="25" style="fill:rgb(242, 72, 225);" />
+  <rect x="150" y="125" width="25" height="25" style="fill:rgb(242, 72, 225);" />
+  <rect x="175" y="125" width="25" height="25" style="fill:rgb(242, 72, 225);" />
   </g>
   <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
-  <rect x="50" y="175" width="25" height="25" style="fill:rgb(242, 83, 72);" />
-  <rect x="75" y="175" width="25" height="25" style="fill:rgb(242, 83, 72);" />
-  <rect x="100" y="175" width="25" height="25" style="fill:rgb(242, 83, 72);" />
-  <rect x="50" y="150" width="25" height="25" style="fill:rgb(242, 83, 72);" />
-  <rect x="75" y="150" width="25" height="25" style="fill:rgb(242, 83, 72);" />
+  <rect x="50" y="175" width="25" height="25" style="fill:rgb(72, 242, 208);" />
+  <rect x="75" y="175" width="25" height="25" style="fill:rgb(72, 242, 208);" />
+  <rect x="100" y="175" width="25" height="25" style="fill:rgb(72, 242, 208);" />
+  <rect x="50" y="150" width="25" height="25" style="fill:rgb(72, 242, 208);" />
+  <rect x="75" y="150" width="25" height="25" style="fill:rgb(72, 242, 208);" />
   </g>
   <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
-  <rect x="125" y="175" width="25" height="25" style="fill:rgb(72, 109, 242);" />
-  <rect x="100" y="150" width="25" height="25" style="fill:rgb(72, 109, 242);" />
-  <rect x="125" y="150" width="25" height="25" style="fill:rgb(72, 109, 242);" />
-  <rect x="150" y="150" width="25" height="25" style="fill:rgb(72, 109, 242);" />
-  <rect x="125" y="125" width="25" height="25" style="fill:rgb(72, 109, 242);" />
+  <rect x="125" y="175" width="25" height="25" style="fill:rgb(242, 160, 72);" />
+  <rect x="100" y="150" width="25" height="25" style="fill:rgb(242, 160, 72);" />
+  <rect x="125" y="150" width="25" height="25" style="fill:rgb(242, 160, 72);" />
+  <rect x="150" y="150" width="25" height="25" style="fill:rgb(242, 160, 72);" />
+  <rect x="125" y="125" width="25" height="25" style="fill:rgb(242, 160, 72);" />
   </g>
   <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
-  <rect x="50" y="125" width="25" height="25" style="fill:rgb(160, 242, 72);" />
-  <rect x="75" y="125" width="25" height="25" style="fill:rgb(160, 242, 72);" />
-  <rect x="100" y="125" width="25" height="25" style="fill:rgb(160, 242, 72);" />
-  <rect x="50" y="100" width="25" height="25" style="fill:rgb(160, 242, 72);" />
-  <rect x="50" y="75" width="25" height="25" style="fill:rgb(160, 242, 72);" />
+  <rect x="50" y="125" width="25" height="25" style="fill:rgb(109, 72, 242);" />
+  <rect x="75" y="125" width="25" height="25" style="fill:rgb(109, 72, 242);" />
+  <rect x="100" y="125" width="25" height="25" style="fill:rgb(109, 72, 242);" />
+  <rect x="50" y="100" width="25" height="25" style="fill:rgb(109, 72, 242);" />
+  <rect x="50" y="75" width="25" height="25" style="fill:rgb(109, 72, 242);" />
   </g>
   <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
-  <rect x="0" y="175" width="25" height="25" style="fill:rgb(242, 72, 208);" />
-  <rect x="25" y="175" width="25" height="25" style="fill:rgb(242, 72, 208);" />
-  <rect x="25" y="150" width="25" height="25" style="fill:rgb(242, 72, 208);" />
-  <rect x="25" y="125" width="25" height="25" style="fill:rgb(242, 72, 208);" />
-  <rect x="25" y="100" width="25" height="25" style="fill:rgb(242, 72, 208);" />
+  <rect x="0" y="175" width="25" height="25" style="fill:rgb(83, 242, 72);" />
+  <rect x="25" y="175" width="25" height="25" style="fill:rgb(83, 242, 72);" />
+  <rect x="25" y="150" width="25" height="25" style="fill:rgb(83, 242, 72);" />
+  <rect x="25" y="125" width="25" height="25" style="fill:rgb(83, 242, 72);" />
+  <rect x="25" y="100" width="25" height="25" style="fill:rgb(83, 242, 72);" />
   </g>
   <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
-  <rect x="0" y="150" width="25" height="25" style="fill:rgb(72, 242, 225);" />
-  <rect x="0" y="125" width="25" height="25" style="fill:rgb(72, 242, 225);" />
-  <rect x="0" y="100" width="25" height="25" style="fill:rgb(72, 242, 225);" />
-  <rect x="0" y="75" width="25" height="25" style="fill:rgb(72, 242, 225);" />
-  <rect x="0" y="50" width="25" height="25" style="fill:rgb(72, 242, 225);" />
+  <rect x="0" y="150" width="25" height="25" style="fill:rgb(242, 72, 134);" />
+  <rect x="0" y="125" width="25" height="25" style="fill:rgb(242, 72, 134);" />
+  <rect x="0" y="100" width="25" height="25" style="fill:rgb(242, 72, 134);" />
+  <rect x="0" y="75" width="25" height="25" style="fill:rgb(242, 72, 134);" />
+  <rect x="0" y="50" width="25" height="25" style="fill:rgb(242, 72, 134);" />
   </g>
   <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
-  <rect x="25" y="75" width="25" height="25" style="fill:rgb(242, 177, 72);" />
-  <rect x="25" y="50" width="25" height="25" style="fill:rgb(242, 177, 72);" />
-  <rect x="0" y="25" width="25" height="25" style="fill:rgb(242, 177, 72);" />
-  <rect x="25" y="25" width="25" height="25" style="fill:rgb(242, 177, 72);" />
-  <rect x="0" y="0" width="25" height="25" style="fill:rgb(242, 177, 72);" />
+  <rect x="25" y="75" width="25" height="25" style="fill:rgb(72, 182, 242);" />
+  <rect x="25" y="50" width="25" height="25" style="fill:rgb(72, 182, 242);" />
+  <rect x="0" y="25" width="25" height="25" style="fill:rgb(72, 182, 242);" />
+  <rect x="25" y="25" width="25" height="25" style="fill:rgb(72, 182, 242);" />
+  <rect x="0" y="0" width="25" height="25" style="fill:rgb(72, 182, 242);" />
   </g>
   <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
-  <rect x="50" y="50" width="25" height="25" style="fill:rgb(126, 72, 242);" />
-  <rect x="50" y="25" width="25" height="25" style="fill:rgb(126, 72, 242);" />
-  <rect x="25" y="0" width="25" height="25" style="fill:rgb(126, 72, 242);" />
-  <rect x="50" y="0" width="25" height="25" style="fill:rgb(126, 72, 242);" />
-  <rect x="75" y="0" width="25" height="25" style="fill:rgb(126, 72, 242);" />
+  <rect x="50" y="50" width="25" height="25" style="fill:rgb(233, 242, 72);" />
+  <rect x="50" y="25" width="25" height="25" style="fill:rgb(233, 242, 72);" />
+  <rect x="25" y="0" width="25" height="25" style="fill:rgb(233, 242, 72);" />
+  <rect x="50" y="0" width="25" height="25" style="fill:rgb(233, 242, 72);" />
+  <rect x="75" y="0" width="25" height="25" style="fill:rgb(233, 242, 72);" />
   </g>
   <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
-  <rect x="125" y="100" width="25" height="25" style="fill:rgb(72, 242, 78);" />
-  <rect x="150" y="100" width="25" height="25" style="fill:rgb(72, 242, 78);" />
-  <rect x="125" y="75" width="25" height="25" style="fill:rgb(72, 242, 78);" />
-  <rect x="100" y="50" width="25" height="25" style="fill:rgb(72, 242, 78);" />
-  <rect x="125" y="50" width="25" height="25" style="fill:rgb(72, 242, 78);" />
+  <rect x="125" y="100" width="25" height="25" style="fill:rgb(202, 72, 242);" />
+  <rect x="150" y="100" width="25" height="25" style="fill:rgb(202, 72, 242);" />
+  <rect x="125" y="75" width="25" height="25" style="fill:rgb(202, 72, 242);" />
+  <rect x="100" y="50" width="25" height="25" style="fill:rgb(202, 72, 242);" />
+  <rect x="125" y="50" width="25" height="25" style="fill:rgb(202, 72, 242);" />
   </g>
   <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
-  <rect x="75" y="50" width="25" height="25" style="fill:rgb(242, 72, 117);" />
-  <rect x="75" y="25" width="25" height="25" style="fill:rgb(242, 72, 117);" />
-  <rect x="100" y="25" width="25" height="25" style="fill:rgb(242, 72, 117);" />
-  <rect x="100" y="0" width="25" height="25" style="fill:rgb(242, 72, 117);" />
-  <rect x="125" y="0" width="25" height="25" style="fill:rgb(242, 72, 117);" />
+  <rect x="75" y="50" width="25" height="25" style="fill:rgb(72, 242, 151);" />
+  <rect x="75" y="25" width="25" height="25" style="fill:rgb(72, 242, 151);" />
+  <rect x="100" y="25" width="25" height="25" style="fill:rgb(72, 242, 151);" />
+  <rect x="100" y="0" width="25" height="25" style="fill:rgb(72, 242, 151);" />
+  <rect x="125" y="0" width="25" height="25" style="fill:rgb(72, 242, 151);" />
   </g>
   <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
-  <rect x="175" y="100" width="25" height="25" style="fill:rgb(72, 165, 242);" />
-  <rect x="150" y="75" width="25" height="25" style="fill:rgb(72, 165, 242);" />
-  <rect x="175" y="75" width="25" height="25" style="fill:rgb(72, 165, 242);" />
-  <rect x="175" y="50" width="25" height="25" style="fill:rgb(72, 165, 242);" />
-  <rect x="175" y="25" width="25" height="25" style="fill:rgb(72, 165, 242);" />
+  <rect x="175" y="100" width="25" height="25" style="fill:rgb(242, 103, 72);" />
+  <rect x="150" y="75" width="25" height="25" style="fill:rgb(242, 103, 72);" />
+  <rect x="175" y="75" width="25" height="25" style="fill:rgb(242, 103, 72);" />
+  <rect x="175" y="50" width="25" height="25" style="fill:rgb(242, 103, 72);" />
+  <rect x="175" y="25" width="25" height="25" style="fill:rgb(242, 103, 72);" />
   </g>
   <g style="stroke:#000000;stroke-width:1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;">
-  <rect x="150" y="50" width="25" height="25" style="fill:rgb(216, 242, 72);" />
-  <rect x="125" y="25" width="25" height="25" style="fill:rgb(216, 242, 72);" />
-  <rect x="150" y="25" width="25" height="25" style="fill:rgb(216, 242, 72);" />
-  <rect x="150" y="0" width="25" height="25" style="fill:rgb(216, 242, 72);" />
-  <rect x="175" y="0" width="25" height="25" style="fill:rgb(216, 242, 72);" />
+  <rect x="150" y="50" width="25" height="25" style="fill:rgb(72, 92, 242);" />
+  <rect x="125" y="25" width="25" height="25" style="fill:rgb(72, 92, 242);" />
+  <rect x="150" y="25" width="25" height="25" style="fill:rgb(72, 92, 242);" />
+  <rect x="150" y="0" width="25" height="25" style="fill:rgb(72, 92, 242);" />
+  <rect x="175" y="0" width="25" height="25" style="fill:rgb(72, 92, 242);" />
   </g>
   
 </svg>

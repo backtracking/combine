@@ -150,14 +150,14 @@ let solve output p algo =
   if solution = [] then
     printf "problem %S has no solution@\n" p.pname
   else begin
-    let print = begin match output with
-      | Svg f ->
-          printf "SVG written in file %S@\n" f;
-          print_solution_to_svg_file f ~width ~height p emc;
-      | Ascii ->
-          print_solution_ascii Format.std_formatter p emc end in
     if !timing then printf "%S solved in %a@." p.pname finish_timer ();
-    print solution
+    match output with
+      | Svg f ->
+          print_solution_to_svg_file f ~width ~height p emc solution;
+          printf "SVG written in file %S@." f
+      | Ascii ->
+          print_solution_ascii Format.std_formatter p emc solution;
+          printf "@."
   end
 
 let interp_problem_command p = function

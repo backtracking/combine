@@ -29,14 +29,19 @@ module Pattern = struct
     matrix   : bool array array;
     height : int;
     width  : int;
+    size   : int;
   }
+
+  let compute_size m =
+    let s = ref 0 in Array.iter (Array.iter (fun b -> if b then incr s)) m; !s
 
   let create g =
     let h = Array.length g in
     if h = 0 then invalid_arg "Pattern.create";
     { matrix = g;
       height = h;
-      width = Array.length g.(0); }
+      width = Array.length g.(0);
+      size = compute_size g }
 
   let apply iso p =
     let trans = D4.apply iso in
@@ -49,7 +54,7 @@ module Pattern = struct
         new_m.(new_y).(new_x) <- p.matrix.(y).(x)
       done
     done;
-    { matrix = new_m; height = new_h; width = new_w }
+    { matrix = new_m; height = new_h; width = new_w; size = p.size }
 
 (* Generating compositions pattern matching source code *)
 
@@ -101,7 +106,7 @@ module Pattern = struct
         m.(y).(x) <- p.matrix.(y).(x)
       done
     done;
-    { matrix = m; height = h; width = w }
+    { matrix = m; height = h; width = w; size = compute_size m }
 
   let crop p ~x ~y ~w ~h =
     let m = Array.make_matrix h w false in
@@ -110,7 +115,7 @@ module Pattern = struct
         m.(y' - y).(x' - x) <- p.matrix.(y').(x')
       done
     done;
-    {matrix = m; height = h; width = w }
+    {matrix = m; height = h; width = w; size = compute_size m }
 
   let shift p ~ofsx ~ofsy =
     let h, w = p.height, p.width in
@@ -122,7 +127,7 @@ module Pattern = struct
           m.(new_y).(new_x) <- p.matrix.(y).(x)
       done
     done;
-    { matrix = m; height = h; width = w }
+    { matrix = m; height = h; width = w; size = compute_size m }
 
   let binary_op op p1 p2 =
     if p1.height <> p2.height || p1.width <> p2.width then
@@ -134,7 +139,7 @@ module Pattern = struct
         m.(y).(x) <- op p1.matrix.(y).(x) p2.matrix.(y).(x)
       done
     done;
-    { matrix = m; height = h; width = w }
+    { matrix = m; height = h; width = w; size = compute_size m }
 
   let union = binary_op (||)
   let inter = binary_op (&&)
