@@ -2,7 +2,7 @@
 (*                                                                        *)
 (*  Combine - an OCaml library for combinatorics                          *)
 (*                                                                        *)
-(*  Copyright (C) 2012                                                    *)
+(*  Copyright (C) 2012-2014                                               *)
 (*    Remy El Sibaie                                                      *)
 (*    Jean-Christophe Filliatre                                           *)
 (*                                                                        *)
