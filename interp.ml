@@ -206,8 +206,11 @@ let interp_problem_command p = function
 
 let tiles = function
   | Tiles_id id ->
-      begin try Hashtbl.find tiles_env id
-      with Not_found -> failwith ("Error: unbound tile list " ^ id) end
+      begin
+        try Hashtbl.find tiles_env id
+        with Not_found ->
+          eprintf "Error: unbound tile list %s@." id; exit 1
+      end
   | Tiles_list l -> tile_list l
 
 let rec interp_decl decl =

@@ -68,17 +68,17 @@ tiles some_hexaminos_but_h1 = [ h2 ~maybe ~sym, h3 ~maybe ~sym, h4 ~maybe
   h27 ~maybe ~sym, h28 ~maybe ~sym, h29 ~maybe ~sym, h30 ~maybe ~sym, h31 ~maybe
   ~sym, h32 ~maybe ~sym, h33 ~maybe ~sym, h34 ~maybe ~sym, h35 ~maybe ~sym ]
 
-tiles some_hexaminos_but_h1_subset1 = [
- h2 ~maybe ~sym, h3 ~maybe ~sym, h4 ~maybe
-  ~sym, h5 ~maybe ~sym, h6 ~maybe ~sym, h7 ~maybe ~sym, h8 ~maybe ~sym, h9
-  ~maybe ~sym, h10 ~maybe ~sym, h11 ~maybe ~sym, h12 ~maybe ~sym, h13 ~maybe
-  ~sym, h14 ~maybe ~sym, h15 ~maybe ~sym, h16 ~maybe ~sym, h17 ~maybe ~sym,
-  h18 ~maybe ~sym, h19 ~maybe ~sym ]
-tiles some_hexaminos_but_h1_subset2 = [
-  h20 ~maybe ~sym, h21 ~maybe ~sym, h22 ~maybe
-  ~sym, h23 ~maybe ~sym, h24 ~maybe ~sym, h25 ~maybe ~sym, h26 ~maybe ~sym,
-  h27 ~maybe ~sym, h28 ~maybe ~sym, h29 ~maybe ~sym, h30 ~maybe ~sym, h31 ~maybe
-  ~sym, h32 ~maybe ~sym, h33 ~maybe ~sym, h34 ~maybe ~sym, h35 ~maybe ~sym ]
+tiles all_hexaminos_but_h1_subset1 = [
+ h2 ~one ~sym, h3 ~one ~sym, h4 ~one
+  ~sym, h23 ~one ~sym, h24 ~one ~sym, h25 ~one ~sym, h8 ~one ~sym, h9
+  ~one ~sym, h10 ~one ~sym, h11 ~one ~sym, h12 ~one ~sym, h13 ~one
+  ~sym, h14 ~one ~sym, h15 ~one ~sym, h16 ~one ~sym, h17 ~one ~sym,
+  h18 ~one ~sym, h19 ~one ~sym ]
+tiles all_hexaminos_but_h1_subset2 = [
+  h20 ~one ~sym, h21 ~one ~sym, h22 ~one
+  ~sym, h5 ~one ~sym, h6 ~one ~sym, h7 ~one ~sym, h26 ~one ~sym,
+  h27 ~one ~sym, h28 ~one ~sym, h29 ~one ~sym, h30 ~one ~sym, h31 ~one
+  ~sym, h32 ~one ~sym, h33 ~one ~sym, h34 ~one ~sym, h35 ~one ~sym ]
 
 problem p_9x12 = {
 ************
@@ -90,9 +90,9 @@ problem p_9x12 = {
 ************
 ************
 ************
-} some_hexaminos_but_h1_subset1
+} all_hexaminos_but_h1_subset1
 
-# solve dlx p_9x12 svg "solutions/hexa_9x12.svg"
+solve dlx p_9x12 svg "solutions/hexa_9x12_subset1.svg"
 # solve dlx p_9x12 ascii
 
 problem p_8x12 = {
@@ -104,9 +104,9 @@ problem p_8x12 = {
 ************
 ************
 ************
-} some_hexaminos_but_h1_subset2
+} all_hexaminos_but_h1_subset2
 
-# solve dlx p_8x12 svg "solutions/hexa_8x12.svg" #
+solve dlx p_8x12 svg "solutions/hexa_8x12_subset2.svg" #
 # solve dlx p_8x12 svg "solutions/hexa_8x12_subset2.svg"
 
 
@@ -125,4 +125,4 @@ problem p2 = {
 *****************
 } all_hexaminos_but_h1
 
-solve dlx p2 svg "solutions/hexa_p2.svg"
+# solve dlx p2 svg "solutions/hexa_p2.svg"
