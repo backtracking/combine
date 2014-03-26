@@ -21,4 +21,9 @@
 
 open Tiling
 
-val equal_size: (solution -> unit) -> problem -> unit
+val debug: bool ref
+
+type algorithm = (solution -> unit) -> problem -> unit
+
+val add: string -> algorithm -> unit
+val find: string -> algorithm

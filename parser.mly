@@ -24,7 +24,7 @@
   open D4
   type option =
     | M of multiplicity
-    | S of symetries
+    | S of symmetries
 
 %}
 
@@ -68,10 +68,18 @@ decl:
       decl_node = Assert b}}
 | PRINT; id = IDENT {{decl_pos = ($startpos, $endpos);
       decl_node = Command (Print, id)}}
-| SOLVE; a = algo; id = IDENT; out = output {{decl_pos = ($startpos, $endpos);
+| SOLVE; a = algo_emc; id = IDENT; out = output
+    {{decl_pos = ($startpos, $endpos);
+      decl_node = Command (SolveEMC (a, out), id)}}
+| SOLVE; a = IDENT; id = IDENT; out = output
+    {{decl_pos = ($startpos, $endpos);
       decl_node = Command (Solve (a, out), id)}}
-| COUNT; a = algo; id = IDENT
-    {{decl_pos = ($startpos, $endpos); decl_node = Command (Count a, id)}}
+| COUNT; a = algo_emc; id = IDENT
+    {{decl_pos = ($startpos, $endpos);
+      decl_node = Command (CountEMC a, id)}}
+| COUNT; a = IDENT; id = IDENT
+    {{decl_pos = ($startpos, $endpos);
+      decl_node = Command (Count a, id)}}
 | DIMACS; id = IDENT; file = STRING
     {{decl_pos = ($startpos, $endpos); decl_node = Dimacs (id, file) }}
 | DEBUG; st = state; {{decl_pos = ($startpos, $endpos);
@@ -79,14 +87,14 @@ decl:
 | TIMING; st = state; {{decl_pos = ($startpos, $endpos);
       decl_node = Timing st}}
 | EXIT {{decl_pos = ($startpos, $endpos);
-      decl_node = Exit}}
+      decl_node = Quit}}
 | INCLUDE; s = STRING {{decl_pos = ($startpos, $endpos);
       decl_node = Include s}}
 | H2G2 {{decl_pos = ($startpos, $endpos);
       decl_node = H2g2}}
 ;
 
-algo:
+algo_emc:
 | DLX             { Dlx }
 | ZDD             { Zdd }
 | SAT; s = STRING { Sat s }

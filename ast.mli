@@ -23,7 +23,7 @@ type dim = int * int
 
 type binop = Union | Inter | Diff | Xor
 
-type algo = Dlx | Zdd | Sat of string
+type algo_emc = Dlx | Zdd | Sat of string
 
 type file = string
 
@@ -32,7 +32,12 @@ type state = On | Off
 type output = Svg of file | Ascii
 
 type setop = Shift | SetXY of bool | Resize | Crop of dim
-type problem_command = Count of algo | Solve of algo * output | Print
+type problem_command =
+  | CountEMC of algo_emc
+  | SolveEMC of algo_emc * output
+  | Count    of string
+  | Solve    of string * output
+  | Print
 
 type compop = Equal
 
@@ -51,13 +56,11 @@ and expr_node =
   | SetOp of setop * dim * expr
   | Apply of D4.t * expr
 
-
-
 type bool_expr =
   | Boolean of bool
   | Comparison of compop * expr * expr
 
-type tile = expr * Tiling.Tile.symetries * Tiling.Tile.multiplicity
+type tile = expr * Tiling.Tile.symmetries * Tiling.Tile.multiplicity
 
 type tiles =
   | Tiles_id of string
@@ -79,7 +82,7 @@ and decl_node =
   | Dimacs of string * string
   | Debug of state
   | Timing of state
-  | Exit
+  | Quit
   | Include of string
   | H2g2
 

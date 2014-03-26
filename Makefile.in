@@ -64,7 +64,7 @@ all: $(OCAMLBEST) test
 # bytecode and native-code compilation
 ######################################
 
-LIBCMO = dlx.cmo zdd.cmo emc.cmo d4.cmo tiling.cmo backtracking.cmo
+LIBCMO = matrix.cmo dlx.cmo zdd.cmo emc.cmo d4.cmo tiling.cmo backtracking.cmo
 LIBCMX = $(LIBCMO:.cmo=.cmx)
 LIBMLI = $(LIBCMO:.cmo=.mli)
 $(LIBCMX): OFLAGS += -for-pack Combine
@@ -117,7 +117,8 @@ test: test.byte combine.byte
 	for f in examples/*.cmb; do ./combine.byte --parse-only $$f ; done
 
 check: combine.opt
-	for f in examples/*.cmb; do ./combine.opt $$f ; done
+#	for f in examples/*.cmb; do ./combine.opt $$f ; done
+	./combine.opt examples/scott.cmb
 
 test.byte: $(CMA) parser.cmo lexer.cmo interp.cmo test.cmo
 	$(OCAMLC) -o $@ $(BFLAGS) nums.cma unix.cma $^

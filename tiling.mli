@@ -38,7 +38,7 @@ module Pattern : sig
   }
 
   val create: bool array array -> t
-    (** [create m] creates a pattern of type t from a boolean matrix*)
+    (** [create m] creates a pattern of type t from a boolean matrix *)
 
   val apply: D4.t -> t -> t
     (** [apply i p] creates a new pattern which is the result of the
@@ -81,19 +81,19 @@ end
 
 module Tile : sig
 
-  type symetries = Snone | Srotations | Sall
+  type symmetries = Snone | Srotations | Sall
   type multiplicity = Minf | Mone | Mmaybe
 
   type t = private {
-    name: string option;
+    name: string;
     pattern: Pattern.t;
     multiplicity: multiplicity;
-    symetries: symetries;
+    symmetries: symmetries;
     isos: D4.subgroup;   (* the pattern is invariant by these isometries *)
   }
 
-  val create: ?name:string -> ?s:symetries -> ?m:multiplicity -> Pattern.t -> t
-    (** construct a tile from his name, its symetries [s] and
+  val create: ?name:string -> ?s:symmetries -> ?m:multiplicity -> Pattern.t -> t
+    (** construct a tile from his name, its symmetries [s] and
         its multiplicity [m]. [s] defaults to [Snone] and [m] defaults
         to [Minf] *)
 
@@ -102,6 +102,8 @@ module Tile : sig
 
   val print: Format.formatter -> t -> unit
     (** print a tile *)
+
+  val create_all_symmetries: t -> t list
 
 end
 

@@ -36,8 +36,9 @@ problem p1 = {
 # print p1
 
 # solve dlx p1 svg "solutions/hexa_p1.svg" # > 110m
+# solve equal_size p1 svg "solutions/hexa_p1.svg"
 
-problem p2 = {
+problem p3 = {
 ***************
 ***************
 ***************
@@ -55,8 +56,8 @@ problem p2 = {
 ***************
 } all_hexaminos_nosym
 
-# solve dlx p2 svg "solutions/hexa_p2.svg" # 0m1.920s
-# count zdd p2
+# solve dlx p3 svg "solutions/hexa_p3.svg" # 0m1.920s
+# count zdd p3
 
 tiles some_hexaminos_but_h1 = [ h2 ~maybe ~sym, h3 ~maybe ~sym, h4 ~maybe
   ~sym, h5 ~maybe ~sym, h6 ~maybe ~sym, h7 ~maybe ~sym, h8 ~maybe ~sym, h9
@@ -92,7 +93,7 @@ problem p_9x12 = {
 } some_hexaminos_but_h1_subset1
 
 # solve dlx p_9x12 svg "solutions/hexa_9x12.svg"
-solve dlx p_9x12 ascii
+# solve dlx p_9x12 ascii
 
 problem p_8x12 = {
 ************
@@ -106,5 +107,22 @@ problem p_8x12 = {
 } some_hexaminos_but_h1_subset2
 
 # solve dlx p_8x12 svg "solutions/hexa_8x12.svg" #
-solve dlx p_8x12 ascii
+# solve dlx p_8x12 svg "solutions/hexa_8x12_subset2.svg"
 
+
+problem p2 = {
+*****************
+*****************
+*****************
+*****************
+*****************
+*****************
+*****************
+*****************
+*****************
+*****************
+*****************
+*****************
+} all_hexaminos_but_h1
+
+solve dlx p2 svg "solutions/hexa_p2.svg"

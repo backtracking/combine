@@ -38,7 +38,7 @@ let set_file f = match !file with
   | None -> eprintf "%s: no such file@." f; exit 1
 
 let () = Arg.parse spec set_file msg
-let () = Interp.debug := !debug
+let () = Interp.debug := !debug; Backtracking.debug := !debug
 
 let error_pieces_board () =
   eprintf "problem must have board and piece(s) @.";

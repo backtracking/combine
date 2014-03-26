@@ -26,7 +26,7 @@ open Format
 module Pattern = struct
 
   type t = {
-    matrix   : bool array array;
+    matrix : bool array array;
     height : int;
     width  : int;
     size   : int;
@@ -55,38 +55,6 @@ module Pattern = struct
       done
     done;
     { matrix = new_m; height = new_h; width = new_w; size = p.size }
-
-(* Generating compositions pattern matching source code *)
-
- (*
-  let f_fig =
-    [|
-     [|true; true; true; true|];
-     [|true; false; false; false|];
-     [|true; true; true; false|];
-     [|true; false; false; false|];
-     [|true; false; false; false|];
-    |]
-
-  let genere () =
-    Iso.S.iter ( fun a ->
-      Iso.S.iter ( fun b ->
-        Iso.S.iter ( fun c ->
-          try
-            let m1 = apply b (apply a f_fig) in
-            let m2 = apply c f_fig in
-            if m1 = m2 then raise Exit
-           with
-            | Exit ->
-              Format.printf "| %a, %a -> %a@."
-              Iso.print a Iso.print b Iso.print c
-        ) Iso.all
-      ) Iso.all
-    ) Iso.all
-
-  let () =
-    genere ()
-    *)
 
   let print fmt p =
     for y = p.height-1 downto 0 do
@@ -169,31 +137,30 @@ end
 
 module Tile = struct
 
-  type symetries = Snone | Srotations | Sall
+  type symmetries = Snone | Srotations | Sall
   type multiplicity = Minf | Mone | Mmaybe
 
   type t = {
-    name: string option;
+    name: string;
     pattern: Pattern.t;
     multiplicity : multiplicity;
-    symetries : symetries;
+    symmetries : symmetries;
     isos   : D4.subgroup;   (* the pattern is invariant by these isometries *)
   }
 
   let print fmt t =
-    begin match t.name with Some s ->
-    Format.printf "tile %S@\n"s; | None -> () end;
+    if t.name <> "" then Format.printf "tile %S@\n" t.name;
     Format.fprintf fmt "%a@\n" Pattern.print t.pattern;
     Format.fprintf fmt "{ ";
     D4.S.iter (fun iso -> Format.fprintf fmt "%a, " D4.print iso)
       (D4.elements t.isos);
     Format.fprintf fmt "}"
 
-  let create ?name ?(s=Snone) ?(m=Minf) p =
+  let create ?(name="") ?(s=Snone) ?(m=Minf) p =
     { name = name;
       pattern = p;
       multiplicity = m;
-      symetries = s;
+      symmetries = s;
       isos = D4.subgroup (Pattern.get_isos p); }
 
   let apply iso t =
@@ -201,15 +168,15 @@ module Tile = struct
     else create ~m:t.multiplicity (Pattern.apply iso t.pattern)
 
 (*
-  let symetries t =
+  let symmetries t =
     D4.S.fold
       (fun iso l -> apply iso t :: l )
       (D4.S.diff D4.all (D4.elements t.isos)) [t]
 *)
 
-  let create_all_symetries t =
+  let create_all_symmetries t =
     let h = Hashtbl.create 8 in
-    let l = match t.symetries with
+    let l = match t.symmetries with
       | Snone -> D4.S.add D4.Id D4.S.empty
       | Srotations -> D4.S.filter D4.is_positive D4.all
       | Sall-> D4.all
@@ -219,7 +186,7 @@ module Tile = struct
     Hashtbl.fold (fun k _ acc -> k :: acc) h []
 
 (*
-  let create_all_symetries t = match t.symetries with
+  let create_all_symmetries t = match t.symmetries with
     | Snone ->
         [t]
     | Srotations | Sall as s ->
@@ -227,9 +194,9 @@ module Tile = struct
 	let g = if s = Srotations then D4.S.filter D4.is_positive g else g in
         List.map (fun iso -> apply iso t) (D4.S.elements g)
 
-  let create_all_symetries t =
-    let l = create_all_symetries t in
-    Format.eprintf "@[<hov 2>create_all_symetries:@\n";
+  let create_all_symmetries t =
+    let l = create_all_symmetries t in
+    Format.eprintf "@[<hov 2>create_all_symmetries:@\n";
     List.iter (fun t -> Format.eprintf "%a@\n" print t) l;
     Format.eprintf "@]";
     l
@@ -494,7 +461,7 @@ module ToEMC = struct
             decodes :=  (t, x, y) :: !decodes
           end
         )
-        (tile :: Tile.create_all_symetries tile)
+        (tile :: Tile.create_all_symmetries tile)
     in
     for y = 0 to h - 1 do
       for x = 0 to w - 1 do

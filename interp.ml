@@ -105,7 +105,7 @@ let finish_timer fmt () =
   fprintf fmt "%fs" elapsed;
   timer := 0.
 
-let count p algo =
+let count_emc p algo =
   let { primary = primary; matrix = m; tiles = decode_tbl } as emc =
     Tiling.ToEMC.make p in
   if !debug then printf "@[<hov 2>EMC size is %a@]@." print_emc_size emc;
@@ -125,13 +125,11 @@ let count p algo =
   end;
   if !timing then printf "%s solutions counted in %a@." p.pname finish_timer ()
 
-let solve output p algo =
+let solve_emc output p algo =
   let emc = Tiling.ToEMC.make p in
   if !debug then printf "@[<hov 2>EMC size is@\n%a@]@." print_emc_size emc;
   let { primary = primary; matrix = m; tiles = decode_tbl } = emc in
   init_timer ();
-  let width, height =
-    p.grid.Pattern.width * 25, p.grid.Pattern.height * 25 in
   let solution = match algo with
     | Dlx ->
         let p = Emc.D.create ~primary m in
@@ -153,6 +151,8 @@ let solve output p algo =
     if !timing then printf "%S solved in %a@." p.pname finish_timer ();
     match output with
       | Svg f ->
+          let width, height =
+            p.grid.Pattern.width * 25, p.grid.Pattern.height * 25 in
           print_solution_to_svg_file f ~width ~height p emc solution;
           printf "SVG written in file %S@." f
       | Ascii ->
@@ -160,11 +160,49 @@ let solve output p algo =
           printf "@."
   end
 
+exception Interrupt
+
+let solve name p output =
+  try
+    let a = Backtracking.find name in
+    init_timer ();
+    let f sol =
+      if !timing then printf "%S solved in %a@." p.pname finish_timer ();
+      begin match output with
+        | Svg f ->
+            let width, height =
+              p.grid.Pattern.width * 25, p.grid.Pattern.height * 25 in
+            Tiling.print_solution_to_svg_file f ~width ~height p sol;
+            printf "SVG written in file %S@." f
+        | Ascii ->
+            Tiling.print_solution_ascii Format.std_formatter p sol;
+            printf "@."
+      end;
+      raise Interrupt
+    in
+    begin
+      try a f p; printf "problem %S has no solution@." p.pname
+      with Interrupt -> ()
+    end
+  with Not_found -> printf "%s: no such algorithm@." name
+
+let count name p =
+  try
+    let algo = Backtracking.find name in
+    init_timer ();
+    let nbsol = ref 0 in
+    let f _ = incr nbsol in
+    algo f p;
+    printf "problem %S has %d solutions@." p.pname !nbsol;
+    if !timing then printf "solutions counted in %a@." finish_timer ()
+  with Not_found -> printf "%s: no such algorithm@." name
+
 let interp_problem_command p = function
   | Print -> printf "%a@\n" Tiling.print_problem p
-  | Solve (algo, output) -> solve output p algo
-  | Count algo -> count p algo
-
+  | SolveEMC (algo, output) -> solve_emc output p algo
+  | CountEMC algo -> count_emc p algo
+  | Count name -> count name p
+  | Solve (name, output) -> solve name p output
 
 let tiles = function
   | Tiles_id id ->
@@ -203,8 +241,8 @@ let rec interp_decl decl =
         debug := (match st with On -> true | Off -> false)
     | Timing st ->
         timing := (match st with On -> true | Off -> false)
-    | Exit ->
-        printf "exit@\n"; exit 0
+    | Quit ->
+        printf "exit@."; exit 0
     | Include s ->
         let file =
           if Filename.is_relative s then
