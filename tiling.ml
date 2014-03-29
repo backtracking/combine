@@ -57,14 +57,17 @@ module Pattern = struct
     { matrix = new_m; height = new_h; width = new_w; size = p.size }
 
   let print fmt p =
+    let even = ref 0 and odd = ref 0 in
     for y = p.height-1 downto 0 do
-      Array.iter (
-        fun cell ->
+      Array.iteri (
+        fun x cell ->
           if cell then Format.fprintf fmt "*"
-          else Format.fprintf fmt "."
+          else Format.fprintf fmt ".";
+          if cell then if (x + y) mod 2 = 0 then incr even else incr odd
       ) p.matrix.(y);
       if y > 0 then Format.fprintf fmt "@\n"
     done
+    (* ; Format.fprintf fmt "(%d even, %d odd)@\n" !even !odd *)
 
   let resize p ~w ~h  =
     let min_w, min_h = min w p.width, min h p.height in
