@@ -64,7 +64,7 @@ all: $(OCAMLBEST) test
 # bytecode and native-code compilation
 ######################################
 
-LIBCMO = matrix.cmo dlx.cmo zdd.cmo emc.cmo d4.cmo tiling.cmo backtracking.cmo
+LIBCMO = matrix.cmo dlx.cmo zdd.cmo emc.cmo d4.cmo tiling.cmo backtracking.cmo ast.cmi parser.cmo lexer.cmo
 LIBCMX = $(LIBCMO:.cmo=.cmx)
 LIBMLI = $(LIBCMO:.cmo=.mli)
 $(LIBCMX): OFLAGS += -for-pack Combine
@@ -91,10 +91,10 @@ combine.cmo: $(LIBCMO)
 combine.cmx: $(LIBCMX)
 	$(OCAMLOPT) $(INCLUDES) -pack -o $@ $^
 
-CMO = parser.cmo lexer.cmo interp.cmo main.cmo
+CMO = interp.cmo main.cmo
 CMX = $(CMO:.cmo=.cmx)
 
-ast.cmi $(CMO) queens.cmo sudoku.cmo test.cmo: combine.cmi
+$(CMO) queens.cmo sudoku.cmo test.cmo: combine.cmi
 $(CMX) queens.cmx sudoku.cmx test.cmx: combine.cmi
 
 combine.byte: $(CMA) $(CMO)
@@ -120,10 +120,10 @@ check: combine.opt
 #	for f in examples/*.cmb; do ./combine.opt $$f ; done
 	./combine.opt examples/scott.cmb
 
-test.byte: $(CMA) parser.cmo lexer.cmo interp.cmo test.cmo
+test.byte: $(CMA) interp.cmo test.cmo
 	$(OCAMLC) -o $@ $(BFLAGS) nums.cma unix.cma $^
 
-test.opt: $(CMXA) parser.cmx lexer.cmx interp.cmx queens.cmx test.cmx
+test.opt: $(CMXA) interp.cmx queens.cmx test.cmx
 	$(OCAMLOPT) -o $@ $(OFLAGS) nums.cmxa unix.cmxa $^
 
 sudoku.byte: $(CMA) sudoku.cmo
@@ -161,7 +161,7 @@ install: install-indep install-$(OCAMLBEST) install-byte
 
 install-byte: install-indep
 	cp -f combine.cmi $(CMA) $(INSTALL_LIBDIR)
-	cp -f $(LIBMLI) $(INSTALL_LIBDIR)
+	# cp -f $(LIBMLI) $(INSTALL_LIBDIR)
 
 install-opt: install-indep
 	cp -f combine.a $(CMXA) $(INSTALL_LIBDIR)
@@ -171,7 +171,7 @@ install-opt: install-indep
 
 .PHONY: doc test check
 
-DOCFILES=zdd.mli dlx.mli emc.mli tiling.mli
+DOCFILES=zdd.mli dlx.mli emc.mli tiling.mli parser.mli
 
 doc:
 	mkdir -p doc

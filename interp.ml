@@ -105,29 +105,29 @@ let finish_timer fmt () =
   fprintf fmt "%fs" elapsed;
   timer := 0.
 
-let count_emc p algo =
+let count_emc fmt efmt p algo =
   let { primary = primary; matrix = m; tiles = decode_tbl } as emc =
     Tiling.ToEMC.make p in
-  if !debug then printf "@[<hov 2>EMC size is %a@]@." print_emc_size emc;
+  if !debug then fprintf fmt "@[<hov 2>EMC size is %a@]@." print_emc_size emc;
   printf "%s : @?" p.pname;
   init_timer ();
   begin match algo with
     | Dlx ->
         let p = Emc.D.create ~primary m in
-        printf "(DLX) %a solutions@." N.print (DCount.count_solutions p)
+        fprintf fmt "(DLX) %a solutions@." N.print (DCount.count_solutions p)
     | Zdd ->
         let p = Emc.Z.create ~primary m in
-        if !debug then eprintf "ZDD has size %d@." (Zdd.size p);
-        printf "(ZDD) %a solutions@." N.print (ZCount.count_solutions p)
+        if !debug then fprintf efmt "ZDD has size %d@." (Zdd.size p);
+        fprintf fmt "(ZDD) %a solutions@." N.print (ZCount.count_solutions p)
     | Sat _ ->
-        eprintf "cannot count solutions with a SAT solver@.";
+        fprintf efmt "cannot count solutions with a SAT solver@.";
         exit 1
   end;
-  if !timing then printf "%s solutions counted in %a@." p.pname finish_timer ()
+  if !timing then fprintf fmt "%s solutions counted in %a@." p.pname finish_timer ()
 
-let solve_emc output p algo =
+let solve_emc fmt emft output p algo =
   let emc = Tiling.ToEMC.make p in
-  if !debug then printf "@[<hov 2>EMC size is@\n%a@]@." print_emc_size emc;
+  if !debug then fprintf fmt "@[<hov 2>EMC size is@\n%a@]@." print_emc_size emc;
   let { primary = primary; matrix = m; tiles = decode_tbl } = emc in
   init_timer ();
   let solution = match algo with
@@ -146,18 +146,18 @@ let solve_emc output p algo =
         begin try Emc.Sat.find_solution cmd p with Not_found -> [] end
   in
   if solution = [] then
-    printf "problem %S has no solution@\n" p.pname
+    fprintf fmt "problem %S has no solution@\n" p.pname
   else begin
-    if !timing then printf "%S solved in %a@." p.pname finish_timer ();
+    if !timing then fprintf fmt "%S solved in %a@." p.pname finish_timer ();
     match output with
       | Svg f ->
           let width, height =
             p.grid.Pattern.width * 25, p.grid.Pattern.height * 25 in
           print_solution_to_svg_file f ~width ~height p emc solution;
-          printf "SVG written in file %S@." f
+          fprintf fmt "SVG written in file %S@." f
       | Ascii ->
           print_solution_ascii Format.std_formatter p emc solution;
-          printf "@."
+          fprintf fmt "@."
   end
 
 exception Interrupt
@@ -197,10 +197,10 @@ let count name p =
     if !timing then printf "solutions counted in %a@." finish_timer ()
   with Not_found -> printf "%s: no such algorithm@." name
 
-let interp_problem_command p = function
+let interp_problem_command fmt efmt p = function
   | Print -> printf "%a@\n" Tiling.print_problem p
-  | SolveEMC (algo, output) -> solve_emc output p algo
-  | CountEMC algo -> count_emc p algo
+  | SolveEMC (algo, output) -> solve_emc fmt efmt output p algo
+  | CountEMC algo -> count_emc fmt efmt p algo
   | Count name -> count name p
   | Solve (name, output) -> solve name p output
 
@@ -213,7 +213,7 @@ let tiles = function
       end
   | Tiles_list l -> tile_list l
 
-let rec interp_decl decl =
+let rec interp_decl fmt efmt decl =
   match decl.decl_node with
     | Pattern (id, z) ->
         let value = interp_expr z in
@@ -239,7 +239,7 @@ let rec interp_decl decl =
         let p = begin try Hashtbl.find problem_tbl id with
           | Not_found ->
               raise (Error (decl.decl_pos, "Unbound problem " ^ id)) end in
-        interp_problem_command p c
+        interp_problem_command fmt efmt p c
     | Debug st ->
         debug := (match st with On -> true | Off -> false)
     | Timing st ->
@@ -257,19 +257,18 @@ let rec interp_decl decl =
         if not (Sys.file_exists file) then
           raise (Error (decl.decl_pos, "No such file: " ^ file));
         let ptree = Lexer.parse_file file in
-        interp ptree
+        interp fmt efmt ptree
     | H2g2 -> printf "42@\n"
 
-and interp dl =
+and interp fmt efmt dl =
   problems := [];
   Hashtbl.clear var_env;
   Hashtbl.clear tiles_env;
-  List.iter (fun d -> interp_decl d) dl
+  List.iter (fun d -> interp_decl fmt efmt d) dl
 
-let interp_problems dl =
+let interp_problems fmt efmt dl =
   problems := [];
   Hashtbl.clear var_env;
   Hashtbl.clear tiles_env;
-  List.iter (fun d -> interp_decl d) dl;
+  List.iter (fun d -> interp_decl fmt efmt d) dl;
   List.rev !problems
-

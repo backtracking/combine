@@ -29,7 +29,8 @@ open Emc
 
 
 let r = Lexer.parse_file "examples/non-regression.cmb"
-let problems = Interp.interp_problems r
+let problems = Interp.interp_problems std_formatter
+      err_formatter r
 let p = List.hd problems
 
 (* sets of sets of integers *)

@@ -19,7 +19,6 @@
 
 %{
   open Ast
-  open Combine
   open Tiling.Tile
   open D4
   type option =
@@ -204,5 +203,3 @@ boolean_expr:
 | b = bool { Boolean b }
 | e1 = expr; EQUAL; e2 = expr { Comparison (Equal, e1, e2)}
 ;
-
-

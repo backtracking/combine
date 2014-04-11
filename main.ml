@@ -18,7 +18,7 @@
 (**************************************************************************)
 
 open Format
-open Combine
+
 
 let zdd = ref false
 let dlx = ref false
@@ -38,14 +38,14 @@ let set_file f = match !file with
   | None -> eprintf "%s: no such file@." f; exit 1
 
 let () = Arg.parse spec set_file msg
-let () = Interp.debug := !debug; Backtracking.debug := !debug
+let () = Interp.debug := !debug; Combine.Backtracking.debug := !debug
 
 let error_pieces_board () =
   eprintf "problem must have board and piece(s) @.";
   exit 1
 
 let ptree = match !file with
-  | Some f -> Lexer.parse_file f
+  | Some f -> Combine.Lexer.parse_file f
   | None -> exit 0
 
 let () = if !parse_only then exit 0
@@ -54,7 +54,7 @@ open Lexing
 
 let () =
   try
-    Interp.interp ptree
+    Interp.interp std_formatter err_formatter ptree
   with
     | Interp.Error (pos, err) ->
         let start, stop = pos in
@@ -103,10 +103,5 @@ let handle_problem p =
 let () =
   if !stats then begin
     Gc.print_stat stdout;
-    printf "ZDD: %d unique trees built@." (Zdd.stat ())
+    printf "ZDD: %d unique trees built@." (Combine.Zdd.stat ())
   end
-
-
-
-
-

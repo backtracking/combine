@@ -221,6 +221,22 @@ and string = parse
     close_in c;
     p
 
+  let parse_string efmt s =
+    let lb = from_string s in
+    lb.lex_curr_p <- { lb.lex_curr_p with pos_fname = "current channel" };
+    let p =
+      try
+	Parser.queue token lb
+      with
+      | Lexical_error msg ->
+  	fprintf efmt "%a@\nlexical error: %s@." print_loc lb msg;
+  	exit 1
+      | Parser.Error ->
+	fprintf efmt "%a@\nsyntax error@." print_loc lb;
+	exit 1
+    in
+    p
+
 
 (***
   let raw_parser c =

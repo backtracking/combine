@@ -17,8 +17,6 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Combine
-
 type dim = int * int
 
 type binop = Union | Inter | Diff | Xor

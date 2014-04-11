@@ -25,6 +25,5 @@ type error
 val print_error : Format.formatter -> error -> unit
 exception Error of Ast.pos * error
 
-val interp: Ast.queue -> unit
-val interp_problems: Ast.queue -> Tiling.problem list
-
+val interp: Format.formatter -> Format.formatter -> Ast.queue -> unit
+val interp_problems: Format.formatter -> Format.formatter -> Ast.queue -> Tiling.problem list
