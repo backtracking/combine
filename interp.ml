@@ -119,7 +119,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     let { primary = primary; matrix = m; tiles = decode_tbl } as emc =
       Tiling.ToEMC.make p in
     if !debug then fprintf fmt "@[<hov 2>EMC size is %a@]@." print_emc_size emc;
-    printf "%s : @?" p.pname;
+    fprintf fmt "%s : @?" p.pname;
     init_timer ();
     begin match algo with
     | Dlx ->
@@ -135,7 +135,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     end;
     if !timing then fprintf fmt "%s solutions counted in %a@." p.pname finish_timer ()
 
-  let solve_emc fmt emft output p algo =
+  let solve_emc fmt efmt output p algo =
     let emc = Tiling.ToEMC.make p in
     if !debug then fprintf fmt "@[<hov 2>EMC size is@\n%a@]@." print_emc_size emc;
     let { primary = primary; matrix = m; tiles = decode_tbl } = emc in
@@ -150,7 +150,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
       | Sat sat ->
         let p = Emc.Sat.create ~primary m in
         let cmd ~input ~output =
-          if !debug then eprintf "DIMACS input in %s@." input;
+          if !debug then fprintf efmt "DIMACS input in %s@." input;
           sprintf "%s %s %s" sat input output
         in
         begin try Emc.Sat.find_solution cmd p with Not_found -> [] end
@@ -166,60 +166,60 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
         print_solution_to_svg_file f ~width ~height p emc solution;
         fprintf fmt "SVG written in file %S@." f
       | Ascii ->
-        print_solution_ascii Format.std_formatter p emc solution;
+        print_solution_ascii fmt p emc solution;
         fprintf fmt "@."
     end
 
   exception Interrupt
 
-  let solve name p output =
+  let solve fmt efmt name p output =
     try
       let a = Backtracking.find name in
       init_timer ();
       let f sol =
-        if !timing then printf "%S solved in %a@." p.pname finish_timer ();
+        if !timing then fprintf fmt "%S solved in %a@." p.pname finish_timer ();
         begin match output with
         | Svg f ->
           let width, height =
             p.grid.Pattern.width * 25, p.grid.Pattern.height * 25 in
           Tiling.print_solution_to_svg_file f ~width ~height p sol;
-          printf "SVG written in file %S@." f
-        | Ascii ->
+          fprintf fmt "SVG written in file %S@." f
+        | Ascii >
           Tiling.print_solution_ascii Format.std_formatter p sol;
-          printf "@."
+          fprintf fmt "@."
         end;
         raise Interrupt
       in
       begin
-        try a f p; printf "problem %S has no solution@." p.pname
+        try a f p; fprintf fmt "problem %S has no solution@." p.pname
         with Interrupt -> ()
       end
-    with Not_found -> printf "%s: no such algorithm@." name
+    with Not_found -> fprintf efmt "%s: no such algorithm@." name
 
-  let count name p =
+  let count fmt efmt name p =
     try
       let algo = Backtracking.find name in
       init_timer ();
       let nbsol = ref 0 in
       let f _ = incr nbsol in
       algo f p;
-      printf "problem %S has %d solutions@." p.pname !nbsol;
-      if !timing then printf "solutions counted in %a@." finish_timer ()
-    with Not_found -> printf "%s: no such algorithm@." name
+      fprintf fmt "problem %S has %d solutions@." p.pname !nbsol;
+      if !timing then fprintf fmt "solutions counted in %a@." finish_timer ()
+    with Not_found -> fprintf efmt "%s: no such algorithm@." name
 
   let interp_problem_command fmt efmt p = function
-    | Print -> printf "%a@\n" Tiling.print_problem p
+    | Print -> fprintf fmt "%a@\n" Tiling.print_problem p
     | SolveEMC (algo, output) -> solve_emc fmt efmt output p algo
     | CountEMC algo -> count_emc fmt efmt p algo
-    | Count name -> count name p
-    | Solve (name, output) -> solve name p output
+    | Count name -> count fmt efmt name p
+    | Solve (name, output) -> solve fmt efmt name p output
 
-  let tiles = function
+  let tiles efmt = function
     | Tiles_id id ->
       begin
         try Hashtbl.find tiles_env id
         with Not_found ->
-          eprintf "Error: unbound tile list %s@." id; exit 1
+          fprintf efmt "Error: unbound tile list %s@." id; exit 1
       end
     | Tiles_list l -> tile_list l
 
@@ -232,7 +232,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
       Hashtbl.replace tiles_env id (tile_list l)
     | Problem (id, e, el) ->
       let value = interp_expr e in
-      let p = Tiling.create_problem ?name:(Some id) value (tiles el) in
+      let p = Tiling.create_problem ?name:(Some id) value (tiles efmt el) in
       problems := p :: !problems;
       Hashtbl.add problem_tbl id p
     | Dimacs (id, file) ->
@@ -255,7 +255,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     | Timing st ->
       timing := (match st with On -> true | Off -> false)
     | Quit ->
-      printf "exit@."; exit 0
+      fprintf fmt "exit@."; exit 0
     | Include s ->
       let file =
         if Filename.is_relative s then
@@ -268,7 +268,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
         raise (Error (decl.decl_pos, "No such file: " ^ file));
       let ptree = Lexer.parse_file file in
       interp fmt efmt ptree
-    | H2g2 -> printf "42@\n"
+    | H2g2 -> fprintf fmt "42@\n"
 
   and interp fmt efmt dl =
     problems := [];

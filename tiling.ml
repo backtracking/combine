@@ -152,7 +152,7 @@ module Tile = struct
   }
 
   let print fmt t =
-    if t.name <> "" then Format.printf "tile %S@\n" t.name;
+    if t.name <> "" then Format.fprintf fmt "tile %S@\n" t.name;
     Format.fprintf fmt "%a@\n" Pattern.print t.pattern;
     Format.fprintf fmt "{ ";
     D4.S.iter (fun iso -> Format.fprintf fmt "%a, " D4.print iso)

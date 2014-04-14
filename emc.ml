@@ -108,22 +108,22 @@ module Z = struct
     in
     build (if primary then bottom else top) top (n-1)
 
-  let inter_right_to_left cols =
+  let inter_right_to_left fmt cols =
     let width = Array.length cols in
     let z = ref cols.(0) in
     for j = 1 to width - 1 do
       let c = cols.(j) in
-      printf "size = %d@." (size !z);
+      fprintf fmt "size = %d@." (size !z);
       z := inter c !z
     done;
     !z
 
-  let inter_left_to_right cols =
+  let inter_left_to_right fmt cols =
     let width = Array.length cols in
     let z = ref cols.(width - 1) in
     for j = width - 2 downto 0 do
       let c = cols.(j) in
-      printf "size = %d@." (size !z);
+      fprintf fmt "size = %d@." (size !z);
       z := inter c !z
     done;
     !z

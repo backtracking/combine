@@ -255,8 +255,8 @@ let get_solution_list m =
   !list_ref
 
 (* Print the given solution as an int list *)
-let print_list_solution l =
-  List.iter (fun e -> Format.printf "%d " e) l; Format.printf "@."
+let print_list_solution fmt l =
+  List.iter (fun e -> Format.fprintf fmt "%d " e) l; Format.fprintf fmt "@."
 
 exception Solution of (node array * int)
 
@@ -266,4 +266,3 @@ let get_first_solution m =
     raise Not_found
   with
     | Solution s -> s
-

@@ -55,10 +55,10 @@
     List.iter (fun (s, k) -> Hashtbl.add h s k)
 [ "pattern",    PATTERN;
   "tiles",      TILES;
-	"problem",    PROBLEM;
-	"false",      FALSE;
-	"true",       TRUE;
-	"constant",   CONSTANT;
+  "problem",    PROBLEM;
+  "false",      FALSE;
+  "true",       TRUE;
+  "constant",   CONSTANT;
   "assert",     ASSERT;
   "print",      PRINT;
   "svg",        SVG_OUT;
@@ -77,13 +77,13 @@
   "on",         ON;
   "off",        OFF;
   "diff",       DIFF;
-	"union",      UNION;
-	"inter",      INTER;
-	"xor",        XOR;
-	"set",        SET;
-	"shift",      SHIFT;
-	"resize",     RESIZE;
-	"crop",       CROP;
+  "union",      UNION;
+  "inter",      INTER;
+  "xor",        XOR;
+  "set",        SET;
+  "shift",      SHIFT;
+  "resize",     RESIZE;
+  "crop",       CROP;
   "apply",      APPLY;
   "Id",         ID;
   "Rot90",      ROT90;
