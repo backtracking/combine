@@ -27,9 +27,21 @@ open Tiling.ToEMC
 open Format
 open Emc
 
+module N = struct
+  type t = Num.num
+  let zero = Num.num_of_int 0
+  let one = Num.num_of_int 1
+  let add = Num.add_num
+  let print fmt n = Format.fprintf fmt "%s" (Num.string_of_num n)
+end
+module T = struct
+  let gettimeofday = Unix.gettimeofday
+end
+
+module TestInterp = Interp.Make(T)(N)
 
 let r = Lexer.parse_file "examples/non-regression.cmb"
-let problems = Interp.interp_problems std_formatter
+let problems = TestInterp.interp_problems std_formatter
       err_formatter r
 let p = List.hd problems
 

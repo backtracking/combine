@@ -64,7 +64,7 @@ all: $(OCAMLBEST) test
 # bytecode and native-code compilation
 ######################################
 
-LIBCMO = matrix.cmo dlx.cmo zdd.cmo emc.cmo d4.cmo tiling.cmo backtracking.cmo ast.cmi parser.cmo lexer.cmo
+LIBCMO = matrix.cmo dlx.cmo zdd.cmo emc.cmo d4.cmo tiling.cmo backtracking.cmo ast.cmi parser.cmo lexer.cmo interp.cmo
 LIBCMX = $(LIBCMO:.cmo=.cmx)
 LIBMLI = $(LIBCMO:.cmo=.mli)
 $(LIBCMX): OFLAGS += -for-pack Combine
@@ -91,7 +91,7 @@ combine.cmo: $(LIBCMO)
 combine.cmx: $(LIBCMX)
 	$(OCAMLOPT) $(INCLUDES) -pack -o $@ $^
 
-CMO = interp.cmo main.cmo
+CMO = main.cmo
 CMX = $(CMO:.cmo=.cmx)
 
 $(CMO) queens.cmo sudoku.cmo test.cmo: combine.cmi
@@ -120,10 +120,10 @@ check: combine.opt
 #	for f in examples/*.cmb; do ./combine.opt $$f ; done
 	./combine.opt examples/scott.cmb
 
-test.byte: $(CMA) interp.cmo test.cmo
+test.byte: $(CMA) test.cmo
 	$(OCAMLC) -o $@ $(BFLAGS) nums.cma unix.cma $^
 
-test.opt: $(CMXA) interp.cmx queens.cmx test.cmx
+test.opt: $(CMXA) queens.cmx test.cmx
 	$(OCAMLOPT) -o $@ $(OFLAGS) nums.cmxa unix.cmxa $^
 
 sudoku.byte: $(CMA) sudoku.cmo

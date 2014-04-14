@@ -17,13 +17,28 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Combine
+module type Time = sig
+  val gettimeofday: unit -> float
+end
 
-val debug: bool ref
+module type N = sig
+  type t
+  val zero: t
+  val one: t
+  val add: t -> t -> t
+  val print : Format.formatter -> t -> unit
+end
 
-type error
-val print_error : Format.formatter -> error -> unit
-exception Error of Ast.pos * error
 
-val interp: Format.formatter -> Format.formatter -> Ast.queue -> unit
-val interp_problems: Format.formatter -> Format.formatter -> Ast.queue -> Tiling.problem list
+module Make : functor (T : Time) -> functor (N : N) -> sig
+
+  val debug: bool ref
+
+  type error
+  val print_error : Format.formatter -> error -> unit
+  exception Error of Ast.pos * error
+
+  val interp: Format.formatter -> Format.formatter -> Ast.queue -> unit
+  val interp_problems: Format.formatter -> Format.formatter -> Ast.queue -> Tiling.problem list
+
+end
