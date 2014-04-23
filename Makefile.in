@@ -148,7 +148,7 @@ color.opt: $(CMXA) color.ml
 # installation
 ##############
 
-INSTALL_LIBDIR=$(OCAMLLIB)/combine
+INSTALL_LIBDIR=$(prefix)/lib/combine
 
 install-indep:
 	mkdir -p $(BINDIR)
