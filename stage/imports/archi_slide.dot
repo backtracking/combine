@@ -1,9 +1,0 @@
-digraph G {
-  size="7.5,10" ;
-  rankdir = TB ;
-  "Sudoku" -> "Emc" ;
-  "Queens" -> "Emc" ;
-  "Tiling" -> "Emc" ;
-  "Emc" -> "Dlx" ;
-  "Emc" -> "Zdd" ;
-}

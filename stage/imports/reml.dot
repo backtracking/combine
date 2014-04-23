@@ -1,5 +1,0 @@
-digraph ZDD {
-	Pavage -> EMC
-	EMC -> matrix
-  }
-
