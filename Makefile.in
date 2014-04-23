@@ -161,6 +161,7 @@ install: install-indep install-$(OCAMLBEST) install-byte
 
 install-byte: install-indep
 	cp -f combine.cmi $(CMA) $(INSTALL_LIBDIR)
+	cp -f META $(INSTALL_LIBDIR)
 	# cp -f $(LIBMLI) $(INSTALL_LIBDIR)
 
 install-opt: install-indep
