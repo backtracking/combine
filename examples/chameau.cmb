@@ -25,10 +25,11 @@ print caml2
 
 dimacs caml2 "chameau.dimacs"
 
+
 solve dlx caml2 ascii
 solve dlx caml2 svg "solutions/chameau.svg"
 
-solve sat "minisat2" caml2 svg "solutions/chameau2.svg"
+#solve sat "minisat2" caml2 svg "solutions/chameau2.svg"
 
 count zdd caml2
 

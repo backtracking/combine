@@ -313,8 +313,7 @@ let hsv_to_rgb h s v =
 let print_solution_to_svg fmt ~width ~height p s =
   let u = width / p.grid.width in
   fprintf fmt
-"<?xml version=\"1.0\" standalone=\"no\"?> @\n\
-@[<hov 2><svg xmlns=\"http://www.w3.org/2000/svg\" \
+"@[<hov 2><svg xmlns=\"http://www.w3.org/2000/svg\" \
 width=\"%d\" height=\"%d\">@\n"
   width height;
   (* print_board_svg p.grid.width p.grid.height u fmt; *)

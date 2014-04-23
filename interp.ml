@@ -184,7 +184,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
             p.grid.Pattern.width * 25, p.grid.Pattern.height * 25 in
           Tiling.print_solution_to_svg_file f ~width ~height p sol;
           fprintf fmt "SVG written in file %S@." f
-        | Ascii >
+        | Ascii ->
           Tiling.print_solution_ascii Format.std_formatter p sol;
           fprintf fmt "@."
         end;

@@ -82,7 +82,7 @@ let () =
         exit 1
     | e ->
         Printexc.print_backtrace stderr; flush stderr;
-        Format.eprintf "Uncaught exception:@.";
+        Format.eprintf "Uncaught exception: %s@." (Printexc.to_string e);
         exit 1
 
 let () =
