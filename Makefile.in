@@ -64,7 +64,8 @@ all: $(OCAMLBEST) test
 # bytecode and native-code compilation
 ######################################
 
-LIBCMO = matrix.cmo dlx.cmo zdd.cmo emc.cmo d4.cmo tiling.cmo backtracking.cmo ast.cmi parser.cmo lexer.cmo interp.cmo
+LIBCMO = matrix.cmo dlx.cmo zdd.cmo emc.cmo d4.cmo tiling.cmo \
+	 cube.cmo backtracking.cmo ast.cmi parser.cmo lexer.cmo interp.cmo
 LIBCMX = $(LIBCMO:.cmo=.cmx)
 LIBMLI = $(LIBCMO:.cmo=.mli)
 $(LIBCMX): OFLAGS += -for-pack Combine
