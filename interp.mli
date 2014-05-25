@@ -39,6 +39,7 @@ module Make : functor (T : Time) -> functor (N : N) -> sig
   exception Error of Ast.pos * error
 
   val interp: Format.formatter -> Format.formatter -> Ast.queue -> unit
-  val interp_problems: Format.formatter -> Format.formatter -> Ast.queue -> Tiling.problem list
+  val interp_problems: Format.formatter -> Format.formatter ->
+    Ast.queue -> Tiling.Problem.problem list
 
 end

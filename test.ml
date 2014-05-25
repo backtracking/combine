@@ -23,7 +23,8 @@ open Combine
 open Dlx
 open Zdd
 open Tiling
-open Tiling.ToEMC
+open Tiling.Problem
+open Tiling.Problem.ToEMC
 open Format
 open Emc
 
@@ -109,7 +110,7 @@ let () =
 
 let () =
   let { primary = primary; matrix = m; tiles = uncode_tbl } =
-    Tiling.ToEMC.make p in
+    Tiling.Problem.ToEMC.make p in
   assert (Emc.Z.count_solutions (Emc.Z.create ~primary m) = 12988816)
 
 let p =

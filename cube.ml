@@ -65,13 +65,17 @@ let all =
 
 let () = assert (List.length all = 48)
 
-let is_positive m =
-  let p = ref 1 in
-  let mul c = if c <> 0 then p := c * !p in
-  Array.iter (Array.iter mul) m;
-  !p = 1
+let det m =
+  let m i j = m.(i).(j) in
+    m 0 0 * (m 1 1 * m 2 2 - m 2 1 * m 1 2)
+  - m 0 1 * (m 1 0 * m 2 2 - m 2 0 * m 1 2)
+  + m 0 2 * (m 1 0 * m 2 1 - m 2 0 * m 1 1)
 
-let positive = List.filter is_positive all
+let is_positive m =
+  det m = 1
+
+let positive =
+  List.filter is_positive all
 
 let () = assert (List.length positive = 24)
 

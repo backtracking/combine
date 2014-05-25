@@ -37,7 +37,8 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
 
   open Ast
   open Tiling
-  open Tiling.ToEMC
+  open Tiling.Problem
+  open Tiling.Problem.ToEMC
   open Format
   open Emc
 
@@ -117,7 +118,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
 
   let count_emc fmt efmt p algo =
     let { primary = primary; matrix = m; tiles = decode_tbl } as emc =
-      Tiling.ToEMC.make p in
+      Tiling.Problem.ToEMC.make p in
     if !debug then fprintf fmt "@[<hov 2>EMC size is %a@]@." print_emc_size emc;
     fprintf fmt "%s : @?" p.pname;
     init_timer ();
@@ -136,7 +137,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     if !timing then fprintf fmt "%s solutions counted in %a@." p.pname finish_timer ()
 
   let solve_emc fmt efmt output p algo =
-    let emc = Tiling.ToEMC.make p in
+    let emc = Tiling.Problem.ToEMC.make p in
     if !debug then fprintf fmt "@[<hov 2>EMC size is@\n%a@]@." print_emc_size emc;
     let { primary = primary; matrix = m; tiles = decode_tbl } = emc in
     init_timer ();
@@ -182,10 +183,10 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
         | Svg f ->
           let width, height =
             p.grid.Pattern.width * 25, p.grid.Pattern.height * 25 in
-          Tiling.print_solution_to_svg_file f ~width ~height p sol;
+          Tiling.Problem.print_solution_to_svg_file f ~width ~height p sol;
           fprintf fmt "SVG written in file %S@." f
         | Ascii ->
-          Tiling.print_solution_ascii Format.std_formatter p sol;
+          Tiling.Problem.print_solution_ascii Format.std_formatter p sol;
           fprintf fmt "@."
         end;
         raise Interrupt
@@ -208,7 +209,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     with Not_found -> fprintf efmt "%s: no such algorithm@." name
 
   let interp_problem_command fmt efmt p = function
-    | Print -> fprintf fmt "%a@\n" Tiling.print_problem p
+    | Print -> fprintf fmt "%a@\n" Tiling.Problem.print p
     | SolveEMC (algo, output) -> solve_emc fmt efmt output p algo
     | CountEMC algo -> count_emc fmt efmt p algo
     | Count name -> count fmt efmt name p
@@ -232,14 +233,14 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
       Hashtbl.replace tiles_env id (tile_list l)
     | Problem (id, e, el) ->
       let value = interp_expr e in
-      let p = Tiling.create_problem ?name:(Some id) value (tiles efmt el) in
+      let p = Tiling.Problem.create ?name:(Some id) value (tiles efmt el) in
       problems := p :: !problems;
       Hashtbl.add problem_tbl id p
     | Dimacs (id, file) ->
       let p = begin try Hashtbl.find problem_tbl id with
         | Not_found ->
           raise (Error (decl.decl_pos, "Unbound problem " ^ id)) end in
-      let emc = Tiling.ToEMC.make p in
+      let emc = Tiling.Problem.ToEMC.make p in
       let sat = Sat.create ~primary:emc.primary emc.matrix in
       Emc.Sat.print_in_file file sat
     | Assert be ->

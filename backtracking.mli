@@ -23,7 +23,7 @@ open Tiling
 
 val debug: bool ref
 
-type algorithm = (solution -> unit) -> problem -> unit
+type algorithm = (Problem.solution -> unit) -> Problem.problem -> unit
 
 val add: string -> algorithm -> unit
 val find: string -> algorithm

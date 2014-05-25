@@ -18,9 +18,9 @@
 (**************************************************************************)
 
 open Format
-open Tiling
 open Tiling.Pattern
 open Tiling.Tile
+open Tiling.Problem
 
 let debug = ref false
 
