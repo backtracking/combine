@@ -19,8 +19,6 @@
 
 (* Tiling Module *)
 
-open Format
-
 (* Misc *)
 
 module Pattern = struct
@@ -138,10 +136,10 @@ module Pattern = struct
 
 end
 
-module Tile = struct
+type symmetries = Snone | Spositive | Sall
+type multiplicity = Minf | Mone | Mmaybe
 
-  type symmetries = Snone | Srotations | Sall
-  type multiplicity = Minf | Mone | Mmaybe
+module Tile = struct
 
   type t = {
     name: string;
@@ -181,7 +179,7 @@ module Tile = struct
     let h = Hashtbl.create 8 in
     let l = match t.symmetries with
       | Snone -> D4.S.add D4.Id D4.S.empty
-      | Srotations -> D4.S.filter D4.is_positive D4.all
+      | Spositive -> D4.S.filter D4.is_positive D4.all
       | Sall-> D4.all
     in
     D4.S.iter (fun iso -> Hashtbl.replace h (apply iso t) ())
@@ -241,6 +239,8 @@ module Problem = struct
           board.(y + y').(x' + x) <- c
       done
     done
+
+  open Format
 
   let print_solution_ascii fmt p s =
     let unique = ref 48 in
@@ -495,3 +495,67 @@ width=\"%d\" height=\"%d\">@\n"
   end
 
 end
+
+(** 3D tiling problems *)
+
+module Tile3 = struct
+
+  type t = {
+    name: string;
+    pattern: Pattern.t list;
+    height: int;
+    width: int;
+    depth: int;
+    multiplicity: multiplicity;
+    symmetries: symmetries;
+  }
+
+  let create ?(name="") ?(s=Snone) ?(m=Minf) pl =
+    let height, width = match pl with
+      | [] -> invalid_arg "Tile3.create"
+      | p :: l -> p.Pattern.height, p.Pattern.width in
+    let check p' = p'.Pattern.height = height && p'.Pattern.width = width in
+    if not (List.for_all check pl) then
+      invalid_arg "Tile3.create: sizes differ";
+    { name = name;
+      pattern = pl;
+      height = height;
+      width = width;
+      depth = List.length pl;
+      multiplicity = m;
+      symmetries = s; }
+
+  open Format
+
+  let print fmt t =
+    let print1 p = Pattern.print fmt p; fprintf fmt "@\n,@\n" in
+    fprintf fmt "@[<hov 1>"; List.iter print1 t.pattern; fprintf fmt "}@]"
+
+end
+
+module Problem3 = struct
+
+  type t = {
+    grid : Tile3.t;
+    pname : string;
+    pieces : Tile3.t list;
+  }
+
+  let create ?(name="") grid pieces =
+    { grid = grid;
+      pname = name;
+      pieces = pieces; }
+
+  open Format
+
+  let print fmt p =
+    if p.pname <> "" then
+      Format.fprintf fmt "problem %S@\n" p.pname;
+    Format.fprintf fmt "%a@\n" Tile3.print p.grid;
+    List.iter (fun t -> Format.fprintf fmt "%a@\n" Tile3.print t) p.pieces
+
+  type solution = (Tile3.t * int * int * int) list
+
+end
+
+

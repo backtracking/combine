@@ -79,10 +79,10 @@ module Pattern : sig
 
 end
 
-module Tile : sig
+type symmetries = Snone | Spositive | Sall
+type multiplicity = Minf | Mone | Mmaybe
 
-  type symmetries = Snone | Srotations | Sall
-  type multiplicity = Minf | Mone | Mmaybe
+module Tile : sig
 
   type t = private {
     name: string;
@@ -167,5 +167,44 @@ module Problem : sig
 end
 
 
+(** 3D tiling problems *)
+
+module Tile3 : sig
+
+  type t = private {
+    name: string;
+    pattern: Pattern.t list;
+    height: int;
+    width: int;
+    depth: int;
+    multiplicity: multiplicity;
+    symmetries: symmetries;
+  }
+
+  val create: ?name:string -> ?s:symmetries -> ?m:multiplicity ->
+    Pattern.t list -> t
+
+  val print: Format.formatter -> t -> unit
+
+end
+
+module Problem3 : sig
+
+  type t = private {
+    grid : Tile3.t;
+    pname : string;
+    pieces : Tile3.t list;
+  }
+
+  val create : ?name:string -> Tile3.t -> Tile3.t list -> t
+  (** construct a problem from his name, the board pattern and
+      a list of tiles *)
+
+  val print: Format.formatter -> t -> unit
+  (** print a problem *)
+
+  type solution = (Tile3.t * int * int * int) list
+
+end
 
 

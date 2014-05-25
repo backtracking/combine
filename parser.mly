@@ -19,7 +19,7 @@
 
 %{
   open Ast
-  open Tiling.Tile
+  open Tiling
   open D4
   type option =
     | M of multiplicity
@@ -106,7 +106,7 @@ option:
 | ONE   { M Mone }
 | MAYBE { M Mmaybe }
 | SYM   { S Sall }
-| ROT   { S Srotations }
+| ROT   { S Spositive }
 
 tiles:
 | l = tile_list { Tiles_list l }

@@ -58,7 +58,7 @@ type bool_expr =
   | Boolean of bool
   | Comparison of compop * expr * expr
 
-type tile = expr * Tiling.Tile.symmetries * Tiling.Tile.multiplicity
+type tile = expr * Tiling.symmetries * Tiling.multiplicity
 
 type tiles =
   | Tiles_id of string
