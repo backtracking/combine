@@ -72,10 +72,12 @@ $(LIBCMX): OFLAGS += -for-pack Combine
 CMA = combine.cma
 CMXA = combine.cmxa
 
+
+
 GENERATED = parser.ml parser.mli lexer.ml version.ml
 
-byte: $(CMA) combine.byte sudoku.byte queens.byte
-opt: $(CMXA) combine.opt sudoku.opt queens.opt
+byte: $(CMA) combine.byte sudoku.byte queens.byte backslide.byte
+opt: $(CMXA) combine.opt sudoku.opt queens.opt backslide.opt
 
 combine.cma: combine.cmo
 	$(OCAMLC) $(INCLUDES) -a -g -o $@ $^
@@ -92,11 +94,15 @@ combine.cmo: $(LIBCMO)
 combine.cmx: $(LIBCMX)
 	$(OCAMLOPT) $(INCLUDES) -pack -o $@ $^
 
+
+
 CMO = main.cmo
 CMX = $(CMO:.cmo=.cmx)
 
 $(CMO) queens.cmo sudoku.cmo test.cmo: combine.cmi
 $(CMX) queens.cmx sudoku.cmx test.cmx: combine.cmi
+# backslide.cmo: combine.cmi
+# backslide.cmx: combine.cmi
 
 combine.byte: $(CMA) $(CMO)
 	$(OCAMLC) $(BFLAGS) -o $@ nums.cma unix.cma $^
@@ -120,6 +126,13 @@ test: test.byte combine.byte
 check: combine.opt
 #	for f in examples/*.cmb; do ./combine.opt $$f ; done
 	./combine.opt examples/scott.cmb
+
+
+backslide.byte: $(CMA) backslide.cmo
+	$(OCAMLC) -o $@ $(BFLAGS) $^
+
+backslide.opt: $(CMXA) backslide.cmx
+	$(OCAMLOPT) -o $@ $(OFLAGS) $^
 
 test.byte: $(CMA) test.cmo
 	$(OCAMLC) -o $@ $(BFLAGS) nums.cma unix.cma $^
