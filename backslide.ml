@@ -1,8 +1,6 @@
 open Printf
 open Combine
 
-(* open Mlpost *)
-
 type btile = {n : bool; e : bool; s : bool; w : bool;}
 
 
@@ -37,45 +35,64 @@ let build_tiles n =
       else build (n - 1) ((bsucc h) :: l)
   in build n []
       
-
   
+
+type t = N | E | S | W
+
     
-    
+
 
 let length = 16 
 let w = 4
 
-let line a t x y =
-  (* a.((y * w + x) * 4) <- false; *)
-  if t.n && y > 0 then a.((((y - 1) * w) + x) * 4 + 2) <- true
-  else if not t.n then a.((y * w + x) * 4) <- true;
+let line tile t x y =
+  let a = Array.make ((w + 1) * length) false in
   
-  if t.e && x < w - 1 then a.((y * w + x + 1) * 4 + 3) <- true
-  else if not t.e then a.((y * w + x) * 4 + 1) <- true;
+  a.(tile) <- true;
 
-  if t.s && y < w - 1 then a.((((y + 1) * w) + x) * 4) <- true
-  else if not t.s then a.((y * w + x) * 4 + 2) <- true;
+  if t.n && y > 0 then a.((((y - 1) * w) + x) * 4 + 2 + length) <- true 
+  else if not t.n then a.((y * w + x) * 4 + length) <- true
+  else raise Exit;
+  
+  if t.e && x < w - 1 then a.((y * w + x + 1) * 4 + 3 + length) <- true
+  else if not t.e then a.((y * w + x) * 4 + 1 + length) <- true
+  else raise Exit;
 
-  if t.w && x > 0 then a.((y * w + x - 1) * 4 + 1) <- true
-  else if not t.w then a.((y * w + x) * 4 + 3) <- true
+  if t.s && y < w - 1 then a.((((y + 1) * w) + x) * 4 + length) <- true
+  else if not t.s then a.((y * w + x) * 4 + 2 + length) <- true
+  else raise Exit;
+
+  if t.w && x > 0 then a.((y * w + x - 1) * 4 + 1 + length) <- true
+  else if not t.w then a.((y * w + x) * 4 + 3 + length) <- true
+  else raise Exit;
+  a
     
   
-let rec set_lines m ntile = 
-  function | [] -> () | h :: tail ->
-    for i = 0 to length - 1 do
-      line m.(length * ntile + i) h (i mod 4) (i / 4)
-    done;
-    set_lines m (ntile + 1) tail
+let emc tiles = 
+  let rec set_lines tile accl = 
+    let rec step h i accl = 
+      if i = 16 then accl 
+      else try step h (i + 1) ((line tile h (i mod 4) (i / 4)) :: accl) 
+        with Exit -> step h (i + 1) accl
+    in function | [] -> accl | h :: tail -> set_lines (tile + 1) 
+      ((step h 0 accl)) tail 
+  in 
+  Array.of_list (set_lines 0 [] tiles)
 
+let print_solution m = List.iter (fun s ->
+  print_line s)
+  
+  
 
 let () =
-  let matrix = Array.make_matrix (length * length) (length * 4) false in
   let tiles = build_tiles 15 in
   (* print_tiles tiles; *)
-  set_lines matrix 0 tiles;
+  let matrix = emc tiles in
+  print_matrix matrix;
   let p = Emc.D.create matrix in
   let s = Emc.D.find_solution p in
   let n = List.length s in
+  printf "matrix : %dx%d.\n" (Array.length matrix) (Array.length matrix.(0));
   printf "solution size : %d.\n" n
 
 
