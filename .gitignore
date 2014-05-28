@@ -21,6 +21,8 @@ sudoku.byte
 sudoku.opt
 queens.byte
 queens.opt
+backslide.byte
+backslide.opt
 .*.swp
 lexer.ml
 parser.ml
