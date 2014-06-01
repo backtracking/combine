@@ -381,7 +381,7 @@ width=\"%d\" height=\"%d\">@\n"
         !id
       with Exit -> !id
 
-    let one_line l n tile_id tile problem ~x ~y =
+    let one_line n tile_id tile problem ~x ~y =
       let line = Array.make n false in
       for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do
         for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do
@@ -459,7 +459,7 @@ width=\"%d\" height=\"%d\">@\n"
         List.iter
           (fun t ->
             if is_possible_position t problem x y then begin
-              lines := one_line w n tile_id t problem x y :: !lines;
+              lines := one_line n tile_id t problem x y :: !lines;
               decodes :=  (t, x, y) :: !decodes
             end
           )
@@ -502,7 +502,7 @@ module Tile3 = struct
 
   type t = {
     name: string;
-    pattern: Pattern.t list;
+    pattern: Pattern.t array;
     height: int;
     width: int;
     depth: int;
@@ -518,7 +518,7 @@ module Tile3 = struct
     if not (List.for_all check pl) then
       invalid_arg "Tile3.create: sizes differ";
     { name = name;
-      pattern = pl;
+      pattern = Array.of_list pl;
       height = height;
       width = width;
       depth = List.length pl;
@@ -529,20 +529,46 @@ module Tile3 = struct
 
   let print fmt t =
     let print1 p = Pattern.print fmt p; fprintf fmt "@\n,@\n" in
-    fprintf fmt "@[<hov 1>"; List.iter print1 t.pattern; fprintf fmt "}@]"
+    fprintf fmt "@[<hov 1>"; Array.iter print1 t.pattern; fprintf fmt "}@]"
+
+  let apply iso p =
+    let trans = Cube.apply iso in
+    let w, h, d = p.width, p.height, p.depth in
+    let new_w, new_h, new_d = Cube.trans_size iso (w, h, d) in
+    let m = Array.init new_d (fun _ -> Array.make_matrix new_h new_w false) in
+    for z = 0 to d-1 do
+      for y = 0 to h-1 do
+        for x = 0 to w-1 do
+          let new_x, new_y, new_z = trans ~w ~h ~d (x, y, z)  in
+          m.(new_z).(new_y).(new_x) <- p.pattern.(z).Pattern.matrix.(y).(x)
+        done
+      done
+    done;
+    let ml = Array.to_list m in
+    let pl = List.map Pattern.create ml in
+    create ~name:p.name ~s:p.symmetries ~m:p.multiplicity pl
+
+  let create_all_symmetries t =
+    match t.symmetries with
+    | Snone -> [t]
+    | Spositive | Sall ->
+        let h = Hashtbl.create 8 in
+        List.iter (fun iso -> Hashtbl.replace h (apply iso t) ())
+          Cube.positive;
+        Hashtbl.fold (fun k _ acc -> k :: acc) h []
 
 end
 
 module Problem3 = struct
 
-  type t = {
+  type problem = {
     grid : Tile3.t;
     pname : string;
     pieces : Tile3.t list;
   }
 
   let create ?(name="") grid pieces =
-    { grid = grid;
+    { grid = Tile3.create ~name grid;
       pname = name;
       pieces = pieces; }
 
@@ -555,6 +581,157 @@ module Problem3 = struct
     List.iter (fun t -> Format.fprintf fmt "%a@\n" Tile3.print t) p.pieces
 
   type solution = (Tile3.t * int * int * int) list
+
+  module ToEMC = struct
+
+    type emc = {
+      primary: int;			      (* number of primary columns *)
+      matrix : bool array array;
+      tiles  : (Tile3.t * int * int * int) array; (* row -> tile and position *)
+    }
+
+    let print_emc fmt emc =
+      let print_bool b = if b then fprintf fmt "1" else fprintf fmt "0" in
+      let print_line _ l = Array.iter print_bool l; fprintf fmt "@\n" in
+      Array.iteri print_line emc.matrix;
+      fprintf fmt "%d primary columns" emc.primary
+
+    let print_emc_size fmt emc =
+      let h = Array.length emc.matrix in
+      fprintf fmt "%d rows x %d columns, with %d primary columns"
+        h (if h = 0 then 0 else Array.length emc.matrix.(0)) emc.primary
+
+    open Pattern
+    open Tile3
+
+    let get_id_col_emc problem x y z =
+      let id = ref 0 in
+      try
+        for z' = 0 to problem.grid.depth - 1 do
+          for y' = 0 to problem.grid.height - 1 do
+            for x' = 0 to problem.grid.width - 1 do
+              if z' = z && y' = y && x' = x then raise Exit;
+              if problem.grid.pattern.(z').matrix.(y').(x') then
+                incr id
+            done
+          done
+        done;
+        !id
+      with Exit -> !id
+
+    let one_line n tile_id tile problem ~x ~y ~z =
+      let line = Array.make n false in
+      for z' = 0 to tile.depth - 1 do
+        for y' = 0 to tile.height - 1 do
+          for x' = 0 to tile.width - 1 do
+            if tile.pattern.(z').matrix.(y').(x') then begin
+              line.(get_id_col_emc problem (x + x') (y + y') (z + z')) <- true;
+              if tile.Tile3.multiplicity <> Minf then
+                line.(tile_id) <- true
+            end
+          done
+        done
+      done;
+      line
+
+    (* the total number of cells in the problem *)
+    let number_of_cell_columns problem =
+      let h = problem.grid.height in
+      let w = problem.grid.width in
+      let d = problem.grid.depth in
+      let realn = ref 0 in
+      for z = 0 to d - 1 do
+        let m = problem.grid.pattern.(z).matrix in
+        for y = 0 to h - 1 do
+          for x = 0 to w - 1 do
+            if m.(y).(x) then
+              incr realn
+          done
+        done
+      done;
+      !realn
+
+    let number_of_tile_columns problem =
+      List.fold_left (
+        fun (prim, sec as acc) e ->
+          match e.Tile3.multiplicity with
+            | Mone -> (prim + 1, sec)
+	    | Mmaybe -> (prim, sec + 1)
+            | Minf -> acc
+      ) (0, 0) problem.pieces
+
+    let existing_position problem x y z =
+      z < problem.grid.depth &&
+      let m = problem.grid.pattern.(z).Pattern.matrix in
+      x < problem.grid.width
+      && y < problem.grid.height
+      && m.(y).(x)
+
+  (* return true if piece could be put at position x y*)
+    let is_possible_position tile board x y z =
+      try
+        for z' = 0 to tile.depth - 1 do
+          let m = tile.pattern.(z').matrix in
+          for y' = 0 to tile.height - 1 do
+            for x' = 0 to tile.width - 1 do
+              if m.(y').(x') &&
+                 not (existing_position board (x + x') (y + y') (z + z'))
+              then raise Exit
+            done
+          done
+        done;
+        true
+      with
+        | Exit ->  false
+
+    let make problem =
+      let h = problem.grid.height in
+      let w = problem.grid.width in
+      let d = problem.grid.depth in
+      let ncc = number_of_cell_columns problem in
+      let prim, sec = number_of_tile_columns problem in
+      let n = ncc + prim + sec in
+      let tile_id_prim = ref ncc in
+      let tile_id_sec  = ref (ncc + prim) in
+      let lines = ref [] in
+      let decodes = ref [] in
+      let add_piece x y z tile =
+        let tile_id = match tile.multiplicity with
+          | Mone -> let v = !tile_id_prim in incr tile_id_prim; v
+          | Mmaybe -> let v = !tile_id_sec in incr tile_id_sec; v
+          | Minf -> -1 (* useless *)
+        in
+        List.iter
+          (fun t ->
+            if is_possible_position t problem x y z then begin
+              lines := one_line n tile_id t problem x y z :: !lines;
+              decodes :=  (t, x, y, z) :: !decodes
+            end
+          )
+          (tile :: Tile3.create_all_symmetries tile)
+      in
+      for z = 0 to d - 1 do
+        for y = 0 to h - 1 do
+          for x = 0 to w - 1 do
+            List.iter (add_piece x y z) problem.pieces;
+            tile_id_prim := ncc;
+            tile_id_sec := ncc + prim
+          done
+        done
+      done;
+      let matrix = Array.of_list !lines in
+      let decode_tbl = Array.of_list !decodes in
+      { primary = ncc + prim;
+        matrix = matrix;
+        tiles = decode_tbl }
+
+    let print_solution_ascii fmt p emc rows =
+      let print r =
+        let t, x, y, z = emc.tiles.(r) in
+        fprintf fmt "tile '%s' at (%d, %d, %d)@\n" t.name x y z in
+      List.iter print rows
+
+  end
 
 end
 

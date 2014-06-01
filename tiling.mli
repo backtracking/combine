@@ -138,7 +138,7 @@ module Problem : sig
 
   module ToEMC: sig
 
-    type emc = {
+    type emc = private {
       primary: int;			      (* number of primary columns *)
       matrix : bool array array;
       tiles  : (Tile.t * int * int) array;    (* row -> tile and its position *)
@@ -173,7 +173,7 @@ module Tile3 : sig
 
   type t = private {
     name: string;
-    pattern: Pattern.t list;
+    pattern: Pattern.t array; (* depth -> pattern *)
     height: int;
     width: int;
     depth: int;
@@ -186,24 +186,46 @@ module Tile3 : sig
 
   val print: Format.formatter -> t -> unit
 
+  val create_all_symmetries: t -> t list
+
 end
 
 module Problem3 : sig
 
-  type t = private {
+  type problem = private {
     grid : Tile3.t;
     pname : string;
     pieces : Tile3.t list;
   }
 
-  val create : ?name:string -> Tile3.t -> Tile3.t list -> t
+  val create : ?name:string -> Pattern.t list -> Tile3.t list -> problem
   (** construct a problem from his name, the board pattern and
       a list of tiles *)
 
-  val print: Format.formatter -> t -> unit
+  val print: Format.formatter -> problem -> unit
   (** print a problem *)
 
   type solution = (Tile3.t * int * int * int) list
+
+  module ToEMC: sig
+
+    type emc = private {
+      primary: int;			      (* number of primary columns *)
+      matrix : bool array array;
+      tiles  : (Tile3.t * int * int * int) array; (* row -> tile and position *)
+    }
+
+    val print_emc: Format.formatter -> emc -> unit
+    val print_emc_size: Format.formatter -> emc -> unit
+
+    val make: problem -> emc
+    (** Encode the given problem under EMC *)
+
+    val print_solution_ascii :
+      Format.formatter -> problem -> emc -> int list -> unit
+    (** print a solution with ascii symboles to draw tiles*)
+
+  end
 
 end
 

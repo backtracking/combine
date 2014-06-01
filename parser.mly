@@ -27,14 +27,16 @@
 
 %}
 
-%token PATTERN TILES PROBLEM CONSTANT FALSE TRUE
+%token PATTERN TILES PROBLEM
+%token PATTERN3 TILES3 PROBLEM3
+%token CONSTANT FALSE TRUE
 %token SET SHIFT CROP RESIZE APPLY
 %token EXIT INCLUDE ASSERT
 %token MINUS AMPAMP BARBAR HAT DIFF UNION XOR INTER ONE MAYBE SYM ROT
 %token EQUAL LSBRA RSBRA RPAR LPAR COMMA
 %token ID ROT90 ROT180 ROT270 VERTREFL HORIZREFL DIAG1REFL DIAG2REFL
 %token ASCII_OUT SVG_OUT PRINT
-%token SOLVE COUNT DIMACS DEBUG TIMING ON OFF DLX ZDD SAT
+%token SOLVE SOLVE3 COUNT DIMACS DEBUG TIMING ON OFF DLX ZDD SAT
 %token <string> IDENT
 %token <string> STRING
 %token <int * int> DIM
@@ -56,12 +58,21 @@ decl:
 | PATTERN; id = IDENT; EQUAL; e = expr
     {{decl_pos = ($startpos, $endpos);
       decl_node = Pattern (id, e)}}
+| PATTERN3; id = IDENT; EQUAL; l = expr_list
+    { { decl_pos = ($startpos, $endpos);
+        decl_node = Pattern3 (id, l) } }
 | TILES; id = IDENT; EQUAL; l = tile_list
     {{decl_pos = ($startpos, $endpos);
       decl_node = Tiles (id, l)}}
+| TILES3; id = IDENT; EQUAL; l = tile_list
+    {{decl_pos = ($startpos, $endpos);
+      decl_node = Tiles3 (id, l)}}
 | PROBLEM; id = IDENT; EQUAL; e = expr; tl = tiles
     {{decl_pos = ($startpos, $endpos);
       decl_node = Problem (id, e, tl)}}
+| PROBLEM3; id = IDENT; EQUAL; e = expr; tl = tiles
+    {{decl_pos = ($startpos, $endpos);
+      decl_node = Problem3 (id, e, tl)}}
 | ASSERT; b = boolean_expr
     {{decl_pos = ($startpos, $endpos);
       decl_node = Assert b}}
@@ -73,6 +84,9 @@ decl:
 | SOLVE; a = IDENT; id = IDENT; out = output
     {{decl_pos = ($startpos, $endpos);
       decl_node = Command (Solve (a, out), id)}}
+| SOLVE3; a = algo_emc; id = IDENT; out = output
+    {{decl_pos = ($startpos, $endpos);
+      decl_node = Command3 (SolveEMC (a, out), id)}}
 | COUNT; a = algo_emc; id = IDENT
     {{decl_pos = ($startpos, $endpos);
       decl_node = Command (CountEMC a, id)}}
@@ -141,15 +155,20 @@ tile:
       let s,m = List.fold_left option (Snone, Minf) o in e,s,m }
 ;
 
+expr_list:
+| LSBRA; l = separated_list(COMMA, expr); RSBRA { l }
+;
+
 expr:
-| LPAR; e = expr; RPAR { e }
+| LPAR; e = expr; RPAR
+    { e }
 | id = IDENT
     {{expr_pos = ($startpos, $endpos);
       expr_node = Var id}}
 | CONSTANT; d = DIM; b = bool
-  { let w,h = d in
-      {expr_pos = ($startpos, $endpos);
-        expr_node = Constant (Array.make h (Array.make w b))} }
+    { let w,h = d in
+      { expr_pos = ($startpos, $endpos);
+        expr_node = Pattern (Array.make h (Array.make w b))} }
 | UNION; e1 = expr; e2 = expr
       {{expr_pos = ($startpos, $endpos);
          expr_node = Binary (Union, e1, e2)}}
@@ -190,8 +209,8 @@ expr:
     {{expr_pos = ($startpos, $endpos);
        expr_node = Apply (iso, e)}}
 | a = ASCII
-    {{expr_pos = ($startpos, $endpos);
-       expr_node = Constant a}}
+    {{ expr_pos = ($startpos, $endpos);
+       expr_node = Pattern a}}
 ;
 
 bool:

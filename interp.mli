@@ -40,6 +40,6 @@ module Make : functor (T : Time) -> functor (N : N) -> sig
 
   val interp: Format.formatter -> Format.formatter -> Ast.queue -> unit
   val interp_problems: Format.formatter -> Format.formatter ->
-    Ast.queue -> Tiling.Problem.problem list
+    Ast.queue -> Tiling.Problem.problem list * Tiling.Problem3.problem list
 
 end

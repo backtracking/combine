@@ -47,7 +47,7 @@ type expr = {
   expr_pos : pos;
 }
 and expr_node =
-  | Constant of bool array array
+  | Pattern of bool array array
   | Var of string
   (* other operations: union, diff, rotations, etc. *)
   | Binary of binop * expr * expr
@@ -73,10 +73,14 @@ type decl = {
 
 and decl_node =
   | Pattern of string * expr
+  | Pattern3 of string * expr list
   | Tiles of string * tile list
+  | Tiles3 of string * tile list
   | Problem of problem
+  | Problem3 of problem
   | Assert of bool_expr
   | Command of problem_command * string
+  | Command3 of problem_command * string
   | Dimacs of string * string
   | Debug of state
   | Timing of state

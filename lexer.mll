@@ -55,7 +55,10 @@
     List.iter (fun (s, k) -> Hashtbl.add h s k)
 [ "pattern",    PATTERN;
   "tiles",      TILES;
+  "pattern3",   PATTERN3;
+  "tiles3",     TILES3;
   "problem",    PROBLEM;
+  "problem3",   PROBLEM3;
   "false",      FALSE;
   "true",       TRUE;
   "constant",   CONSTANT;
@@ -64,6 +67,7 @@
   "svg",        SVG_OUT;
   "ascii",      ASCII_OUT;
   "solve",      SOLVE;
+  "solve3",     SOLVE3;
   "count",      COUNT;
   "dimacs",     DIMACS;
   "include",    INCLUDE;
