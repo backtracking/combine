@@ -140,7 +140,7 @@ module Problem : sig
 
     type emc = private {
       primary: int;			      (* number of primary columns *)
-      matrix : bool array array;
+      emc    : bool array array;
       tiles  : (Tile.t * int * int) array;    (* row -> tile and its position *)
     }
 

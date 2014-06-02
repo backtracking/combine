@@ -35,8 +35,8 @@
 %token MINUS AMPAMP BARBAR HAT DIFF UNION XOR INTER ONE MAYBE SYM ROT
 %token EQUAL LSBRA RSBRA RPAR LPAR COMMA
 %token ID ROT90 ROT180 ROT270 VERTREFL HORIZREFL DIAG1REFL DIAG2REFL
-%token ASCII_OUT SVG_OUT PRINT
-%token SOLVE SOLVE3 COUNT DIMACS DEBUG TIMING ON OFF DLX ZDD SAT
+%token ASCII_OUT SVG_OUT PRINT ALL ALL3
+%token SOLVE SOLVE3 COUNT COUNT3 DIMACS DEBUG TIMING ON OFF DLX ZDD SAT
 %token <string> IDENT
 %token <string> STRING
 %token <int * int> DIM
@@ -87,12 +87,21 @@ decl:
 | SOLVE3; a = algo_emc; id = IDENT; out = output
     {{decl_pos = ($startpos, $endpos);
       decl_node = Command3 (SolveEMC (a, out), id)}}
+| ALL; a = algo_emc; id = IDENT
+    {{decl_pos = ($startpos, $endpos);
+      decl_node = Command (AllEMC a, id)}}
+| ALL3; a = algo_emc; id = IDENT
+    {{decl_pos = ($startpos, $endpos);
+      decl_node = Command3 (AllEMC a, id)}}
 | COUNT; a = algo_emc; id = IDENT
     {{decl_pos = ($startpos, $endpos);
       decl_node = Command (CountEMC a, id)}}
 | COUNT; a = IDENT; id = IDENT
     {{decl_pos = ($startpos, $endpos);
       decl_node = Command (Count a, id)}}
+| COUNT3; a = algo_emc; id = IDENT
+    {{decl_pos = ($startpos, $endpos);
+      decl_node = Command3 (CountEMC a, id)}}
 | DIMACS; id = IDENT; file = STRING
     {{decl_pos = ($startpos, $endpos); decl_node = Dimacs (id, file) }}
 | DEBUG; st = state; {{decl_pos = ($startpos, $endpos);

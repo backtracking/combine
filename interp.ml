@@ -137,7 +137,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     timer := 0.
 
   let count_emc fmt efmt p algo =
-    let { primary = primary; matrix = m; tiles = decode_tbl } as emc =
+    let { primary = primary; emc = m; tiles = decode_tbl } as emc =
       Tiling.Problem.ToEMC.make p in
     if !debug then fprintf fmt "@[<hov 2>EMC size is %a@]@." print_emc_size emc;
     fprintf fmt "%s : @?" p.pname;
@@ -156,11 +156,34 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     end;
     if !timing then fprintf fmt "%s solutions counted in %a@." p.pname finish_timer ()
 
+  let count3_emc fmt efmt p algo =
+    let module P3 = Tiling.Problem3 in
+    let { P3.ToEMC.primary = primary; emc = m; tiles = decode_tbl } as emc =
+      P3.ToEMC.make p in
+    if !debug then fprintf fmt "@[<hov 2>EMC size is %a@]@."
+      P3.ToEMC.print_emc_size emc;
+    fprintf fmt "%s : @?" p.P3.pname;
+    init_timer ();
+    begin match algo with
+    | Dlx ->
+      let p = Emc.D.create ~primary m in
+      fprintf fmt "(DLX) %a solutions@." N.print (DCount.count_solutions p)
+    | Zdd ->
+      let p = Emc.Z.create ~primary m in
+      if !debug then fprintf efmt "ZDD has size %d@." (Zdd.size p);
+      fprintf fmt "(ZDD) %a solutions@." N.print (ZCount.count_solutions p)
+    | Sat _ ->
+      fprintf efmt "cannot count solutions with a SAT solver@.";
+      exit 1
+    end;
+    if !timing then
+      fprintf fmt "%s solutions counted in %a@." p.P3.pname finish_timer ()
+
   let solve_emc fmt efmt output p algo =
     let emc = Tiling.Problem.ToEMC.make p in
     if !debug then
       fprintf fmt "@[<hov 2>EMC size is@\n%a@]@." print_emc_size emc;
-    let { primary = primary; matrix = m; tiles = decode_tbl } = emc in
+    let { primary = primary; emc = m; tiles = decode_tbl } = emc in
     init_timer ();
     let solution = match algo with
       | Dlx ->
@@ -226,6 +249,57 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
         P3.print_solution_ascii fmt p emc solution;
         fprintf fmt "@."
     end
+
+  let all_emc fmt p algo =
+    let module P = Tiling.Problem.ToEMC in
+    let emc = P.make p in
+    if !debug then
+      fprintf fmt "@[<hov 2>EMC size is@\n%a@]@." P.print_emc_size emc;
+    let { P.primary = primary; emc = m; tiles = decode_tbl } = emc in
+    init_timer ();
+    let iter_solution f = match algo with
+      | Dlx ->
+        let p = Emc.D.create ~primary m in
+        Emc.D.iter_solution f p
+      | Zdd ->
+        let zdd = Emc.Z.create ~primary m in
+        Emc.Z.iter_solution f zdd
+      | Sat _ ->
+          fprintf fmt "cannot find all solutions with SAT@."
+    in
+    let nb = ref 0 in
+    let print1 sol =
+      incr nb; P.print_solution_ascii fmt p emc sol; fprintf fmt "@." in
+    iter_solution print1;
+    fprintf fmt "%d solutions found for problem %S@." !nb p.Problem.pname;
+    if !timing then
+      fprintf fmt "%S solved in %a@." p.Problem.pname finish_timer ()
+
+  let all3_emc fmt p algo =
+    let module P3 = Tiling.Problem3.ToEMC in
+    let emc = P3.make p in
+    if !debug then
+      fprintf fmt "@[<hov 2>EMC size is@\n%a@]@." P3.print_emc_size emc;
+    let { P3.primary = primary; emc = m; tiles = decode_tbl } = emc in
+    init_timer ();
+    let iter_solution f = match algo with
+      | Dlx ->
+        let p = Emc.D.create ~primary m in
+        Emc.D.iter_solution f p
+      | Zdd ->
+        let zdd = Emc.Z.create ~primary m in
+        Emc.Z.iter_solution f zdd
+      | Sat _ ->
+          fprintf fmt "cannot find all solutions with SAT@."
+    in
+    let nb = ref 0 in
+    let print1 sol =
+      incr nb; P3.print_solution_ascii fmt p emc sol; fprintf fmt "@." in
+    iter_solution print1;
+    fprintf fmt "%d solutions found for problem %S@." !nb p.Problem3.pname;
+    if !timing then
+      fprintf fmt "%S solved in %a@." p.Problem3.pname finish_timer ()
+
   exception Interrupt
 
   let solve fmt efmt name p output =
@@ -266,6 +340,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
   let interp_problem_command fmt efmt p = function
     | Print -> fprintf fmt "%a@\n" Tiling.Problem.print p
     | SolveEMC (algo, output) -> solve_emc fmt efmt output p algo
+    | AllEMC algo -> all_emc fmt p algo
     | CountEMC algo -> count_emc fmt efmt p algo
     | Count name -> count fmt efmt name p
     | Solve (name, output) -> solve fmt efmt name p output
@@ -273,7 +348,8 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
   let interp_problem3_command fmt efmt p = function
     | Print -> fprintf fmt "%a@\n" Tiling.Problem3.print p
     | SolveEMC (algo, output) -> solve3_emc fmt efmt output p algo
-    | CountEMC _algo -> assert false (*TODO*)
+    | AllEMC algo -> all3_emc fmt p algo
+    | CountEMC algo -> count3_emc fmt efmt p algo
     | Count _name -> assert false (*TODO*)
     | Solve (_name, _output) -> assert false (*TODO*)
 
@@ -329,7 +405,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
         | Not_found ->
           raise (Error (decl.decl_pos, "Unbound problem " ^ id)) end in
       let emc = Tiling.Problem.ToEMC.make p in
-      let sat = Sat.create ~primary:emc.primary emc.matrix in
+      let sat = Sat.create ~primary:emc.primary emc.emc in
       Emc.Sat.print_in_file file sat
     | Assert be ->
       if not (interp_bool_expr be) then begin

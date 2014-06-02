@@ -108,7 +108,7 @@ let () =
   assert (Zdd.mem s2 z3)
 
 let () =
-  let { primary = primary; matrix = m; tiles = uncode_tbl } =
+  let { primary = primary; emc = m; tiles = uncode_tbl } =
     Tiling.Problem.ToEMC.make p in
   assert (Emc.Z.count_solutions (Emc.Z.create ~primary m) = 12988816)
 

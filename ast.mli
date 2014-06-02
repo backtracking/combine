@@ -33,6 +33,7 @@ type setop = Shift | SetXY of bool | Resize | Crop of dim
 type problem_command =
   | CountEMC of algo_emc
   | SolveEMC of algo_emc * output
+  | AllEMC   of algo_emc
   | Count    of string
   | Solve    of string * output
   | Print

@@ -422,20 +422,20 @@ width=\"%d\" height=\"%d\">@\n"
 
     type emc = {
       primary: int;			      (* number of primary columns *)
-      matrix : bool array array;
-      tiles  : (Tile.t * int * int) array;      (* row -> tile and its position *)
+      emc    : bool array array;
+      tiles  : (Tile.t * int * int) array;    (* row -> tile and its position *)
     }
 
     let print_emc fmt emc =
       let print_bool b = if b then fprintf fmt "1" else fprintf fmt "0" in
       let print_line _ l = Array.iter print_bool l; fprintf fmt "@\n" in
-      Array.iteri print_line emc.matrix;
+      Array.iteri print_line emc.emc;
       fprintf fmt "%d primary columns" emc.primary
 
     let print_emc_size fmt emc =
-      let h = Array.length emc.matrix in
+      let h = Array.length emc.emc in
       fprintf fmt "%d rows x %d columns, with %d primary columns"
-        h (if h = 0 then 0 else Array.length emc.matrix.(0)) emc.primary
+        h (if h = 0 then 0 else Array.length emc.emc.(0)) emc.primary
 
   (* return a boolean matrix representing the set of way to put all pieces
    * on the board
@@ -475,7 +475,7 @@ width=\"%d\" height=\"%d\">@\n"
       let matrix = Array.of_list !lines in
       let decode_tbl = Array.of_list !decodes in
       { primary = ncc + prim;
-        matrix = matrix;
+        emc = matrix;
         tiles = decode_tbl }
 
     open Format

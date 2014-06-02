@@ -287,7 +287,7 @@ pattern3 one_cube = [{
 
 problem3 one_cube = one_cube some_pentacubes
 
-solve3 dlx one_cube ascii
+all3 dlx one_cube
 
 pattern3 two_cubes = [{
 ***.***
@@ -305,7 +305,7 @@ pattern3 two_cubes = [{
 
 problem3 two_cubes = two_cubes some_pentacubes
 
-solve3 dlx two_cubes ascii
+# solve3 dlx two_cubes ascii
 
 pattern3 three_cubes = [{
 ***.***.***
@@ -323,7 +323,7 @@ pattern3 three_cubes = [{
 
 problem3 three_cubes = three_cubes some_pentacubes
 
-solve3 dlx three_cubes ascii
+# solve3 dlx three_cubes ascii
 
 pattern3 four_cubes = [{
 ***.***.***.***
@@ -359,7 +359,7 @@ pattern3 five_cubes = [{
 
 problem3 five_cubes = five_cubes some_pentacubes
 
-solve3 dlx five_cubes ascii
+# solve3 dlx five_cubes ascii
 
 # Local Variables:
 # compile-command: "../combine.opt pentacubes.cmb"

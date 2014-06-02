@@ -69,6 +69,7 @@
   "solve",      SOLVE;
   "solve3",     SOLVE3;
   "count",      COUNT;
+  "count3",     COUNT3;
   "dimacs",     DIMACS;
   "include",    INCLUDE;
   "exit",       EXIT;
@@ -97,6 +98,8 @@
   "HorizRefl",  HORIZREFL;
   "Diag1Refl",  DIAG1REFL;
   "Diag2Refl",  DIAG2REFL;
+  "all",        ALL;
+  "all3",       ALL3;
       ];
     fun s -> try Hashtbl.find h s with Not_found -> IDENT s
 
