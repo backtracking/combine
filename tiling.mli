@@ -211,7 +211,7 @@ module Problem3 : sig
 
     type emc = private {
       primary: int;			      (* number of primary columns *)
-      matrix : bool array array;
+      emc    : bool array array;
       tiles  : (Tile3.t * int * int * int) array; (* row -> tile and position *)
     }
 

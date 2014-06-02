@@ -197,7 +197,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     let emc = P3.make p in
     if !debug then
       fprintf fmt "@[<hov 2>EMC size is@\n%a@]@." P3.print_emc_size emc;
-    let { P3.primary = primary; matrix = m; tiles = decode_tbl } = emc in
+    let { P3.primary = primary; emc = m; tiles = decode_tbl } = emc in
     init_timer ();
     let solution = match algo with
       | Dlx ->
@@ -300,11 +300,11 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
 
   let rec interp_decl fmt efmt decl =
     match decl.decl_node with
-    | Pattern (id, z) ->
+    | Dpattern (id, z) ->
       let value = interp_expr z in
       warning_duplicate "pattern" var_env id;
       Hashtbl.replace var_env id value
-    | Pattern3 (id, l) ->
+    | Dpattern3 (id, l) ->
       let l = List.map interp_expr l in
       warning_duplicate "3D pattern" var3_env id;
       Hashtbl.replace var3_env id l

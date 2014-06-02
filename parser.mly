@@ -57,10 +57,10 @@ queue:
 decl:
 | PATTERN; id = IDENT; EQUAL; e = expr
     {{decl_pos = ($startpos, $endpos);
-      decl_node = Pattern (id, e)}}
+      decl_node = Dpattern (id, e)}}
 | PATTERN3; id = IDENT; EQUAL; l = expr_list
     { { decl_pos = ($startpos, $endpos);
-        decl_node = Pattern3 (id, l) } }
+        decl_node = Dpattern3 (id, l) } }
 | TILES; id = IDENT; EQUAL; l = tile_list
     {{decl_pos = ($startpos, $endpos);
       decl_node = Tiles (id, l)}}

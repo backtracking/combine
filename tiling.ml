@@ -586,20 +586,20 @@ module Problem3 = struct
 
     type emc = {
       primary: int;			      (* number of primary columns *)
-      matrix : bool array array;
+      emc    : bool array array;
       tiles  : (Tile3.t * int * int * int) array; (* row -> tile and position *)
     }
 
     let print_emc fmt emc =
       let print_bool b = if b then fprintf fmt "1" else fprintf fmt "0" in
       let print_line _ l = Array.iter print_bool l; fprintf fmt "@\n" in
-      Array.iteri print_line emc.matrix;
+      Array.iteri print_line emc.emc;
       fprintf fmt "%d primary columns" emc.primary
 
     let print_emc_size fmt emc =
-      let h = Array.length emc.matrix in
+      let h = Array.length emc.emc in
       fprintf fmt "%d rows x %d columns, with %d primary columns"
-        h (if h = 0 then 0 else Array.length emc.matrix.(0)) emc.primary
+        h (if h = 0 then 0 else Array.length emc.emc.(0)) emc.primary
 
     open Pattern
     open Tile3
@@ -722,7 +722,7 @@ module Problem3 = struct
       let matrix = Array.of_list !lines in
       let decode_tbl = Array.of_list !decodes in
       { primary = ncc + prim;
-        matrix = matrix;
+        emc = matrix;
         tiles = decode_tbl }
 
     let print_solution_ascii fmt p emc rows =

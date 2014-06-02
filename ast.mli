@@ -72,8 +72,8 @@ type decl = {
 }
 
 and decl_node =
-  | Pattern of string * expr
-  | Pattern3 of string * expr list
+  | Dpattern of string * expr
+  | Dpattern3 of string * expr list
   | Tiles of string * tile list
   | Tiles3 of string * tile list
   | Problem of problem
