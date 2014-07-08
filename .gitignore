@@ -49,3 +49,5 @@ color.opt
 /tests/*.svg
 *.dimacs
 /solutions/
+_obuild
+ocp-build.*
