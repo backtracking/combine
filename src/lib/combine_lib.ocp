@@ -1,10 +1,8 @@
 begin library "lib"
     sort = true
     files = [
-      begin pack Combine (sort = true) [
-        "ast.mli" "matrix.ml" "dlx.ml" "zdd.ml" "emc.ml" "d4.ml"
-          "cube.ml" "tiling.ml" "backtracking.ml"]
-      end
+         "d4.ml" "ast.mli" "matrix.ml" "dlx.ml" "zdd.ml" "emc.ml"
+          "cube.ml" "tiling.ml" "backtracking.ml"
     ]
     requires = ["nums" "unix"]
 end
