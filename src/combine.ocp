@@ -1,14 +1,18 @@
 begin program "combine"
   sort = true
   files = [ "main.ml" ]
-  requires = [ "interp" ]
+  requires = [ "combinelib" ]
 end
 
-
-begin program "combine_debug"
-  sort = true
-  files = [ "main.ml" ]
-  requires = [ "interp" ]
-  bytecomp = [ "-g" ]
-  bytelink = [ "-g" ]
+begin library "combinelib"
+    sort = true
+    ocamlyacc = "menhir"
+    files = [
+      begin pack Combine (sort = true) [
+        "d4.ml" "ast.mli" "matrix.ml" "dlx.ml" "zdd.ml" "emc.ml"
+          "cube.ml" "tiling.ml" "backtracking.ml" "interp.ml"
+          "parser.mly" "lexer.mll"
+      ] end
+    ]
+  requires = [ "num" "unix" "menhirLib" ]
 end
