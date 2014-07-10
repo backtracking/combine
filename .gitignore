@@ -1,5 +1,4 @@
 .depend
-Makefile
 configure
 version.ml
 autom4te.cache/
@@ -49,3 +48,5 @@ color.opt
 /tests/*.svg
 *.dimacs
 /solutions/
+_obuild
+ocp-build.*

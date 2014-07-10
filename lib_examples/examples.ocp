@@ -1,0 +1,14 @@
+begin program "sudoku"
+  files = [ "sudoku.ml" ]
+  requires = [ "combinelib" "str" ]
+end
+
+begin program "queens"
+  files = [ "queens.ml" ]
+  requires = [ "combinelib" ]
+end
+
+begin program "backslide"
+  files = [ "backslide.ml" ]
+  requires = [ "combinelib" ]
+end
