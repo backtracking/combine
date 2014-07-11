@@ -18,36 +18,45 @@
 ##########################################################################
 
 
-all: main
+PACKAGES = combinelib combine
+
+
+all: build
 
 
 init:
-	ocp-build -init
+	ocp-build -init || ocp-build init
 
-main:
-	ocp-build build combine
+build: init
+	ocp-build build $(PACKAGES)
 
-debug: 
-	ocp-build build combine_debug
-
-install: main
-	ocp-build install combine combinelib
-	cp _obuild/combinelib/*.cmi `ocamlfind query combinelib`
+install: uninstall
+	ocp-build install $(PACKAGES)
+	@for p in $(PACKAGES) ; do \
+		cp _obuild/$$p/*.cmi `ocamlfind query $$p` ; \
+		echo "Copy cmi's for $$p." ; \
+	done
 
 
 examples: main
 	ocp-build build sudoku queens backslide
 
 
-test: main
+test:
 	ocp-build test 
 	./_obuild/tests/tests.byte
 
-uninstall:
-	ocp-build -uninstall combine
+uninstall: init
+	@for p in $(PACKAGES) ; do \
+		ocamlfind remove $$p ; \
+	done
 
-clean:
+clean: init
 	ocp-build clean
-
-clean-all: clean
 	rm -rf ocp-build.*
+
+
+pkg:
+	ocp2opam \
+		-ocp src/combine.ocp \
+		-url "https://github.com/backtracking"

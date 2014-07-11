@@ -1,15 +1,15 @@
 
-You need Objective Caml 3.11 or higher.
+You need Objective Caml 3.12 or higher.
 
 Configure with
 
-	  ./configure
+	make init
 
 Compile with
 
-	  make
+	make
 
 Install (as root if needed) with
 
-	  make install
+	make install
 

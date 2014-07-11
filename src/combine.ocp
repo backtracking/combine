@@ -1,7 +1,13 @@
+
+authors = ["Rémy El Sibaïe" "Jean-Christophe Filliâtre"]
+description = ["A library for combinatorics problem solving"]
+version = ["0.56"]
+
+
 begin program "combine"
-  sort = true
-  files = [ "main.ml" ]
-  requires = [ "combinelib" ]
+    sort = true
+    files = [ "main.ml" ]
+    requires = [ "combinelib" ]
 end
 
 begin library "combinelib"
@@ -14,5 +20,5 @@ begin library "combinelib"
           "parser.mly" "lexer.mll"
       ] end
     ]
-  requires = [ "num" "unix" "menhirLib" ]
+    requires = [ "num" "unix" "menhirLib" ]
 end
