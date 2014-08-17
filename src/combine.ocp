@@ -1,7 +1,0 @@
-begin program "combine"
-  sort = true
-  files = [ "interp.ml" "main.ml" ]
-  requires = [ "lib" "parser" ]
-  bytecomp = [ "-g" ]
-  bytelink = [ "-g" ]
-end

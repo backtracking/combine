@@ -1,5 +1,0 @@
-begin library "parser"
-    sort = true
-    requires = ["lib" "menhirLib"]
-    files = ["parser.mly" "lexer.mll" ]
-end
