@@ -3,8 +3,6 @@ authors = ["Rémy El Sibaïe" "Jean-Christophe Filliâtre"]
 description = ["A library for combinatorics problem solving"]
 version = ["0.56"]
 
-comp = "-g" (* use -g only for compiling *)
-link = "-g" (* use -g only for linking *)
 
 begin program "combine"
     sort = true
@@ -17,7 +15,7 @@ begin library "combinelib"
     ocamlyacc = "menhir"
     files = [
       begin pack Combine (sort = true) [
-        "d4.ml" "ast.mli" "matrix.ml" "dlx.ml" "dlxa.ml" "zdd.ml" "emc.ml"
+        "d4.ml" "ast.mli" "matrix.ml" "dlx.ml" "zdd.ml" "emc.ml"
           "cube.ml" "tiling.ml" "backtracking.ml" "interp.ml"
           "parser.mly" "lexer.mll"
       ] end

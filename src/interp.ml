@@ -32,7 +32,6 @@ module type N = sig
   val print : Format.formatter -> t -> unit
 end
 
-let fast_dlx = ref false
 
 module Make = functor (T : Time) -> functor (N : N) -> struct
 
@@ -144,9 +143,6 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     fprintf fmt "%s : @?" p.pname;
     init_timer ();
     begin match algo with
-    | Dlx when !fast_dlx ->
-      let p = Dlxa.create ~primary m in
-      fprintf fmt "(DLX) %d solutions@." (Dlxa.count_solutions p)
     | Dlx ->
       let p = Emc.D.create ~primary m in
       fprintf fmt "(DLX) %a solutions@." N.print (DCount.count_solutions p)

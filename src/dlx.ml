@@ -54,7 +54,6 @@ let add_below n1 n2 =
 
 (* Adds row after the headers in the DLM *)
 let add_row headers row i =
-  let dummy = one_node () in
   let rec addi_rec n previous =
     if n < Array.length row then
       if row.(n) then begin
@@ -63,13 +62,14 @@ let add_row headers row i =
         element.c <- headers.(n);
         element.name <- "";
         headers.(n).s <- headers.(n).s + 1;
-        if previous != dummy then add_right previous element;
+        if n != 0 then
+          add_right previous element;
         add_below headers.(n) element;
         addi_rec (n + 1) element
       end else
         addi_rec (n + 1) previous
   in
-  addi_rec 0 dummy
+  addi_rec 0 (one_node ())
 
 (* Returns a DLM only with the headers *)
 let generate_headers ?primary size h =

@@ -29,7 +29,6 @@ module type N = sig
   val print : Format.formatter -> t -> unit
 end
 
-val fast_dlx: bool ref
 
 module Make : functor (T : Time) -> functor (N : N) -> sig
 
