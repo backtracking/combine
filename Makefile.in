@@ -64,7 +64,7 @@ all: $(OCAMLBEST) test
 # bytecode and native-code compilation
 ######################################
 
-LIBCMO = matrix.cmo dlx.cmo zdd.cmo emc.cmo d4.cmo cube.cmo tiling.cmo \
+LIBCMO = matrix.cmo dlx.cmo dlxa.cmo zdd.cmo emc.cmo d4.cmo cube.cmo tiling.cmo \
 	 backtracking.cmo ast.cmi parser.cmo lexer.cmo interp.cmo
 LIBCMX = $(LIBCMO:.cmo=.cmx)
 LIBMLI = $(LIBCMO:.cmo=.mli)
@@ -183,7 +183,7 @@ install-opt: install-indep
 
 .PHONY: doc test check
 
-DOCFILES=zdd.mli dlx.mli emc.mli tiling.mli parser.mli
+DOCFILES=zdd.mli dlx.mli dlxa.mli emc.mli tiling.mli parser.mli
 
 doc:
 	mkdir -p doc
