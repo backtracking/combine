@@ -1,4 +1,5 @@
 .depend
+Makefile
 configure
 version.ml
 autom4te.cache/
