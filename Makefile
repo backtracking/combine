@@ -18,6 +18,17 @@
 ##########################################################################
 
 
+TEMPORARY_DIR=_obuild
+AUTO_GEN_DIR=src/auto_gen
+ERROR_GEN_EXE=./$(TEMPORARY_DIR)/error_gen/error_gen.byte
+NOWORK_BIN_TMP=$(TEMPORARY_DIR)/nowork/nowork.byte
+NOWORK_BIN=nowork
+
+DOC_FILES=coding-style.tex dev-manual.tex user-manual.tex methodology.tex
+DOC_PDF=$(DOC_FILES:.tex=.pdf)
+PDF=$(addprefix doc/pdf/, $(DOC_PDF))
+
+
 all: main
 
 
