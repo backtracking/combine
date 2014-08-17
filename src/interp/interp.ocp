@@ -1,0 +1,10 @@
+begin library "interp"
+    sort = true
+    requires = ["lib" "menhirLib"]
+    ocamlyacc = "menhir"
+    files = [
+      begin pack Combine (sort = true) [
+        "interp.ml" "parser.mly" "lexer.mll"
+      ] end
+    ]
+end

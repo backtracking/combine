@@ -42,9 +42,7 @@ debug:
 	ocp-build build combine_debug
 
 install: main
-	ocp-build install combine combinelib
-	cp _obuild/combinelib/*.cmi `ocamlfind query combinelib`
-
+	ocp-build install combine
 
 examples: main
 	ocp-build build sudoku queens backslide

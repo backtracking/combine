@@ -1,0 +1,8 @@
+begin library "lib"
+    sort = true
+    files = [
+         "d4.ml" "ast.mli" "matrix.ml" "dlx.ml" "zdd.ml" "emc.ml"
+          "cube.ml" "tiling.ml" "backtracking.ml"
+    ]
+    requires = ["nums" "unix"]
+end

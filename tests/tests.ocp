@@ -1,7 +1,7 @@
 begin test "tests"
   sort = true
   files = [ "test.ml" "test_sat.ml" ]
-  requires = [ "combinelib" "nums" "unix" ]
+  requires = [ "lib" "interp" "nums" "unix" ]
   bytecomp = [ "-g" ]
   bytelink = [ "-g" ]
 end
