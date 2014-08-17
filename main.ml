@@ -30,7 +30,9 @@ let parse_only = ref false
 let msg = "usage: project [options] file"
 let spec = [ "--debug", Arg.Set debug, "  Set the debug flag";
             "--stats", Arg.Set stats, "  Set the stats flag";
-	    "--parse-only", Arg.Set parse_only, "  Stop after parsing";]
+	    "--parse-only", Arg.Set parse_only, "  Stop after parsing";
+            "--fast-dlx", Arg.Set Interp.fast_dlx, "  Use fast DLX";
+           ]
 
 let file = ref None
 let set_file f = match !file with
