@@ -1,7 +1,0 @@
-begin test "tests"
-  sort = true
-  files = [ "test.ml" "test_sat.ml" ]
-  requires = [ "lib" "interp" "nums" "unix" ]
-  bytecomp = [ "-g" ]
-  bytelink = [ "-g" ]
-end

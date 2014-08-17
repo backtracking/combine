@@ -1,0 +1,317 @@
+##########################################################################
+#                                                                        #
+#  Combine - an OCaml library for combinatorics                          #
+#                                                                        #
+#  Copyright (C) 2012-2014                                               #
+#    Remy El Sibaie                                                      #
+#    Jean-Christophe Filliatre                                           #
+#                                                                        #
+#  This software is free software; you can redistribute it and/or        #
+#  modify it under the terms of the GNU Library General Public           #
+#  License version 2.1, with the special exception on linking            #
+#  described in file LICENSE.                                            #
+#                                                                        #
+#  This software is distributed in the hope that it will be useful,      #
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  #
+#                                                                        #
+##########################################################################
+
+#
+# sample Makefile for Objective Caml
+# Copyright (C) 2001 Jean-Christophe FILLIATRE
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Library General Public
+# License version 2, as published by the Free Software Foundation.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# See the GNU Library General Public License version 2 for more details
+# (enclosed in the file LGPL).
+
+# where to install the binaries
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+BINDIR=@bindir@
+
+# where to install the man page
+MANDIR=@mandir@
+
+# other variables set by ./configure
+OCAMLC   = @OCAMLC@
+OCAMLOPT = @OCAMLOPT@
+OCAMLDEP = @OCAMLDEP@
+OCAMLLEX = @OCAMLLEX@
+MENHIR = menhir # developers should have menhir installed
+OCAMLLIB = @OCAMLLIB@
+OCAMLBEST= @OCAMLBEST@
+OCAMLVERSION = @OCAMLVERSION@
+OCAMLWEB = @OCAMLWEB@
+OCAMLWIN32 = @OCAMLWIN32@
+EXE = @EXE@
+
+INCLUDES =
+BFLAGS = -g $(INCLUDES)
+OFLAGS = -g -annot $(INCLUDES)
+# main target
+#############
+
+all: $(OCAMLBEST) test
+
+# bytecode and native-code compilation
+######################################
+
+LIBCMO = matrix.cmo dlx.cmo zdd.cmo emc.cmo d4.cmo cube.cmo tiling.cmo \
+	 backtracking.cmo ast.cmi parser.cmo lexer.cmo interp.cmo
+LIBCMX = $(LIBCMO:.cmo=.cmx)
+LIBMLI = $(LIBCMO:.cmo=.mli)
+$(LIBCMX): OFLAGS += -for-pack Combine
+CMA = combine.cma
+CMXA = combine.cmxa
+
+
+
+GENERATED = parser.ml parser.mli lexer.ml version.ml
+
+byte: $(CMA) combine.byte sudoku.byte queens.byte backslide.byte
+opt: $(CMXA) combine.opt sudoku.opt queens.opt backslide.opt
+
+combine.cma: combine.cmo
+	$(OCAMLC) $(INCLUDES) -a -g -o $@ $^
+
+combine.cmxa: combine.cmx
+	$(OCAMLOPT) $(INCLUDES) -a -o $@ $^
+
+combine.cmi: combine.cmo
+combine.o: combine.cmx
+
+combine.cmo: $(LIBCMO)
+	$(OCAMLC) $(INCLUDES) -pack -g -o $@ $^
+
+combine.cmx: $(LIBCMX)
+	$(OCAMLOPT) $(INCLUDES) -pack -o $@ $^
+
+
+
+CMO = main.cmo
+CMX = $(CMO:.cmo=.cmx)
+
+$(CMO) queens.cmo sudoku.cmo backslide.cmo test.cmo: combine.cmi
+$(CMX) queens.cmx sudoku.cmx backslide.cmx test.cmx: combine.cmi
+
+combine.byte: $(CMA) $(CMO)
+	$(OCAMLC) $(BFLAGS) -o $@ nums.cma unix.cma $^
+
+combine.opt: $(CMXA) $(CMX)
+	$(OCAMLOPT) $(OFLAGS) -o $@ nums.cmxa unix.cmxa $^
+
+VERSION=0.55
+
+version.ml: Makefile
+	echo "let version = \""$(VERSION)"\"" > version.ml
+	echo "let date = \""`date`"\"" >> version.ml
+
+# test
+######
+
+test: test.byte combine.byte
+	./test.byte
+	for f in examples/*.cmb; do ./combine.byte --parse-only $$f ; done
+
+check: combine.opt
+#	for f in examples/*.cmb; do ./combine.opt $$f ; done
+	./combine.opt examples/scott.cmb
+
+backslide.byte: $(CMA) backslide.cmo
+	$(OCAMLC) -o $@ $(BFLAGS) $^
+
+backslide.opt: $(CMXA) backslide.cmx
+	$(OCAMLOPT) -o $@ $(OFLAGS) $^
+
+test.byte: $(CMA) test.cmo
+	$(OCAMLC) -o $@ $(BFLAGS) nums.cma unix.cma $^
+
+test.opt: $(CMXA) queens.cmx test.cmx
+	$(OCAMLOPT) -o $@ $(OFLAGS) nums.cmxa unix.cmxa $^
+
+sudoku.byte: $(CMA) sudoku.cmo
+	$(OCAMLC) -o $@ $(BFLAGS) str.cma $^
+
+sudoku.opt: $(CMXA) sudoku.cmx
+	$(OCAMLOPT) -o $@ $(OFLAGS) str.cmxa $^
+
+queens.byte: $(CMA) queens.cmo
+	$(OCAMLC) -o $@ unix.cma $(BFLAGS) $^
+
+queens.opt: $(CMXA) queens.cmx
+	$(OCAMLOPT) -o $@ unix.cmxa $(OFLAGS) $^
+
+color.byte: $(CMA) color.ml
+	$(OCAMLC) -o $@ $(BFLAGS) -I +ocamlgraph unix.cma graphics.cma graph.cma $^
+
+color.opt: $(CMXA) color.ml
+	$(OCAMLOPT) -o $@ $(OFLAGS) -I +ocamlgraph unix.cmxa graphics.cmxa graph.cmxa $^
+
+
+# installation
+##############
+
+INSTALL_LIBDIR=$(prefix)/lib/combine
+
+install-indep:
+	mkdir -p $(BINDIR)
+	mkdir -p $(INSTALL_LIBDIR)
+	# mkdir -p $(MANDIR)/man1
+	# cp -f combine.1 $(MANDIR)/man1
+
+install: install-indep install-$(OCAMLBEST) install-byte
+	cp -f combine.$(OCAMLBEST) $(BINDIR)/combine$(EXE)
+
+install-byte: install-indep
+	cp -f combine.cmi $(CMA) $(INSTALL_LIBDIR)
+	cp -f META $(INSTALL_LIBDIR)
+	# cp -f $(LIBMLI) $(INSTALL_LIBDIR)
+
+install-opt: install-indep
+	cp -f combine.a $(CMXA) $(INSTALL_LIBDIR)
+
+# documentation
+###############
+
+.PHONY: doc test check
+
+DOCFILES=zdd.mli dlx.mli emc.mli tiling.mli parser.mli
+
+doc:
+	mkdir -p doc
+	ocamldoc -d doc -html $(DOCFILES)
+
+# export
+########
+
+EXPORTDIR=combine-$(VERSION)
+TAR=$(EXPORTDIR).tar
+
+WWW = /users/demons/filliatr/WWW/combine/
+
+FILES = *.ml* Makefile.in configure configure.in .depend examples/*.cmb \
+	README INSTALL LICENSE
+
+export: source export-doc
+	cp README LICENSE $(WWW)
+	mkdir -p $(WWW)/download/
+	cp export/$(TAR).gz $(WWW)/download/
+
+source:
+	mkdir -p export/$(EXPORTDIR)
+	cp --parents $(FILES) export/$(EXPORTDIR)
+	rm -f export/$(EXPORTDIR)/parser.mly
+	cd export ; tar cf $(TAR) $(EXPORTDIR) ; gzip -f --best $(TAR)
+
+export-doc: doc
+	cp -f -r doc/ $(WWW)
+	caml2html -d $(WWW) queens.ml sudoku.ml
+	cp -f www/*.html www/*.css $(WWW)
+	mkdir -p $(WWW)/images/
+	cp www/images/* $(WWW)/images/
+
+# literate programming
+######################
+
+SOURCES =
+
+combine.tex: $(SOURCES)
+	$(OCAMLWEB) -o $@ $^
+
+# generic rules
+###############
+
+.SUFFIXES: .mli .ml .cmi .cmo .cmx .mll .mly .tex .dvi .ps .html
+
+.mli.cmi:
+	$(OCAMLC) -c $(BFLAGS) $<
+
+.ml.cmo:
+	$(OCAMLC) -c $(BFLAGS) $<
+
+.ml.o:
+	$(OCAMLOPT) -c $(OFLAGS) $<
+
+.ml.cmx:
+	$(OCAMLOPT) -c $(OFLAGS) $<
+
+.mll.ml:
+	$(OCAMLLEX) $<
+
+.mly.ml:
+	$(MENHIR) -v $<
+	perl -pi -e 's/4611686018427387903/max_int/g' parser.ml
+
+.mly.mli:
+	$(MENHIR) -v $<
+
+.tex.dvi:
+	latex $< && latex $<
+
+.dvi.ps:
+	dvips $< -o $@
+
+.tex.html:
+	hevea $<
+
+###############
+# file headers
+###############
+
+headers:
+	headache -c misc/headache_config.txt -h misc/header.txt \
+	    Makefile.in configure.in *.ml* README
+
+# Emacs tags
+############
+
+tags:
+	find . -name "*.ml*" | sort -r | xargs \
+	etags "--regex=/let[ \t]+\([^ \t]+\)/\1/" \
+	      "--regex=/let[ \t]+rec[ \t]+\([^ \t]+\)/\1/" \
+	      "--regex=/and[ \t]+\([^ \t]+\)/\1/" \
+	      "--regex=/type[ \t]+\([^ \t]+\)/\1/" \
+              "--regex=/exception[ \t]+\([^ \t]+\)/\1/" \
+	      "--regex=/val[ \t]+\([^ \t]+\)/\1/" \
+	      "--regex=/module[ \t]+\([^ \t]+\)/\1/"
+
+# Makefile is rebuilt whenever Makefile.in or configure.in is modified
+######################################################################
+
+Makefile: Makefile.in config.status
+	./config.status
+
+config.status: configure
+	./config.status --recheck
+
+configure: configure.in
+	autoconf
+
+# clean
+#######
+
+clean::
+	rm -f *.cm[iox] *.o *~
+	rm -f $(GENERATED) parser.output
+	rm -f combine.byte combine.opt
+	rm -f *.aux *.log combine.tex combine.dvi combine.ps
+
+dist-clean distclean:: clean
+	rm -f Makefile config.cache config.log config.status
+
+# depend
+########
+
+.depend depend:: $(GENERATED)
+	rm -f .depend
+	$(OCAMLDEP) $(INCLUDES) *.ml *.mli > .depend
+
+include .depend
