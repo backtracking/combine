@@ -117,7 +117,7 @@ let create ?primary m =
   } in
   let n0 = one_node t in
   assert (n0 = 0);
-  let headers = generate_headers ?primary nc t in
+  generate_headers ?primary nc t;
   for i = Array.length m - 1 downto 0 do
     add_row t m.(i) i
   done;
