@@ -33,6 +33,8 @@
 
     ocamlc -I +combine combine.cma <other files>
 
+  full documentation : https://www.lri.fr/~filliatr/combine/
+
 
 * Examples
 
