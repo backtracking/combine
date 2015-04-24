@@ -1,0 +1,44 @@
+
+# The 5 tetrominoes
+#
+# See for instance http://en.wikipedia.org/wiki/Tetromino
+# Tiling problems involving the tetrominoes can be found in tetro.cmb
+
+
+pattern I = {
+****
+}
+
+pattern O = {
+**
+**
+}
+
+pattern T = {
+***
+.*.
+}
+
+pattern L = {
+***
+*..
+}
+
+pattern S = {
+.**
+**.
+}
+
+tiles all_tetrominoes =
+[ I ~one ~sym, O ~one ~sym, T ~one ~sym, L ~one ~sym, S ~one ~sym ]
+
+tiles all_tetrominoes_twice =
+[ I ~one ~sym, O ~one ~sym, T ~one ~sym, L ~one ~sym, S ~one ~sym,
+  I ~one ~sym, O ~one ~sym, T ~one ~sym, L ~one ~sym, S ~one ~sym ]
+
+tiles all_tetrominoes_nosym =
+[ I ~one ~sym, O ~one ~sym, T ~one ~sym, L ~one ~sym, S ~one ]
+
+tiles some_tetrominoes =
+[ I ~maybe ~sym, O ~maybe ~sym, T ~maybe ~sym, L ~maybe ~sym, S ~maybe ~sym ]
+

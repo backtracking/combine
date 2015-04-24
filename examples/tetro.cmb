@@ -1,0 +1,24 @@
+
+include "tetrominoes.cmb"
+
+problem p4x10 = {
+**********
+**********
+**********
+**********
+} all_tetrominoes_twice
+
+count dlx p4x10 # 57472
+
+problem p5x8 = {
+********
+********
+********
+********
+********
+} all_tetrominoes_twice
+
+count dlx p5x8 # 99392
+
+
+
