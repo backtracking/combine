@@ -44,6 +44,7 @@ open Combine
    columns are the following
 *)
 
+let debug = ref false
 let range = ref 0
 let svg_file = ref ""
 
@@ -51,7 +52,9 @@ let msg = "usage: ./queens -n value"
 let spec = ["-n", Arg.Set_int range,
               "  Range of the N-queens problem";
             "--svg", Arg.Set_string svg_file,
-              "<file>  Output one solution in SVG format";]
+              "<file>  Output one solution in SVG format";
+            "--debug", Arg.Set debug,
+              "prints the EMC matrix"; ]
 
 let () = Arg.parse spec (fun _ ->()) msg
 let () = if !range = 0 then exit 0
@@ -138,7 +141,9 @@ let time () = (Unix.times()).Unix.tms_utime
 let () =
   printf "Solving the %d-queens@." n;
   printf "EMC matrix is %a@." Emc.print_matrix_size emc;
+  if !debug then printf "%d@.%d@.%d@." primary (6*n-2-primary) (n*n);
   let p = Emc.D.create ~primary emc in
+  if !debug then printf "%a@." Emc.print_boolean_matrix emc;
   let board = Array.make_matrix n n false in
   if svg_file <> "" then begin
     let solution = Emc.D.find_solution p in
