@@ -3,6 +3,81 @@ include "hexaminos.cmb"
 
 timing on
 
+pattern cell = {
+*
+}
+
+tiles some_complex_hexaminos = [
+  cell ~one, cell ~one, cell ~one, cell ~one, cell ~one, cell ~one,
+  h17 ~one ~sym,
+  h20 ~one ~sym,
+  h33 ~one ~sym,
+  h10 ~one ~sym,
+  h24 ~one ~sym,
+  h18 ~one ~sym,
+  h22 ~one ~sym,
+  h25 ~one ~sym,
+  h29 ~one ~sym,
+  h35 ~one ~sym,
+  h23 ~one ~sym,
+  h11 ~one ~sym,
+  h12 ~one ~sym,
+  h13 ~one ~sym,
+  h14 ~one ~sym,
+  h16 ~one ~sym,
+  h15 ~one ~sym
+]
+
+tiles some_simple_hexaminos = [
+  cell ~one, cell ~one, cell ~one, cell ~one, cell ~one, cell ~one,
+  h5 ~one ~sym,
+  h9 ~one ~sym,
+  h6 ~one ~sym,
+  h7 ~one ~sym,
+  h21 ~one ~sym,
+  h19 ~one ~sym,
+  h2 ~one ~sym,
+  h3 ~one ~sym,
+  h4 ~one ~sym,
+  h26 ~one ~sym,
+  h32 ~one ~sym,
+  h31 ~one ~sym,
+  h30 ~one ~sym,
+  h34 ~one ~sym,
+  h28 ~one ~sym,
+  h27 ~one ~sym,
+  h8 ~one ~sym
+]
+
+problem p9x12 = {
+************
+************
+************
+************
+************
+************
+************
+************
+************
+} some_complex_hexaminos
+
+problem p9x12simple = {
+************
+************
+************
+************
+************
+************
+************
+************
+************
+} some_simple_hexaminos
+
+solve dlx p9x12simple svg "solutions/hexa_9x12simple.svg"
+solve dlx p9x12 svg "solutions/hexa_9x12.svg"
+count dlx p9x12
+exit
+
 problem p18x15_5x3 = {
 ***************
 ***************
