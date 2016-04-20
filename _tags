@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: b2435c30f944eb31d039cf2df28f1d9b)
+# DO NOT EDIT (digest: 586163a4039182f0360178bd0c591d7c)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -43,7 +43,6 @@ true: annot, bin_annot
 <examples/lib/queens.{native,byte}>: pkg_menhirLib
 <examples/lib/queens.{native,byte}>: pkg_unix
 <examples/lib/queens.{native,byte}>: use_combine
-<examples/lib/*.ml{,i,y}>: pkg_unix
 # Executable sudoku
 <examples/lib/sudoku.{native,byte}>: pkg_menhirLib
 <examples/lib/sudoku.{native,byte}>: pkg_str
@@ -56,11 +55,22 @@ true: annot, bin_annot
 <examples/lib/color.{native,byte}>: pkg_graphics
 <examples/lib/color.{native,byte}>: pkg_menhirLib
 <examples/lib/color.{native,byte}>: pkg_ocamlgraph
+<examples/lib/color.{native,byte}>: pkg_unix
 <examples/lib/color.{native,byte}>: use_combine
 <examples/lib/*.ml{,i,y}>: pkg_graphics
 <examples/lib/*.ml{,i,y}>: pkg_menhirLib
 <examples/lib/*.ml{,i,y}>: pkg_ocamlgraph
+<examples/lib/*.ml{,i,y}>: pkg_unix
 <examples/lib/*.ml{,i,y}>: use_combine
+# Executable test
+<tests/test.{native,byte}>: pkg_menhirLib
+<tests/test.{native,byte}>: pkg_num
+<tests/test.{native,byte}>: pkg_unix
+<tests/test.{native,byte}>: use_combine
+<tests/*.ml{,i,y}>: pkg_menhirLib
+<tests/*.ml{,i,y}>: pkg_num
+<tests/*.ml{,i,y}>: pkg_unix
+<tests/*.ml{,i,y}>: use_combine
 # OASIS_STOP
 
 true: use_menhir, explain
