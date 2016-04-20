@@ -49,3 +49,7 @@ color.opt
 /tests/*.svg
 *.dimacs
 /solutions/
+_build
+setup.data
+setup.log
+main.native

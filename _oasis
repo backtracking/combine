@@ -1,0 +1,27 @@
+OASISFormat: 0.4
+Name:        combine
+Version:     0.6
+Synopsis:    "A library for combinatorics problems"
+Authors:     Remy El Sibaïe, Jean-Christophe Filliâtre
+License:     LGPL
+Plugins:     META (0.4), DevFiles (0.4)
+BuildTools:  ocamlbuild
+
+Library combine
+  Path: src/lib/
+  Pack: true
+  Install: true
+  BuildDepends: menhirLib
+  Modules:
+    Matrix, Dlx, Dlxa, Zdd, Emc, D4,
+    Cube, Tiling, Backtracking,
+    Ast, Parser, Lexer, Interp
+
+Executable combine
+  Path:           src/
+  Install: true
+  BuildDepends:
+  MainIs:         main.ml
+  CompiledObject: best
+  BuildDepends: combine, num, unix
+

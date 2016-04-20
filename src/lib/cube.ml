@@ -46,7 +46,7 @@ let trans_size m (w,h,d) =
   mul m.(0), mul m.(1), mul m.(2)
 
 let all =
-  let m = Array.create_matrix 3 3 0 in
+  let m = Array.make_matrix 3 3 0 in
   let res = ref [] in
   let rec make = function
     | [] ->
