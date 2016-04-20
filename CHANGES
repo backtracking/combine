@@ -1,6 +1,9 @@
+version 0.55, Apr 2014
+----------------------
 
  * Tiling.Problem.ToEMC now creates a sparse matrix
  o alternative implementation of DLX using arrays of integers (in Dlxa)
+ * use oasis as build system
 
 version 0.55, Apr 2014
 ----------------------
