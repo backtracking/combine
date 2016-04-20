@@ -123,6 +123,31 @@ let create ?primary m =
   done;
   t
 
+let create_sparse ?primary ~columns m =
+  let nc = columns in
+  let n = Array.fold_left (fun acc l -> acc + List.length l) (1 + nc) m in
+  let t = {
+    nc = nc;
+    c     = Array.make n 0;
+    s     = Array.make n 0;
+    up    = Array.make n 0;
+    down  = Array.make n 0;
+    left  = Array.make n 0;
+    right = Array.make n 0;
+    name  = Array.make n "";
+    next = 0;
+  } in
+  let n0 = one_node t in
+  assert (n0 = 0);
+  generate_headers ?primary nc t;
+  let row = Array.make nc false in
+  for i = Array.length m - 1 downto 0 do
+    Array.fill row 0 nc false;
+    List.iter (fun c -> row.(c) <- true) m.(i);
+    add_row t row i
+  done;
+  t
+
 (* Applies f to elements of the DLM, from left to right*)
 let iter_right t ?(self = true) f n =
   if self then f n;

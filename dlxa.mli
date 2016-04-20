@@ -41,6 +41,8 @@ val create: ?primary:int -> bool array array -> t
       If [primary] is given, it means that the first [primary] columns are
       primary; otherwise, all columns are primary columns. *)
 
+val create_sparse: ?primary:int -> columns:int -> int list array -> t
+
 val count_solutions: t -> int
   (** Returns the number of solutions. *)
 

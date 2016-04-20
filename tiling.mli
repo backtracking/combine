@@ -139,8 +139,9 @@ module Problem : sig
   module ToEMC: sig
 
     type emc = private {
+      columns: int;
       primary: int;			      (* number of primary columns *)
-      emc    : bool array array;
+      emc    : int list array;
       tiles  : (Tile.t * int * int) array;    (* row -> tile and its position *)
     }
 

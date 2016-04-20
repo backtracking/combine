@@ -382,17 +382,17 @@ width=\"%d\" height=\"%d\">@\n"
       with Exit -> !id
 
     let one_line n tile_id tile problem ~x ~y =
-      let line = Array.make n false in
+      let line = ref [] in
       for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do
         for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do
           if tile.Tile.pattern.Pattern.matrix.(y').(x') then begin
-            line.(get_id_col_emc problem (x + x') (y + y')) <- true;
+            line := get_id_col_emc problem (x + x') (y + y') :: !line;
             if tile.Tile.multiplicity <> Minf then
-              line.(tile_id) <- true
+              line := tile_id :: !line
           end
         done
       done;
-      line
+      List.sort Pervasives.compare !line
 
     let one_line_piece_only n piece_id piece =
       let line = Array.make n false in
@@ -421,21 +421,24 @@ width=\"%d\" height=\"%d\">@\n"
       ) (0, 0) problem.pieces
 
     type emc = {
+      columns: int;
       primary: int;			      (* number of primary columns *)
-      emc    : bool array array;
+      emc    : int list array;
       tiles  : (Tile.t * int * int) array;    (* row -> tile and its position *)
     }
 
     let print_emc fmt emc =
-      let print_bool b = if b then fprintf fmt "1" else fprintf fmt "0" in
-      let print_line _ l = Array.iter print_bool l; fprintf fmt "@\n" in
-      Array.iteri print_line emc.emc;
+      let rec print_line i = function
+        | _ when i = emc.columns -> ()
+        | c :: l when c = i -> fprintf fmt "1"; print_line (i + 1) l
+        | l -> fprintf fmt "0"; print_line (i + 1) l in
+      Array.iter (print_line 0) emc.emc;
       fprintf fmt "%d primary columns" emc.primary
 
     let print_emc_size fmt emc =
       let h = Array.length emc.emc in
       fprintf fmt "%d rows x %d columns, with %d primary columns"
-        h (if h = 0 then 0 else Array.length emc.emc.(0)) emc.primary
+        h emc.columns emc.primary
 
   (* return a boolean matrix representing the set of way to put all pieces
    * on the board
@@ -474,7 +477,8 @@ width=\"%d\" height=\"%d\">@\n"
       done;
       let matrix = Array.of_list !lines in
       let decode_tbl = Array.of_list !decodes in
-      { primary = ncc + prim;
+      { columns = n;
+        primary = ncc + prim;
         emc = matrix;
         tiles = decode_tbl }
 

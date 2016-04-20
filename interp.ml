@@ -138,20 +138,20 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     timer := 0.
 
   let count_emc fmt efmt p algo =
-    let { primary = primary; emc = m; tiles = decode_tbl } as emc =
-      Tiling.Problem.ToEMC.make p in
+    let { columns = columns; primary = primary; emc = m; tiles = decode_tbl }
+        as emc = Tiling.Problem.ToEMC.make p in
     if !debug then fprintf fmt "@[<hov 2>EMC size is %a@]@." print_emc_size emc;
     fprintf fmt "%s : @?" p.pname;
     init_timer ();
     begin match algo with
     | Dlx when !fast_dlx ->
-      let p = Dlxa.create ~primary m in
+      let p = Dlxa.create_sparse ~primary ~columns m in
       fprintf fmt "(DLX) %d solutions@." (Dlxa.count_solutions p)
     | Dlx ->
-      let p = Emc.D.create ~primary m in
+      let p = Emc.D.create_sparse ~primary ~columns m in
       fprintf fmt "(DLX) %a solutions@." N.print (DCount.count_solutions p)
     | Zdd ->
-      let p = Emc.Z.create ~primary m in
+      let p = Emc.Z.create_sparse ~primary ~columns m in
       if !debug then fprintf efmt "ZDD has size %d@." (Zdd.size p);
       fprintf fmt "(ZDD) %a solutions@." N.print (ZCount.count_solutions p)
     | Sat _ ->
@@ -185,19 +185,20 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
 
   let solve_emc fmt efmt output p algo =
     let emc = Tiling.Problem.ToEMC.make p in
+    let columns = emc.columns in
     if !debug then
       fprintf fmt "@[<hov 2>EMC size is@\n%a@]@." print_emc_size emc;
     let { primary = primary; emc = m; tiles = decode_tbl } = emc in
     init_timer ();
     let solution = match algo with
       | Dlx ->
-        let p = Emc.D.create ~primary m in
+        let p = Emc.D.create_sparse ~columns ~primary m in
         begin try Emc.D.find_solution p with Not_found -> [] end
       | Zdd ->
-        let zdd = Emc.Z.create ~primary m in
+        let zdd = Emc.Z.create_sparse ~columns ~primary m in
         begin try Emc.Z.find_solution zdd with Not_found -> [] end
       | Sat sat ->
-        let p = Emc.Sat.create ~primary m in
+        let p = Emc.Sat.create_sparse ~columns ~primary m in
         let cmd ~input ~output =
           if !debug then fprintf efmt "DIMACS input in %s@." input;
           sprintf "%s %s %s" sat input output
@@ -257,16 +258,17 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
   let all_emc fmt p algo =
     let module P = Tiling.Problem.ToEMC in
     let emc = P.make p in
+    let columns = emc.columns in
     if !debug then
       fprintf fmt "@[<hov 2>EMC size is@\n%a@]@." P.print_emc_size emc;
     let { P.primary = primary; emc = m; tiles = decode_tbl } = emc in
     init_timer ();
     let iter_solution f = match algo with
       | Dlx ->
-        let p = Emc.D.create ~primary m in
+        let p = Emc.D.create_sparse ~columns ~primary m in
         Emc.D.iter_solution f p
       | Zdd ->
-        let zdd = Emc.Z.create ~primary m in
+        let zdd = Emc.Z.create_sparse ~columns ~primary m in
         Emc.Z.iter_solution f zdd
       | Sat _ ->
           fprintf fmt "cannot find all solutions with SAT@."
@@ -409,7 +411,8 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
         | Not_found ->
           raise (Error (decl.decl_pos, "Unbound problem " ^ id)) end in
       let emc = Tiling.Problem.ToEMC.make p in
-      let sat = Sat.create ~primary:emc.primary emc.emc in
+      let columns = emc.columns in
+      let sat = Sat.create_sparse ~columns ~primary:emc.primary emc.emc in
       Emc.Sat.print_in_file file sat
     | Assert be ->
       if not (interp_bool_expr be) then begin
