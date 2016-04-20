@@ -23,12 +23,13 @@ timing on
 
 # solve dlx scott_problem svg "solutions/scott.svg"
 
-# count dlx scott_problem
+solve dlx scott_problem ascii
+count dlx scott_problem
 
 # solve sat "minisat2" scott_problem svg "solutions/scott2.svg"
 
-solve equal_size scott_problem ascii
-count equal_size scott_problem
+# solve equal_size scott_problem ascii
+# count equal_size scott_problem
 
 # Local Variables:
 # compile-command: "../combine.opt scott.cmb"
