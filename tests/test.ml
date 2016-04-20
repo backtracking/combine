@@ -41,7 +41,7 @@ end
 
 module TestInterp = Interp.Make(T)(N)
 
-let r = Lexer.parse_file "examples/non-regression.cmb"
+let r = Lexer.parse_file "examples/cmb/non-regression.cmb"
 let problems, _ = TestInterp.interp_problems std_formatter err_formatter r
 let p = List.hd problems
 

@@ -1,6 +1,66 @@
 # OASIS_START
-# DO NOT EDIT (digest: a3c674b4239234cbbe53afe090018954)
-
+# DO NOT EDIT (digest: b2435c30f944eb31d039cf2df28f1d9b)
+# Ignore VCS directories, you can use the same kind of rule outside
+# OASIS_START/STOP if you want to exclude directories that contains
+# useless stuff for the build process
+true: annot, bin_annot
+<**/.svn>: -traverse
+<**/.svn>: not_hygienic
+".bzr": -traverse
+".bzr": not_hygienic
+".hg": -traverse
+".hg": not_hygienic
+".git": -traverse
+".git": not_hygienic
+"_darcs": -traverse
+"_darcs": not_hygienic
+# Library combine
+"src/lib/combine.cmxs": use_combine
+"src/lib/matrix.cmx": for-pack(Combine)
+"src/lib/dlx.cmx": for-pack(Combine)
+"src/lib/dlxa.cmx": for-pack(Combine)
+"src/lib/zdd.cmx": for-pack(Combine)
+"src/lib/emc.cmx": for-pack(Combine)
+"src/lib/d4.cmx": for-pack(Combine)
+"src/lib/cube.cmx": for-pack(Combine)
+"src/lib/tiling.cmx": for-pack(Combine)
+"src/lib/backtracking.cmx": for-pack(Combine)
+"src/lib/ast.cmx": for-pack(Combine)
+"src/lib/parser.cmx": for-pack(Combine)
+"src/lib/lexer.cmx": for-pack(Combine)
+"src/lib/interp.cmx": for-pack(Combine)
+<src/lib/*.ml{,i,y}>: pkg_menhirLib
+# Executable combine
+<src/main.{native,byte}>: pkg_menhirLib
+<src/main.{native,byte}>: pkg_num
+<src/main.{native,byte}>: pkg_unix
+<src/main.{native,byte}>: use_combine
+<src/*.ml{,i,y}>: pkg_menhirLib
+<src/*.ml{,i,y}>: pkg_num
+<src/*.ml{,i,y}>: pkg_unix
+<src/*.ml{,i,y}>: use_combine
+# Executable queens
+<examples/lib/queens.{native,byte}>: pkg_menhirLib
+<examples/lib/queens.{native,byte}>: pkg_unix
+<examples/lib/queens.{native,byte}>: use_combine
+<examples/lib/*.ml{,i,y}>: pkg_unix
+# Executable sudoku
+<examples/lib/sudoku.{native,byte}>: pkg_menhirLib
+<examples/lib/sudoku.{native,byte}>: pkg_str
+<examples/lib/sudoku.{native,byte}>: use_combine
+<examples/lib/*.ml{,i,y}>: pkg_str
+# Executable backslide
+<examples/lib/backslide.{native,byte}>: pkg_menhirLib
+<examples/lib/backslide.{native,byte}>: use_combine
+# Executable color
+<examples/lib/color.{native,byte}>: pkg_graphics
+<examples/lib/color.{native,byte}>: pkg_menhirLib
+<examples/lib/color.{native,byte}>: pkg_ocamlgraph
+<examples/lib/color.{native,byte}>: use_combine
+<examples/lib/*.ml{,i,y}>: pkg_graphics
+<examples/lib/*.ml{,i,y}>: pkg_menhirLib
+<examples/lib/*.ml{,i,y}>: pkg_ocamlgraph
+<examples/lib/*.ml{,i,y}>: use_combine
 # OASIS_STOP
 
 true: use_menhir, explain

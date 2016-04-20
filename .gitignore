@@ -52,4 +52,4 @@ color.opt
 _build
 setup.data
 setup.log
-main.native
+*.native

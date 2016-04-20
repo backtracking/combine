@@ -7,6 +7,14 @@ License:     LGPL
 Plugins:     META (0.4), DevFiles (0.4)
 BuildTools:  ocamlbuild
 
+##### FLAGS
+
+Flag "examples"
+  Description: Build examples
+  Default: false
+
+##### LIBRARY & EXECUTABLE
+
 Library combine
   Path: src/lib/
   Pack: true
@@ -20,8 +28,57 @@ Library combine
 Executable combine
   Path:           src/
   Install: true
-  BuildDepends:
   MainIs:         main.ml
   CompiledObject: best
   BuildDepends: combine, num, unix
 
+
+##### EXAMPLES
+
+Executable queens
+  Build$: flag(examples)
+  Path:   examples/lib
+  Install: false
+  MainIs:         queens.ml
+  CompiledObject: best
+  BuildDepends: combine, unix
+
+Executable sudoku
+  Build$: flag(examples)
+  Path:   examples/lib
+  Install: false
+  MainIs:         sudoku.ml
+  CompiledObject: best
+  BuildDepends: combine, str
+
+Executable backslide
+  Build$: flag(examples)
+  Path:   examples/lib
+  Install: false
+  MainIs:         backslide.ml
+  CompiledObject: best
+  BuildDepends: combine
+
+Executable color
+  Build$: flag(examples)
+  Path:   examples/lib
+  Install: false
+  MainIs:         color.ml
+  CompiledObject: best
+  BuildDepends: unix, combine, ocamlgraph, graphics
+
+
+##### TESTS
+
+Executable test
+  Build$: flag(tests)
+  Path: tests/
+  MainIs: test.ml
+  CompiledObject: best
+  Install: false
+  BuildDepends: combine, num, unix
+
+Test test
+  Run$: flag(tests)
+  TestTools: test
+  Command: ./test.native
