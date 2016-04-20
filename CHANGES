@@ -1,0 +1,8 @@
+
+ * Tiling.Problem.ToEMC now creates a sparse matrix
+ o alternative implementation of DLX using arrays of integers (in Dlxa)
+
+version 0.55, Apr 2014
+----------------------
+
+
