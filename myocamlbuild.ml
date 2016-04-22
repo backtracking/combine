@@ -620,18 +620,3 @@ let dispatch_default = MyOCamlbuildBase.dispatch_default conf package_default;;
 
 # 622 "myocamlbuild.ml"
 (* OASIS_STOP *)
-
-let () =
-  dispatch @@ MyOCamlbuildBase.dispatch_combine [
-    (fun hook ->
-       dispatch_default hook;
-       match hook with
-
-       | After_rules ->
-         mark_tag_used("pkg_ocamlgraph");
-         mark_tag_used("tests");
-
-       | _ ->
-         ());
-    dispatch_default
-  ]
