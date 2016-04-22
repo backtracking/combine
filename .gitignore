@@ -22,9 +22,6 @@ queens.opt
 backslide.byte
 backslide.opt
 .*.swp
-lexer.ml
-parser.ml
-parser.mli
 parser.automaton
 parser.output
 *~
