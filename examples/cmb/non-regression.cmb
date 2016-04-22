@@ -1,7 +1,0 @@
-
-pattern chessboard = constant 8x8 true
-
-pattern a = {**}
-
-problem domino_8_8 = chessboard [a ~sym]
-
