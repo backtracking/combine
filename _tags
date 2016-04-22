@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 586163a4039182f0360178bd0c591d7c)
+# DO NOT EDIT (digest: 7491b4b5e76f82077b8de2658ab48016)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -29,48 +29,11 @@ true: annot, bin_annot
 "src/lib/parser.cmx": for-pack(Combine)
 "src/lib/lexer.cmx": for-pack(Combine)
 "src/lib/interp.cmx": for-pack(Combine)
-<src/lib/*.ml{,i,y}>: pkg_menhirLib
 # Executable combine
-<src/main.{native,byte}>: pkg_menhirLib
 <src/main.{native,byte}>: pkg_num
 <src/main.{native,byte}>: pkg_unix
 <src/main.{native,byte}>: use_combine
-<src/*.ml{,i,y}>: pkg_menhirLib
 <src/*.ml{,i,y}>: pkg_num
 <src/*.ml{,i,y}>: pkg_unix
 <src/*.ml{,i,y}>: use_combine
-# Executable queens
-<examples/lib/queens.{native,byte}>: pkg_menhirLib
-<examples/lib/queens.{native,byte}>: pkg_unix
-<examples/lib/queens.{native,byte}>: use_combine
-# Executable sudoku
-<examples/lib/sudoku.{native,byte}>: pkg_menhirLib
-<examples/lib/sudoku.{native,byte}>: pkg_str
-<examples/lib/sudoku.{native,byte}>: use_combine
-<examples/lib/*.ml{,i,y}>: pkg_str
-# Executable backslide
-<examples/lib/backslide.{native,byte}>: pkg_menhirLib
-<examples/lib/backslide.{native,byte}>: use_combine
-# Executable color
-<examples/lib/color.{native,byte}>: pkg_graphics
-<examples/lib/color.{native,byte}>: pkg_menhirLib
-<examples/lib/color.{native,byte}>: pkg_ocamlgraph
-<examples/lib/color.{native,byte}>: pkg_unix
-<examples/lib/color.{native,byte}>: use_combine
-<examples/lib/*.ml{,i,y}>: pkg_graphics
-<examples/lib/*.ml{,i,y}>: pkg_menhirLib
-<examples/lib/*.ml{,i,y}>: pkg_ocamlgraph
-<examples/lib/*.ml{,i,y}>: pkg_unix
-<examples/lib/*.ml{,i,y}>: use_combine
-# Executable test
-<tests/test.{native,byte}>: pkg_menhirLib
-<tests/test.{native,byte}>: pkg_num
-<tests/test.{native,byte}>: pkg_unix
-<tests/test.{native,byte}>: use_combine
-<tests/*.ml{,i,y}>: pkg_menhirLib
-<tests/*.ml{,i,y}>: pkg_num
-<tests/*.ml{,i,y}>: pkg_unix
-<tests/*.ml{,i,y}>: use_combine
 # OASIS_STOP
-
-true: use_menhir, explain

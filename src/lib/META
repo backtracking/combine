@@ -1,8 +1,7 @@
 # OASIS_START
-# DO NOT EDIT (digest: d8608dbc5d40cc7057381dd1064a5646)
+# DO NOT EDIT (digest: 5a9eec52eadb9c12efc8b936a8b3314d)
 version = "0.6"
 description = "\"A library for combinatorics problems\""
-requires = "menhirLib"
 archive(byte) = "combine.cma"
 archive(byte, plugin) = "combine.cma"
 archive(native) = "combine.cmxa"
