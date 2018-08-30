@@ -1,0 +1,56 @@
+debug on
+
+timing on
+
+pattern p_3_1 = {
+*
+}
+
+pattern p_3_2 = {
+**
+*
+}
+
+pattern p_3_3 = {
+***
+*
+*
+}
+
+pattern p_4_1 = {
+*
+}
+
+pattern p_4_2 = {
+**
+*
+}
+
+pattern p_4_3 = {
+***
+*
+*
+}
+
+pattern p_4_4 = {
+****
+*
+*
+*
+}
+
+tiles all_tiles =
+[ p_3_1 ~one ~sym, p_3_2 ~one ~sym, p_3_3 ~one ~sym, p_4_1 ~one ~sym,
+p_4_2 ~one ~sym, p_4_3 ~one ~sym, p_4_4 ~one ~sym]
+
+problem pbm5 = {
+*****
+*****
+*****
+*****
+*****
+} all_tiles
+
+solve dlx pbm5 svg "solutions/pyth-3-4-5.svg"
+# count dlx pbm5
+
