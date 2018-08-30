@@ -1,0 +1,176 @@
+debug on
+
+timing on
+
+pattern p_5_1 = {
+*
+}
+
+pattern p_5_2 = {
+**
+*
+}
+
+pattern p_5_3 = {
+***
+*
+*
+}
+
+pattern p_5_4 = {
+****
+*
+*
+*
+}
+
+pattern p_5_5 = {
+*****
+*
+*
+*
+*
+}
+
+pattern p_12_1 = {
+*
+}
+
+pattern p_12_2 = {
+**
+*
+}
+
+pattern p_12_3 = {
+***
+*
+*
+}
+
+pattern p_12_4 = {
+****
+*
+*
+*
+}
+
+pattern p_12_5 = {
+*****
+*
+*
+*
+*
+}
+
+pattern p_12_6 = {
+******
+*
+*
+*
+*
+*
+}
+
+pattern p_12_7 = {
+*******
+*
+*
+*
+*
+*
+*
+}
+
+pattern p_12_8 = {
+********
+*
+*
+*
+*
+*
+*
+*
+}
+
+pattern p_12_9 = {
+*********
+*
+*
+*
+*
+*
+*
+*
+*
+}
+
+pattern p_12_10 = {
+**********
+*
+*
+*
+*
+*
+*
+*
+*
+*
+}
+
+pattern p_12_11 = {
+***********
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+}
+
+pattern p_12_12 = {
+************
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+}
+
+tiles all_tiles =
+[ p_5_1 ~one ~sym, p_5_2 ~one ~sym, p_5_3 ~one ~sym, p_5_4 ~one ~sym,
+p_5_5 ~one ~sym, p_12_1 ~one ~sym, p_12_2 ~one ~sym, p_12_3 ~one ~sym,
+p_12_4 ~one ~sym, p_12_5 ~one ~sym, p_12_6 ~one ~sym, p_12_7 ~one ~sym,
+p_12_8 ~one ~sym, p_12_9 ~one ~sym, p_12_10 ~one ~sym, p_12_11 ~one ~sym,
+p_12_12 ~one ~sym]
+
+problem pbm13 = {
+*************
+*************
+*************
+*************
+*************
+*************
+*************
+*************
+*************
+*************
+*************
+*************
+*************
+} all_tiles
+
+solve dlx pbm13 svg "solutions/pyth-5-12-13.svg"
+# count dlx pbm13
+# pbm13 : (DLX) 1276672 solutions
+# pbm13 solutions counted in 158.109695s
+

@@ -14,6 +14,7 @@ open Format
 
 let n = int_of_string Sys.argv.(1)
 let m = int_of_string Sys.argv.(2)
+let f = try int_of_string Sys.argv.(3) with _ -> 1
 
 let rec gcd n m = if m = 0 then n else gcd m (n mod m)
 let gcd n m = if n > m then gcd n m else gcd m n
@@ -22,9 +23,9 @@ let () = assert (n < m)
 let () = assert (n mod 2 <> m mod 2)
 let () = assert (gcd n m = 1)
 
-let a = 2*m*n
-let b = (m*m - n*n)
-let c = (m*m + n*n)
+let a = f * 2*m*n
+let b = f * (m*m - n*n)
+let c = f * (m*m + n*n)
 let a = min a b and b = max a b
 let () = printf "%d %d %d@." a b c
 

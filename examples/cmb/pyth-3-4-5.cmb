@@ -53,4 +53,6 @@ problem pbm5 = {
 
 solve dlx pbm5 svg "solutions/pyth-3-4-5.svg"
 # count dlx pbm5
+# pbm5 : (DLX) 640 solutions
+# pbm5 solutions counted in 0.003658s
 

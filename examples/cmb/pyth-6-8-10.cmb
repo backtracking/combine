@@ -1,0 +1,126 @@
+debug on
+
+timing on
+
+pattern p_6_1 = {
+*
+}
+
+pattern p_6_2 = {
+**
+*
+}
+
+pattern p_6_3 = {
+***
+*
+*
+}
+
+pattern p_6_4 = {
+****
+*
+*
+*
+}
+
+pattern p_6_5 = {
+*****
+*
+*
+*
+*
+}
+
+pattern p_6_6 = {
+******
+*
+*
+*
+*
+*
+}
+
+pattern p_8_1 = {
+*
+}
+
+pattern p_8_2 = {
+**
+*
+}
+
+pattern p_8_3 = {
+***
+*
+*
+}
+
+pattern p_8_4 = {
+****
+*
+*
+*
+}
+
+pattern p_8_5 = {
+*****
+*
+*
+*
+*
+}
+
+pattern p_8_6 = {
+******
+*
+*
+*
+*
+*
+}
+
+pattern p_8_7 = {
+*******
+*
+*
+*
+*
+*
+*
+}
+
+pattern p_8_8 = {
+********
+*
+*
+*
+*
+*
+*
+*
+}
+
+tiles all_tiles =
+[ p_6_1 ~one ~sym, p_6_2 ~one ~sym, p_6_3 ~one ~sym, p_6_4 ~one ~sym,
+p_6_5 ~one ~sym, p_6_6 ~one ~sym, p_8_1 ~one ~sym, p_8_2 ~one ~sym,
+p_8_3 ~one ~sym, p_8_4 ~one ~sym, p_8_5 ~one ~sym, p_8_6 ~one ~sym,
+p_8_7 ~one ~sym, p_8_8 ~one ~sym]
+
+problem pbm10 = {
+**********
+**********
+**********
+**********
+**********
+**********
+**********
+**********
+**********
+**********
+} all_tiles
+
+solve dlx pbm10 svg "solutions/pyth-6-8-10.svg"
+# count dlx pbm10
+# pbm10 : (DLX) 522752 solutions
+# pbm10 solutions counted in 121.210053s
