@@ -121,7 +121,7 @@ let sudoku =
   let p =
     try
       let s = String.make (in_channel_length c) ' ' in
-      really_input c s 0 (in_channel_length c - 1);
+      really_input c (Bytes.of_string s) 0 (in_channel_length c - 1);
       read s
     with Invalid_argument msg ->
       eprintf "invalid input file: %s@." msg;
@@ -217,11 +217,11 @@ let print_emc_sudoku () =
   for i = 1 to 9 do printf "%d        " i done;
   printf "@.";
   printf "colonne  ";
-  for i = 1 to 8 do printf "         " done;
+  for _ = 1 to 8 do printf "         " done;
   printf "ligne    ";
-  for i = 1 to 8 do printf "         " done;
+  for _ = 1 to 8 do printf "         " done;
   printf "cellule  ";
-  for i = 1 to 8 do printf "         " done;
+  for _ = 1 to 8 do printf "         " done;
   printf "@."
 
 
@@ -300,5 +300,3 @@ let () =
     end;
     printf "%d solutions@." (Emc.D.count_solutions p)
   with Not_found -> printf "No solution@."
-
-

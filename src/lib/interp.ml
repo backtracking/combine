@@ -109,7 +109,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
 
   let tile_list = List.map (fun (e, s, m) -> tile ~s ~m e)
 
-  let rec interp3_expr expr = match expr.expr_node with
+  let interp3_expr expr = match expr.expr_node with
     | Var s -> begin
       try
         let value = Hashtbl.find var3_env s in
@@ -138,7 +138,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     timer := 0.
 
   let count_emc fmt efmt p algo =
-    let { columns = columns; primary = primary; emc = m; tiles = decode_tbl }
+    let { columns = columns; primary = primary; emc = m; tiles = _decode_tbl }
         as emc = Tiling.Problem.ToEMC.make p in
     if !debug then fprintf fmt "@[<hov 2>EMC size is %a@]@." print_emc_size emc;
     fprintf fmt "%s : @?" p.pname;
@@ -162,7 +162,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
 
   let count3_emc fmt efmt p algo =
     let module P3 = Tiling.Problem3 in
-    let { P3.ToEMC.primary = primary; emc = m; tiles = decode_tbl } as emc =
+    let { P3.ToEMC.primary = primary; emc = m; tiles = _decode_tbl } as emc =
       P3.ToEMC.make p in
     if !debug then fprintf fmt "@[<hov 2>EMC size is %a@]@."
       P3.ToEMC.print_emc_size emc;
@@ -188,7 +188,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     let columns = emc.columns in
     if !debug then
       fprintf fmt "@[<hov 2>EMC size is@\n%a@]@." print_emc_size emc;
-    let { primary = primary; emc = m; tiles = decode_tbl } = emc in
+    let { primary = primary; emc = m; tiles = _decode_tbl; _ } = emc in
     init_timer ();
     let solution = match algo with
       | Dlx ->
@@ -225,7 +225,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     let emc = P3.make p in
     if !debug then
       fprintf fmt "@[<hov 2>EMC size is@\n%a@]@." P3.print_emc_size emc;
-    let { P3.primary = primary; emc = m; tiles = decode_tbl } = emc in
+    let { P3.primary = primary; emc = m; tiles = _decode_tbl } = emc in
     init_timer ();
     let solution = match algo with
       | Dlx ->
@@ -248,7 +248,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
       if !timing then
         fprintf fmt "%S solved in %a@." p.Problem3.pname finish_timer ();
       match output with
-      | Svg f ->
+      | Svg _f ->
         assert false (*TODO*)
       | Ascii ->
         P3.print_solution_ascii fmt p emc solution;
@@ -261,7 +261,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     let columns = emc.columns in
     if !debug then
       fprintf fmt "@[<hov 2>EMC size is@\n%a@]@." P.print_emc_size emc;
-    let { P.primary = primary; emc = m; tiles = decode_tbl } = emc in
+    let { P.primary = primary; emc = m; tiles = _decode_tbl; _ } = emc in
     init_timer ();
     let iter_solution f = match algo with
       | Dlx ->
@@ -286,7 +286,7 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
     let emc = P3.make p in
     if !debug then
       fprintf fmt "@[<hov 2>EMC size is@\n%a@]@." P3.print_emc_size emc;
-    let { P3.primary = primary; emc = m; tiles = decode_tbl } = emc in
+    let { P3.primary = primary; emc = m; tiles = _decode_tbl; _ } = emc in
     init_timer ();
     let iter_solution f = match algo with
       | Dlx ->

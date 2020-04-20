@@ -1,0 +1,19 @@
+(executable
+ (name queens)
+ (modules queens)
+ (libraries combine unix))
+
+(executable
+ (name sudoku)
+ (modules sudoku)
+ (libraries combine str unix))
+
+(executable
+ (name backslide)
+ (modules backslide)
+ (libraries combine))
+
+(executable
+ (name color)
+ (modules color)
+ (libraries combine graphics ocamlgraph unix))

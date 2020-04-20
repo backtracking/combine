@@ -20,10 +20,8 @@
 (* Test Module *)
 
 open Combine
-open Dlx
 open Zdd
 open Tiling
-open Tiling.Problem
 open Tiling.Problem.ToEMC
 open Format
 open Emc
@@ -41,7 +39,7 @@ end
 
 module TestInterp = Interp.Make(T)(N)
 
-let r = Lexer.parse_file "examples/cmb/non-regression.cmb"
+let r = Lexer.parse_file "../examples/cmb/non-regression.cmb"
 let problems, _ = TestInterp.interp_problems std_formatter err_formatter r
 let p = List.hd problems
 
@@ -56,11 +54,11 @@ module SS = struct
   let random n k m =
     let random_set () =
       let s = ref Zdd.S.empty in
-      for i = 1 to Random.int (k+1) do s := Zdd.S.add (Random.int m) !s done;
+      for _ = 1 to Random.int (k+1) do s := Zdd.S.add (Random.int m) !s done;
       !s
     in
     let ss = ref empty in
-    for i = 1 to n do ss := add (random_set ()) !ss done; !ss
+    for _ = 1 to n do ss := add (random_set ()) !ss done; !ss
   let print_set fmt s =
     fprintf fmt "{";
     Zdd.S.iter (fun x -> fprintf fmt "%d,@ " x) s; fprintf fmt "}"
@@ -108,7 +106,7 @@ let () =
   assert (Zdd.mem s2 z3)
 
 let () =
-  let { columns = columns; primary = primary; emc = m; tiles = uncode_tbl } =
+  let { columns = columns; primary = primary; emc = m; tiles = _uncode_tbl } =
     Tiling.Problem.ToEMC.make p in
   assert (Emc.Z.count_solutions (Emc.Z.create_sparse ~columns ~primary m)
           = 12988816)

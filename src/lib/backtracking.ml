@@ -40,7 +40,7 @@ let all_tiles_same_size tl =
   List.iter check_size tl;
   match !size with None -> assert false | Some s -> s
 
-let add_tile grid ({pattern=p}, tx, ty) =
+let add_tile grid ({pattern=p; _}, tx, ty) =
   let grid = Matrix.copy grid in
   for y = 0 to p.height - 1 do for x = 0 to p.width - 1 do
     if p.matrix.(y).(x) then begin
@@ -81,7 +81,7 @@ let rec backtracking f sol size grid todo pieces =
   else if check_areas grid size then match pieces with
     | [] -> ()
     | tiles :: other_pieces ->
-        let test_move (t, x, y as m) =
+        let test_move (t, _x, _y as m) =
           try
             let grid = add_tile grid m in
             let sol = m :: sol in
@@ -94,9 +94,9 @@ let rec backtracking f sol size grid todo pieces =
         in
         List.iter test_move tiles;
         match tiles with
-          | ({multiplicity = Mmaybe | Minf},_,_) :: _ ->
+          | ({multiplicity = Mmaybe | Minf ; _},_,_) :: _ ->
               backtracking f sol size grid todo other_pieces
-          | [] | ({ multiplicity = Mone },_,_) :: _ -> ()
+          | [] | ({ multiplicity = Mone ; _},_,_) :: _ -> ()
 
 let possible_moves grid size tile =
   let res = ref [] in

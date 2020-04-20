@@ -21,8 +21,8 @@
 
    requires OCamlgraph *)
 
-open Format
 open Graph
+open Format
 open Combine
 
 (* command line *)
