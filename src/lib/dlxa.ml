@@ -92,7 +92,7 @@ let generate_headers ?primary size t =
     | Some p -> if p < 0 || p > size then invalid_arg "create"; p
   in
   (* create size nodes for the headers *)
-  for n = 1 to size do ignore (one_node t) done;
+  for _ = 1 to size do ignore (one_node t) done;
   (* and link the primary ones with node 0 *)
   for n = 1 to primary do
     t.s.(n) <- 0;
@@ -264,4 +264,3 @@ let count_solutions m =
   let r = ref 0 in
   iter_solution (fun (_, _) -> r:= !r + 1) m;
   !r
-

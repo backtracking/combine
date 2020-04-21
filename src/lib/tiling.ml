@@ -258,7 +258,7 @@ module Problem = struct
     done;
     fprintf fmt "@\n"
 
-  let print_board_svg width height u fmt =
+  let _print_board_svg width height u fmt =
     for i = 0 to height do
       fprintf fmt "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" \
 style=\"stroke:black;stroke-width:1;\" />@\n"
@@ -381,7 +381,7 @@ width=\"%d\" height=\"%d\">@\n"
         !id
       with Exit -> !id
 
-    let one_line n tile_id tile problem ~x ~y =
+    let one_line _n tile_id tile problem ~x ~y =
       let line = ref [] in
       for y' = 0 to tile.Tile.pattern.Pattern.height - 1 do
         for x' = 0 to tile.Tile.pattern.Pattern.width - 1 do
@@ -392,9 +392,9 @@ width=\"%d\" height=\"%d\">@\n"
           end
         done
       done;
-      List.sort Pervasives.compare !line
+      List.sort Stdlib.compare !line
 
-    let one_line_piece_only n piece_id piece =
+    let _one_line_piece_only n piece_id _piece =
       let line = Array.make n false in
       line.(piece_id) <- true;
       line
@@ -462,7 +462,7 @@ width=\"%d\" height=\"%d\">@\n"
         List.iter
           (fun t ->
             if is_possible_position t problem x y then begin
-              lines := one_line n tile_id t problem x y :: !lines;
+              lines := one_line n tile_id t problem ~x ~y :: !lines;
               decodes :=  (t, x, y) :: !decodes
             end
           )
@@ -482,18 +482,15 @@ width=\"%d\" height=\"%d\">@\n"
         emc = matrix;
         tiles = decode_tbl }
 
-    open Format
-    open Pattern
-
     let decode_solution d s = List.map (fun r -> d.(r)) s
 
-    let print_solution_to_svg fmt ~width ~height p {tiles=d} s =
+let print_solution_to_svg fmt ~width ~height p {tiles=d; _} s =
       print_solution_to_svg fmt ~width ~height p (decode_solution d s)
 
-    let print_solution_to_svg_file f ~width ~height p {tiles=d} s =
+let print_solution_to_svg_file f ~width ~height p {tiles=d; _} s =
       print_solution_to_svg_file f ~width ~height p (decode_solution d s)
 
-    let print_solution_ascii fmt p {tiles=d} s =
+let print_solution_ascii fmt p {tiles=d; _} s =
       print_solution_ascii fmt p (decode_solution d s)
 
   end
@@ -517,7 +514,7 @@ module Tile3 = struct
   let create ?(name="") ?(s=Snone) ?(m=Minf) pl =
     let height, width = match pl with
       | [] -> invalid_arg "Tile3.create"
-      | p :: l -> p.Pattern.height, p.Pattern.width in
+      | p :: _l -> p.Pattern.height, p.Pattern.width in
     let check p' = p'.Pattern.height = height && p'.Pattern.width = width in
     if not (List.for_all check pl) then
       invalid_arg "Tile3.create: sizes differ";
@@ -708,7 +705,7 @@ module Problem3 = struct
         List.iter
           (fun t ->
             if is_possible_position t problem x y z then begin
-              lines := one_line n tile_id t problem x y z :: !lines;
+              lines := one_line n tile_id t problem ~x ~y ~z :: !lines;
               decodes :=  (t, x, y, z) :: !decodes
             end
           )
@@ -729,7 +726,7 @@ module Problem3 = struct
         emc = matrix;
         tiles = decode_tbl }
 
-    let print_solution_ascii fmt p emc rows =
+    let print_solution_ascii fmt _p emc rows =
       let print r =
         let t, x, y, z = emc.tiles.(r) in
         fprintf fmt "tile '%s' at (%d, %d, %d)@\n" t.name x y z in
@@ -738,5 +735,3 @@ module Problem3 = struct
   end
 
 end
-
-

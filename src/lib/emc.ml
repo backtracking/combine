@@ -108,7 +108,7 @@ module Z = struct
     in
     build (if primary then bottom else top) top (n-1)
 
-  let inter_right_to_left fmt cols =
+  let _inter_right_to_left fmt cols =
     let width = Array.length cols in
     let z = ref cols.(0) in
     for j = 1 to width - 1 do
@@ -118,7 +118,7 @@ module Z = struct
     done;
     !z
 
-  let inter_left_to_right fmt cols =
+  let _inter_left_to_right fmt cols =
     let width = Array.length cols in
     let z = ref cols.(width - 1) in
     for j = width - 2 downto 0 do
@@ -146,7 +146,7 @@ module Z = struct
     balancing min max;
     cols.(max)
 
-  let first_row j h colj =
+  let first_row _j h colj =
     let rec lookup i = if i = h || colj i then i else lookup (i+1) in
     lookup 0
 
@@ -157,7 +157,7 @@ module Z = struct
       let colj i = m.(i).(j) in
       first_row j height colj, column ?primary j height colj in
     let cols = Array.init width make_col in
-    let compare (i1, _) (i2, _) = Pervasives.compare i2 i1 in
+    let compare (i1, _) (i2, _) = Stdlib.compare i2 i1 in
     Array.sort compare cols;
     inter_middle_balancing (Array.map snd cols)
 
@@ -174,7 +174,7 @@ module Z = struct
       let colj i = col.(i) in
       first_row j height colj, column ?primary j height colj in
     let cols = Array.init width make_col in
-    let compare (i1, _) (i2, _) = Pervasives.compare i2 i1 in
+    let compare (i1, _) (i2, _) = Stdlib.compare i2 i1 in
     Array.sort compare cols;
     inter_middle_balancing (Array.map snd cols)
 
@@ -297,7 +297,7 @@ module Sat = struct
     let input = Filename.temp_file "combine" ".dimacs" in
     print_in_file input t;
     let output = Filename.temp_file "combine" ".out" in
-    let sat_command = sat_solver input output in
+    let sat_command = sat_solver ~input ~output in
     ignore (Sys.command sat_command);
     let c = open_in output in
     let sol = ref [] in

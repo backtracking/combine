@@ -247,7 +247,8 @@ let count_solutions m =
   iter_solution (fun (_, _) -> r:= !r + 1) m;
   !r
 
-let get_solution_list m =
+(* unused... *)
+let _get_solution_list m =
   let list_ref = ref [] in
   iter_solution (
     fun (o, k) -> list_ref := list_of_solution (o, k) :: !list_ref
@@ -255,7 +256,7 @@ let get_solution_list m =
   !list_ref
 
 (* Print the given solution as an int list *)
-let print_list_solution fmt l =
+let _print_list_solution fmt l =
   List.iter (fun e -> Format.fprintf fmt "%d " e) l; Format.fprintf fmt "@."
 
 exception Solution of (node array * int)

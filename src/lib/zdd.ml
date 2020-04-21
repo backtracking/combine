@@ -54,12 +54,12 @@ let hash_node i z1 z2 = (19 * (19 * i + unique z1) + unique z2) land max_int
 let unique_ref = ref 2
 
 module HashedZdd = struct
-  type t = zdd
+  type _t = zdd
   let hash = function
     | Bottom -> 0
     | Top -> 1
     | Node (_, i, z1, z2) -> hash_node i z1 z2
-  let equal k1 k2 = match k1, k2 with
+  let _equal k1 k2 = match k1, k2 with
     | Top, Top
     | Bottom, Bottom -> true
     | Node (_, i1, l1, r1), Node (_, i2, l2, r2) ->
@@ -214,7 +214,7 @@ let cardinal = memo_rec1 (
   fun cardinal -> function
     | Top -> 1
     | Bottom -> 0
-    | Node(_, i, z1, z2) -> cardinal z1 + cardinal z2
+    | Node(_, _i, z1, z2) -> cardinal z1 + cardinal z2
   )
 
 module type ARITH = sig
@@ -256,8 +256,8 @@ let inter = memo_rec2 (
     | Top, Top -> Top
     | Bottom, _
     | _, Bottom -> Bottom
-    | (Node (u1, i1, l1, r1) as z1),
-        (Node (u2, i2, l2, r2) as z2) ->
+    | (Node (_u1, i1, l1, r1) as z1),
+        (Node (_u2, i2, l2, r2) as z2) ->
         if i1 = i2 then
           construct i1 (inter (l1, l2)) (inter (r1, r2))
         else if i1 > i2 then
@@ -325,7 +325,7 @@ let subset z1 z2 =
   subset (z1, z2)
 
 let equal = (==)
-let compare z1 z2 = Pervasives.compare (unique z1) (unique z2)
+let compare z1 z2 = Stdlib.compare (unique z1) (unique z2)
 
 let singleton s =
   let elts = S.elements s in
@@ -527,4 +527,3 @@ let print_to_dot_file f z =
   close_out c
 
 let stat () = !unique_ref
-

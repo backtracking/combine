@@ -125,7 +125,7 @@ state:
 | ON  { On }
 | OFF { Off }
 
-option:
+opt:
 | ONE   { M Mone }
 | MAYBE { M Mmaybe }
 | SYM   { S Sall }
@@ -156,7 +156,7 @@ isometry:
 ;
 
 tile:
-| e = expr; o = list(option)
+| e = expr; o = list(opt)
     { let option (s, m) = function
         | M m' -> s, m' (* FIXME: fail on ambiguity *)
 	| S s' -> s', m (* idem *)

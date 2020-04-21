@@ -1,0 +1,26 @@
+(library
+ (public_name combine)
+ (modules
+  ;
+  matrix
+  dlx
+  dlxa
+  zdd
+  emc
+  d4
+  ;
+  cube
+  tiling
+  backtracking
+  ;
+  ast
+  parser
+  lexer
+  interp)
+ (modules_without_implementation ast))
+
+(menhir
+ (modules parser))
+
+(ocamllex
+ (modules lexer))

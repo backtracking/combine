@@ -20,7 +20,7 @@ let print_matrix = Array.iter (fun e -> print_line e; printf "\n")
 
 let xorr a b = a && not b || not a && b, a && b
 
-let rec bsucc t =
+let bsucc t =
   let n, r  = xorr t.n true in
   let e, r = xorr t.e r in
   let s, r = xorr t.s r in
@@ -71,7 +71,7 @@ let emc tiles =
   in
   Array.of_list (set_lines 0 [] tiles)
 
-let print_solution m = List.iter (fun s ->
+let print_solution _m = List.iter (fun s ->
   print_line s)
 
 

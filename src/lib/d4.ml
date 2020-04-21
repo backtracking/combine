@@ -17,7 +17,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
+[@@@warning "-37"]
 type t = Id | Rot90 | Rot180 | Rot270 | VertRefl | HorizRefl |
     Diag1Refl | Diag2Refl
 
@@ -94,7 +94,7 @@ let print fmt iso = Format.fprintf fmt "%s" (to_string iso)
 module S = Set.Make (
   struct
     type t = iso
-    let compare = Pervasives.compare
+    let compare = Stdlib.compare
   end)
 
 let all =
@@ -131,6 +131,7 @@ let () =
               assert (compose a (compose b c) = compose (compose a b) c)) all
       ) all ) all
 
+[@@@warning "-27"]
 let apply = function
   | Id -> (fun ~w ~h p -> p)
   | Rot180 -> (fun ~w ~h (x, y) -> (w - 1 - x , h - 1 - y))
@@ -209,7 +210,7 @@ let quotient g1 g2 =
 
 let elements g = g
 
-let compl = function
+let _compl = function
   | Id -> D4
   | Vert -> Positive
   | Horiz -> Positive
@@ -221,12 +222,5 @@ let compl = function
   | Refl_12 -> Horiz
   | D4 -> Id
 
-let generated_by s =
+let _generated_by _s =
   failwith "to be implemented"
-
-
-
-
-
-
-

@@ -1,0 +1,11 @@
+(test
+ (name test)
+ (modules test)
+ (libraries combine num unix)
+ (deps
+  (file ../examples/cmb/non-regression.cmb)))
+
+(test
+ (name test_sat)
+ (modules test_sat)
+ (libraries combine))

@@ -55,22 +55,24 @@ val quotient : subgroup -> subgroup -> subgroup
 (** {2 The 10 subgroups of D4} *)
 
 (** 1 element *)
-val id: subgroup 			(* { Id } *)
+val id: subgroup			(* { Id } *)
+
 (** 2 elements *)
 val vert: subgroup			(* { Id, VertRefl } *)
 val horiz: subgroup			(* { Id, HorizRefl } *)
 val rot180: subgroup
 val diag1: subgroup
 val diag2: subgroup
+
 (** 4 elements *)
 val positive: subgroup
 val refl_hv: subgroup
 val refl_12: subgroup
+
 (** 8 elements = D4 itself *)
 val d4: subgroup
 
 val elements: subgroup -> S.t
 
 val subgroup: S.t -> subgroup
-
 
