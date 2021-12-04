@@ -1,0 +1,112 @@
+### Cat Stax "The purrfect puzzle"
+
+pattern yellow_cat = {
+*..
+***
+***
+}
+pattern purple_cat = {
+***
+***
+}
+pattern white_cat = {
+*..
+***
+}
+pattern black_cat = {
+*.*
+***
+***
+}
+pattern blue_cat = {
+**
+}
+pattern darkblue_cat = {
+**
+**
+}
+pattern green_cat = {
+**..
+*..*
+****
+*..*
+}
+pattern pink_cat = {
+..*
+***
+*.*
+}
+pattern red_cat = {
+...*
+****
+*..*
+}
+pattern turqoise_cat = {
+...*
+****
+****
+}
+pattern sage_cat = {
+.*.
+.**
+***
+}
+pattern yale_cat = {
+*.
+**
+}
+
+pattern pattern_15 = {
+***.***
+*******
+*******
+.*****.
+*******
+*******
+***.***
+}
+tiles tiles_15 = [
+  yellow_cat ~one ~sym,
+  purple_cat ~one ~sym,
+  white_cat ~one ~sym,
+  black_cat ~one ~sym,
+  blue_cat ~one ~sym,
+  turqoise_cat ~one ~sym,
+  sage_cat ~one ~sym,
+  yale_cat ~one ~sym
+]
+problem problem_15 = pattern_15 tiles_15
+
+solve dlx problem_15 svg "solutions/cat_stax_15.svg"
+count dlx problem_15
+
+pattern pattern_16 = {
+*******
+*******
+*.***.*
+*******
+*******
+*.***.*
+*******
+*******
+}
+tiles tiles_16 = [
+  darkblue_cat ~one ~sym,
+  red_cat ~one ~sym,
+  black_cat ~one ~sym,
+  blue_cat ~one ~sym,
+  yale_cat ~one ~sym,
+  yellow_cat ~one ~sym,
+  purple_cat ~one ~sym,
+  turqoise_cat ~one ~sym,
+  sage_cat ~one ~sym
+]
+problem problem_16 = pattern_16 tiles_16
+
+solve dlx problem_16 svg "solutions/cat_stax_16.svg"
+count dlx problem_16
+
+# Local Variables:
+# compile-command: "../../src/main.exe cat_stax.cmb"
+# End:
+

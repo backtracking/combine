@@ -362,5 +362,5 @@ problem3 five_cubes = five_cubes some_pentacubes
 # solve3 dlx five_cubes ascii
 
 # Local Variables:
-# compile-command: "../combine.opt pentacubes.cmb"
+# compile-command: "../../src/main.exe pentacubes.cmb"
 # End:

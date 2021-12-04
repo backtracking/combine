@@ -32,6 +32,6 @@ count dlx scott_problem
 # count equal_size scott_problem
 
 # Local Variables:
-# compile-command: "../combine.opt scott.cmb"
+# compile-command: "../../src/main.exe scott.cmb"
 # End:
 

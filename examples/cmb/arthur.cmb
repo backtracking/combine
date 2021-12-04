@@ -53,5 +53,5 @@ count3 zdd one_cube
 
 
 # Local Variables:
-# compile-command: "../combine.opt arthur.cmb"
+# compile-command: "../../src/main.exe arthur.cmb"
 # End:
