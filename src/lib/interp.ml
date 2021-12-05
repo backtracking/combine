@@ -249,7 +249,8 @@ module Make = functor (T : Time) -> functor (N : N) -> struct
         fprintf fmt "%S solved in %a@." p.Problem3.pname finish_timer ();
       match output with
       | Svg _f ->
-        assert false (*TODO*)
+        (*TODO*)
+        fprintf fmt "SVG output of 3D problems not yet implemented@."
       | Ascii ->
         P3.print_solution_ascii fmt p emc solution;
         fprintf fmt "@."

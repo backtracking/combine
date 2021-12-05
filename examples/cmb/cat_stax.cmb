@@ -72,7 +72,7 @@ tiles tiles_15 = [
   black_cat ~one ~sym,
   blue_cat ~one ~sym,
   turqoise_cat ~one ~sym,
-  sage_cat ~one ~sym,
+  sage_cat ~one,
   yale_cat ~one ~sym
 ]
 problem problem_15 = pattern_15 tiles_15
@@ -99,12 +99,108 @@ tiles tiles_16 = [
   yellow_cat ~one ~sym,
   purple_cat ~one ~sym,
   turqoise_cat ~one ~sym,
-  sage_cat ~one ~sym
+  sage_cat ~one
 ]
 problem problem_16 = pattern_16 tiles_16
 
 solve dlx problem_16 svg "solutions/cat_stax_16.svg"
 count dlx problem_16
+
+
+## several layers
+
+pattern3 yellow_cat = [{
+*..
+***
+***
+}]
+pattern3 purple_cat = [{
+***
+***
+}]
+pattern3 white_cat = [{
+*..
+***
+}]
+pattern3 black_cat = [{
+*.*
+***
+***
+}]
+pattern3 blue_cat = [{
+**
+}]
+pattern3 darkblue_cat = [{
+**
+**
+}]
+pattern3 green_cat = [{
+**..
+*..*
+****
+*..*
+}]
+pattern3 pink_cat = [{
+..*
+***
+*.*
+}]
+pattern3 red_cat = [{
+...*
+****
+*..*
+}]
+pattern3 turqoise_cat = [{
+...*
+****
+****
+}]
+pattern3 sage_cat = [{
+.*.
+.**
+***
+}]
+pattern3 yale_cat = [{
+*.
+**
+}]
+
+tiles3 all_cats3 = [
+  yellow_cat ~one ~sym,
+  purple_cat ~one ~sym,
+  white_cat  ~one ~sym,
+  black_cat ~one ~sym,
+  blue_cat ~one ~sym,
+  darkblue_cat ~one ~sym,
+  green_cat ~one ~sym,
+  pink_cat ~one ~sym,
+  red_cat ~one ~sym,
+  turqoise_cat ~one ~sym,
+  sage_cat ~one ~sym,
+  yale_cat ~one ~sym
+]
+pattern3 pattern_43 = [{
+..*..
+*****
+*****
+*****
+*****
+*****
+*****
+*****
+},{
+..*..
+*****
+*****
+*****
+*****
+*****
+*****
+*****
+}]
+problem3 problem_43 = pattern_43 all_cats3
+
+solve3 dlx problem_43 ascii
 
 # Local Variables:
 # compile-command: "../../src/main.exe cat_stax.cmb"
