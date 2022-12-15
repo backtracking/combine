@@ -1,0 +1,69 @@
+
+# tiling a 5xn rectangle with a subset of the pentaminos
+# this is https://oeis.org/A246902
+
+include "pentaminos.cmb"
+
+#   n | nb solutions
+#   1 |     1
+#   2 |     0
+#   3 |    28
+#   4 |   200
+#   5 |   856
+#   6 |  2164
+#   7 |  5584
+#   8 | 13632
+#   9 | 23608
+#  10 | 27804
+#  11 | 16412
+#  12 |  4040
+
+# answers for n=1 and n=2 are obvious but we check anyway
+
+problem penta_5_1 = constant 5x1 true some_pentaminos
+solve dlx penta_5_1 svg "solutions/penta_5_1.svg"
+count dlx penta_5_1
+
+problem penta_5_2 = constant 5x2 true some_pentaminos
+solve dlx penta_5_2 svg "solutions/penta_5_2.svg"
+count dlx penta_5_2
+
+problem penta_5_3 = constant 5x3 true some_pentaminos
+solve dlx penta_5_3 svg "solutions/penta_5_3.svg"
+count dlx penta_5_3
+
+problem penta_5_4 = constant 5x4 true some_pentaminos
+solve dlx penta_5_4 svg "solutions/penta_5_4.svg"
+count dlx penta_5_4
+
+problem penta_5_5 = constant 5x5 true some_pentaminos
+solve dlx penta_5_5 svg "solutions/penta_5_5.svg"
+count dlx penta_5_5
+
+problem penta_5_6 = constant 5x6 true some_pentaminos
+solve dlx penta_5_6 svg "solutions/penta_5_6.svg"
+count dlx penta_5_6
+
+problem penta_5_7 = constant 5x7 true some_pentaminos
+solve dlx penta_5_7 svg "solutions/penta_5_7.svg"
+count dlx penta_5_7
+
+problem penta_5_8 = constant 5x8 true some_pentaminos
+solve dlx penta_5_8 svg "solutions/penta_5_8.svg"
+count dlx penta_5_8
+
+problem penta_5_9 = constant 5x9 true some_pentaminos
+solve dlx penta_5_9 svg "solutions/penta_5_9.svg"
+count dlx penta_5_9
+
+problem penta_5_10 = constant 5x10 true some_pentaminos
+solve dlx penta_5_10 svg "solutions/penta_5_10.svg"
+count dlx penta_5_10
+
+problem penta_5_11 = constant 5x11 true some_pentaminos
+solve dlx penta_5_11 svg "solutions/penta_5_11.svg"
+count dlx penta_5_11
+
+problem penta_5_12 = constant 5x12 true some_pentaminos
+solve dlx penta_5_12 svg "solutions/penta_5_12.svg"
+count dlx penta_5_12
