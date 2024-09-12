@@ -1,0 +1,46 @@
+
+pattern p1 = {
+**
+}
+pattern p2 = {
+*..
+*..
+***
+}
+pattern p3 = {
+**.
+.*.
+.**
+}
+pattern p4 = {
+***
+.*.
+}
+pattern p5 = {
+***
+*..
+}
+pattern p6 = {
+***.
+..**
+}
+
+tiles pieces =
+[ p1 ~one ~sym,
+  p2 ~one ~sym,
+  p3 ~one ~sym,
+  p4 ~one ~sym,
+  p5 ~one ~sym,
+  p6 ~one ~sym ]
+
+problem p = {
+*****
+*****
+*****
+*****
+*****
+} pieces
+
+solve dlx p svg "solutions/gagnetonpapa.svg"
+count dlx p
+count zdd p
