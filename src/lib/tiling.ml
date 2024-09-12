@@ -243,12 +243,14 @@ module Problem = struct
   open Format
 
   let print_solution_ascii fmt p s =
-    let unique = ref 48 in
+    let unique = ref 33 in
     let board = Array.make_matrix p.grid.height p.grid.width '.' in
     List.iter (
       fun (t, x, y) ->
         put_char t board x y (Char.chr !unique);
-        incr unique
+        incr unique;
+        if !unique = 46 then incr unique; (* skip '.' *)
+        if !unique = 127 then Format.eprintf "too many tiles for ASCII output@."
     ) s;
     for y = p.grid.height - 1 downto 0 do
       for x = 0 to p.grid.width - 1 do
