@@ -486,13 +486,13 @@ width=\"%d\" height=\"%d\">@\n"
 
     let decode_solution d s = List.map (fun r -> d.(r)) s
 
-let print_solution_to_svg fmt ~width ~height p {tiles=d; _} s =
+    let print_solution_to_svg fmt ~width ~height p {tiles=d; _} s =
       print_solution_to_svg fmt ~width ~height p (decode_solution d s)
 
-let print_solution_to_svg_file f ~width ~height p {tiles=d; _} s =
+    let print_solution_to_svg_file f ~width ~height p {tiles=d; _} s =
       print_solution_to_svg_file f ~width ~height p (decode_solution d s)
 
-let print_solution_ascii fmt p {tiles=d; _} s =
+    let print_solution_ascii fmt p {tiles=d; _} s =
       print_solution_ascii fmt p (decode_solution d s)
 
   end
@@ -532,7 +532,7 @@ module Tile3 = struct
 
   let print fmt t =
     let print1 p = Pattern.print fmt p; fprintf fmt "@\n,@\n" in
-    fprintf fmt "@[<hov 1>"; Array.iter print1 t.pattern; fprintf fmt "}@]"
+    fprintf fmt "@[<v 0>"; Array.iter print1 t.pattern; fprintf fmt "}@]"
 
   let apply iso p =
     let trans = Cube.apply iso in
@@ -728,11 +728,44 @@ module Problem3 = struct
         emc = matrix;
         tiles = decode_tbl }
 
-    let print_solution_ascii fmt _p emc rows =
-      let print r =
+    (* let print_solution_ascii fmt _p emc rows = *)
+    (*   let print r = *)
+    (*     let t, x, y, z = emc.tiles.(r) in *)
+    (*     fprintf fmt "tile '%s' at (%d, %d, %d)@\n  @[<v 0>%a@]@\n" t.name x y z *)
+    (*       Tile3.print t in *)
+    (*   List.iter print rows *)
+
+    let put_char tile board x y z c =
+      for z' = 0 to tile.depth - 1 do
+        for y' = 0 to tile.height - 1 do
+          for x' = 0 to tile.width - 1 do
+            if tile.pattern.(z').matrix.(y').(x') then
+              board.(z + z').(y + y').(x + x') <- c
+          done
+        done
+      done
+
+    let print_solution_ascii fmt p emc rows =
+      let unique = ref 33 in
+      let board = Array.init p.grid.depth (fun _ ->
+                      Array.make_matrix p.grid.height p.grid.width '.') in
+      List.iter (fun r ->
         let t, x, y, z = emc.tiles.(r) in
-        fprintf fmt "tile '%s' at (%d, %d, %d)@\n" t.name x y z in
-      List.iter print rows
+        put_char t board x y z (Char.chr !unique);
+        incr unique;
+        if !unique = 46 then incr unique; (* skip '.' *)
+        if !unique = 127 then Format.eprintf "too many tiles for ASCII output@."
+      ) rows;
+      for z = 0 to p.grid.depth - 1 do
+        for y = 0 to p.grid.height - 1 do
+          for x = 0 to p.grid.width - 1 do
+            fprintf fmt "%c" board.(z).(y).(x)
+          done;
+          fprintf fmt "@\n"
+        done;
+        fprintf fmt "@\n"
+      done;
+      fprintf fmt "@\n"
 
   end
 

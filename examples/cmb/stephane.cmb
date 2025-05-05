@@ -1,0 +1,102 @@
+
+# A 3D puzzle suggested by Stéphane Gonnord
+
+pattern3 P1 = [{
+**.
+...
+},{
+...
+..*
+}]
+
+pattern3 P4 = [{
+.**
+...
+},{
+...
+*..
+}]
+
+pattern3 P2 = [{
+*..
+...
+...
+},{
+...
+.*.
+...
+},{
+...
+...
+..*
+}]
+
+pattern3 P3 = [{
+*..
+.**
+*..
+},{
+..*
+...
+...
+}]
+
+pattern3 P5 = [{
+*..
+*..
+},{
+.**
+...
+},{
+...
+..*
+}]
+
+pattern3 P6 = [{
+***
+...
+...
+},{
+*..
+*..
+...
+},{
+...
+...
+.**
+}]
+
+
+### sets of tiles ###########################################################
+
+tiles3 pieces =
+[ P1 ~one ~rot, P2 ~one ~rot, P3 ~one ~rot,
+  P4 ~one ~rot, P5 ~one ~rot, P6 ~one ]
+
+### problem ##############################################################
+
+debug on
+timing on
+
+pattern3 one_cube = [{
+***
+***
+***
+},{
+***
+**.
+***
+},{
+***
+***
+***
+}]
+
+problem3 one_cube = one_cube pieces
+
+solve3 dlx one_cube ascii # svg "stephane.svg"
+all3 dlx one_cube
+
+# Local Variables:
+# compile-command: "../../src/main.exe stephane.cmb"
+# End:
