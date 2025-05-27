@@ -1,4 +1,4 @@
 (executable
  (name main)
  (promote (until-clean))
- (libraries combine num unix))
+ (libraries combine zarith unix))

@@ -8,19 +8,19 @@ The Combine library contains four main modules:
 - Zdd: implements Zero-suppressed binary decision diagrams
 - Emc: a common interface to modules Dlx and Zdd to solve the Exact Matrix Cover problem
 - Tiling: converts a 2D tiling problem into an EMC problem"""
-maintainer: ["Jean-Christophe Filliâtre <jean-christophe.filliatre@lri.fr>"]
+maintainer: ["Jean-Christophe Filliâtre <jean-christophe.filliatre@cnrs.fr>"]
 authors: [
-  "Remy El Sibaie <remy.el-sibaie@lip6.fr>, Jean-Christophe Filliâtre <jean-christophe.filliatre@lri.fr>"
+  "Remy El Sibaie <remy.el-sibaie@lip6.fr>, Jean-Christophe Filliâtre <jean-christophe.filliatre@cnrs.fr>"
 ]
 license: "LGPL"
-homepage: "https://www.lri.fr/~filliatr/combine/"
-doc: "https://www.lri.fr/~filliatr/combine/"
+homepage: "https://github.com/backtracking/combine"
+doc: "https://github.com/backtracking/combine"
 bug-reports: "https://github.com/backtracking/combine/issues"
 depends: [
   "ocaml" {>= "4.07"}
   "dune" {>= "2.4"}
   "menhir" {>= "20200211"}
-  "num" {with-test}
+  "zarith"
   "str" {dev}
   "graphics" {dev}
   "ocamlgraph" {dev}

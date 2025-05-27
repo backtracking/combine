@@ -42,11 +42,11 @@ let set_file f = match !file with
 
 
 module N = struct
-  type t = Num.num
-  let zero = Num.num_of_int 0
-  let one = Num.num_of_int 1
-  let add = Num.add_num
-  let print fmt n = Format.fprintf fmt "%s" (Num.string_of_num n)
+  type t = Z.t
+  let zero = Z.zero
+  let one = Z.one
+  let add = Z.add
+  let print = Z.pp_print
 end
 module T = struct
   let gettimeofday = Unix.gettimeofday
